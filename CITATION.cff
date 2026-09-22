@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+title: "Paper Research Skill: Evidence-Grounded Paper Reading for AI Agents"
+message: "If you use this skill, please cite it as below."
+type: software
+authors:
+  - family-names: Shi
+    given-names: Xiaofeng
+    orcid: "https://orcid.org/0009-0009-6052-7713"
+url: "https://github.com/xiaofengShi/paper-reading-skill"
+repository-code: "https://github.com/xiaofengShi/paper-reading-skill"
+license: MIT
+version: 0.1.0
+date-released: "2026-09-23"

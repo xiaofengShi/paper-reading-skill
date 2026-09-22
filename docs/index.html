@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Paper Research Skill — Evidence-Grounded Paper Reading for AI Agents</title>
+    <meta
+      name="description"
+      content="A cross-agent skill that turns paper reading into evidence-grounded research analysis: claim graphs, evidence verification, reviewer-style critique, and research cards. For Codex, Claude Code, and Kimi Code."
+    />
+    <meta name="theme-color" content="#183d45" />
+    <link rel="canonical" href="https://xiaofengshi.github.io/paper-reading-skill/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Paper Research Skill" />
+    <meta
+      property="og:description"
+      content="From reading papers to building research knowledge — a claim-centered, evidence-first reading methodology for AI agents."
+    />
+    <meta property="og:url" content="https://xiaofengshi.github.io/paper-reading-skill/" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="container nav">
+        <a class="wordmark" href="#" aria-label="Paper Research Skill home"
+          ><span class="mark" aria-hidden="true">P</span>PaperResearch<span
+            class="nav-year"
+          >
+            / skill</span
+          ></a
+        >
+        <nav aria-label="Main navigation">
+          <a href="#method">Method</a><a href="#modes">Modes</a
+          ><a href="#architecture">Architecture</a
+          ><a href="#resources">Resources</a
+          ><a
+            href="https://github.com/xiaofengShi/paper-reading-skill"
+            class="nav-code"
+            >GitHub <span aria-hidden="true">↗</span></a
+          >
+        </nav>
+      </div>
+    </header>
+    <main id="main">
+      <section class="hero container" aria-labelledby="title">
+        <div class="hero-copy">
+          <a
+            class="conference"
+            href="https://github.com/xiaofengShi/paper-reading-skill"
+            ><span class="status-dot" aria-hidden="true"></span>AGENT SKILL ·
+            v0.1 <span aria-hidden="true">↗</span></a
+          >
+          <h1 id="title">Paper<span>Reading</span></h1>
+          <p class="paper-title">
+            A Paper Research Skill for Evidence-Grounded Reading with AI Agents
+          </p>
+          <p class="hero-description">
+            From reading papers to building research knowledge.<br />Claims,
+            evidence, fairness, and hypotheses — not summaries.
+          </p>
+          <div class="hero-actions">
+            <a
+              class="button primary"
+              href="https://github.com/xiaofengShi/paper-reading-skill"
+              >Get the skill <span aria-hidden="true">↗</span></a
+            ><a class="button" href="#method"
+              >See the workflow <span aria-hidden="true">↓</span></a
+            >
+          </div>
+        </div>
+        <figure class="hero-figure">
+          <div class="figure-top">
+            <span>PAPER → RESEARCH CARD</span><span>FIG. 01</span>
+          </div>
+          <div class="diagram" role="img"
+            aria-label="Claim graph: problem to hypothesis to mechanism to claim to evidence, and one verified claim card">
+            <div class="flow">
+              <span>Problem</span><i>→</i><span>Hypothesis</span><i>→</i
+              ><span>Mechanism</span><i>→</i><span>Claim</span><i>→</i
+              ><span>Evidence</span>
+            </div>
+            <div class="claim-card">
+              <p class="claim-id">CLAIM C1 · TABLE 4 · ISOLATED ABLATION</p>
+              <p class="claim-text">
+                “Skill memory improves cross-task adaptation.”
+              </p>
+              <p class="claim-meta">
+                <span>support</span><strong class="ok">DIRECT</strong>
+                <span>confidence</span><strong class="ok">CONFIRMED</strong>
+                <span>variance</span><strong class="warn">NOT REPORTED</strong>
+              </p>
+            </div>
+            <div class="flow muted">
+              <span>Caveat</span><i>→</i><span>Limitation</span><i>→</i
+              ><span>Hypothesis for your research</span>
+            </div>
+          </div>
+          <figcaption>
+            <span class="figure-label">EVIDENCE CHECK</span>
+            <p>
+              Every claim is aligned with the experiment that actually tests
+              it — and labeled DIRECT, INDIRECT, WEAK, or UNSUPPORTED.
+            </p>
+            <span class="answer"
+              >Output <strong>one Research Card</strong></span
+            >
+          </figcaption>
+        </figure>
+      </section>
+      <div class="authors container">
+        <p>
+          <a href="https://github.com/xiaofengShi">Xiaofeng Shi</a>
+        </p>
+        <p class="affiliations">
+          <span>A methodology distilled into a cross-agent SKILL.md</span
+          ><span>For Codex · Claude Code · Kimi Code</span>
+        </p>
+      </div>
+      <div class="metrics-wrap">
+        <div class="container metrics">
+          <div><strong>4</strong><span>Reading modes</span></div>
+          <div><strong>10</strong><span>Workflow steps</span></div>
+          <div><strong>12</strong><span>Critique dimensions</span></div>
+          <div><strong>1</strong><span>Research Card per paper</span></div>
+        </div>
+        <p class="container metric-note">
+          SCAN · UNDERSTAND · REVIEW · RESEARCH — with early-stop triage, so
+          irrelevant papers cost minutes, not hours.
+        </p>
+      </div>
+      <section id="overview" class="section container">
+        <div class="section-heading">
+          <p class="eyebrow">01 / THE PROBLEM</p>
+          <h2>Summaries are not knowledge.</h2>
+        </div>
+        <div class="intro-columns">
+          <p class="lead">
+            A paper reader that returns a polished abstract has answered the
+            wrong question.
+          </p>
+          <p>
+            Research needs different answers: what does this paper claim, which
+            experiment actually supports each claim, is the comparison fair,
+            what remains unproven, how does it differ from the closest work —
+            and what should you do next? Paper Research Skill encodes that
+            discipline: read in passes, not in pages; build a claim graph, not
+            a section summary; end every reading in a decision.
+          </p>
+        </div>
+        <figure class="overview-figure">
+          <div class="depth-ladder">
+            <div><strong>L0</strong><span>1–2 min · relevant at all?</span><em>100 papers</em></div>
+            <div><strong>L1</strong><span>5–10 min · core idea + verdict</span><em>~30 papers</em></div>
+            <div><strong>L2</strong><span>30–60 min · method + experiments</span><em>~10 papers</em></div>
+            <div><strong>L3</strong><span>2h+ · reproduce / improve</span><em>2–3 papers</em></div>
+          </div>
+          <figcaption>
+            The depth ladder: reading every paper at full depth is a triage
+            failure, not diligence.
+          </figcaption>
+        </figure>
+      </section>
+      <section id="method" class="section section-tint">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">02 / THE METHOD</p>
+            <h2>Claim first. Evidence always.</h2>
+            <p>
+              A fixed workflow constrains how to read scientifically — the
+              agent keeps the judgment of what is worth pursuing.
+            </p>
+          </div>
+          <div class="taxonomy">
+            <div>
+              <span class="number">01</span>
+              <h3>Intent &amp; Triage</h3>
+              <p>
+                Establish the reading objective.<br />Title → abstract → Fig 1 →
+                main table.<br />Three-sentence verdict.<br />Stop early if
+                irrelevant.
+              </p>
+            </div>
+            <div>
+              <span class="number">02</span>
+              <h3>Decompose &amp; Verify</h3>
+              <p>
+                Build the claim graph.<br />Align each claim with evidence.<br />DIRECT
+                / INDIRECT / WEAK /<br />UNSUPPORTED.
+              </p>
+            </div>
+            <div>
+              <span class="number">03</span>
+              <h3>Critique</h3>
+              <p>
+                Reviewer mode, 12 dimensions.<br />Baseline fairness.<br />Ablation
+                completeness.<br />Statistical reliability.
+              </p>
+            </div>
+            <div>
+              <span class="number">04</span>
+              <h3>De-package</h3>
+              <p>
+                Reduce to the minimal pipeline.<br />Which arrow is actually new?<br />“Compared
+                with X, they add Y.”
+              </p>
+            </div>
+            <div>
+              <span class="number">05</span>
+              <h3>Connect</h3>
+              <p>
+                Overlap and difference vs your work.<br />Reusable components.<br />Threat
+                to novelty.<br />Potential baseline.
+              </p>
+            </div>
+            <div>
+              <span class="number">06</span>
+              <h3>Synthesize</h3>
+              <p>
+                One Research Card.<br />Gap → hypothesis → minimal experiment.<br />A
+                mandatory next_action.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="modes" class="section container">
+        <div class="section-heading">
+          <p class="eyebrow">03 / READING MODES</p>
+          <h2>Four depths. One decision.</h2>
+          <p>
+            Not every paper deserves the same hour. The skill picks exactly one
+            mode — and stops early when triage says stop.
+          </p>
+        </div>
+        <div class="example-heading">
+          <h3>Pick a mode</h3>
+          <div
+            class="example-controls"
+            role="group"
+            aria-label="Choose a reading mode"
+            hidden
+          >
+            <button type="button" aria-pressed="true" data-example="scan">
+              Scan</button
+            ><button type="button" aria-pressed="false" data-example="understand">
+              Understand</button
+            ><button type="button" aria-pressed="false" data-example="review">
+              Review</button
+            ><button type="button" aria-pressed="false" data-example="research">
+              Research
+            </button>
+          </div>
+        </div>
+        <article class="example" id="example-scan" aria-labelledby="heading-scan">
+          <div class="drawing terminal">
+            <pre><code>$ read arXiv:2601.00001 --mode SCAN
+
+triage:
+  problem:  long-horizon agents can't reuse experience
+  idea:     compressed skill memory + retrieval-gated planner
+  result:   68.2 vs 64.1 on HotpotQA-hard
+  relevance: high
+  recommended_depth: RESEARCH</code></pre>
+          </div>
+          <div class="example-copy">
+            <p class="eyebrow">SCAN / minutes</p>
+            <h3 id="heading-scan">Is it worth reading?</h3>
+            <p class="question">
+              Title → abstract → Figure 1 → conclusion → main table. Ends in a
+              forced three-sentence verdict and a keep/drop decision.
+            </p>
+            <details>
+              <summary>Show the verdict format</summary>
+              <p>Existing XXX methods suffer from XXX. This paper proposes
+              XXX, which solves it by XXX. On XXX benchmark it improves over
+              XXX by XXX.</p>
+            </details>
+            <p class="source">
+              Most papers should be filtered out here. That is the point.
+            </p>
+          </div>
+        </article>
+        <article
+          class="example"
+          id="example-understand"
+          aria-labelledby="heading-understand"
+        >
+          <div class="drawing terminal">
+            <pre><code>minimal_pipeline:
+  Trajectory → Compressor → Memory store
+    → Retriever → Planner → Actor
+
+new_arrow: Memory → Planner
+
+novelty: "Compared with vanilla ReAct+RAG,
+  they add a compressed skill-memory store
+  with a retrieval-gated planner."</code></pre>
+          </div>
+          <div class="example-copy">
+            <p class="eyebrow">UNDERSTAND / ~30–60 min</p>
+            <h3 id="heading-understand">How does the method work?</h3>
+            <p class="question">
+              De-package the terminology into the simplest system diagram, then
+              find the one arrow that is actually new — and the causal chain
+              that says why it should work.
+            </p>
+            <details>
+              <summary>Show the causal chain</summary>
+              <p>Problem → why prior methods fail → proposed mechanism → why it
+              should work in principle → which experiment validates it.</p>
+            </details>
+            <p class="source">
+              If the novelty cannot be compressed into one sentence, it is not
+              yet understood.
+            </p>
+          </div>
+        </article>
+        <article
+          class="example"
+          id="example-review"
+          aria-labelledby="heading-review"
+        >
+          <div class="drawing terminal">
+            <pre><code>critique:
+  - dimension: baseline_fairness
+    status: concern
+    observation: "ours retrieves 10 docs,
+      baselines 5"
+    why_it_matters: "gain may be budget,
+      not mechanism"
+    resolving_experiment: "rerun strongest
+      baseline at equal budget"</code></pre>
+          </div>
+          <div class="example-copy">
+            <p class="eyebrow">REVIEW / +critique</p>
+            <h3 id="heading-review">Is it credible?</h3>
+            <p class="question">
+              Reviewer mode: every major claim is aligned with the experiment
+              that tests it, then attacked along a fixed 12-dimension matrix.
+            </p>
+            <details>
+              <summary>Show the critique rule</summary>
+              <p>Every criticism must be specific, evidence-grounded, and
+              testable: Observation → Why it matters → Experiment that could
+              resolve it. “More experiments are needed” is forbidden.</p>
+            </details>
+            <p class="source">
+              End-to-end wins with multiple simultaneous changes are INDIRECT
+              evidence — never proof of the mechanism.
+            </p>
+          </div>
+        </article>
+        <article
+          class="example"
+          id="example-research"
+          aria-labelledby="heading-research"
+        >
+          <div class="drawing terminal">
+            <pre><code>research_hypotheses:
+  - gap: "no equal-budget comparison of
+      memory representations"
+    hypothesis: "evidence-state memory beats
+      raw-trajectory memory at fixed budget"
+    minimal_experiment: "5-doc cap, 3 seeds,
+      HotpotQA-hard"
+    next_action: [COMPARE, USE_AS_BASELINE]</code></pre>
+          </div>
+          <div class="example-copy">
+            <p class="eyebrow">RESEARCH / hours</p>
+            <h3 id="heading-research">What does it mean for my work?</h3>
+            <p class="question">
+              Overlap, difference, threat to novelty, reusable components — then
+              grounded hypotheses in the form Gap → Hypothesis → Minimal
+              experiment → Expected observation.
+            </p>
+            <details>
+              <summary>Show the long-term payoff</summary>
+              <p>100 papers read this way become 100 falsifiable research
+              hypotheses — a completely different asset from 100 summaries.</p>
+            </details>
+            <p class="source">
+              Reading must terminate in a decision: IGNORE · SAVE · CITE ·
+              COMPARE · USE_AS_BASELINE · REPRODUCE · INTEGRATE · INVESTIGATE.
+            </p>
+          </div>
+        </article>
+      </section>
+      <section id="architecture" class="section method-section">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">04 / THE ARCHITECTURE</p>
+            <h2>Workflow below. Judgment on top.</h2>
+            <p>
+              Three layers turn a reading prompt into a research instrument —
+              plus optional multi-agent escalation when the paper earns it.
+            </p>
+          </div>
+          <ol class="pipeline">
+            <li>
+              <span class="step">LAYER 01</span>
+              <h3>Workflow</h3>
+              <p>
+                Scan → Understand → Verify → Critique. The fixed scientific
+                discipline that keeps the agent honest and cheap.
+              </p>
+              <strong>10 <span>steps, fixed</span></strong>
+            </li>
+            <li>
+              <span class="step">LAYER 02</span>
+              <h3>Evidence State</h3>
+              <p>
+                Claim ↔ Evidence ↔ Confidence ↔ Uncertainty. A living state
+                that absorbs appendices, code, and author responses.
+              </p>
+              <strong>v<sub>t</sub> → v<sub>t+1</sub> <span>updatable</span></strong>
+            </li>
+            <li>
+              <span class="step">LAYER 03</span>
+              <h3>Research Agent</h3>
+              <p>
+                Compare, challenge, connect, hypothesize. The open judgment
+                space where new research directions appear.
+              </p>
+              <strong>4 <span>roles, on demand</span></strong>
+            </li>
+          </ol>
+          <p class="method-note">
+            Multi-agent escalation: SCAN → Reader · REVIEW → Reader + Experiment
+            Critic · RESEARCH → Reader + Method Critic + Experiment Critic ·
+            conflicts → Research Judge.
+            <a
+              href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/multi-agent.md"
+              >Escalation policy ↗</a
+            >
+          </p>
+        </div>
+      </section>
+      <section id="resources" class="section container">
+        <div class="section-heading">
+          <p class="eyebrow">05 / OPEN RESOURCES</p>
+          <h2>Install it in one command.</h2>
+          <p>
+            The skill, the reference protocols, and a filled example card.
+          </p>
+        </div>
+        <div class="resource-list">
+          <article>
+            <span class="resource-index">01</span>
+            <div>
+              <h3>SKILL.md</h3>
+              <p>
+                The entry point: purpose, reading modes, the 10-step workflow,
+                evidence discipline, output schema, and anti-patterns.
+              </p>
+            </div>
+            <div class="resource-links">
+              <a
+                href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/SKILL.md"
+                >Read SKILL.md ↗</a
+              >
+            </div>
+          </article>
+          <article>
+            <span class="resource-index">02</span>
+            <div>
+              <h3>Reference protocols</h3>
+              <p>
+                Reading modes, the 12-dimension critique matrix, the Research
+                Card schema, Paper Evidence State, paper-type variants, and the
+                multi-agent escalation policy.
+              </p>
+            </div>
+            <div class="resource-links">
+              <a
+                href="https://github.com/xiaofengShi/paper-reading-skill/tree/main/references"
+                >Browse references ↗</a
+              ><a
+                href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/research-card.example.md"
+                >Example card ↗</a
+              >
+            </div>
+          </article>
+          <article>
+            <span class="resource-index">03</span>
+            <div>
+              <h3>Quick install</h3>
+              <p>
+                Clone once, copy into your agent's skill directory, and ask for
+                a mode — SCAN, UNDERSTAND, REVIEW, or RESEARCH.
+              </p>
+            </div>
+            <div class="resource-links">
+              <a
+                href="https://github.com/xiaofengShi/paper-reading-skill#-installation"
+                >Installation guide ↗</a
+              >
+            </div>
+          </article>
+        </div>
+        <p class="source">
+          Works with agents that support SKILL.md-style skills, including
+          Codex, Claude Code, and Kimi Code.
+        </p>
+      </section>
+      <section id="citation" class="section citation-section">
+        <div class="container citation-layout">
+          <div>
+            <p class="eyebrow">06 / CITATION</p>
+            <h2>Using this skill?</h2>
+            <p>
+              If Paper Research Skill is useful in your work, you can cite the
+              repository.
+            </p>
+            <a href="citation.bib" download>Download BibTeX ↙</a>
+          </div>
+          <div class="citation-code">
+            <div class="code-heading">
+              <span>BIBTEX</span
+              ><button type="button" id="copy-citation" hidden>
+                Copy citation
+              </button>
+            </div>
+            <pre><code id="bibtex">@misc{shi2026paperresearchskill,
+  title  = {Paper Research Skill: Evidence-Grounded Paper Reading for AI Agents},
+  author = {Xiaofeng Shi},
+  year   = {2026},
+  url    = {https://github.com/xiaofengShi/paper-reading-skill}
+}</code></pre>
+            <p id="copy-status" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="container">
+      <a class="wordmark" href="#">PaperResearch</a>
+      <p>Agent skill · Evidence-grounded paper reading</p>
+      <div>
+        <a
+          href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE"
+          >License</a
+        ><a href="https://github.com/xiaofengShi/paper-reading-skill"
+          >GitHub ↗</a
+        >
+      </div>
+    </footer>
+  </body>
+</html>
