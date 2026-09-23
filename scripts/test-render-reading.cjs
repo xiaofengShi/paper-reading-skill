@@ -22,6 +22,12 @@ test('inline math stays in prose, display math stays separate, and paired values
 
 **Example:** A has $x+y$, B has $z$. The result stays in one paragraph.
 
+An observation can be read on its own.（PDF p. 3, Fig. 1）
+
+Another observation stands alone (PDF p. 5, Fig. 2).
+
+*原论文 Fig. 1，PDF p. 4。图示说明留在本页。*
+
 $$x=y+z$$
 
 \`\`\`paper-chart
@@ -40,6 +46,12 @@ $$x=y+z$$
     assert.match(html, /\+10\.0 个百分点/);
     assert.match(html, /-10\.0 个百分点/);
     assert.doesNotMatch(html, /class="pair-line"/);
+    assert.match(html, /id="show-sources" type="checkbox"/);
+    assert.doesNotMatch(html, /id="show-sources"[^>]*\bchecked\b/);
+    assert.match(html, /#show-sources:not\(:checked\) ~ \* \.source-ref/);
+    assert.match(html, /An observation can be read on its own\.<span class="source-ref">（PDF p\. 3, Fig\. 1）<\/span>/);
+    assert.match(html, /Another observation stands alone <span class="source-ref">\(PDF p\. 5, Fig\. 2\)<\/span>\./);
+    assert.match(html, /原论文 Fig\. 1<span class="source-ref">，PDF p\. 4<\/span>。图示说明留在本页。/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

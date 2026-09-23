@@ -1,6 +1,6 @@
 # MiMo-V2.6：Agent 强化学习的规模化路径
 
-> **阅读定位**：从全局训练链、关键学习信号到实验与基础设施，完整理解这篇报告。原文为 LLM-Core Xiaomi 的 *MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement*，本样例依据用户提供的 44 页 PDF（SHA-256：`7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b`）。页码均指该 PDF 的页码。PDF 未随仓库分发；外部代码和更新版本未核验。
+> **阅读定位**：从全局训练链、关键学习信号到实验与基础设施，完整理解这篇报告。原文为 LLM-Core Xiaomi 的 *MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement*。<span class="source-ref">本样例依据用户提供的 44 页 PDF（SHA-256：7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b）；页码均指该 PDF 的页码。PDF 未随仓库分发；外部代码和更新版本未核验。</span>
 
 ## 01 / 先把整篇论文装进脑中
 
@@ -39,7 +39,7 @@
 
 进入 RL 的两个关键输入值得分开理解：**任务与 harness 提供可执行的交互轨迹**；**grader 把轨迹和测试结果转成可区别质量的学习信号**。前者改变模型遇到什么问题，后者改变模型从同样的“通过测试”中学到什么。后面的实验分别检查训练趋势、评分、跨 harness 迁移和稳定性；最终模型总分不能单独归因于其中一条箭头。（PDF pp. 8, 16–26）
 
-<details class="source-note"><summary>原文参数表的一处标注不一致</summary><p>PDF p. 3 写 Pro 为 1.02T 总参数、42B active parameters；p. 6 的 Table 1 写 42T active parameters。后者疑似表内笔误，本文没有使用这一冲突值进行计算。</p></details>
+<details class="source-note"><summary>原文参数表的一处标注不一致</summary><p>报告正文将 Pro 标为 1.02T 总参数、42B active parameters；Table 1 却写成 42T active parameters。后者疑似表内笔误，本文没有使用这一冲突值进行计算。（PDF p. 3；p. 6, Table 1）</p></details>
 
 ## 02 / 一轮 RL：轨迹、评分、更新
 

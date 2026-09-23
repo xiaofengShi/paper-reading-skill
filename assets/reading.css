@@ -23,6 +23,14 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .topbar .brand { font-size: .8rem; font-weight: 900; letter-spacing: .16em; text-decoration: none; color: var(--ink); white-space: nowrap; }
 .topbar span { color: var(--subtle); font-size: .82rem; margin-right: auto; }
 .topbar > a:last-child { font-size: .82rem; font-weight: 700; text-decoration: none; }
+.source-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.source-toggle-label { cursor: pointer; color: var(--ink-soft); font-size: .78rem; font-weight: 700; white-space: nowrap; border: 1px solid var(--line); padding: .3rem .65rem; border-radius: 3px; }
+.source-toggle-label::before { content: '□'; margin-right: .4em; }
+#show-sources:checked + .topbar .source-toggle-label { color: var(--teal); background: var(--teal-pale); border-color: #a9c8ba; }
+#show-sources:checked + .topbar .source-toggle-label::before { content: '☑'; }
+#show-sources:focus-visible + .topbar .source-toggle-label { outline: 3px solid var(--orange); outline-offset: 3px; }
+#show-sources:not(:checked) ~ * .source-ref, #show-sources:not(:checked) ~ * .source-badge { display: none; }
+.source-ref { color: var(--subtle); font-size: .82em; }
 .hero { background: #14353a; color: #f7fcf8; overflow: hidden; }
 .hero-inner { max-width: 1440px; min-height: 440px; margin: 0 auto; padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5rem); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(340px, .9fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
 .eyebrow { color: #90d5bd; font-size: .73rem; font-weight: 800; letter-spacing: .18em; margin: 0 0 1.2rem; }
@@ -166,6 +174,7 @@ math { font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", serif;
 }
 @media (max-width: 700px) {
   .topbar span { display: none; }.topbar .brand { margin-right: auto; }
+  .topbar > a:last-child { display: none; }
   .hero-inner { min-height: 0; display: block; padding: 2.4rem 1.3rem; }
   .hero-map { margin-top: 2.3rem; }
   .article-inner { padding: 1.3rem 1.05rem 4rem; }

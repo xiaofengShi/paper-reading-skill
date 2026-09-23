@@ -19,7 +19,7 @@
 <li><strong>全局认知图</strong>：问题、研究场景、主要想法、贡献和证据所在位置。</li>
 <li><strong>方法或论证流程图</strong>：输入、关键步骤、反馈与输出；每条重要箭头有解释。</li>
 <li><strong>机制放大</strong>：必要定义、公式、算法、假设和一个便于理解的例子。</li>
-<li><strong>实验图谱</strong>：问题 → 设置/对照 → 指标 → 结果 → 能得出的结论，附 PDF 页码与图表号。</li>
+<li><strong>实验图谱</strong>：问题 → 设置/对照 → 指标 → 结果 → 能得出的结论；PDF 定位按需显示。</li>
 <li><strong>综合理解</strong>：把机制与实验重新连起来，说明已展示的结果、适用范围和仍待回答的问题。</li>
 </ol>
 <p>这些层次在<strong>同一份离线可读的 HTML</strong> 中展开，按论文类型选择合适图形：方法论文常用工作流与机制图，理论论文常用定义与证明依赖图，基准论文常用构建流程与测量维度图。图负责导航，解释、公式、原始表格和来源定位仍保留在正文中。</p>
@@ -58,7 +58,7 @@
 <pre><code class="language-bash">npm ci
 npm run build:example
 </code></pre>
-<p>构建器 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">render-reading.cjs</a> 从 Markdown 与仓库内的图形输入生成单文件 HTML，内嵌样式、图像和交互图，并把公式排为 MathML。样例的两幅 Archify HTML 已作为输入保存在仓库；重建时不调用 Archify，也不依赖本机安装的其他 skill 或机器特定路径。新论文没有 Archify 图时，直接用内联 SVG、HTML 图表或其他合适图形完成阅读文档。运行 <code>npm test</code> 可检查行内/独立公式、首屏图谱和数据图的生成契约。</p>
+<p>构建器 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">render-reading.cjs</a> 从 Markdown 与仓库内的图形输入生成单文件 HTML，内嵌样式、图像和交互图，并把公式排为 MathML。PDF 页码等核对信息保留在 Markdown 审计源中；HTML 默认隐藏，顶部的“显示原文定位”可按需展开。样例的两幅 Archify HTML 已作为输入保存在仓库；重建时不调用 Archify，也不依赖本机安装的其他 skill 或机器特定路径。新论文没有 Archify 图时，直接用内联 SVG、HTML 图表或其他合适图形完成阅读文档。运行 <code>npm test</code> 可检查行内/独立公式、首屏图谱、出处开关和数据图的生成契约。</p>
 <h2>方法依据与取舍</h2>
 <ul>
 <li><a href="https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf">Keshav 的三遍阅读法</a>提供“先全局、再内容、再细节”的阅读节奏。本 skill 在用户要求深读时完成后两遍，不把第一遍筛选当成默认终点。</li>
