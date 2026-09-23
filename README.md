@@ -40,7 +40,7 @@ npm ci
 npm run build:example
 ```
 
-构建器 [render-reading.cjs](scripts/render-reading.cjs) 从 Markdown 与本地图形输入生成单文件 HTML，内嵌样式、图像和交互图，并把公式排为 MathML。没有 Archify 时，可以用内联 SVG、HTML 图表或其他合适图形完成阅读文档；它不是 skill 的必需依赖。
+构建器 [render-reading.cjs](scripts/render-reading.cjs) 从 Markdown 与仓库内的图形输入生成单文件 HTML，内嵌样式、图像和交互图，并把公式排为 MathML。样例的两幅 Archify HTML 已作为输入保存在仓库；重建时不调用 Archify，也不依赖本机安装的其他 skill 或机器特定路径。新论文没有 Archify 图时，直接用内联 SVG、HTML 图表或其他合适图形完成阅读文档。运行 `npm test` 可检查行内/独立公式、首屏图谱和数据图的生成契约。
 
 ## 方法依据与取舍
 

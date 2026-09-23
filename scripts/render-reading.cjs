@@ -21,6 +21,12 @@ const slot = html => {
   slots.push(html);
   return `\n\n${id}\n\n`;
 };
+const inlineSlots = [];
+const inlineSlot = html => {
+  const id = `PAPERREADINGINLINE${inlineSlots.length}END`;
+  inlineSlots.push(html);
+  return id;
+};
 const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;')
   .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const localFile = relative => {
@@ -65,12 +71,16 @@ function renderChart(data) {
   }
   if (data.type === 'paired') {
     const rows = data.rows.map(r => {
-      for (const key of ['before', 'after']) if (!(Number(r[key]) >= 0 && Number(r[key]) <= 100)) throw new Error(`Invalid ${key} for ${r.label}`);
+      for (const key of ['before', 'after']) if (!(Number.isFinite(Number(r[key])) && Number(r[key]) >= 0 && Number(r[key]) <= 100)) throw new Error(`Invalid ${key} for ${r.label}`);
+      const before = Number(r.before);
+      const after = Number(r.after);
+      const delta = after - before;
+      const change = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}`;
       const prefix = r.approx ? '≈' : '';
-      return `<div class="pair-row"><div class="pair-label">${esc(r.label)}</div><div class="pair-line"><span class="pair-key">起点</span><div class="pair-track"><span class="pair-fill before" style="width:${r.before}%"></span></div><strong>${prefix}${r.before}</strong></div><div class="pair-line"><span class="pair-key">终点</span><div class="pair-track"><span class="pair-fill after" style="width:${r.after}%"></span></div><strong>${prefix}${r.after}</strong></div><p class="pair-delta">变化：${prefix}+${(r.after-r.before).toFixed(1)} 个百分点</p></div>`;
+      return `<div class="pair-row"><div class="pair-label">${esc(r.label)}</div><div class="pair-track" role="img" aria-label="${esc(`起点 ${prefix}${before}%，终点 ${prefix}${after}%，变化 ${prefix}${change} 个百分点`)}"><span class="pair-connector" style="left:${Math.min(before, after)}%;width:${Math.abs(delta)}%"></span><span class="pair-point before" style="left:${before}%"></span><span class="pair-point after" style="left:${after}%"></span></div><div class="pair-values"><span><i class="pair-symbol before" aria-hidden="true"></i>起点 <strong>${prefix}${before}%</strong></span><span><i class="pair-symbol after" aria-hidden="true"></i>终点 <strong>${prefix}${after}%</strong></span><span class="pair-delta">${prefix}${change} 个百分点</span></div></div>`;
     }).join('');
-    const table = `<details class="chart-table"><summary>查看图表数据</summary><table><thead><tr><th>项目</th><th>起点</th><th>终点</th><th>变化（百分点）</th></tr></thead><tbody>${data.rows.map(r => `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${r.before}</td><td>${r.approx?'≈':''}${r.after}</td><td>${r.approx?'≈':''}+${(r.after-r.before).toFixed(1)}</td></tr>`).join('')}</tbody></table></details>`;
-    return `<figure class="data-figure">${header}<div class="paired-chart">${rows}</div>${table}</figure>`;
+    const table = `<details class="chart-table"><summary>查看图表数据</summary><table><thead><tr><th>项目</th><th>起点（%）</th><th>终点（%）</th><th>变化（百分点）</th></tr></thead><tbody>${data.rows.map(r => { const delta = Number(r.after) - Number(r.before); return `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${esc(r.before)}</td><td>${r.approx?'≈':''}${esc(r.after)}</td><td>${r.approx?'≈':''}${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</td></tr>`; }).join('')}</tbody></table></details>`;
+    return `<figure class="data-figure">${header}<div class="paired-chart">${rows}<div class="pair-axis" aria-hidden="true"><span>0%</span><span>100%</span></div></div>${table}</figure>`;
   }
   throw new Error(`Unknown paper-chart type: ${data.type}`);
 }
@@ -83,17 +93,26 @@ function renderArchify(relative, title) {
   return `<details class="archify-disclosure"><summary>展开辅助交互图：${esc(title)} <span>节点聚焦与路径探索</span></summary><figure class="archify-figure"><iframe title="${esc(title)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="lazy"></iframe><figcaption>交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。</figcaption></figure></details>`;
 }
 
-let prepared = source.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => slot(`<div class="display-math">${katex.renderToString(math.trim(), {output:'mathml',displayMode:true,throwOnError:true})}</div>`));
-prepared = prepared.replace(/\$([^$\n]+)\$/g, (_, math) => slot(katex.renderToString(math.trim(), {output:'mathml',throwOnError:true})));
-prepared = prepared.replace(/```paper-map\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderMap(JSON.parse(json))));
+let prepared = source;
+let heroMap = null;
+prepared = prepared.replace(/```paper-map\s*\n([\s\S]*?)\n```/g, (_, json) => {
+  const data = JSON.parse(json);
+  if (!Array.isArray(data.items) || !data.items.length) throw new Error('paper-map needs items');
+  if (!heroMap) { heroMap = data; return ''; }
+  return slot(renderMap(data));
+});
 prepared = prepared.replace(/```paper-path\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderPath(JSON.parse(json))));
 prepared = prepared.replace(/```paper-contrast\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderContrast(JSON.parse(json))));
 prepared = prepared.replace(/```paper-experiments\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderExperiments(JSON.parse(json))));
 prepared = prepared.replace(/```paper-chart\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderChart(JSON.parse(json))));
 prepared = prepared.replace(/<!-- archify:([^|>]+)\|([^>]+) -->/g, (_, file, title) => slot(renderArchify(file, title.trim())));
+prepared = prepared.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => slot(`<div class="display-math">${katex.renderToString(math.trim(), {output:'mathml',displayMode:true,throwOnError:true})}</div>`));
+prepared = prepared.replace(/\$([^$\n]+)\$/g, (_, math) => inlineSlot(`<span class="inline-math">${katex.renderToString(math.trim(), {output:'mathml',throwOnError:true})}</span>`));
 let body = marked.parse(prepared, {gfm:true});
 slots.forEach((html, i) => { body = body.replace(`<p>PAPER_READING_SLOT_${i}_END</p>`, html); });
 if (/PAPER_READING_SLOT_\d+_END/.test(body)) throw new Error('Unresolved visual slot');
+inlineSlots.forEach((html, i) => { body = body.replaceAll(`PAPERREADINGINLINE${i}END`, html); });
+if (/PAPERREADINGINLINE\d+END/.test(body)) throw new Error('Unresolved inline math slot');
 body = body.replace(/<img src="([^"]+)" alt="([^"]*)">/g, (_, relative, alt) => {
   const file = localFile(relative);
   const mime = file.endsWith('.webp') ? 'image/webp' : file.endsWith('.png') ? 'image/png' : null;
@@ -110,9 +129,10 @@ body = body.replace(/<h2>([\s\S]*?)<\/h2>/g, (_, heading) => {
 const title = (body.match(/<h1>([\s\S]*?)<\/h1>/) || [,'Paper Reading'])[1].replace(/<[^>]*>/g,'');
 body = body.replace(/<h1>[\s\S]*?<\/h1>/, '');
 const nav = sections.map(s => `<a href="#${s.id}">${esc(s.heading)}</a>`).join('');
+const heroVisual = heroMap ? `<div class="hero-map"><p class="hero-map-title">论文全局图 <span>01 — ${String(heroMap.items.length).padStart(2, '0')}</span></p><ol>${heroMap.items.map(x => `<li><span class="hero-map-index">${esc(x.number)}</span><div><div class="hero-map-heading"><strong>${esc(x.label)}</strong>${x.signal ? `<b>${esc(x.signal)}</b>` : ''}</div><p>${esc(x.text)}</p>${sourceBadge(x.source)}</div></li>`).join('')}</ol>${heroMap.outcome ? `<div class="hero-map-outcome"><span aria-hidden="true">↳</span><div><strong>${esc(heroMap.outcome)}</strong>${heroMap.outcomeSource ? sourceBadge(heroMap.outcomeSource) : ''}</div></div>` : ''}</div>` : '';
 const output = `<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${esc(title)}：从全局路径到机制与实验的一体化论文深读。"><title>${esc(title)} · 深读图谱</title><style>${css}</style></head>
-<body><a class="skip-link" href="#content">跳到正文</a><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>原文证据驱动的深读图谱</span><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>${esc(title)}</h1><p class="hero-sub">一页贯通全局认知、关键机制与实验证据。</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div><div class="hero-visual" aria-hidden="true"><div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="hero-core">PAPER</div><span class="hero-tag t1">全局认知</span><span class="hero-tag t2">关键机制</span><span class="hero-tag t3">实验证据</span></div></div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span>Paper Reading Skill · 单文件阅读版</span><a href="#top">返回顶部 ↑</a></footer></body></html>`;
+<body><a class="skip-link" href="#content">跳到正文</a><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>原文证据驱动的深读图谱</span><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>${esc(title)}</h1><p class="hero-sub">${esc(heroMap?.thesis || '从全局路径到关键机制与实验证据。')}</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span>Paper Reading Skill · 单文件阅读版</span><a href="#top">返回顶部 ↑</a></footer></body></html>`;
 const cleanOutput = output.replace(/[ \t]+$/gm, '');
 fs.writeFileSync(outputPath, cleanOutput);
 console.log(`Built ${outputPath} (${Buffer.byteLength(cleanOutput)} bytes, ${sections.length} sections, ${slots.length} visuals)`);
