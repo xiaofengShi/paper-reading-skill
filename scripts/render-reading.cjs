@@ -60,7 +60,7 @@ function renderMap(data) {
 function renderPath(data) {
   if (!Array.isArray(data.stages) || !data.stages.length) throw new Error('paper-path needs stages');
   return `<figure class="reading-path"><figcaption><span class="figure-kicker">GUIDED PATH</span><strong>${esc(data.title)}</strong><p>${esc(data.intro)}</p></figcaption><ol>${data.stages.map((s, i) =>
-    `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>为什么需要</dt><dd>${esc(s.why)}</dd></div><div><dt>交给下一阶段</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
+    `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>为什么需要</dt><dd>${esc(s.why)}</dd></div><div><dt>${i === data.stages.length - 1 ? '这一阶段留下什么' : '交给下一阶段'}</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
   ).join('')}</ol></figure>`;
 }
 function renderContrast(data) {
@@ -76,13 +76,14 @@ function renderExperiments(data) {
   ).join('')}</div></figure>`;
 }
 function renderChart(data) {
-  const header = `<div class="figure-head"><div><span class="figure-kicker">DATA VIEW</span><h3>${esc(data.title)}</h3>${data.subtitle ? `<p>${esc(data.subtitle)}</p>` : ''}</div>${sourceBadge(data.source)}</div>`;
+  const header = `<div class="figure-head"><div><span class="figure-kicker">${esc(data.origin || '本文整理的数据图')}</span><h3>${esc(data.title)}</h3>${data.subtitle ? `<p>${esc(data.subtitle)}</p>` : ''}</div>${sourceBadge(data.source)}</div>`;
+  const note = data.note ? `<figcaption class="data-note">${esc(data.note)}</figcaption>` : '';
   if (data.type === 'segments') {
     const sum = data.rows.reduce((n, r) => n + Number(r.value), 0);
     if (Math.abs(sum - 100) > 0.2) throw new Error(`Segments do not total 100: ${sum}`);
     const bar = `<div class="segments" role="img" aria-label="${esc(data.rows.map(r => `${r.label} ${r.value}${data.unit || ''}`).join('；'))}">${data.rows.map((r, i) => `<span class="segment s${i}" style="width:${Number(r.value)}%"></span>`).join('')}</div>`;
     const legend = `<div class="segment-legend">${data.rows.map((r, i) => `<div><span class="swatch s${i}"></span><span>${esc(r.label)}</span><strong>${esc(r.value)}${esc(data.unit || '')}</strong></div>`).join('')}</div>`;
-    return `<figure class="data-figure">${header}${bar}${legend}</figure>`;
+    return `<figure class="data-figure">${header}${bar}${legend}${note}</figure>`;
   }
   if (data.type === 'paired') {
     const rows = data.rows.map(r => {
@@ -95,7 +96,7 @@ function renderChart(data) {
       return `<div class="pair-row"><div class="pair-label">${esc(r.label)}</div><div class="pair-track" role="img" aria-label="${esc(`起点 ${prefix}${before}%，终点 ${prefix}${after}%，变化 ${prefix}${change} 个百分点`)}"><span class="pair-connector" style="left:${Math.min(before, after)}%;width:${Math.abs(delta)}%"></span><span class="pair-point before" style="left:${before}%"></span><span class="pair-point after" style="left:${after}%"></span></div><div class="pair-values"><span><i class="pair-symbol before" aria-hidden="true"></i>起点 <strong>${prefix}${before}%</strong></span><span><i class="pair-symbol after" aria-hidden="true"></i>终点 <strong>${prefix}${after}%</strong></span><span class="pair-delta">${prefix}${change} 个百分点</span></div></div>`;
     }).join('');
     const table = `<details class="chart-table"><summary>查看图表数据</summary><table><thead><tr><th>项目</th><th>起点（%）</th><th>终点（%）</th><th>变化（百分点）</th></tr></thead><tbody>${data.rows.map(r => { const delta = Number(r.after) - Number(r.before); return `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${esc(r.before)}</td><td>${r.approx?'≈':''}${esc(r.after)}</td><td>${r.approx?'≈':''}${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</td></tr>`; }).join('')}</tbody></table></details>`;
-    return `<figure class="data-figure">${header}<div class="paired-chart">${rows}<div class="pair-axis" aria-hidden="true"><span>0%</span><span>100%</span></div></div>${table}</figure>`;
+    return `<figure class="data-figure">${header}<div class="paired-chart">${rows}<div class="pair-axis" aria-hidden="true"><span>0%</span><span>100%</span></div></div>${table}${note}</figure>`;
   }
   throw new Error(`Unknown paper-chart type: ${data.type}`);
 }

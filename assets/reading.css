@@ -162,6 +162,7 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .chart-table { border-top: 1px solid var(--line); padding: .6rem 1.2rem; font-size: .79rem; }
 .chart-table summary { cursor: pointer; color: var(--teal); font-weight: 700; }
 .chart-table table { margin: .6rem 0 !important; }
+.data-note { padding: .7rem 1.2rem; color: var(--ink-soft); background: #f8fbf9; border-top: 1px solid var(--line); font-size: .82rem; line-height: 1.5; }
 .page-footer { display: flex; justify-content: space-between; padding: 1.5rem clamp(1rem, 4vw, 4rem); color: var(--subtle); background: #e9f1ed; border-top: 1px solid var(--line); font-size: .8rem; }
 @media (max-width: 1000px) {
   .reading-shell { display: block; }

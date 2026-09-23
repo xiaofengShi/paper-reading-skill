@@ -57,6 +57,7 @@ $$x=y+z$$
     assert.match(html, /class="hero-sub">One idea grounded in the source/);
     assert.match(html, /class="hero-map"[\s\S]*?A source fact/);
     assert.match(html, /class="pair-track"[\s\S]*?left:60%[\s\S]*?left:70%/);
+    assert.match(html, /<span class="figure-kicker">本文整理的数据图<\/span>/);
     assert.match(html, /\+10\.0 个百分点/);
     assert.match(html, /-10\.0 个百分点/);
     assert.doesNotMatch(html, /class="pair-line"/);
@@ -66,6 +67,27 @@ $$x=y+z$$
     assert.match(html, /An observation can be read on its own\.<span class="source-ref">（PDF p\. 3, Fig\. 1）<\/span>/);
     assert.match(html, /Another observation stands alone <span class="source-ref">\(PDF p\. 5, Fig\. 2\)<\/span>\./);
     assert.match(html, /原论文 Fig\. 1<span class="source-ref">，PDF p\. 4<\/span>。图示说明留在本页。/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('MiMo reader includes Eq. 1, names both Fig. 3 redraws, and explains its reading order', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-mimo-test-'));
+  try {
+    const source = path.resolve(__dirname, '../examples/mimo-v2.6-deep-read.md');
+    const output = path.join(dir, 'mimo.html');
+    execFileSync(process.execPath, [renderer, source, output]);
+    const html = fs.readFileSync(output, 'utf8');
+    assert.match(html, /id="section-1">01 \/ 全局与阅读顺序<\/h2>/);
+    assert.match(html, /前四步是模型训练，第五步是结果评测/);
+    assert.match(html, /<div class="display-math">[\s\S]*?r_{i,t}M_{i,t}A_i[\s\S]*?<\/div>/);
+    assert.ok(html.includes('\\frac{1}{\\sum_{i=1}^{G}|o_i|}'), 'Eq. 1 keeps its group-token denominator');
+    assert.match(html, /分母是<strong>该组全部轨迹的 token 总数<\/strong>/);
+    assert.match(html, /<span class="figure-kicker">本文重绘 · 原论文 Fig\. 3 右图<\/span>/);
+    assert.match(html, /<span class="figure-kicker">本文重绘 · 原论文 Fig\. 3 左图<\/span>/);
+    assert.match(html, /id="original-fig-3"/);
+    assert.match(html, /这一阶段留下什么/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
