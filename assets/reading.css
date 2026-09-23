@@ -64,6 +64,35 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .principle-number { color: var(--orange); font: 800 .8rem ui-monospace, monospace; }
 .principle h3 { margin: .55rem 0 .4rem; font-size: 1.1rem; }
 .principle p { font-size: .9rem; margin-bottom: .7rem; }
+.reading-path, .mechanism-contrast { margin: 2rem 0 2.3rem; border: 1px solid var(--line); border-radius: 7px; background: #fff; box-shadow: 0 10px 25px #18362e0b; overflow: hidden; }
+.reading-path > figcaption, .mechanism-contrast > figcaption { display: block; padding: 1.15rem 1.3rem; background: #f0f6f2; border-bottom: 1px solid var(--line); }
+.reading-path > figcaption strong, .mechanism-contrast > figcaption strong { display: block; font-size: 1.15rem; line-height: 1.35; }
+.reading-path > figcaption p, .mechanism-contrast > figcaption p { margin: .3rem 0 0; font-size: .84rem; }
+.reading-path ol { list-style: none; padding: .1rem 1.3rem 1rem !important; margin: 0 !important; max-width: none !important; }
+.reading-path li { display: grid; grid-template-columns: 2.4rem minmax(0,1fr); gap: .85rem; margin: 0 !important; padding: 1rem 0; position: relative; }
+.reading-path li:not(:last-child) { border-bottom: 1px solid var(--line); }
+.path-index { width: 2.25rem; height: 2.25rem; border: 2px solid #89b5a5; border-radius: 50%; display: grid; place-items: center; color: var(--teal); background: #fff; font: 800 .8rem ui-monospace, monospace; z-index: 1; }
+.reading-path li:not(:last-child)::before { content: ''; position: absolute; left: 1.07rem; top: 3.25rem; bottom: -1rem; width: 2px; background: #89b5a5; }
+.path-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: .3rem .7rem; }
+.path-title h3 { margin: .05rem 0 .35rem; font-size: 1.03rem; }
+.path-title span { color: var(--orange); font-size: .74rem; font-weight: 800; }
+.path-content > p { margin: 0 0 .55rem; font-size: .91rem; }
+.path-content dl { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .55rem; margin: .6rem 0; }
+.path-content dl > div { padding: .55rem .7rem; background: #f7faf8; border-left: 2px solid #b9d6cb; }
+.path-content dt, .contrast-branch dt { color: var(--teal); font-size: .7rem; font-weight: 850; }
+.path-content dd, .contrast-branch dd { margin: .15rem 0 0; color: var(--ink-soft); font-size: .79rem; line-height: 1.5; }
+.contrast-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+.contrast-branch { padding: 1.2rem 1.3rem; }
+.contrast-branch + .contrast-branch { border-left: 1px solid var(--line); }
+.contrast-branch h3 { margin: 0 0 .35rem; font-size: 1.15rem; color: var(--teal-dark); }
+.contrast-branch.b1 h3 { color: #a4532f; }
+.contrast-lead { margin: 0 0 .8rem !important; font-size: .88rem; }
+.contrast-branch dl { margin: 0 0 .8rem; }
+.contrast-branch dl > div { padding: .55rem 0; border-top: 1px solid var(--line); }
+.archify-disclosure { margin: 1.2rem 0 2rem; border: 1px solid var(--line); border-radius: 6px; background: #f4f8f5; }
+.archify-disclosure > summary { padding: .75rem 1rem; cursor: pointer; color: var(--teal); font-size: .85rem; font-weight: 800; }
+.archify-disclosure > summary span { margin-left: .7rem; color: var(--subtle); font-size: .76rem; font-weight: 500; }
+.archify-disclosure .archify-figure { margin: 0; border: 0; box-shadow: none; border-radius: 0; }
 .experiment-atlas { margin: 1.7rem 0 2.3rem; border: 1px solid var(--line); background: #fff; box-shadow: 0 10px 25px #18362e0b; border-radius: 7px; overflow: hidden; }
 .experiment-atlas figcaption { padding: 1.1rem 1.2rem; border-bottom: 1px solid var(--line); }
 .experiment-atlas figcaption strong { display: block; font-size: 1.1rem; }
@@ -124,6 +153,9 @@ math { font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", serif;
   .article-inner { padding: 1.3rem 1.05rem 4rem; }
   .article h2 { margin-top: 3.1rem; font-size: 1.65rem; }
   .principle-grid { grid-template-columns: 1fr; }
+  .path-content dl, .contrast-grid { grid-template-columns: 1fr; }
+  .contrast-branch + .contrast-branch { border-left: 0; border-top: 1px solid var(--line); }
+  .archify-disclosure > summary span { display: block; margin: .15rem 0 0 1.25rem; }
   .experiment-head { display: none; }
   .experiment-row { display: block; }
   .experiment-row > p { margin: .4rem 0 !important; }

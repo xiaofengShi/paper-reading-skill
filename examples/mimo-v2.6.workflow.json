@@ -3,7 +3,7 @@
   "diagram_type": "workflow",
   "meta": {
     "title": "MiMo-V2.6 的训练主线",
-    "subtitle": "技术报告的全局路径；节点下方标注 PDF 页码",
+    "subtitle": "从基础模型、混合 RL 到多教师能力整合",
     "locale": "zh-CN",
     "visual_preset": "editorial",
     "quality_profile": "showcase",
@@ -18,7 +18,7 @@
           "mopd",
           "final"
         ],
-        "note": "先看主路径：基础模型、长上下文 agent 训练、混合 RL、蒸馏与最终模型。"
+        "note": "基础能力与长上下文训练进入混合 RL；任务环境提供探索，grader 决定轨迹如何转成学习信号；MOPD2 最后整合领域教师。"
       },
       {
         "id": "rl",
@@ -28,7 +28,7 @@
           "env",
           "grader"
         ],
-        "note": "混合 RL 的能力来源包括训练计算、环境/agent harness 多样性和 grader 计算；见 PDF 第 3、8–19 页。"
+        "note": "大批次增加可探索轨迹；环境与 harness 增加任务变化；GRS/GAR 区分同样过测的解法质量。三者是相互配合的扩展轴。"
       }
     ]
   },
@@ -56,7 +56,7 @@
       "col": 0,
       "type": "database",
       "label": "预训练",
-      "sublabel": "多模态基础 · p. 3–7",
+      "sublabel": "MoE + 多模态基础",
       "width": 150
     },
     {
@@ -65,7 +65,7 @@
       "col": 1,
       "type": "backend",
       "label": "中训与短 SFT",
-      "sublabel": "长上下文至 1M · p. 7–8",
+      "sublabel": "长上下文至 1M",
       "width": 150
     },
     {
@@ -74,7 +74,7 @@
       "col": 2,
       "type": "backend",
       "label": "混合任务 RL",
-      "sublabel": "长轨迹大批次 · p. 8–9",
+      "sublabel": "约 25K 轨迹/步",
       "width": 150
     },
     {
@@ -83,7 +83,7 @@
       "col": 3,
       "type": "backend",
       "label": "MOPD2 蒸馏",
-      "sublabel": "多教师与前缀 · p. 24–25",
+      "sublabel": "完整轨迹 + 前缀",
       "width": 150
     },
     {
@@ -92,7 +92,7 @@
       "col": 4,
       "type": "cloud",
       "label": "最终模型",
-      "sublabel": "跨领域评测 · p. 26",
+      "sublabel": "跨领域整体评测",
       "width": 150
     },
     {
@@ -101,7 +101,7 @@
       "col": 1,
       "type": "external",
       "label": "任务与 Harness",
-      "sublabel": "代码/通用/视觉/安全 · p. 9–16",
+      "sublabel": "代码/通用/视觉/安全",
       "width": 150
     },
     {
@@ -110,7 +110,7 @@
       "col": 3,
       "type": "security",
       "label": "分组评分",
-      "sublabel": "GRS / GAR · p. 16–19",
+      "sublabel": "GRS / GAR 质量信号",
       "width": 150
     }
   ],
@@ -151,19 +151,18 @@
   "cards": [
     {
       "dot": "cyan",
-      "title": "如何读这张图",
+      "title": "混合 RL 的三条扩展轴",
       "items": [
-        "主路径是训练阶段，不代表所有子阶段只运行一次。",
-        "RL 内部的 rollout → grader → update 循环详见阅读图谱的机制部分。"
+        "训练计算：典型一步有约 25K 条长轨迹；Pro 的 RL 成本中探索、评分、更新分别占 43.8%、12.7%、43.5%。",
+        "任务与环境：同一策略在代码、通用、视觉和安全任务中交互；多 harness 训练后，三个 held-out harness 的均值约从 50% 到 66%。"
       ]
     },
     {
       "dot": "amber",
-      "title": "证据位置",
+      "title": "评分轴如何接上训练",
       "items": [
-        "训练计算：PDF p. 8–9, Fig. 3",
-        "Harness 多样性：p. 22–23, Fig. 10",
-        "分组评分：p. 16–19, Fig. 7–8"
+        "测试先判断是否完成任务；GRS 或 GAR 再区分通过解的质量，把差异转成奖励或优势。",
+        "因此图中的两条支路不是额外训练阶段：任务提供轨迹，评分决定同组轨迹的学习权重。"
       ]
     }
   ]

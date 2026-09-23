@@ -36,6 +36,18 @@ function renderMap(data) {
     `<article class="principle" role="listitem"><span class="principle-number">${esc(x.number)}</span><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p>${sourceBadge(x.source)}</article>`
   ).join('')}</div>`;
 }
+function renderPath(data) {
+  if (!Array.isArray(data.stages) || !data.stages.length) throw new Error('paper-path needs stages');
+  return `<figure class="reading-path"><figcaption><span class="figure-kicker">GUIDED PATH</span><strong>${esc(data.title)}</strong><p>${esc(data.intro)}</p></figcaption><ol>${data.stages.map((s, i) =>
+    `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>为什么需要</dt><dd>${esc(s.why)}</dd></div><div><dt>交给下一阶段</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
+  ).join('')}</ol></figure>`;
+}
+function renderContrast(data) {
+  if (!Array.isArray(data.branches) || data.branches.length !== 2) throw new Error('paper-contrast needs two branches');
+  return `<figure class="mechanism-contrast"><figcaption><span class="figure-kicker">MECHANISM COMPARISON</span><strong>${esc(data.title)}</strong><p>${esc(data.intro)}</p></figcaption><div class="contrast-grid">${data.branches.map((b, i) =>
+    `<section class="contrast-branch b${i}"><h3>${esc(b.name)}</h3><p class="contrast-lead">${esc(b.lead)}</p><dl><div><dt>用于哪些任务</dt><dd>${esc(b.scope)}</dd></div><div><dt>怎样判断</dt><dd>${esc(b.judge)}</dd></div><div><dt>如何进入学习</dt><dd>${esc(b.signal)}</dd></div><div><dt>关键价值</dt><dd>${esc(b.why)}</dd></div></dl>${sourceBadge(b.source)}</section>`
+  ).join('')}</div></figure>`;
+}
 function renderExperiments(data) {
   if (!Array.isArray(data.rows) || !data.rows.length) throw new Error('paper-experiments needs rows');
   return `<figure class="experiment-atlas"><figcaption><span class="figure-kicker">EXPERIMENT ATLAS</span><strong>${esc(data.title)}</strong></figcaption><div class="experiment-head" aria-hidden="true"><span>研究问题</span><span>设置 / 对照</span><span>观察</span></div><div class="experiment-rows">${data.rows.map((r, i) =>
@@ -68,12 +80,14 @@ function renderArchify(relative, title) {
   html = html.replace(/<link rel="preconnect" href="https:\/\/fonts\.gstatic\.com"[^>]*>/g, '')
     .replace(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>/g, '')
     .replace(/<noscript>\s*<link href="https:\/\/fonts\.googleapis\.com[^>]*>\s*<\/noscript>/g, '');
-  return `<figure class="archify-figure"><div class="figure-head"><div><span class="figure-kicker">EXPLORE THE STRUCTURE</span><h3>${esc(title)}</h3><p>可聚焦节点与追踪路径；图中的页码指向原论文。</p></div><span class="renderer-badge">Archify 渲染</span></div><iframe title="${esc(title)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="eager"></iframe><figcaption>本图由 paper-reading 组织论文内容、Archify 渲染结构；正文负责解释和核对来源。</figcaption></figure>`;
+  return `<details class="archify-disclosure"><summary>展开辅助交互图：${esc(title)} <span>节点聚焦与路径探索</span></summary><figure class="archify-figure"><iframe title="${esc(title)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="lazy"></iframe><figcaption>交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。</figcaption></figure></details>`;
 }
 
 let prepared = source.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => slot(`<div class="display-math">${katex.renderToString(math.trim(), {output:'mathml',displayMode:true,throwOnError:true})}</div>`));
 prepared = prepared.replace(/\$([^$\n]+)\$/g, (_, math) => slot(katex.renderToString(math.trim(), {output:'mathml',throwOnError:true})));
 prepared = prepared.replace(/```paper-map\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderMap(JSON.parse(json))));
+prepared = prepared.replace(/```paper-path\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderPath(JSON.parse(json))));
+prepared = prepared.replace(/```paper-contrast\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderContrast(JSON.parse(json))));
 prepared = prepared.replace(/```paper-experiments\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderExperiments(JSON.parse(json))));
 prepared = prepared.replace(/```paper-chart\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderChart(JSON.parse(json))));
 prepared = prepared.replace(/<!-- archify:([^|>]+)\|([^>]+) -->/g, (_, file, title) => slot(renderArchify(file, title.trim())));
