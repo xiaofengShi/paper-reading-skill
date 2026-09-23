@@ -1,3 +1,4 @@
+<!-- paper-reading-lang: zh-CN -->
 # MiMo-V2.6：Agent 强化学习的规模化路径
 
 > **阅读定位**：从全局训练链、关键学习信号到实验与基础设施，完整理解这篇报告。原文为 LLM-Core Xiaomi 的 *MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement*。<span class="source-ref">本样例的图与页码依据用户提供的 44 页 PDF（SHA-256：7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b）。作者在 Hugging Face 提交 73875d0 更新 PDF（SHA-256：fb81e6e083801b3358f084ed6be953dc23b0d2e434690f4541d5eae03e01e7af）；模型卡标明 Pro 为 1.02T 总参数、42B active parameters。更新版 PDF 的其他内容未逐页对照。</span>

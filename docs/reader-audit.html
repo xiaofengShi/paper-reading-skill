@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Paper Reading Skill：读者视角审查与改进方案</title><style>
+:root{color-scheme:light;--ink:#18313b;--muted:#485f65;--line:#dce6e2;--teal:#16685f;--paper:#fffefa}*{box-sizing:border-box}body{margin:0;background:#f2f7f4;color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}a{color:var(--teal);text-underline-offset:3px}.top{padding:1.1rem max(1rem,calc((100vw - 1120px)/2));background:#173b40;color:#eff8f3;font-weight:800;letter-spacing:.12em}.top a{color:inherit;text-decoration:none}.wrap{max-width:1120px;margin:0 auto;padding:3rem 1.5rem 5rem;background:var(--paper)}h1{font-size:clamp(2rem,4vw,3.5rem);line-height:1.16;letter-spacing:-.035em}h2{margin:3rem 0 1rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:1.7rem;line-height:1.3}p,li{color:var(--muted)}p{margin:0 0 1.2rem}li{margin:.4rem 0}strong{color:var(--ink)}table{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse;margin:1.5rem 0 2rem;font-size:.92rem}th,td{min-width:11rem;padding:.7rem .85rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#eaf3ef}code{overflow-wrap:anywhere}a:focus-visible{outline:3px solid #c16736;outline-offset:3px}@media(max-width:600px){.wrap{padding:1.5rem 1rem 3rem}h2{font-size:1.4rem}th,td{min-width:10rem}}@media print{body{background:#fff}.wrap{max-width:none;padding:0}.top{display:none}table{overflow:visible}tr{break-inside:avoid}}
+</style></head><body><header class="top"><a href="./">PAPER / READING</a></header><main class="wrap"><h1>Paper Reading Skill：读者视角审查与改进方案</h1>
+<p>审查日期：2026 年 9 月 23 日。审查对象是当前仓库的 skill 指令、安装文档、渲染器、主页，以及 MiMo-V2.6、Attention Is All You Need、DeepSeek-V4.1-Flash 三份公开样例。判断依据包括源码检查、构建与测试，以及 1440 px 桌面和 390 px 手机视口的实际页面检查。三份样例的事实仍来自各自论文；这次审查不是独立读者盲测。</p>
+<h2>结论</h2>
+<p><strong>项目已能展示一种可信的“读完一篇论文”的交付形式：一份可离线阅读的 HTML，从全局图进入机制、公式和实验，并保留 Markdown 审计源。</strong> 新增的经典架构论文和近期系统报告，使这一形式不再只依赖 MiMo 一篇论文。当前最大的不确定性是：不同读者能否仅凭产物真正复述论文的关键推理，以及 agent 面对更多论文类型时能否稳定生成相同质量。下一轮应以读者任务和跨论文复现为中心，而不是继续增加装饰性图形。</p>
+<h2>按读者任务审查</h2>
+<table>
+<thead>
+<tr>
+<th>读者任务</th>
+<th>目前能力与证据</th>
+<th>仍影响使用的地方</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>先知道整篇论文在解决什么</td>
+<td>三份案例都有首屏论点、全局路径和关键机制入口；概览图改用对应论文的真实结构与数字</td>
+<td>首屏文字仍偏多，初次读者可更快看到一条可操作的“从这里开始”路径</td>
+</tr>
+<tr>
+<td>不翻回 PDF 也能理解关键机制</td>
+<td>Transformer 给出注意力公式、教学算例、编码器／解码器路径；DeepSeek 同页解释 CED、CSA2 和 SWA replay，并把原图放在相邻段落</td>
+<td>图中细小文字在手机上需要放大；复杂公式在窄屏使用局部横向滚动</td>
+</tr>
+<tr>
+<td>看懂实验测了什么</td>
+<td>案例把问题、设置、对照、指标与结果放在一起；DeepSeek 明确区分 benchmark 版本、effort 与 harness</td>
+<td>尚未系统核对每个案例的所有图表单元格，不能把渲染测试当作科学事实验证</td>
+</tr>
+<tr>
+<td>找到原文核验</td>
+<td>PDF 章节、图、表和版本哈希保留在 Markdown，HTML 有原文定位开关且默认隐藏</td>
+<td>原文定位目前是文本，不是跳转到 PDF 中具体对象的可点击证据链</td>
+</tr>
+<tr>
+<td>按自己语种阅读</td>
+<td>skill 按用户明确要求或请求语种选择；没有线索时使用英文。渲染器要求首行声明 <code>en</code> 或 <code>zh-CN</code>，并本地化导航、图表标签及 <code>lang</code> 属性</td>
+<td>当前附带渲染器只内建英语和简体中文；第三种语种需另做等效渲染</td>
+</tr>
+<tr>
+<td>离线使用与转发</td>
+<td>三份 HTML 都内嵌图、CSS、KaTeX 字体，无脚本也能读主要内容</td>
+<td>文件体积约 0.6–2.3 MB，长页面在移动设备上的原图缩放仍需改善</td>
+</tr>
+</tbody></table>
+<h2>方法与安装路径</h2>
+<p>方法选择以<strong>理解论文</strong>为默认目的：从整体问题、论证或训练路径走到关键机制，再用实验或证明检验作者的具体主张。审稿式质疑、研究选题比较和快筛是用户提出时才切换的视角。输出的箭头应表明数据流、时间顺序或证据关系中的哪一种，图旁必须有可直接读懂的解释。原论文图、本文重绘图和示意图各有名称；示意数字不可伪装成实验测量。</p>
+<p>安装路径是三步：克隆到 agent 的个人 skill 目录、在该目录运行 <code>npm ci</code>、重启 agent 会话后提供 PDF 或 URL。Node.js 20+ 是 HTML 渲染器的要求。此项目提供指令、模板和渲染工具；它依赖 agent 实际阅读并核查论文，当前不是接收 PDF 即自动产出已验证文档的服务。文档已写明这一点，但首次使用仍需要读者理解“安装 skill”和“给 agent 论文”是两个步骤。已有同名目录时 <code>git clone</code> 会失败，因此 README 现在单独给出已有安装的更新命令。</p>
+<h2>本轮已经完成的改进</h2>
+<ol>
+<li><strong>语言选择显式化。</strong> Skill 规定用户偏好、请求语种和无提示默认英文的顺序；Markdown 首行必须声明语言，缺失时渲染失败，生成页面的首屏标明语种。</li>
+<li><strong>增加两种不同论文案例。</strong> Transformer 案例检验架构、公式、复杂度与消融的阅读路径；DeepSeek 案例检验系统部署、缓存层级、训练上下文和 agent 评测条件。两例均有 Markdown 源、一页英文 HTML、论文专属概览图与相邻解释的原图。</li>
+<li><strong>改善发现与进入路径。</strong> 中英文主页可直接选择三份完整案例，英文页面首先提供英文案例；README 和安装示例同步更新，首页移动端代码块可折行。</li>
+<li><strong>保持正文和证据同页。</strong> 原文定位继续默认隐藏，长公式在自身区域滚动，原论文图先在正文介绍，再出现图片与说明。</li>
+</ol>
+<h2>下一轮最值得做的工作</h2>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>改进</th>
+<th>完成标准</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>真实读者任务测试</strong>：让未参与编写的人仅看 HTML，回答“核心机制如何工作、哪项实验支撑哪条结论、限制是什么”，记录错误和回读位置</td>
+<td>至少覆盖三篇现有论文；能指出具体页面段落的误解，而不只给主观评分</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>跨类型压力测试</strong>：加入一篇理论或证明论文与一篇数据集／基准论文，并在生成前固定质量检查表</td>
+<td>每例仍有一份完整 HTML 与审计源；图形随论证类型变化，不能机械套训练流程图</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>证据链质量门槛</strong>：为每张图、每个关键公式和每条主要实验数字建立源对象对照，重点人工复核 PDF 表格与图注</td>
+<td>构建检查能发现失联引用；独立复核抽样能定位并改正错读，不把 PDF 文本提取结果当作视觉确认</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>移动端原图阅读</strong>：给细节密集的原图提供可放大或横向平移的离线视图，同时保留紧邻的文字解释</td>
+<td>390 px 视口中原图内容可辨认，正文无整页横向滚动，键盘可操作</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>降低首次安装摩擦</strong>：用全新目录重复验证 Codex、Claude Code、Kimi Code 的入口，并把实际失败案例写回安装文档</td>
+<td>新用户可按文档从空目录安装并成功生成一份自己的 HTML；失败有明确定位信息</td>
+</tr>
+</tbody></table>
+<p>推广方面，最有说服力的页面不是功能列表，而是<strong>多论文、可直接阅读、可核查来源的成品</strong>。本轮三例和双语主页已建立入口。下一步应先收集真实读者在这些页面上的误解，再把修正前后页面和测试结果写成公开案例；这样使用认可建立在阅读效果上，而不依赖展示图的视觉冲击。</p>
+</main></body></html>

@@ -8,8 +8,8 @@ const site = 'https://xiaofengshi.github.io/paper-reading-skill/';
 const repo = 'https://github.com/xiaofengShi/paper-reading-skill';
 const sourceBase = `${repo}/blob/main/`;
 const pages = [
-  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Open the complete reading →', github: 'View on GitHub ↗', footer: 'Read deeply. Keep the evidence close.' },
-  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '打开完整深读 →', github: '查看 GitHub ↗', footer: '读懂全文，证据就在身边。' },
+  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Explore complete readings →', github: 'View on GitHub ↗', footer: 'Read deeply. Keep the evidence close.' },
+  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '选择完整深读 →', github: '查看 GitHub ↗', footer: '读懂全文，证据就在身边。' },
 ];
 
 const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -80,8 +80,8 @@ for (const page of pages) {
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="mimo-v2.6-deep-read.html">${page.example}</a><a class="button secondary" href="${repo}">${page.github}</a></div></div>
-      <figure class="hero-visual">${rewriteLinks(marked.parser([preview]))}<figcaption>${page.lang === 'en' ? 'An editorial preview of the published MiMo-V2.6 deep read.' : '已发布的 MiMo-V2.6 深读文档的编辑式预览。'}</figcaption></figure>
+      <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="#section-1">${page.example}</a><a class="button secondary" href="${repo}">${page.github}</a></div></div>
+      <figure class="hero-visual">${rewriteLinks(marked.parser([preview]))}<figcaption>${page.lang === 'en' ? 'Editorial preview of the MiMo-V2.6 reading (Chinese); English examples are below.' : 'MiMo-V2.6 中文深读文档的编辑式预览；下方另有两个英文样例。'}</figcaption></figure>
     </section>
     <div class="content-wrap">${content}</div>
   </main>

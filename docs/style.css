@@ -59,9 +59,11 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
 .content-section code { overflow-wrap: anywhere; padding: .1rem .25rem; border-radius: 3px; color: #124f50; background: #e8f2ee; }
 .content-section img { max-width: 100%; height: auto; }
 
-.section-1 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 4rem; }
-.section-1 h2 { grid-column: 1 / -1; }
 .section-1 p { margin-top: .4rem; }
+.section-1 ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 1.6rem 0; padding: 0; list-style: none; }
+.section-1 li { display: flex; flex-direction: column; gap: 1rem; min-width: 0; margin: 0; padding: 1.4rem; border: 1px solid var(--line); border-radius: 9px; background: var(--wash); line-height: 1.65; }
+.section-1 li strong { display: block; color: var(--ink); font-size: 1.12rem; line-height: 1.35; }
+.section-1 li a { display: inline-block; margin-top: auto; font-weight: 750; }
 .section-1 p:last-child { padding: 1rem 1.2rem; border-left: 3px solid var(--teal); background: var(--wash); font-size: .94rem; }
 .section-2 ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 2.2rem 0; padding: 0; list-style: none; counter-reset: item; }
 .section-2 li { position: relative; min-height: 185px; margin: 0; padding: 3.4rem 1.25rem 1.25rem; border: 1px solid var(--line); border-radius: 8px; background: var(--wash); counter-increment: item; }
@@ -84,6 +86,7 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
   .hero { grid-template-columns: 1fr; min-height: 0; }
   .hero h1 { max-width: none; }
   .hero-visual { max-width: 760px; }
+  .section-1 ul { grid-template-columns: 1fr; }
   .section-2 ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 620px) {
@@ -94,10 +97,10 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
   .hero-actions { display: grid; }
   .content-wrap { padding: 0 1rem; }
   .content-section { padding: 3.5rem 0; }
-  .section-1 { display: block; }
   .section-2 ol { grid-template-columns: 1fr; }
   .section-2 li { min-height: 0; }
   .section-3 { margin: 0 -1rem; padding: 3.4rem 1rem; }
+  .content-section pre code { white-space: pre-wrap; overflow-wrap: anywhere; }
   .site-footer { display: block; padding: 2rem 1rem; }
   .site-footer span { display: block; margin-bottom: .75rem; }
 }

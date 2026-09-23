@@ -6,9 +6,13 @@
 
 ![MiMo-V2.6 阅读图谱预览：把论文全局、RL 机制和实验证据连在一起。](docs/assets/atlas-preview.svg)
 
-## 看一份完整深读
+## 阅读完整样例
 
-[MiMo-V2.6 样例](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)是一页中文完整文档：从研究问题和训练路径，读到 RL 目标、GRS/GAR 评分、运行系统、MOPD2 与各项实验。它包含完整的关键 Eq. 1、教学算例、紧邻解释的原论文图摘录、数值对照和可选显示的 PDF 定位。交互图只作补充；主要解释不依赖交互也能读懂。
+选一篇论文，就能在一个页面里沿全局图、机制说明、原论文图、公式和实验证据读完整篇。图示与重要数字均有相邻解释，原文定位按需显示。
+
+- **Attention Is All You Need · English。** 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 [打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
+- **DeepSeek-V4.1-Flash · English。** 分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。 [打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-deep-read.html)
+- **MiMo-V2.6 · 中文。** 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。 [打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
 
 样例基于一份 44 页的本地 PDF 编写，仓库不分发该 PDF。作者后来[更新了在线报告](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d)；样例已采用修正后的 Pro 激活参数数值，其他版本差异尚未逐页核对。
 
@@ -40,7 +44,9 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/
 npm ci --prefix "$HOME/.claude/skills/paper-reading"
 ```
 
-重新打开 agent 会话，附上 PDF 或给出可访问的论文链接，然后说：**“深入阅读这篇论文，给我一份可视化 HTML 文档，讲清主线、重要公式和实验。”** Skill 名称是 `paper-reading`；也可以在 Codex 输入 `$paper-reading`，在 Claude Code 输入 `/paper-reading`，在 Kimi Code 输入 `/skill:paper-reading`。Agent 必须能访问论文并完成科学阅读；本项目提供阅读流程与渲染器，并非把任意 PDF 自动转换成已核实解读的服务。
+如果已经安装，直接更新已有目录及依赖，不要在同名目录上再次 `git clone`。Codex 或 Kimi Code 运行 `git -C "$HOME/.agents/skills/paper-reading" pull --ff-only`，再运行 `npm ci --prefix "$HOME/.agents/skills/paper-reading"`；Claude Code 把路径换成 `$HOME/.claude/skills/paper-reading`。
+
+重新打开 agent 会话，附上 PDF 或给出可访问的论文链接，然后说：**“用中文深入阅读这篇论文，给我一份可视化 HTML 文档，讲清主线、重要公式和实验。”** 也可以明确要求英文。Skill 默认遵循用户请求的语种；没有任何语种线索时使用英文。Skill 名称是 `paper-reading`；也可以在 Codex 输入 `$paper-reading`，在 Claude Code 输入 `/paper-reading`，在 Kimi Code 输入 `/skill:paper-reading`。Agent 必须能访问论文并完成科学阅读；本项目提供阅读流程与渲染器，并非把任意 PDF 自动转换成已核实解读的服务。
 
 只有需要快筛时才要求概览；需要审稿或与自己的研究比较时，再要求额外视角。普通读论文请求以理解论文为主。
 
@@ -48,19 +54,19 @@ npm ci --prefix "$HOME/.claude/skills/paper-reading"
 
 [Skill 指令](SKILL.md)引导 agent 依次建立全局认知、重建全文、编写解释并核对来源。[论文类型协议](references/paper-types.md)为实证、系统、基准、数据集、理论和综述论文选择合适图形；[可视化阅读规则](references/visual-reading.md)要求图示与解释、证据对应。[阅读模式](references/reading-modes.md)定义可选的快筛、审稿和研究视角。
 
-仓库附带的[渲染器](scripts/render-reading.cjs)把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。英文 Markdown 可在首行添加 `<!-- paper-reading-lang: en -->`，让导航和图表标签也使用英文。Archify 可以呈现可选的交互结构图，但构建不依赖 Archify 或其他本地 skill。[MiMo Markdown 源](examples/mimo-v2.6-deep-read.md)及图形输入展示了格式；它们是构建材料，不要求读者分别打开。
+仓库附带的[渲染器](scripts/render-reading.cjs)把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 `<!-- paper-reading-lang: en -->` 或 `<!-- paper-reading-lang: zh-CN -->`，导航和图表标签也据此选择语种。Archify 可以呈现可选的交互结构图，但构建不依赖 Archify 或其他本地 skill。[Transformer](examples/attention-is-all-you-need-deep-read.md)、[DeepSeek](examples/deepseek-v4.1-flash-deep-read.md)和[MiMo](examples/mimo-v2.6-deep-read.md)的 Markdown 与图形输入都是构建材料，不要求读者分别打开。
 
-本地重建已发布样例：
+本地重建所有已发布样例：
 
 ```bash
 npm ci
-npm run build:example
+npm run build:examples
 npm test
 ```
 
 ## 验证与适用范围
 
-MiMo-V2.6 文档展示了一次完整的实证技术报告深读。渲染测试覆盖行内与独立公式、原文位置开关、原图上下文和数值图行为。这些检查验证排版与生成契约，不等于独立核证每一条科学解读。Skill 已描述其他论文类型的阅读路径，但尚无同等完整的公开样例或跨论文用户评估。
+三个文档分别覆盖经典架构论文，以及机制和评测结构不同的两份技术报告。渲染测试覆盖语言声明、行内与独立公式、原文位置开关、原图上下文和数值图行为。这些检查验证排版与生成契约，不等于独立核证每一条科学解读。理论、综述、数据集和独立读者测试仍不在当前样例范围内。
 
 阅读方法参考了[Keshav 的三遍阅读法](https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf)、[Novak 与 Cañas 的概念图方法](https://cmap.ihmc.us/publications/researchpapers/theoryunderlyingconceptmaps.pdf)及[SciDoc2Diagrammer-MAF](https://aclanthology.org/2024.findings-emnlp.780/)。[Archify](https://github.com/tt-a1i/archify)是可选的交互结构图呈现工具。科学内容仍须对照论文核查。
 

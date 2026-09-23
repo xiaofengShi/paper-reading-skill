@@ -5,6 +5,9 @@
     "build:docs": "node scripts/build-docs.cjs",
     "check:docs": "node scripts/build-docs.cjs --check",
     "build:example": "node scripts/render-reading.cjs examples/mimo-v2.6-deep-read.md docs/mimo-v2.6-deep-read.html",
+    "build:examples": "node scripts/render-reading.cjs examples/mimo-v2.6-deep-read.md docs/mimo-v2.6-deep-read.html && node scripts/render-reading.cjs examples/attention-is-all-you-need-deep-read.md docs/attention-is-all-you-need-deep-read.html && node scripts/render-reading.cjs examples/deepseek-v4.1-flash-deep-read.md docs/deepseek-v4.1-flash-deep-read.html",
+    "build:audit": "node scripts/build-reader-audit.cjs",
+    "check:audit": "node scripts/build-reader-audit.cjs --check",
     "test": "node --test scripts/test-*.cjs"
   },
   "devDependencies": {

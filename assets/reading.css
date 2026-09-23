@@ -63,11 +63,11 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .article h2 { scroll-margin-top: 1rem; margin: 4rem 0 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--line); font-size: clamp(1.65rem, 2.6vw, 2.45rem); line-height: 1.24; letter-spacing: -.035em; }
 .article h2:first-of-type { margin-top: 2.2rem; }
 .article h3 { margin: 2.7rem 0 .8rem; font-size: 1.2rem; line-height: 1.35; }
-.article p { margin: 0 0 1.1rem; max-width: 76ch; color: var(--ink-soft); }
+.article p { margin: 0 0 1.1rem; color: var(--ink-soft); }
 .article p strong { color: var(--ink); }
 .article > .article-inner > blockquote { border-left: 3px solid var(--teal); background: #edf5f1; margin: 0 0 2.5rem; padding: 1rem 1.25rem; border-radius: 0 6px 6px 0; }
 .article blockquote p { margin: 0; color: #385450; font-size: .9rem; }
-.article ol, .article ul { margin: 0 0 1.5rem; padding-left: 1.4rem; max-width: 76ch; }
+.article ol, .article ul { margin: 0 0 1.5rem; padding-left: 1.4rem; }
 .article li { margin: .35rem 0; }
 .article code { background: #edf3f1; padding: .1em .28em; border-radius: 3px; color: var(--ink); overflow-wrap: anywhere; }
 .article a:not(.hero-link) { font-weight: 650; }

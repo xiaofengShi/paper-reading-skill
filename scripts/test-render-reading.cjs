@@ -12,7 +12,8 @@ test('inline math stays in prose, display math stays separate, and paired values
   try {
     const source = path.join(dir, 'paper.md');
     const output = path.join(dir, 'paper.html');
-    fs.writeFileSync(source, `# Test Paper
+    fs.writeFileSync(source, `<!-- paper-reading-lang: zh-CN -->
+# Test Paper
 
 ## 01 / Overview
 
@@ -103,7 +104,8 @@ test('a figure caption with bold text closes before the next chapter', () => {
     fs.writeFileSync(path.join(dir, 'pixel.png'), Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl7ZQAAAABJRU5ErkJggg==', 'base64'));
     const source = path.join(dir, 'paper.md');
     const output = path.join(dir, 'paper.html');
-    fs.writeFileSync(source, `# Test Paper
+    fs.writeFileSync(source, `<!-- paper-reading-lang: zh-CN -->
+# Test Paper
 
 ## 01 / Figure
 
@@ -168,10 +170,43 @@ test('a visual fact without a source fails instead of publishing an untraceable 
   try {
     const source = path.join(dir, 'paper.md');
     const output = path.join(dir, 'paper.html');
-    fs.writeFileSync(source, '# Paper\n\n```paper-map\n{"items":[{"number":"01","label":"Claim","text":"An unverified claim."}]}\n```\n');
+    fs.writeFileSync(source, '<!-- paper-reading-lang: en -->\n# Paper\n\n```paper-map\n{"items":[{"number":"01","label":"Claim","text":"An unverified claim."}]}\n```\n');
     assert.throws(() => execFileSync(process.execPath, [renderer, source, output], { stdio: 'pipe' }), /A visual fact is missing its source/);
     assert.equal(fs.existsSync(output), false);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('a reading source must declare a supported output language', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-language-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    fs.writeFileSync(source, '# Unmarked paper\n');
+    assert.throws(() => execFileSync(process.execPath, [renderer, source, output], { stdio: 'pipe' }), /Declare the reading language/);
+    fs.writeFileSync(source, '<!-- paper-reading-lang: fr -->\n# Unsupported paper\n');
+    assert.throws(() => execFileSync(process.execPath, [renderer, source, output], { stdio: 'pipe' }), /Declare the reading language/);
+    assert.equal(fs.existsSync(output), false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('the two English examples embed their diagrams, original figures, and reading context', () => {
+  for (const [file, figure, keyText] of [
+    ['attention-is-all-you-need', 'Figure 1', 'Figure 1 is particularly useful here'],
+    ['deepseek-v4.1-flash', 'Figure 3', 'The original Figure 3'],
+  ]) {
+    const html = fs.readFileSync(path.resolve(__dirname, `../docs/${file}-deep-read.html`), 'utf8');
+    assert.match(html, /<html lang="en">/);
+    assert.match(html, /DEEP READING ATLAS · ENGLISH/);
+    assert.match(html, /data:image\/svg\+xml;base64,/);
+    assert.match(html, /data:image\/png;base64,/);
+    assert.ok(html.includes(keyText), `${file} introduces its original figure in prose`);
+    assert.ok(html.includes(figure), `${file} labels the original figure`);
+    assert.match(html, /class="experiment-atlas"/);
+    assert.match(html, /class="display-math"/);
+    assert.doesNotMatch(html, /class="katex-error"/);
   }
 });

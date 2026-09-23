@@ -15,7 +15,8 @@ const outputPath = path.resolve(outputArg);
 const sourceDir = path.dirname(sourcePath);
 const source = fs.readFileSync(sourcePath, 'utf8');
 const languageMarker = source.match(/^<!-- paper-reading-lang: (en|zh-CN) -->\r?\n/);
-const lang = languageMarker?.[1] || 'zh-CN';
+if (!languageMarker) throw new Error('Declare the reading language on the first line: <!-- paper-reading-lang: en --> or <!-- paper-reading-lang: zh-CN -->');
+const lang = languageMarker[1];
 const labels = {
   'zh-CN': {
     why: '为什么需要', last: '这一阶段留下什么', next: '交给下一阶段',
@@ -26,7 +27,7 @@ const labels = {
     wholeMap: '论文全局图', description: '从全局路径到机制与实验的一体化论文深读。', titleSuffix: '深读图谱',
     skip: '跳到正文', topbar: '原文证据驱动的深读图谱', showSources: '显示原文定位', startReading: '开始阅读',
     defaultThesis: '从全局路径到关键机制与实验证据。', enter: '进入论文图谱', nav: '本文目录', route: '阅读路径',
-    footer: '单文件阅读版', back: '返回顶部',
+    footer: '单文件阅读版', back: '返回顶部', pathKicker: '方法路径', contrastKicker: '机制对照', experimentKicker: '实验图谱', heroKicker: '论文深读图谱 · 中文',
   },
   en: {
     why: 'Why it matters', last: 'What this stage leaves behind', next: 'Passed to the next stage',
@@ -37,7 +38,7 @@ const labels = {
     wholeMap: 'Whole-paper map', description: 'A visual deep read from the global path to mechanisms and experiments.', titleSuffix: 'Deep reading atlas',
     skip: 'Skip to content', topbar: 'A source-grounded reading atlas', showSources: 'Show source locations', startReading: 'Start reading',
     defaultThesis: 'From the global path to mechanisms and experimental evidence.', enter: 'Enter the reading atlas', nav: 'Contents', route: 'Reading path',
-    footer: 'Single-file reading page', back: 'Back to top',
+    footer: 'Single-file reading page', back: 'Back to top', pathKicker: 'METHOD PATH', contrastKicker: 'MECHANISM COMPARISON', experimentKicker: 'EXPERIMENT ATLAS', heroKicker: 'DEEP READING ATLAS · ENGLISH',
   },
 };
 const t = labels[lang];
@@ -72,7 +73,7 @@ const localFile = relative => {
 };
 const imageData = relative => {
   const file = localFile(relative);
-  const mime = file.endsWith('.webp') ? 'image/webp' : file.endsWith('.png') ? 'image/png' : null;
+  const mime = file.endsWith('.webp') ? 'image/webp' : file.endsWith('.png') ? 'image/png' : file.endsWith('.svg') ? 'image/svg+xml' : null;
   if (!mime) throw new Error(`Unsupported image: ${relative}`);
   return `data:${mime};base64,${fs.readFileSync(file).toString('base64')}`;
 };
@@ -89,19 +90,19 @@ function renderMap(data) {
 }
 function renderPath(data) {
   if (!Array.isArray(data.stages) || !data.stages.length) throw new Error('paper-path needs stages');
-  return `<figure class="reading-path"><figcaption><span class="figure-kicker">GUIDED PATH</span><strong>${esc(data.title)}</strong>${data.intro ? `<p>${esc(data.intro)}</p>` : ''}</figcaption><ol>${data.stages.map((s, i) =>
+  return `<figure class="reading-path"><figcaption><span class="figure-kicker">${t.pathKicker}</span><strong>${esc(data.title)}</strong>${data.intro ? `<p>${esc(data.intro)}</p>` : ''}</figcaption><ol>${data.stages.map((s, i) =>
     `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>${t.why}</dt><dd>${esc(s.why)}</dd></div><div><dt>${i === data.stages.length - 1 ? t.last : t.next}</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
   ).join('')}</ol></figure>`;
 }
 function renderContrast(data) {
   if (!Array.isArray(data.branches) || data.branches.length !== 2) throw new Error('paper-contrast needs two branches');
-  return `<figure class="mechanism-contrast"><figcaption><span class="figure-kicker">MECHANISM COMPARISON</span><strong>${esc(data.title)}</strong><p>${esc(data.intro)}</p></figcaption><div class="contrast-grid">${data.branches.map((b, i) =>
+  return `<figure class="mechanism-contrast"><figcaption><span class="figure-kicker">${t.contrastKicker}</span><strong>${esc(data.title)}</strong><p>${esc(data.intro)}</p></figcaption><div class="contrast-grid">${data.branches.map((b, i) =>
     `<section class="contrast-branch b${i}"><h3>${esc(b.name)}</h3><p class="contrast-lead">${esc(b.lead)}</p><dl><div><dt>${t.scope}</dt><dd>${esc(b.scope)}</dd></div><div><dt>${t.judge}</dt><dd>${esc(b.judge)}</dd></div><div><dt>${t.signal}</dt><dd>${esc(b.signal)}</dd></div><div><dt>${t.value}</dt><dd>${esc(b.why)}</dd></div></dl>${sourceBadge(b.source)}</section>`
   ).join('')}</div></figure>`;
 }
 function renderExperiments(data) {
   if (!Array.isArray(data.rows) || !data.rows.length) throw new Error('paper-experiments needs rows');
-  return `<figure class="experiment-atlas"><figcaption><span class="figure-kicker">EXPERIMENT ATLAS</span><strong>${esc(data.title)}</strong></figcaption><div class="experiment-head" aria-hidden="true"><span>${t.question}</span><span>${t.setup}</span><span>${t.observation}</span></div><div class="experiment-rows">${data.rows.map((r, i) =>
+  return `<figure class="experiment-atlas"><figcaption><span class="figure-kicker">${t.experimentKicker}</span><strong>${esc(data.title)}</strong></figcaption><div class="experiment-head" aria-hidden="true"><span>${t.question}</span><span>${t.setup}</span><span>${t.observation}</span></div><div class="experiment-rows">${data.rows.map((r, i) =>
     `<article class="experiment-row"><div class="experiment-question"><span>${String(i + 1).padStart(2, '0')}</span><strong>${esc(r.question)}</strong></div><p>${esc(r.setup)}</p><div><p>${esc(r.observation)}</p>${sourceBadge(r.source)}</div></article>`
   ).join('')}</div></figure>`;
 }
@@ -141,7 +142,7 @@ function renderArchify(relative, title) {
   return `<details class="archify-disclosure"><summary>${t.openDiagram}${esc(title)} <span>${t.explore}</span></summary><figure class="archify-figure"><iframe title="${esc(title)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="lazy"></iframe><figcaption>${t.diagramNote}</figcaption></figure></details>`;
 }
 
-let prepared = languageMarker ? source.slice(languageMarker[0].length) : source;
+let prepared = source.slice(languageMarker[0].length);
 let heroMap = null;
 prepared = prepared.replace(/```paper-map\s*\n([\s\S]*?)\n```/g, (_, json) => {
   const data = JSON.parse(json);
@@ -183,7 +184,7 @@ const nav = sections.map(s => `<a href="#${s.id}">${esc(s.heading)}</a>`).join('
 const heroVisual = heroMap ? `<div class="hero-map"><p class="hero-map-title">${t.wholeMap} <span>01 — ${String(heroMap.items.length).padStart(2, '0')}</span></p><ol>${heroMap.items.map(x => `<li><span class="hero-map-index">${esc(x.number)}</span><div><div class="hero-map-heading"><strong>${esc(x.label)}</strong>${x.signal ? `<b>${esc(x.signal)}</b>` : ''}</div><p>${esc(x.text)}</p>${sourceBadge(x.source)}</div></li>`).join('')}</ol>${heroMap.outcome ? `<div class="hero-map-outcome"><span aria-hidden="true">↳</span><div><strong>${esc(heroMap.outcome)}</strong>${heroMap.outcomeSource ? sourceBadge(heroMap.outcomeSource) : ''}</div></div>` : ''}</div>` : '';
 const output = `<!doctype html>
 <html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${esc(title)}${lang === 'zh-CN' ? '：' : ': '}${t.description}"><title>${esc(title)} · ${t.titleSuffix}</title><style>${katexCss}\n${css}</style></head>
-<body><a class="skip-link" href="#content">${t.skip}</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>${t.topbar}</span><label class="source-toggle-label" for="show-sources">${t.showSources}</label><a href="#content">${t.startReading} ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>${esc(title)}</h1><p class="hero-sub">${esc(heroMap?.thesis || t.defaultThesis)}</p><a class="hero-link" href="#section-1">${t.enter} <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="${t.nav}"><div class="toc-title">${t.route}</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span>Paper Reading Skill · ${t.footer}</span><a href="#top">${t.back} ↑</a></footer></body></html>`;
+<body><a class="skip-link" href="#content">${t.skip}</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>${t.topbar}</span><label class="source-toggle-label" for="show-sources">${t.showSources}</label><a href="#content">${t.startReading} ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">${t.heroKicker}</p><h1>${esc(title)}</h1><p class="hero-sub">${esc(heroMap?.thesis || t.defaultThesis)}</p><a class="hero-link" href="#section-1">${t.enter} <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="${t.nav}"><div class="toc-title">${t.route}</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span>Paper Reading Skill · ${t.footer}</span><a href="#top">${t.back} ↑</a></footer></body></html>`;
 const cleanOutput = output.replace(/[ \t]+$/gm, '');
 fs.writeFileSync(outputPath, cleanOutput);
 console.log(`Built ${outputPath} (${Buffer.byteLength(cleanOutput)} bytes, ${sections.length} sections, ${slots.length} visuals)`);

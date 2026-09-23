@@ -2,15 +2,19 @@
 
 **Turn a research paper into one visual reading atlas.** Start with the whole argument, follow the method or proof, work through important mechanisms, and read the experiments with their actual settings and numbers. The default request, “read this paper,” produces a complete, self-contained HTML deep read.
 
-[Project website →](https://xiaofengshi.github.io/paper-reading-skill/) · [Explore the MiMo-V2.6 deep read →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html) · [中文说明](README.zh-CN.md)
+[Project website →](https://xiaofengshi.github.io/paper-reading-skill/) · [Read the Transformer example →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html) · [中文说明](README.zh-CN.md)
 
 ![A preview of the MiMo-V2.6 reading atlas, connecting the paper's global map, RL mechanism, and experiment evidence.](docs/assets/atlas-preview.svg)
 
-## See a complete reading
+## Explore complete readings
 
-The [MiMo-V2.6 example](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html) is a Chinese-language single page that moves from the research problem and training path to the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments. It includes the complete relevant Eq. 1, worked examples, original figure excerpts beside their explanations, numerical comparisons, and optional PDF locations. Interactive diagrams are supplementary; the main explanation remains readable without them.
+Choose a paper and read its full argument in one page. Each example has a paper-specific editorial map, linked mechanism explanations, original figure excerpts where useful, equations, and experiment conditions beside the results.
 
-The example was authored from a 44-page local PDF. The PDF itself is not redistributed here. The authors later [updated the online report](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d); the example incorporates the corrected Pro active-parameter figure, while other version differences have not been checked page by page.
+- **Attention Is All You Need · English.** Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer. [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
+- **DeepSeek-V4.1-Flash · English.** Separate prefill computation, runtime global KV, and persistent KV; inspect CED and CSA2 with original figures, then read agent benchmarks with their harness conditions. [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-deep-read.html)
+- **MiMo-V2.6 · 中文.** Follow the training path through the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments. [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
+
+The MiMo example was authored from a 44-page local PDF. The PDF itself is not redistributed here. The authors later [updated the online report](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d); the example incorporates the corrected Pro active-parameter figure, while other version differences have not been checked page by page.
 
 ## What you get
 
@@ -40,7 +44,9 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/
 npm ci --prefix "$HOME/.claude/skills/paper-reading"
 ```
 
-Start a new agent session, attach a PDF or give an accessible paper URL, and ask: **“Read this paper deeply. Give me one visual HTML reading document that explains the main path, important equations, and experiments.”** The skill is named `paper-reading`; you can also invoke it explicitly as `$paper-reading` in Codex, `/paper-reading` in Claude Code, or `/skill:paper-reading` in Kimi Code. The agent needs access to the paper and must do the scientific reading; this repository supplies the workflow and renderer, not a service that automatically converts an arbitrary PDF into a verified explanation.
+If the skill is already installed, update that checkout and its renderer dependencies instead of cloning over it. For Codex or Kimi Code, run `git -C "$HOME/.agents/skills/paper-reading" pull --ff-only` followed by `npm ci --prefix "$HOME/.agents/skills/paper-reading"`; for Claude Code, use the same commands with `$HOME/.claude/skills/paper-reading`.
+
+Start a new agent session, attach a PDF or give an accessible paper URL, and ask: **“Read this paper deeply in English. Give me one visual HTML reading document that explains the main path, important equations, and experiments.”** Replace “in English” with your preferred language. If you give no language cue, the skill defaults to English; an ordinary request in Chinese produces Chinese output. The skill is named `paper-reading`; you can also invoke it explicitly as `$paper-reading` in Codex, `/paper-reading` in Claude Code, or `/skill:paper-reading` in Kimi Code. The agent needs access to the paper and must do the scientific reading; this repository supplies the workflow and renderer, not a service that automatically converts an arbitrary PDF into a verified explanation.
 
 Ask for a quick scan only when you want triage. Ask for a review or research comparison when you want those additional lenses. An ordinary request to read a paper stays understanding-first.
 
@@ -48,19 +54,19 @@ Ask for a quick scan only when you want triage. Ask for a review or research com
 
 The [skill instructions](SKILL.md) guide an agent through orientation, full reconstruction, explanation, and source checking. [Paper-type routes](references/paper-types.md) select suitable views for empirical, systems, benchmark, dataset, theory, and survey papers; [visual-reading rules](references/visual-reading.md) keep diagrams tied to explanations and evidence. [Reading modes](references/reading-modes.md) define the optional scan, review, and research lenses.
 
-The bundled [renderer](scripts/render-reading.cjs) turns a Markdown audit source and local visuals into a standalone HTML file with embedded images, diagrams, KaTeX math, and fonts. English audit sources start with `<!-- paper-reading-lang: en -->` to render English navigation and chart labels. Archify can render optional interactive structure views, but neither Archify nor another locally installed skill is required. The [MiMo Markdown source](examples/mimo-v2.6-deep-read.md) and its visual inputs show the format; they are build materials, not separate reading pages.
+The bundled [renderer](scripts/render-reading.cjs) turns a Markdown audit source and local visuals into a standalone HTML file with embedded images, diagrams, KaTeX math, and fonts. Every source begins with an explicit language marker, `<!-- paper-reading-lang: en -->` or `<!-- paper-reading-lang: zh-CN -->`, which also sets navigation and chart labels. Archify can render optional interactive structure views, but neither Archify nor another locally installed skill is required. The [Transformer](examples/attention-is-all-you-need-deep-read.md), [DeepSeek](examples/deepseek-v4.1-flash-deep-read.md), and [MiMo](examples/mimo-v2.6-deep-read.md) Markdown sources and visual inputs are build materials, not separate reading pages.
 
-To rebuild the published example locally:
+To rebuild all published examples locally:
 
 ```bash
 npm ci
-npm run build:example
+npm run build:examples
 npm test
 ```
 
 ## Validation and scope
 
-The MiMo-V2.6 document demonstrates one complete empirical technical-report read. Renderer tests cover inline and display math, source-location visibility, figure context, and numerical chart behavior. These checks verify rendering contracts; they do not independently certify every scientific interpretation. Other paper types are described in the skill but do not yet have equally complete public examples or cross-paper user evaluation.
+The three documents exercise an influential architecture paper and two technical reports with different mechanism and evaluation structures. Renderer tests cover language declarations, inline and display math, source-location visibility, figure context, and numerical chart behavior. These checks verify rendering contracts; they do not independently certify every scientific interpretation. Theory, surveys, datasets, and independent reader studies remain outside the current example set.
 
 The reading method draws on [Keshav’s three-pass approach](https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf), [Novak and Cañas’s concept maps](https://cmap.ihmc.us/publications/researchpapers/theoryunderlyingconceptmaps.pdf), and [SciDoc2Diagrammer-MAF](https://aclanthology.org/2024.findings-emnlp.780/). [Archify](https://github.com/tt-a1i/archify) is an optional presentation tool for interactive structure diagrams. Scientific fidelity still depends on reading and checking the source paper.
 
