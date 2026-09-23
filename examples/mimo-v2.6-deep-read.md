@@ -1,6 +1,6 @@
 # MiMo-V2.6：Agent 强化学习的规模化路径
 
-> **阅读定位**：从全局训练链、关键学习信号到实验与基础设施，完整理解这篇报告。原文为 LLM-Core Xiaomi 的 *MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement*。<span class="source-ref">本样例依据用户提供的 44 页 PDF（SHA-256：7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b）；页码均指该 PDF 的页码。PDF 未随仓库分发；外部代码和更新版本未核验。</span>
+> **阅读定位**：从全局训练链、关键学习信号到实验与基础设施，完整理解这篇报告。原文为 LLM-Core Xiaomi 的 *MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement*。<span class="source-ref">本样例的图与页码依据用户提供的 44 页 PDF（SHA-256：7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b）。作者在 Hugging Face 提交 73875d0 更新 PDF（SHA-256：fb81e6e083801b3358f084ed6be953dc23b0d2e434690f4541d5eae03e01e7af）；模型卡标明 Pro 为 1.02T 总参数、42B active parameters。更新版 PDF 的其他内容未逐页对照。</span>
 
 ## 01 / 研究问题与训练链
 
@@ -37,8 +37,6 @@
 <!-- archify:mimo-v2.6.workflow.html|全局训练路径 -->
 
 混合 RL 中，**任务与 harness 提供可执行的交互轨迹**，**grader 把轨迹和测试结果转成可区分质量的学习信号**。前者决定模型遇到什么问题，后者决定哪些做法受到强化；最终模型的跨任务分数反映整条训练链的结果，不能单独归因于其中一项。（PDF pp. 8, 16–26）
-
-<details class="source-note"><summary>原文参数表的一处标注不一致</summary><p>报告正文将 Pro 标为 1.02T 总参数、42B active parameters；Table 1 却写成 42T active parameters。后者疑似表内笔误，本文没有使用这一冲突值进行计算。（PDF p. 3；p. 6, Table 1）</p></details>
 
 ## 02 / 一轮 RL 如何学习
 
@@ -83,13 +81,15 @@ $$
 
 <!-- archify:mimo-v2.6-grading.workflow.html|轨迹如何变成学习信号 -->
 
+**原论文 Fig. 7 把两种评分画成并行分支。** 左半幅的上、下虚线框分别是 GRS 的离线 rubric 构建和在线复用：新轨迹经 rubric grader 得到细化奖励。右半幅是 GAR：同组轨迹进入 groupwise grader，通过解按质量排序，确认依赖外部或泄露答案的解法先归零，然后重分配优势。两路都进入 RL policy update，并非 GRS 的输出再送进 GAR。（PDF pp. 17–18, Fig. 7）
+
 ![论文 Fig. 7：左侧 GRS 离线生成 rubric 并在训练时复用；右侧 GAR 在线比较同组轨迹、重分配优势。](assets/fig7-grading.webp)
 
 *原论文 Fig. 7，PDF p. 17。左边的离线 rubric 被复用于后续训练；右边的在线 grader 只比较当前组的解法，并调整优势分配。此图是核对上述机制的原始画法。*
 
 ### GRS：提前建立任务专属的质量尺
 
-离线阶段，grader 结合任务说明、仓库与多条尝试，写出**解决方案质量**和**解题行为质量**两套 rubric。训练时，新轨迹逐条得到两个分数，最终奖励为（PDF pp. 17–18, Eq. 2）：
+原论文 Fig. 7(a) 左侧对应这里的两次处理：离线阶段，grader 结合任务说明、仓库与多条尝试，写出**解决方案质量**和**解题行为质量**两套 rubric；训练时，新轨迹逐条得到两个分数，最终奖励为（PDF pp. 17–18, Eq. 2）：
 
 $$R_i = R_i^{\mathrm{test}}\,S_i^{\mathrm{sol}}\,S_i^{\mathrm{beh}}.$$
 
@@ -99,7 +99,7 @@ $$R_i = R_i^{\mathrm{test}}\,S_i^{\mathrm{sol}}\,S_i^{\mathrm{beh}}.$$
 
 ### GAR：在线比较同组解法，重分配正向学习权重
 
-GAR 在混合成功/失败的 rollout group 中，联合查看任务、仓库、补丁与测试。它比较通过解的方案适合度、实现准确性、改动最小性、副作用和代码工艺；确认依赖泄露答案的轨迹先被归零。接着，它用质量因子降低较差通过解的正 advantage，并把释放的正向权重重新分给更好的通过解。未截断形式保持通过解的正 advantage 总量；实际实现还限制放大因子，并使最终组均值为零。（PDF p. 18, Eq. 3）
+原论文 Fig. 7(b) 右侧对应 GAR 的在线比较：在混合成功/失败的 rollout group 中，grader 联合查看任务、仓库、补丁与测试，比较通过解的方案适合度、实现准确性、改动最小性、副作用和代码工艺；确认依赖外部或泄露答案的轨迹先被归零。接着，它用质量因子降低较差通过解的正 advantage，并把释放的正向权重重新分给更好的通过解。未截断形式保持通过解的正 advantage 总量；实际实现还限制放大因子，并使最终组均值为零。（PDF p. 18, Eq. 3）
 
 把有效二值奖励写成 $R_i$、组均值写成 $\bar R$，原始序列优势是 $A_i=R_i-\bar R$。对通过解的集合 $P$，grader 给出质量因子 $f_i\in(0,1]$。论文的**未截断**重分配可写成（PDF p. 18, Eq. 3）：
 
@@ -137,11 +137,13 @@ Sample Mixer 解决混合任务的**组成稳定性**：25 个数据源的平均
 
 混合 RL 后，MOPD2 使用不同领域的教师。可验证任务可由 mixRL 教师提供监督，开放域任务则可用合成演示训练的 SFT 教师。**Standard MOPD**让学生从任务 prompt 完整 rollout；**Prefix-Conditioned OPD**从教师轨迹或 SFT 数据抽取历史前缀，让学生从每个前缀自己生成一轮，再接受相应教师的 token 级监督。（PDF pp. 24–25, Fig. 13）
 
+**原论文 Fig. 13 分三层展示这一过程。** 顶部区分可验证任务的 mixRL 教师与开放域任务的 SFT 教师；左下是从题目开始生成完整轨迹的 Standard MOPD；右下把教师轨迹或 SFT 演示切成多个历史前缀，学生从每个前缀新生成一轮，接受相应教师的监督。图中的历史前缀是生成条件，不是学生要照抄的目标。（PDF p. 25, Fig. 13）
+
 ![论文 Fig. 13：领域教师、完整学生 rollout 与前缀条件蒸馏的两条路径。](assets/fig13-mopd2.webp)
 
 *原论文 Fig. 13，PDF p. 25。SFT 数据提供的是历史**上下文**，而不是固定的学生续写目标；这是理解前缀蒸馏的关键。*
 
-**用三轮对话想象 Prefix-Conditioned OPD。** 一条教师轨迹若有 3 个 assistant 决策点，便能切出 3 个完整历史前缀 $h_1,h_2,h_3$。学生分别从每个前缀新生成一轮 $y_1,y_2,y_3$，并在相同历史与已生成 token 条件下接受对应教师的 token 级监督；不要求学生从头重演此前全部交互。SFT 演示在这里提供前缀，**不是**要求学生照抄的固定续写。这让开放域任务也能产生 on-policy 学生动作，同时缩短在未经验证的长链历史上持续偏离的风险。（PDF p. 25, Fig. 13）
+**用三轮对话读懂原论文 Fig. 13(c) 的前缀分支。** 一条教师轨迹若有 3 个 assistant 决策点，便能切出 3 个完整历史前缀 $h_1,h_2,h_3$。学生分别从每个前缀新生成一轮 $y_1,y_2,y_3$，并在相同历史与已生成 token 条件下接受对应教师的 token 级监督；不要求学生从头重演此前全部交互。SFT 演示在这里提供前缀，**不是**要求学生照抄的固定续写。这让开放域任务也能产生 on-policy 学生动作，同时缩短在未经验证的长链历史上持续偏离的风险。（PDF p. 25, Fig. 13）
 
 ## 06 / 实验分别说明什么
 
@@ -167,6 +169,8 @@ Sample Mixer 解决混合任务的**组成稳定性**：25 个数据源的平均
 ```paper-chart
 {"type":"paired","title":"DeepSWE v1.1 · average@3","subtitle":"每个模型与自己的 RL 起点比较；单位：%","origin":"本文重绘 · 原论文 Fig. 3 左图","note":"本图只比较起点与终点；连续训练轨迹和成本横轴请看紧接着的论文原图。","source":"PDF p. 8, Fig. 3；正文数值四舍五入至一位小数","rows":[{"label":"MiMo-V2.6-Pro","before":58.4,"after":72.6},{"label":"MiMo-V2.6-Flash","before":48.7,"after":65.7}]}
 ```
+
+**原论文 Fig. 3 把两类信息并排展示。** 左侧连续曲线显示得分怎样随累计 RL 成本变化；右侧分别展示 Pro 和 Flash 的 rollout、grader、training 成本占比。上面的重绘只保留起点与终点，原图还能看到中间的波动以及两种模型的成本构成。（PDF p. 8, Fig. 3）
 
 <a id="original-fig-3"></a>
 

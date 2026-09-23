@@ -89,6 +89,9 @@ test('MiMo reader leads with the paper, includes Eq. 1, and names both Fig. 3 re
     assert.match(html, /<span class="figure-kicker">本文重绘 · 原论文 Fig\. 3 左图<\/span>/);
     assert.match(html, /id="original-fig-3"/);
     assert.match(html, /这一阶段留下什么/);
+    assert.match(html, /<strong>原论文 Fig\. 7 把两种评分画成并行分支。<\/strong>[\s\S]*?<\/p>\s*<figure class="paper-figure">/);
+    assert.match(html, /<strong>原论文 Fig\. 13 分三层展示这一过程。<\/strong>[\s\S]*?<\/p>\s*<figure class="paper-figure">/);
+    assert.doesNotMatch(html, /原文参数表的一处标注不一致/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

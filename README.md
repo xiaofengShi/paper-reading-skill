@@ -31,7 +31,7 @@
 
 两幅交互图的**节点、关系、说明与论文来源由 paper-reading 阅读流程整理并写成 JSON**；[Archify](https://github.com/tt-a1i/archify) 将 JSON 渲染成可探索的图。它们不是 Archify 自动读 PDF 的结果。最终 HTML 把这些图与其余正文、数据图、原图摘录放在一起；Archify 只负责结构图的呈现与结构校验，科学内容仍需回到论文核查。
 
-样例依据用户提供的 44 页本地 PDF，页码指 PDF 页码；PDF 未随仓库分发。此文档演示完整阅读形式，不声称对论文发布版本、代码或外部实验做了独立复核。[Markdown 审计源](examples/mimo-v2.6-deep-read.md)、[训练图 JSON](examples/mimo-v2.6.workflow.json)、[评分图 JSON](examples/mimo-v2.6-grading.workflow.json)及对应 Archify HTML 是生成输入，不需要读者逐一打开。
+样例的图与页码依据用户提供的 44 页本地 PDF；PDF 未随仓库分发。作者后来[更新了 PDF](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d)；[模型卡](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL)确认 Pro 是 1.02T 总参数、42B active parameters，本样例不再展示旧版 Table 1 的笔误提示。更新版 PDF 的其他差异尚未逐页核对。[Markdown 审计源](examples/mimo-v2.6-deep-read.md)、[训练图 JSON](examples/mimo-v2.6.workflow.json)、[评分图 JSON](examples/mimo-v2.6-grading.workflow.json)及对应 Archify HTML 是生成输入，不需要读者逐一打开。
 
 本地重建样例：
 
