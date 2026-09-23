@@ -93,6 +93,9 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .archify-disclosure > summary { padding: .75rem 1rem; cursor: pointer; color: var(--teal); font-size: .85rem; font-weight: 800; }
 .archify-disclosure > summary span { margin-left: .7rem; color: var(--subtle); font-size: .76rem; font-weight: 500; }
 .archify-disclosure .archify-figure { margin: 0; border: 0; box-shadow: none; border-radius: 0; }
+.source-note { margin: .8rem 0 1.4rem; border-left: 2px solid var(--line); padding: .25rem 0 .25rem .85rem; color: var(--subtle); }
+.source-note > summary { cursor: pointer; font-size: .8rem; font-weight: 700; }
+.source-note > p { margin: .5rem 0 0; font-size: .8rem; }
 .experiment-atlas { margin: 1.7rem 0 2.3rem; border: 1px solid var(--line); background: #fff; box-shadow: 0 10px 25px #18362e0b; border-radius: 7px; overflow: hidden; }
 .experiment-atlas figcaption { padding: 1.1rem 1.2rem; border-bottom: 1px solid var(--line); }
 .experiment-atlas figcaption strong { display: block; font-size: 1.1rem; }

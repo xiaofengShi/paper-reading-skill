@@ -94,6 +94,9 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .archify-disclosure > summary { padding: .75rem 1rem; cursor: pointer; color: var(--teal); font-size: .85rem; font-weight: 800; }
 .archify-disclosure > summary span { margin-left: .7rem; color: var(--subtle); font-size: .76rem; font-weight: 500; }
 .archify-disclosure .archify-figure { margin: 0; border: 0; box-shadow: none; border-radius: 0; }
+.source-note { margin: .8rem 0 1.4rem; border-left: 2px solid var(--line); padding: .25rem 0 .25rem .85rem; color: var(--subtle); }
+.source-note > summary { cursor: pointer; font-size: .8rem; font-weight: 700; }
+.source-note > p { margin: .5rem 0 0; font-size: .8rem; }
 .experiment-atlas { margin: 1.7rem 0 2.3rem; border: 1px solid var(--line); background: #fff; box-shadow: 0 10px 25px #18362e0b; border-radius: 7px; overflow: hidden; }
 .experiment-atlas figcaption { padding: 1.1rem 1.2rem; border-bottom: 1px solid var(--line); }
 .experiment-atlas figcaption strong { display: block; font-size: 1.1rem; }
@@ -178,7 +181,7 @@ math { font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", serif;
   .article h2 { break-after: avoid; }
 }
 </style></head>
-<body><a class="skip-link" href="#content">跳到正文</a><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>原文证据驱动的深读图谱</span><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>MiMo-V2.6：一篇关于扩大 Agent 强化学习的技术报告</h1><p class="hero-sub">一页贯通全局认知、关键机制与实验证据。</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div><div class="hero-visual" aria-hidden="true"><div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="hero-core">PAPER</div><span class="hero-tag t1">全局认知</span><span class="hero-tag t2">关键机制</span><span class="hero-tag t3">实验证据</span></div></div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div><a href="#section-1">01 / 先把整篇论文装进脑中</a><a href="#section-2">02 / 一轮 RL：轨迹、评分、更新</a><a href="#section-3">03 / 核心机制：GRS 与 GAR 不在同一条串行流水线上</a><a href="#section-4">04 / 工程系统：为什么大批量混合任务可以跑起来</a><a href="#section-5">05 / RL 之后：MOPD2 如何合并能力</a><a href="#section-6">06 / 实验图谱：按问题找图，不按排行榜跳结论</a><a href="#section-7">07 / 读完后应留下怎样的认识</a></nav><main id="content" class="article"><div class="article-inner">
+<body><a class="skip-link" href="#content">跳到正文</a><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>原文证据驱动的深读图谱</span><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>MiMo-V2.6：一篇关于扩大 Agent 强化学习的技术报告</h1><p class="hero-sub">一页贯通全局认知、关键机制与实验证据。</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div><div class="hero-visual" aria-hidden="true"><div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="hero-core">PAPER</div><span class="hero-tag t1">全局认知</span><span class="hero-tag t2">关键机制</span><span class="hero-tag t3">实验证据</span></div></div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div><a href="#section-1">01 / 先把整篇论文装进脑中</a><a href="#section-2">02 / 一轮 RL：轨迹、评分、更新</a><a href="#section-3">03 / 核心机制：GRS 与 GAR 不在同一条串行流水线上</a><a href="#section-4">04 / 工程系统：为什么大批量混合任务可以跑起来</a><a href="#section-5">05 / RL 之后：MOPD2 如何合并能力</a><a href="#section-6">06 / 实验图谱：按问题找图，不按排行榜跳结论</a><a href="#section-7">07 / 为什么扩大 RL 需要这几部分一起工作？</a></nav><main id="content" class="article"><div class="article-inner">
 <blockquote>
 <p><strong>阅读定位</strong>：从全局训练链、关键学习信号到实验与基础设施，完整理解这篇报告。原文为 LLM-Core Xiaomi 的 <em>MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement</em>，本样例依据用户提供的 44 页 PDF（SHA-256：<code>7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b</code>）。页码均指该 PDF 的页码。PDF 未随仓库分发；外部代码和更新版本未核验。</p>
 </blockquote>
@@ -14987,6 +14990,8 @@ math { font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", serif;
 &lt;/html&gt;
 " sandbox="allow-scripts" loading="lazy"></iframe><figcaption>交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。</figcaption></figure></details>
 <p>进入 RL 的两个关键输入值得分开理解：<strong>任务与 harness 提供可执行的交互轨迹</strong>；<strong>grader 把轨迹和测试结果转成可区别质量的学习信号</strong>。前者改变模型遇到什么问题，后者改变模型从同样的“通过测试”中学到什么。后面的实验分别检查训练趋势、评分、跨 harness 迁移和稳定性；最终模型总分不能单独归因于其中一条箭头。（PDF pp. 8, 16–26）</p>
+<details class="source-note"><summary>原文参数表的一处标注不一致</summary><p>PDF p. 3 写 Pro 为 1.02T 总参数、42B active parameters；p. 6 的 Table 1 写 42T active parameters。后者疑似表内笔误，本文没有使用这一冲突值进行计算。</p></details>
+
 <h2 id="section-2">02 / 一轮 RL：轨迹、评分、更新</h2>
 <p>报告的典型训练步含 <strong>1,568 个 prompts × 每题 16 条 rollout</strong>，约 25,000 条序列，合计 2.7–3.7B 训练 token。任务来自混合数据源；Agent 与环境交互生成轨迹，测试与 grader 产生奖励/优势，训练再把序列级信号用于 token 级更新。Eq. 1 还包含重要性比率与 token mask。（PDF p. 8, Eq. 1）</p>
 <p>**一条学习信号怎样到达 token？**先对同题的多条完整轨迹求出序列级优势 </p>
@@ -30046,9 +30051,8 @@ A&#x27;_i=\begin{cases}\lambda f_iA_i,&amp;i\in P,\\ A_i,&amp;i\notin P.\end{cas
 </tbody></table>
 <p>这组开放资源实验展示的是<strong>从同一 SFT 起点继续做领域 RL 或多 harness RL</strong>的收益；Table 6 与 Table 7 的代码结果不是同一次训练。上述三个 held-out harness 的提升支持跨外壳迁移，但仍只是在这三个具体实现和三套代码评测上的观察。（PDF pp. 35–36）</p>
 <p>最终模型 Table 3 则汇总 Pro/Flash 与前代、其他模型在多领域 benchmark 的表现。它展示整条训练链之后的能力，不可据此单独算出 GRS、GAR、多 harness 或 MOPD2 的增益。读表时必须逐行看任务、模型、指标和评测协议。（PDF pp. 25–26, Table 3）</p>
-<h2 id="section-7">07 / 读完后应留下怎样的认识</h2>
-<p>**可带走的系统图像：**训练吞吐决定能探索多少长轨迹；环境和 harness 决定探索空间与交互差异；GRS/GAR 决定通过测试之外还能学到什么；基础设施把这些异质轨迹稳定送到训练；MOPD2 再汇合不同领域的能力。（PDF pp. 3, 8–19, 24–32）</p>
-<p>**实验各回答各的问题：**Fig. 3 是整体训练趋势，Fig. 8 看 GAR 的定向比较，Fig. 10 看跨 harness 迁移，Fig. 11 看 router 稳定性，Table 6–7 看开放小模型资源。把它们并置，能理解报告的设计逻辑；把它们相加为“某个单一模块带来全部提升”则超出了证据。（PDF pp. 8, 18–26, 34–36）</p>
-<p>**原文的一处数字冲突：**PDF p. 3 写 Pro 为 1.02T 总参数、42B active parameters；p. 6 的 Table 1 却写 42T active parameters。本阅读文档保留两处原文，并把后者视为疑似表内笔误；不拿这个冲突值继续计算。</p>
-<p>**这篇报告给出的完整设计逻辑：**要让 Agent RL 持续学习，首先要有能生成长轨迹的模型与多样环境；其次要把“完成任务”细化成能区别解法质量的学习信号；然后需要能承载异质任务、超大批次和稳定路由的系统；最后用多教师蒸馏把不同领域的能力汇入一个学生。文中的图、算例和数据已经给出理解这条链所需的关键内容。若要做复现或审稿，仍需另行核验代码、数据与评测实现；这超出本次阅读文档的材料范围。</p>
+<h2 id="section-7">07 / 为什么扩大 RL 需要这几部分一起工作？</h2>
+<p>**更多轨迹，不一定带来更多有效学习。**大 batch 让模型在同一题上探索更多做法；若二值测试把所有通过解都记成相同奖励，多出的候选解仍难以提供质量差异。GRS 为高通过率任务预先建立质量尺，GAR 则在混合结果的组内重新分配学习权重。Pro 的 RL 成本中有 12.7% 用于 grader，说明“判断轨迹”本身也是扩展预算的一部分；GAR 的定向比较进一步观察到更持续的 pass rate 增长与较稳定的轨迹长度。（PDF pp. 8–9, 16–19, Fig. 3, 7–8）</p>
+<p>**更多任务和 harness，也会让训练更难组织。**它们带来不同的交互方式、通过率和轨迹时长；若快任务持续填满批次，或长轨迹搬运和 MoE 路由不稳定，增加多样性便无法稳定转成更新。Sample Mixer、分离的数据与控制面、统一轨迹表示以及冻结 router，分别处理这些运行约束。三个 held-out harness 上的提升和 router 负载实验，展示了跨外壳迁移与系统稳定性，但覆盖范围仍是报告中这些具体设置。（PDF pp. 22–24, 26–32, Fig. 10–11, 14–16）</p>
+<p>**还有些任务很难设计可靠的 RL 奖励。**MOPD2 因此使用不同领域的教师，让学生在完整轨迹或给定历史前缀上自行生成，再接受 token 级监督。整篇报告展示的是一套把探索、反馈、运行系统和能力整合接起来的训练方案。Fig. 3 与最终模型评测说明整条链运行后的表现；它们不能单独量出每个环节各自带来的分数。（PDF pp. 8, 24–26, Fig. 3, 13, Table 3）</p>
 </div></main></div><footer class="page-footer"><span>Paper Reading Skill · 单文件阅读版</span><a href="#top">返回顶部 ↑</a></footer></body></html>
