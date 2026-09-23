@@ -1,7 +1,6 @@
 # Paper Evidence State
 
-A Paper Evidence State is the updatable form of a Research Card. A summary is
-written once; an evidence state is *revised* as new evidence arrives —
+A Paper Evidence State records how the reading atlas changes as new evidence arrives —
 appendices, released code, author responses, reproduction attempts, follow-up
 papers.
 

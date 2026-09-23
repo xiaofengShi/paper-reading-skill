@@ -1,0 +1,41 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "MiMo-V2.6：从轨迹到学习信号",
+    "subtitle": "GRS 与 GAR 是不同任务子集的互补分支 · PDF pp. 16–19",
+    "locale": "zh-CN",
+    "visual_preset": "editorial",
+    "quality_profile": "showcase",
+    "views": [
+      {"id": "flow", "label": "一轮更新", "focus": ["task", "rollout", "test", "grade", "update"], "note": "主路径从任务采样到策略更新；不同代码任务使用不同的评分分支。"},
+      {"id": "branches", "label": "GRS / GAR", "focus": ["test", "grs", "gar", "grade"], "note": "GRS 用预先生成的 rubric 细化奖励；GAR 在线比较同组通过解并重分配优势。"}
+    ]
+  },
+  "lanes": [
+    {"id": "main", "label": "RL 主路径"},
+    {"id": "grade_methods", "label": "按代码任务选择评分方法"}
+  ],
+  "mainPath": ["task", "rollout", "test", "grade", "update"],
+  "nodes": [
+    {"id": "task", "lane": "main", "col": 0, "type": "database", "label": "任务批次", "sublabel": "混合采样 · p. 8", "width": 150},
+    {"id": "rollout", "lane": "main", "col": 1, "type": "backend", "label": "多条 rollout", "sublabel": "每题 16 条 · p. 8", "width": 150},
+    {"id": "test", "lane": "main", "col": 2, "type": "security", "label": "执行测试", "sublabel": "通过 / 失败 · p. 16", "width": 150},
+    {"id": "grade", "lane": "main", "col": 3, "type": "backend", "label": "计算优势", "sublabel": "细化学习信号 · p. 18", "width": 150},
+    {"id": "update", "lane": "main", "col": 4, "type": "cloud", "label": "策略更新", "sublabel": "token 级目标 · p. 8", "width": 150},
+    {"id": "grs", "lane": "grade_methods", "col": 2, "type": "database", "label": "GRS 离线 rubric", "sublabel": "高通过率子集 · p. 17–18", "width": 150},
+    {"id": "gar", "lane": "grade_methods", "col": 4, "type": "messagebus", "label": "GAR 在线比较", "sublabel": "其余代码任务 · p. 18", "width": 150}
+  ],
+  "edges": [
+    {"from": "task", "to": "rollout", "label": "采样"},
+    {"from": "rollout", "to": "test", "label": "提交轨迹"},
+    {"from": "test", "to": "grade", "label": "原始奖励"},
+    {"from": "grade", "to": "update", "label": "优势信号"},
+    {"from": "grs", "to": "grade", "label": "逐条质量分数", "role": "branch"},
+    {"from": "gar", "to": "grade", "label": "组内排序", "role": "branch"}
+  ],
+  "cards": [
+    {"dot": "cyan", "title": "GRS · PDF pp. 17–18", "items": ["离线多轨迹生成任务 rubric；训练时复用。", "奖励 = 测试奖励 × 解法质量 × 行为质量。"]},
+    {"dot": "amber", "title": "GAR · PDF p. 18", "items": ["在线比较同组成功/失败轨迹，确认 hack 后归零。", "通过解之间重分配正 advantage；实践中设重标定上限。"]}
+  ]
+}

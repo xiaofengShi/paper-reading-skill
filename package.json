@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build:docs": "node scripts/build-docs.cjs"
+  },
+  "devDependencies": {
+    "marked": "17.0.5"
+  }
+}
