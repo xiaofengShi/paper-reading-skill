@@ -23,7 +23,7 @@ Read the paper in passes: inspect the abstract, introduction, overview figures, 
 
 Produce these layers in this reader-facing order inside **one continuous reading document**, adapting diagram type to the paper:
 
-Before the main path, name the ordering principle when several orders coexist (for example, paper section order, model training chronology, and this document's explanation order). State why the reader-facing chapters follow that route and where a cross-cutting system component fits. A final evaluation belongs after training as evidence, not as another training operation. Keep the navigation labels short enough to scan.
+Choose the chapter order as an editorial decision while drafting. If paper section order, process chronology, and explanation order differ, keep them distinct in your reasoning and make diagrams convey the actual process. Do not add a default section explaining why the document uses its chapter order or comparing multiple orders; show the paper's substance directly. Label evaluation as evaluation, and place cross-cutting components with the operations they support. Keep navigation labels short enough to scan.
 
 1. **Global map:** research problem, setting, prior limitation, main idea, contributions, and where evidence enters. Give a short orientation paragraph and a labeled concept map.
 2. **Main path:** method, training/inference pipeline, proof dependency, dataset construction, or benchmark protocol. Show inputs, transformations, decisions, outputs, and feedback loops. Explain each non-obvious arrow.

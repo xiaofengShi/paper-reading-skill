@@ -72,15 +72,16 @@ $$x=y+z$$
   }
 });
 
-test('MiMo reader includes Eq. 1, names both Fig. 3 redraws, and explains its reading order', () => {
+test('MiMo reader leads with the paper, includes Eq. 1, and names both Fig. 3 redraws', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-mimo-test-'));
   try {
     const source = path.resolve(__dirname, '../examples/mimo-v2.6-deep-read.md');
     const output = path.join(dir, 'mimo.html');
     execFileSync(process.execPath, [renderer, source, output]);
     const html = fs.readFileSync(output, 'utf8');
-    assert.match(html, /id="section-1">01 \/ 全局与阅读顺序<\/h2>/);
-    assert.match(html, /前四步是模型训练，第五步是结果评测/);
+    assert.match(html, /id="section-1">01 \/ 研究问题与训练链<\/h2>/);
+    assert.doesNotMatch(html, /先分清三种顺序|本页阅读：|论文叙述：|前四步是模型训练/);
+    assert.match(html, /从基础模型到最终评测/);
     assert.match(html, /<div class="display-math">[\s\S]*?r_{i,t}M_{i,t}A_i[\s\S]*?<\/div>/);
     assert.ok(html.includes('\\frac{1}{\\sum_{i=1}^{G}|o_i|}'), 'Eq. 1 keeps its group-token denominator');
     assert.match(html, /分母是<strong>该组全部轨迹的 token 总数<\/strong>/);

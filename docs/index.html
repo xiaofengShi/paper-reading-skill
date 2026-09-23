@@ -51,7 +51,7 @@
 </tbody></table>
 <p>如果用户没有给研究目标，skill 不会替用户虚构“要批判这篇论文”的目的，也不会因初步相关性判断而中止已要求的深读。</p>
 <h2>MiMo-V2.6 实操样例</h2>
-<p><a href="mimo-v2.6-deep-read.html">打开 MiMo-V2.6 一体化深读 HTML</a>：一页从全局训练路径读到 GRS/GAR、系统架构、MOPD2 和实验。开篇区分论文叙述、模型训练与本页阅读的顺序；正文直接给出 RL 的 Eq. 1、评分公式与算例、实验对照和完整关键数据。数据图标明是本文重绘还是近似整理，并指明原论文图及面板；原论文图在相关解释旁供核对，两幅 Archify 交互图供进一步探索。页内还有实验索引、七幅原论文图摘录与按需显示的 PDF 定位。它参照 <a href="https://xiaofengshi.github.io/MechVQA/">MechVQA 项目页</a>的单页阅读组织方式，内容与图示针对本论文重新编写。</p>
+<p><a href="mimo-v2.6-deep-read.html">打开 MiMo-V2.6 一体化深读 HTML</a>：一页从研究问题与训练路径读到 GRS/GAR、系统架构、MOPD2 和实验。正文直接给出 RL 的 Eq. 1、评分公式与算例、实验对照和完整关键数据。数据图标明是本文重绘还是近似整理，并指明原论文图及面板；原论文图在相关解释旁供核对，两幅 Archify 交互图供进一步探索。页内还有实验索引、七幅原论文图摘录与按需显示的 PDF 定位。它参照 <a href="https://xiaofengshi.github.io/MechVQA/">MechVQA 项目页</a>的单页阅读组织方式，内容与图示针对本论文重新编写。</p>
 <p>两幅交互图的<strong>节点、关系、说明与论文来源由 paper-reading 阅读流程整理并写成 JSON</strong>；<a href="https://github.com/tt-a1i/archify">Archify</a> 将 JSON 渲染成可探索的图。它们不是 Archify 自动读 PDF 的结果。最终 HTML 把这些图与其余正文、数据图、原图摘录放在一起；Archify 只负责结构图的呈现与结构校验，科学内容仍需回到论文核查。</p>
 <p>样例依据用户提供的 44 页本地 PDF，页码指 PDF 页码；PDF 未随仓库分发。此文档演示完整阅读形式，不声称对论文发布版本、代码或外部实验做了独立复核。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">Markdown 审计源</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6.workflow.json">训练图 JSON</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-grading.workflow.json">评分图 JSON</a>及对应 Archify HTML 是生成输入，不需要读者逐一打开。</p>
 <p>本地重建样例：</p>

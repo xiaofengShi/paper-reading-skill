@@ -59,7 +59,7 @@ function renderMap(data) {
 }
 function renderPath(data) {
   if (!Array.isArray(data.stages) || !data.stages.length) throw new Error('paper-path needs stages');
-  return `<figure class="reading-path"><figcaption><span class="figure-kicker">GUIDED PATH</span><strong>${esc(data.title)}</strong><p>${esc(data.intro)}</p></figcaption><ol>${data.stages.map((s, i) =>
+  return `<figure class="reading-path"><figcaption><span class="figure-kicker">GUIDED PATH</span><strong>${esc(data.title)}</strong>${data.intro ? `<p>${esc(data.intro)}</p>` : ''}</figcaption><ol>${data.stages.map((s, i) =>
     `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>为什么需要</dt><dd>${esc(s.why)}</dd></div><div><dt>${i === data.stages.length - 1 ? '这一阶段留下什么' : '交给下一阶段'}</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
   ).join('')}</ol></figure>`;
 }

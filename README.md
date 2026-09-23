@@ -27,7 +27,7 @@
 
 ## MiMo-V2.6 实操样例
 
-[打开 MiMo-V2.6 一体化深读 HTML](docs/mimo-v2.6-deep-read.html)：一页从全局训练路径读到 GRS/GAR、系统架构、MOPD2 和实验。开篇区分论文叙述、模型训练与本页阅读的顺序；正文直接给出 RL 的 Eq. 1、评分公式与算例、实验对照和完整关键数据。数据图标明是本文重绘还是近似整理，并指明原论文图及面板；原论文图在相关解释旁供核对，两幅 Archify 交互图供进一步探索。页内还有实验索引、七幅原论文图摘录与按需显示的 PDF 定位。它参照 [MechVQA 项目页](https://xiaofengshi.github.io/MechVQA/)的单页阅读组织方式，内容与图示针对本论文重新编写。
+[打开 MiMo-V2.6 一体化深读 HTML](docs/mimo-v2.6-deep-read.html)：一页从研究问题与训练路径读到 GRS/GAR、系统架构、MOPD2 和实验。正文直接给出 RL 的 Eq. 1、评分公式与算例、实验对照和完整关键数据。数据图标明是本文重绘还是近似整理，并指明原论文图及面板；原论文图在相关解释旁供核对，两幅 Archify 交互图供进一步探索。页内还有实验索引、七幅原论文图摘录与按需显示的 PDF 定位。它参照 [MechVQA 项目页](https://xiaofengshi.github.io/MechVQA/)的单页阅读组织方式，内容与图示针对本论文重新编写。
 
 两幅交互图的**节点、关系、说明与论文来源由 paper-reading 阅读流程整理并写成 JSON**；[Archify](https://github.com/tt-a1i/archify) 将 JSON 渲染成可探索的图。它们不是 Archify 自动读 PDF 的结果。最终 HTML 把这些图与其余正文、数据图、原图摘录放在一起；Archify 只负责结构图的呈现与结构校验，科学内容仍需回到论文核查。
 
