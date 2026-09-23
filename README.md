@@ -40,7 +40,7 @@ npm ci
 npm run build:example
 ```
 
-构建器 [render-reading.cjs](scripts/render-reading.cjs) 从 Markdown 与仓库内的图形输入生成单文件 HTML，内嵌样式、图像和交互图，并把公式排为 MathML。PDF 页码等核对信息保留在 Markdown 审计源中；HTML 默认隐藏，顶部的“显示原文定位”可按需展开。样例的两幅 Archify HTML 已作为输入保存在仓库；重建时不调用 Archify，也不依赖本机安装的其他 skill 或机器特定路径。新论文没有 Archify 图时，直接用内联 SVG、HTML 图表或其他合适图形完成阅读文档。运行 `npm test` 可检查行内/独立公式、首屏图谱、出处开关和数据图的生成契约。
+构建器 [render-reading.cjs](scripts/render-reading.cjs) 从 Markdown 与仓库内的图形输入生成单文件 HTML，内嵌样式、图像和交互图；公式使用 KaTeX HTML 排版，并保留 MathML 供辅助技术读取。所需字体也内嵌在文件中。PDF 页码等核对信息保留在 Markdown 审计源中；HTML 默认隐藏，顶部的“显示原文定位”可按需展开。样例的两幅 Archify HTML 已作为输入保存在仓库；重建时不调用 Archify，也不依赖本机安装的其他 skill 或机器特定路径。新论文没有 Archify 图时，直接用内联 SVG、HTML 图表或其他合适图形完成阅读文档。运行 `npm test` 可检查行内/独立公式、首屏图谱、出处开关和数据图的生成契约。
 
 ## 方法依据与取舍
 

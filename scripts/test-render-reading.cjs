@@ -22,6 +22,10 @@ test('inline math stays in prose, display math stays separate, and paired values
 
 **Example:** A has $x+y$, B has $z$. The result stays in one paragraph.
 
+**Worked example:** A has $A_i$, B has $f_A=1,f_B=0.5$, and $\\lambda=4/3$ remains inline.
+
+中文公式 $A_i$，标点与公式同行。
+
 An observation can be read on its own.（PDF p. 3, Fig. 1）
 
 Another observation stands alone (PDF p. 5, Fig. 2).
@@ -37,8 +41,18 @@ $$x=y+z$$
     execFileSync(process.execPath, [renderer, source, output]);
     const html = fs.readFileSync(output, 'utf8');
     assert.match(html, /<strong>Example:<\/strong> A has <span class="inline-math">[\s\S]*?B has <span class="inline-math">[\s\S]*?The result stays in one paragraph\.<\/p>/);
-    assert.equal((html.match(/class="inline-math"/g) || []).length, 2);
+    assert.equal((html.match(/class="inline-math"/g) || []).length, 6);
+    const worked = html.match(/<p><strong>Worked example:<\/strong>[\s\S]*?<\/p>/)?.[0];
+    assert.ok(worked, 'worked example remains one paragraph');
+    assert.equal((worked.match(/class="inline-math"/g) || []).length, 3);
+    assert.match(html, /，<\/span>标点与公式同行。/);
     assert.match(html, /class="display-math"/);
+    assert.match(html, /class="katex-html" aria-hidden="true"/);
+    assert.match(html, /class="katex-mathml"><math/);
+    assert.match(html, /\.katex \.katex-mathml\{clip:/);
+    assert.match(html, /\.inline-math \{ display: inline-block;/);
+    assert.match(html, /data:font\/woff2;base64,/);
+    assert.doesNotMatch(html, /url\(fonts\//);
     assert.doesNotMatch(html, /\*\*Example:/);
     assert.match(html, /class="hero-sub">One idea grounded in the source/);
     assert.match(html, /class="hero-map"[\s\S]*?A source fact/);

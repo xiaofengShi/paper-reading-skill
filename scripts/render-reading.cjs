@@ -15,6 +15,15 @@ const outputPath = path.resolve(outputArg);
 const sourceDir = path.dirname(sourcePath);
 const source = fs.readFileSync(sourcePath, 'utf8');
 const css = fs.readFileSync(path.resolve(__dirname, '../assets/reading.css'), 'utf8');
+const katexCssFile = require.resolve('katex/dist/katex.min.css');
+let katexCss = fs.readFileSync(katexCssFile, 'utf8');
+let embeddedFonts = 0;
+katexCss = katexCss.replace(/src:url\(fonts\/([^)]*\.woff2)\) format\("woff2"\),url\(fonts\/[^)]*\.woff\) format\("woff"\),url\(fonts\/[^)]*\.ttf\) format\("truetype"\)/g, (_, file) => {
+  embeddedFonts++;
+  const font = fs.readFileSync(path.resolve(path.dirname(katexCssFile), 'fonts', file));
+  return `src:url(data:font/woff2;base64,${font.toString('base64')}) format("woff2")`;
+});
+if (!embeddedFonts || /url\(fonts\//.test(katexCss)) throw new Error('KaTeX fonts were not fully embedded');
 const slots = [];
 const slot = html => {
   const id = `PAPER_READING_SLOT_${slots.length}_END`;
@@ -106,8 +115,8 @@ prepared = prepared.replace(/```paper-contrast\s*\n([\s\S]*?)\n```/g, (_, json) 
 prepared = prepared.replace(/```paper-experiments\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderExperiments(JSON.parse(json))));
 prepared = prepared.replace(/```paper-chart\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderChart(JSON.parse(json))));
 prepared = prepared.replace(/<!-- archify:([^|>]+)\|([^>]+) -->/g, (_, file, title) => slot(renderArchify(file, title.trim())));
-prepared = prepared.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => slot(`<div class="display-math">${katex.renderToString(math.trim(), {output:'mathml',displayMode:true,throwOnError:true})}</div>`));
-prepared = prepared.replace(/\$([^$\n]+)\$/g, (_, math) => inlineSlot(`<span class="inline-math">${katex.renderToString(math.trim(), {output:'mathml',throwOnError:true})}</span>`));
+prepared = prepared.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => slot(`<div class="display-math">${katex.renderToString(math.trim(), {output:'htmlAndMathml',displayMode:true,throwOnError:true})}</div>`));
+prepared = prepared.replace(/\$([^$\n]+)\$([，。；：、,.;:]?)/g, (_, math, punctuation) => inlineSlot(`<span class="inline-math">${katex.renderToString(math.trim(), {output:'htmlAndMathml',throwOnError:true})}${esc(punctuation)}</span>`));
 const sourceRef = label => inlineSlot(`<span class="source-ref">${esc(label)}</span>`);
 prepared = prepared.replace(/（PDF[^）]+）/g, sourceRef);
 prepared = prepared.replace(/\(PDF[^)]+\)/g, sourceRef);
@@ -136,7 +145,7 @@ body = body.replace(/<h1>[\s\S]*?<\/h1>/, '');
 const nav = sections.map(s => `<a href="#${s.id}">${esc(s.heading)}</a>`).join('');
 const heroVisual = heroMap ? `<div class="hero-map"><p class="hero-map-title">论文全局图 <span>01 — ${String(heroMap.items.length).padStart(2, '0')}</span></p><ol>${heroMap.items.map(x => `<li><span class="hero-map-index">${esc(x.number)}</span><div><div class="hero-map-heading"><strong>${esc(x.label)}</strong>${x.signal ? `<b>${esc(x.signal)}</b>` : ''}</div><p>${esc(x.text)}</p>${sourceBadge(x.source)}</div></li>`).join('')}</ol>${heroMap.outcome ? `<div class="hero-map-outcome"><span aria-hidden="true">↳</span><div><strong>${esc(heroMap.outcome)}</strong>${heroMap.outcomeSource ? sourceBadge(heroMap.outcomeSource) : ''}</div></div>` : ''}</div>` : '';
 const output = `<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${esc(title)}：从全局路径到机制与实验的一体化论文深读。"><title>${esc(title)} · 深读图谱</title><style>${css}</style></head>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${esc(title)}：从全局路径到机制与实验的一体化论文深读。"><title>${esc(title)} · 深读图谱</title><style>${katexCss}\n${css}</style></head>
 <body><a class="skip-link" href="#content">跳到正文</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>原文证据驱动的深读图谱</span><label class="source-toggle-label" for="show-sources">显示原文定位</label><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>${esc(title)}</h1><p class="hero-sub">${esc(heroMap?.thesis || '从全局路径到关键机制与实验证据。')}</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span>Paper Reading Skill · 单文件阅读版</span><a href="#top">返回顶部 ↑</a></footer></body></html>`;
 const cleanOutput = output.replace(/[ \t]+$/gm, '');
 fs.writeFileSync(outputPath, cleanOutput);

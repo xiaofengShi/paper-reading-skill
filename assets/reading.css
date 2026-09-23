@@ -133,10 +133,9 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .archify-figure figcaption, .paper-figure figcaption { padding: .7rem 1.2rem; color: var(--subtle); background: #f8fbf9; border-top: 1px solid var(--line); font-size: .83rem; line-height: 1.5; }
 .paper-figure img { display: block; width: 100%; height: auto; padding: .6rem; background: #fff; }
 .display-math { overflow-x: auto; padding: 1rem 1.2rem; margin: 1.5rem 0; background: #f2f7f4; border-left: 3px solid var(--teal); font-size: 1.17rem; }
-.inline-math { display: inline; white-space: nowrap; color: var(--ink); }
-.inline-math math { display: inline; vertical-align: -.08em; }
-.display-math math { max-width: 100%; }
-math { font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", serif; }
+.inline-math { display: inline-block; vertical-align: -.08em; white-space: nowrap; color: var(--ink); line-height: 1; }
+.inline-math .katex { font-size: 1em; }
+.display-math .katex-display { margin: 0; }
 .segments { height: 48px; display: flex; margin: 1.4rem 1.2rem 1.1rem; border-radius: 3px; overflow: hidden; }
 .segment { display: block; }
 .s0 { background: #16685f; }.s1 { background: #d17c4a; }.s2 { background: #a9c8ba; }
