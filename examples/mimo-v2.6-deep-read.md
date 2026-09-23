@@ -1,100 +1,150 @@
-# MiMo-V2.6：从全局图读到训练机制与实验
+# MiMo-V2.6：一篇关于扩大 Agent 强化学习的技术报告
 
-> 阅读对象：[MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement](/Users/baai/Downloads/MiMo_V2_6_technical_report.pdf)，LLM-Core Xiaomi，44 页本地 PDF（SHA-256: `7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b`；PDF 未随仓库分发）。本文是**理解优先**的深读样例：先重建系统和论文叙事，再追到机制与实验。页码均指 PDF 页码；这份样例未对外部代码或更新版本做交叉核验。
->
-> [打开可探索的全局训练图](mimo-v2.6.workflow.html) · [图的可编辑 JSON](mimo-v2.6.workflow.json) · [打开评分机制图](mimo-v2.6-grading.workflow.html)
+> **阅读定位**：从全局训练链、关键学习信号到实验与基础设施，完整理解这篇报告。原文为 LLM-Core Xiaomi 的 *MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement*，本样例依据用户提供的 44 页 PDF（SHA-256：`7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b`）。页码均指该 PDF 的页码。PDF 未随仓库分发；外部代码和更新版本未核验。
 
-## 1. 三分钟建立全局认知
+## 01 / 先把整篇论文装进脑中
 
-**问题。** 报告关注长时程 agent 的强化学习：模型需要在复杂环境中产生大量轨迹，环境要覆盖不同任务和工具接口，而二值测试奖励不能区分“都通过了测试但质量不同”的解法。作者把这三个瓶颈分别对应到训练计算、环境与 harness 多样性、grader 计算。这个概括来自论文引言与 §4，而不是对某一个模块的独立因果证明。（PDF pp. 3, 8–9, 16）
+**一句话主线：**作者认为，长时程 Agent RL 要继续扩展，不能只加训练算力；还需要多样化的可交互任务和 harness，以及能区分“同样通过测试、但质量不同”的评分信号。报告围绕这三条轴组织系统设计与实验。（PDF pp. 3, 8–9, 16）
 
-**主张的系统路径。** 预训练基础模型 → agent 中期训练扩展长上下文与探索空间 → 短 SFT → 混合任务 RL → MOPD2 蒸馏形成最终系列模型。RL 阶段的三条放大轴是批量/吞吐、任务与 harness、以及更细的评分信号。最终模型评测见 Table 3；训练过程与组件实验分布在 Fig. 3、7–11 和 Table 6–7。不要把最终模型 Table 3 的分数当作单独 RL 或 GAR 的增益。（PDF pp. 3, 7–9, 16–26, 34–36）
-
-```mermaid
-flowchart LR
- A[预训练基础] --> B[Agent 中训与短 SFT]
- B --> C[混合任务 RL]
- D[代码/通用/视觉/安全环境<br/>多种 harness] --> C
- E[GRS/GAR 分组评分] --> C
- C --> F[MOPD2 多教师蒸馏]
- F --> G[MiMo-V2.6 最终模型]
+```paper-map
+{
+  "items": [
+    {"number":"01", "label":"训练计算", "text":"大批量、长轨迹、异步 rollout，让 RL 可以持续探索。", "source":"PDF pp. 8–9"},
+    {"number":"02", "label":"任务与环境", "text":"代码、通用、视觉和安全任务，加上多种 agent harness。", "source":"PDF pp. 9–16, 22–23"},
+    {"number":"03", "label":"评分计算", "text":"GRS/GAR 在二值测试之外区分解法质量与行为。", "source":"PDF pp. 16–19"}
+  ]
+}
 ```
 
-**如何读图。** 横向是训练阶段；两个侧输入说明 RL 为什么能“扩规模”：更多真实交互轨迹与更细的学习信号。MOPD2 是 RL 之后的能力整合阶段，不应从图中误读为每步 RL 都会蒸馏。来源：PDF pp. 3, 7–9, 16–18, 24–26。
+**训练阶段**从多模态预训练出发，经过 Agent 中期训练、短 SFT、混合任务 RL，再用 MOPD2 整合不同领域教师的能力。下面的图是读全文的导航；它表示阶段关系，并不暗示每个阶段只运行一次。（PDF pp. 3, 7–9, 24–26）
 
-## 2. 方法主线：一轮 RL 如何运转
+<!-- archify:mimo-v2.6.workflow.html|全局训练路径 -->
 
-报告使用大批量混合任务 RL。每步抽取 1,568 个 prompts，每个 prompt 生成 16 条 rollout，约 25,000 条序列、合计 2.7–3.7B 训练 token。训练式（1）的要素是采样策略产生轨迹、grader/环境反馈形成序列级 advantage，再把该信号广播到 token 级更新；还包含重要性比率与 token mask。基础流程并不要求读者先理解所有分布式系统细节。（PDF p. 8, Eq. 1；p. 9）
+这张图中最值得追的箭头是进入 RL 的两种支持：**任务与 harness 提供轨迹**，**grader 把轨迹转成更有信息量的学习信号**。后面的实验分别检查训练趋势、评分、跨 harness 迁移和稳定性；最终模型总分不能单独归因于其中一条箭头。（PDF pp. 8, 16–26）
 
-```mermaid
-flowchart LR
- Q[从混合任务采样 prompt] --> R[每题多条 agent rollout]
- R --> T[环境测试与行为证据]
- T --> J[评分/优势计算]
- J --> U[策略更新]
- U -. 下一批 .-> Q
+## 02 / 一轮 RL：轨迹、评分、更新
+
+报告的典型训练步含 **1,568 个 prompts × 每题 16 条 rollout**，约 25,000 条序列，合计 2.7–3.7B 训练 token。任务来自混合数据源；Agent 与环境交互生成轨迹，测试与 grader 产生奖励/优势，训练再把序列级信号用于 token 级更新。Eq. 1 还包含重要性比率与 token mask。（PDF p. 8, Eq. 1）
+
+训练计算并非全用来更新权重。Fig. 3 给出的 **Pro RL** 成本分配如下；这是报告中该运行的预算切面，不应外推成所有模型的固定比例。（PDF pp. 8–9, Fig. 3）
+
+```paper-chart
+{"type":"segments","title":"Pro 的 RL 计算花在哪里","unit":"%","source":"PDF pp. 8–9, Fig. 3","rows":[{"label":"Rollout / 探索","value":43.8},{"label":"Grader / 判断","value":12.7},{"label":"Training / 更新","value":43.5}]}
 ```
 
-**三个计算预算分别花在哪里。** Rollout 负责探索，grader 负责区分解法，training 用学习信号更新参数。Fig. 3 右图中 Pro 报告的成本占比分别为 rollout 43.8%、grader 12.7%、training 43.5%；这是该报告所列成本分解，不是所有模型或所有训练阶段的通用比例。（PDF pp. 8–9, Fig. 3）
+报告把 Agent 运行拆成 **Sample → Sequence → Context → Segment** 四级：一个题目可生成多条执行序列；一条序列可有多个并发对话上下文；一个 segment 是一轮消息、模型生成或工具结果。只有模型生成的部分进入损失。Penalty Module 能在合适层级遮罩或调整 advantage，避免把环境故障当作模型犯错。（PDF pp. 26–27）
 
-**环境为什么要多样。** 任务覆盖代码、通用、视觉和安全；同一类代码任务又可以用多个 mini-harness 执行。Harness 的变化改变工具接口与交互路径，训练若只适应一个外壳，就可能学到外壳特定策略。作者在 Fig. 10 用训练 harness 和未见过的 harness 分开画曲线，专门观察迁移。（PDF pp. 9–16, 22–23）
+## 03 / 核心机制：GRS 与 GAR 不在同一条串行流水线上
 
-## 3. 机制放大：二值奖励如何变成质量信号
+二值测试只回答“过没过”，无法区分通过者的实现质量。论文采用两种互补方法，**分别作用于不同的代码任务子集**：高通过率任务的一部分使用 GRS，其余代码任务主要依赖 GAR。先理解这个分工，再看公式和实验会容易得多。（PDF p. 16, Fig. 7）
 
-这里的关键是分清 **GRS** 与 **GAR** 的适用任务和时间位置。它们不是同一条轨迹连续经过的两个评分器，而是用于不同代码任务子集的互补方法。（PDF p. 16, Fig. 7）
+<!-- archify:mimo-v2.6-grading.workflow.html|轨迹如何变成学习信号 -->
 
-| 机制 | 何时建立标准 | 哪些任务 | 实际改变什么 | 原文位置 |
-|---|---|---|---|---|
-| GRS，Groupwise Reward Synthesis | 训练前看多条离线 rollout，生成任务专属 rubric；训练时复用 | 一部分高通过率代码任务 | 用实现质量与行为质量分数细化通过测试的奖励 | PDF pp. 16–18, Fig. 7a, Eq. 2 |
-| GAR，Groupwise Advantage Redistribution | 训练中在线对同组轨迹比较 | 其余代码任务为主，且可比较的 mixed-outcome group | 在通过的轨迹之间重新分配正 advantage；确认的 hack 归零 | PDF pp. 16–19, Fig. 7b, Eq. 3 |
+![论文 Fig. 7：左侧 GRS 离线生成 rubric 并在训练时复用；右侧 GAR 在线比较同组轨迹、重分配优势。](assets/fig7-grading.webp)
 
-### GRS：先写评分尺，再逐条打分
+*原论文 Fig. 7，PDF p. 17。上面的交互图帮助沿训练路径阅读；这张原图保留作者对两条机制的原始画法。*
 
-离线阶段，grader 同时看任务说明、仓库和多个解法，把“好实现”与“好解题行为”分成两套 rubric。训练阶段，新 rollout 分别得到解决方案分数 $S_i^{\mathrm{sol}}$ 与行为分数 $S_i^{\mathrm{beh}}$，最终奖励为：
+### GRS：提前建立任务专属的质量尺
+
+离线阶段，grader 结合任务说明、仓库与多条尝试，写出**解决方案质量**和**解题行为质量**两套 rubric。训练时，新轨迹逐条得到两个分数，最终奖励为（PDF pp. 17–18, Eq. 2）：
 
 $$R_i = R_i^{\mathrm{test}}\,S_i^{\mathrm{sol}}\,S_i^{\mathrm{beh}}.$$
 
-这意味着未通过测试的轨迹继续得零；通过测试的轨迹仍会因补丁质量或验证行为而区分。即便一组轨迹全通过，仍可能有非零差异信号。论文特别说明 rubric 以任务要求为依据，不把某个成功解法的偶然选择硬变成所有解法的要求。（PDF pp. 17–18, Eq. 2）
+如果测试未通过，奖励仍为零；若都通过，rubric 仍能给出质量差异。作者特别说明，rubric 依据任务要求，不会把某条成功轨迹的偶然做法硬设为所有解法的必要条件。（PDF pp. 17–18）
 
-### GAR：保留组内正优势总量，重新分配给更好的通过解
+### GAR：在线比较同组解法，重分配正向学习权重
 
-在线阶段，grader 把同一任务的一组成功和失败轨迹放进共享工作区，比较通过的补丁；维度包括方案适合度、实现准确性、最小改动、外部副作用与代码工艺。对确认依赖外部泄露答案的轨迹，先把有效奖励归零并重算组统计。然后用质量因子压低低质量通过解的正 advantage，再重标定，使通过解的正 advantage 总量在未截断式中保持不变。实际实现还对重标定因子设上限，并使最终组均值为零。（PDF p. 18, Eq. 3）
+GAR 在混合成功/失败的 rollout group 中，联合查看任务、仓库、补丁与测试。它比较通过解的方案适合度、实现准确性、改动最小性、副作用和代码工艺；确认依赖泄露答案的轨迹先被归零。接着，它用质量因子降低较差通过解的正 advantage，并把释放的正向权重重新分给更好的通过解。未截断形式保持通过解的正 advantage 总量；实际实现还限制放大因子，并使最终组均值为零。（PDF p. 18, Eq. 3）
 
-**一个直观例子。** 若两个补丁都通过测试，但 A 是局部、可验证的改动，B 加了宽泛兼容分支，二值测试给出的信号相同；GAR 会把更多正向学习权重分给 A。这是对机制的解释性例子，不是论文报告的具体样本。（机制来源：PDF pp. 17–19）
+**直观想象：**A 与 B 都通过测试，A 只修改必要代码并验证结果，B 添加宽泛兼容分支。二值测试视两者相同，GAR 则倾向于让 A 获得更多正向学习权重。这是帮助理解机制的假设例子，并非论文中的具体样本。
 
-[交互查看：轨迹到学习信号](mimo-v2.6-grading.workflow.html) · [评分图 JSON](mimo-v2.6-grading.workflow.json)
+## 04 / 工程系统：为什么大批量混合任务可以跑起来
 
-### 长轨迹为什么需要专门的基础设施
+大批量并发会同时推高 Agent 运行数量、轨迹体积和训练数据搬运量。Fig. 14 把系统画成两条路径：**控制面**用轻量 metadata 调度，**数据面**把 token、MoE 路由、top-p 索引和多模态 payload 存入分布式存储，到 pack 阶段按训练 rank 取所需片段。Harness Pool 用持久多租户 actor 承载多种 agent/harness。（PDF pp. 27–29, Fig. 14）
 
-报告 §6 把一条 agent rollout 组织成 **Sample → Sequence → Context → Segment**：一题可采样多条执行序列，一条序列可有并发对话分支，一个 Segment 是一次消息/生成/工具结果；只有模型生成的 turn 进入训练损失。Penalty Module 可按层级遮罩或调整 advantage，让环境故障和局部模型错误得到不同处理。这个结构解释了为何一条长轨迹不能简单当成一条普通文本序列。（PDF pp. 26–27）
+![论文 Fig. 14：Sample Mixer、Harness Pool、Payload Porter、Inference Engine 与 Training Engine 的关系。](assets/fig14-infrastructure.webp)
 
-Fig. 14 的系统图可读成两条路径：控制面用轻量 metadata 调度，数据面把 token、路由、采样和多模态 payload 放进分布式存储，到 pack 阶段才按训练 rank 取需要的片段；Harness Pool 用持久多租户 actor 承载并发 agent/harness。Sample Mixer 则在任务耗时和过滤率差异很大时，维持目标任务混合比例。报告中 25 个数据源的平均生成 token 与活动 rollout 时长分别相差约 90× 与 66×，说明调度异质性是实际问题。（PDF pp. 27–30, Fig. 14–15）
+*原论文 Fig. 14，PDF p. 28。读图时先沿“采样 → harness/推理 → 轨迹存储 → 训练”走主线，再看控制面和数据面的分离。*
 
-### MOPD2：RL 之后怎样合并能力
+Sample Mixer 解决混合任务的**组成稳定性**：25 个数据源的平均生成 token 和活动 rollout 时长分别相差约 90× 与 66×。更慢、通过率更低的来源需要不同并发与调度预算，才能在每步训练里贡献目标份额。作者用自适应并发、调度、预测式 dispatch 与 replay 共同处理这一点。（PDF pp. 29–31, Fig. 15–16）
 
-MOPD2 使用不同领域的教师：可验证任务可用 mixRL 教师，开放域任务可用高质量合成演示训练的 SFT 教师。Standard MOPD 在适合的领域让学生完整 rollout；Prefix-Conditioned OPD 从教师轨迹或 SFT 数据抽取历史前缀，由学生自己生成下一 turn，再由相应教师在同一历史与学生前文条件下给 token 级监督。因此 SFT 前缀提供**上下文**，不是固定续写目标。这个区别能帮助理解它为何被放在混合 RL 之后来覆盖难以设计可靠奖励的任务。（PDF pp. 24–25, Fig. 13）
+## 05 / RL 之后：MOPD2 如何合并能力
 
-## 4. 实验图谱：每张图回答什么
+混合 RL 后，MOPD2 使用不同领域的教师。可验证任务可由 mixRL 教师提供监督，开放域任务则可用合成演示训练的 SFT 教师。**Standard MOPD**让学生从任务 prompt 完整 rollout；**Prefix-Conditioned OPD**从教师轨迹或 SFT 数据抽取历史前缀，让学生从每个前缀自己生成一轮，再接受相应教师的 token 级监督。（PDF pp. 24–25, Fig. 13）
 
-| 问题 | 设计与观察 | 应怎样读 | 来源 |
-|---|---|---|---|
-| 增加 RL 计算后，同一个模型的表现如何变化？ | Fig. 3：DeepSWE v1.1 average@3，Pro 从 58.4 到 72.6（+14.2 个百分点），Flash 从 48.7 到 65.7（+17.0 个百分点），横轴为累计 RL 成本。 | 这是各自训练过程的趋势，能说明报告中的两条运行轨迹随计算增加而改进；不要当成单个机制的隔离实验。 | PDF p. 8, Fig. 3 |
-| 在线 GAR 对训练动态有什么影响？ | Fig. 8：Flash 的 code-only RL，在 batch 128、token-mean loss 下比较有/无 GAR；有 GAR 的 pass rate 后续仍增长，turn 数大致稳定，token 长度增长较缓。 | 更接近 GAR 的定向比较。图的曲线没有给出可直接引用的精确终点表值；因此这里报告趋势，不编造精确差值。 | PDF pp. 18–19, Fig. 8 |
-| 多 harness 训练是否迁移到未见 harness？ | Fig. 10：4 个训练 mini-harness 与 3 个 held-out harness 分开评估；held-out 均值 pass@1 约 50% → 66%。 | 这是“跨 harness 迁移”的直接观察；仍限于该 DeepSWE 设置与这些 harness。 | PDF p. 23, Fig. 10 |
-| 冻结 MoE router 是否改善负载稳定性？ | Fig. 11：比较仅 router 是否冻结的 Pro RL 运行。可训练 router 的 L9 负载 CV 约 0.78→2.0、峰值 6×→16×、冷专家 0.5%→22%；冻结时三项基本平稳。 | 论文还做了 step-20 router 参数恢复诊断；这比只看最终分数更有助于理解负载失衡的来源。 | PDF pp. 23–24, Fig. 11 |
-| 小模型和开放环境能否复现跨域 RL 收益？ | Table 6：同一 Distill-Qwen-9B SFT 起点，按领域分别做 GRPO；表中 11 项报告指标均高于 SFT，如 SWE-bench Verified avg@3 61.1→66.2，Terminal Bench 2.1 avg@1 37.1→52.8。 | 它支持“这套公开资源可用于多域 RL”的叙述；不是 Pro/Flash 大模型混合 RL 的直接消融。不同任务的 avg@1 与 avg@3 不相互合并。 | PDF pp. 34–35, Table 5–6 |
-| 开放小模型的多 harness 训练能否跨执行外壳改善？ | Table 7：从相同的 Distill-Qwen-9B SFT 起点，4 个训练 mini-harness；在 3 种代码评测 × 7 个 harness 的 21 个组合上报告多 harness RL 相比 SFT 均改善。 | 这是与 Table 6 的单 harness 领域 RL 分开的实验，不应合并成同一差值。 | PDF pp. 35–36, Table 7 |
-| 最终系列达到什么水平？ | Table 3 汇总 Pro/Flash、前代模型及其他模型在多域 benchmark 的结果。 | 最终分数包含前面多个阶段的影响，阅读时逐行确认任务、协议和比较对象。 | PDF pp. 25–26, Table 3 |
+![论文 Fig. 13：领域教师、完整学生 rollout 与前缀条件蒸馏的两条路径。](assets/fig13-mopd2.webp)
 
-**读图顺序建议。** 先 Fig. 3 看主结果随 RL 计算变化，再用 Fig. 7–8 看评分机制及其定向比较，Fig. 10 看 harness 迁移，Fig. 11 看训练稳定性；最后看 Table 3 和 Table 6 分清最终模型能力与公开小模型实验。Fig. 9 还显示多个领域的训练表现与 token 使用一起增长，提醒读者性能变化伴随推理/交互预算变化。（PDF pp. 8, 17–26, 34–35）
+*原论文 Fig. 13，PDF p. 25。SFT 数据提供的是历史**上下文**，而不是固定的学生续写目标；这是理解前缀蒸馏的关键。*
 
-## 5. 回到整篇论文：哪些认识可以带走
+## 06 / 实验图谱：按问题找图，不按排行榜跳结论
 
-1. **核心系统思想**：要把 agent RL 扩到长轨迹与多领域，训练吞吐、可交互环境和评分粒度需要一起设计。论文提供完整训练链条，并把最关键的瓶颈转成具体工程/算法组件。（PDF pp. 3, 8–19, 26–32）
-2. **最容易记住的机制**：GRS 是离线构造可复用 rubric 后逐条细化奖励；GAR 是训练时在线比较同组轨迹、重新分配通过解的优势。两者针对不同任务子集。（PDF pp. 16–19）
-3. **最有解释力的实验**：Fig. 8 观察 GAR 的训练动态；Fig. 10 观察未见 harness 的迁移；Fig. 11 对 router 冻结有更清晰的对照和参数恢复诊断。这些分别回答不同问题，不能相加成一个统一因果证明。（PDF pp. 18–24）
-4. **需要保留的边界**：Fig. 3 是大规模训练曲线，不隔离三条放大轴各自的贡献。Table 3 是最终系列比较，Table 6 是 Distill-Qwen-9B 的领域单独 RL。表之间模型、阶段和协议不同。（PDF pp. 8, 26, 34–35）
+下面先把主要实验放在同一张索引里。每一行只回答它实际测试的问题；想看曲线、原图和边界，再沿本节往下读。
 
-**源文件内部冲突。** PDF p. 3 把 Pro 写作“1.02T 总参数、42B active parameters”，而 PDF p. 6 的 Table 1 把其 active parameters 写成“42T”。这里保留两处原文并将后者标为表内疑似笔误；本样例不把冲突数字用于进一步计算。
+```paper-experiments
+{
+  "title":"每项实验分别回答什么？",
+  "rows":[
+    {"question":"RL 扩展后表现如何？","setup":"Pro 与 Flash 各自沿累计训练成本跟踪 DeepSWE average@3。","observation":"分别从 58.4→72.6、48.7→65.7；这是整体训练趋势。","source":"PDF p. 8, Fig. 3"},
+    {"question":"GAR 改变了什么？","setup":"Flash code-only RL；同一配置比较有无 GAR。","observation":"pass rate 后续仍增长，turn 大致稳定，token 增长较缓。","source":"PDF pp. 18–19, Fig. 8"},
+    {"question":"跨 harness 能迁移吗？","setup":"4 个训练 mini-harness；另看 3 个 held-out harness。","observation":"后者平均 pass@1 约 50%→66%，范围限于这 3 个外壳。","source":"PDF p. 23, Fig. 10"},
+    {"question":"为什么冻结 router？","setup":"两条 Pro RL 运行只改变 router 是否冻结；另做参数恢复。","observation":"冻结时负载统计更平稳；恢复 router 参数后负载恢复。","source":"PDF pp. 23–24, Fig. 11"},
+    {"question":"开放资源能做什么？","setup":"9B SFT 起点上分别做领域 GRPO，并另测多 harness 代码任务。","observation":"Table 6 的 11 项和 Table 7 的 21 项均报告超过各自 SFT 基线。","source":"PDF pp. 34–36, Tables 6–7"}
+  ]
+}
+```
 
-**继续阅读路径。** 想理解训练式，读 PDF pp. 8–9 的 Eq. 1；想理解 grader，连读 pp. 16–19 的 Fig. 7、Eq. 2–3、Fig. 8；想了解开放复现资源，读 pp. 33–36 的 Table 4–7。若目标变为复现或审稿，再扩展到附录、代码和协议核查。
+### 训练计算：同一模型随 RL 训练推进如何变化？
+
+Fig. 3 用 DeepSWE v1.1 **average@3** 对累计 RL 成本作图。Pro 从 58.4 到 72.6，Flash 从 48.7 到 65.7，分别提高 14.2 和 17.0 个百分点。这是各自运行的训练趋势；它不能隔离训练计算、环境多样性或 grader 中任何单一机制的贡献。（PDF p. 8, Fig. 3）
+
+```paper-chart
+{"type":"paired","title":"DeepSWE v1.1 · average@3","subtitle":"每个模型与自己的 RL 起点比较；单位：%","source":"PDF p. 8, Fig. 3；正文数值四舍五入至一位小数","rows":[{"label":"MiMo-V2.6-Pro","before":58.4,"after":72.6},{"label":"MiMo-V2.6-Flash","before":48.7,"after":65.7}]}
+```
+
+![论文 Fig. 3：DeepSWE 随累计 RL 成本的曲线，以及 Pro/Flash 的训练、rollout、grader 成本切分。](assets/fig3-scaling.webp)
+
+*原论文 Fig. 3，PDF p. 8。左图横轴是累计成本，右图是成本组成；两个切面不可混为一个因果实验。*
+
+### 在线评分：GAR 是否改变训练动态？
+
+Fig. 8 是更有针对性的对照：MiMo-V2.6-Flash 的 **code-only RL**，batch 128、token-mean loss，比较有无 GAR。报告称有 GAR 的 pass rate 后续仍增长，turn 数大致稳定，token 长度增长较缓。曲线未提供可直接引用的精确终点表值，因此这里描述趋势，不从图像臆造差值。（PDF pp. 18–19, Fig. 8）
+
+![论文 Fig. 8：有无 GAR 的 pass rate、turn 数和总 token 长度曲线。](assets/fig8-gar.webp)
+
+*原论文 Fig. 8，PDF p. 19。三幅图要一起读：表现变化与轨迹长度变化是同一对照中的不同观察量。*
+
+### 多 harness：能力能否迁移到没参加训练的外壳？
+
+Fig. 10 将 **4 个训练 mini-harness** 和 **3 个 held-out harness** 分开显示。后者的平均 pass@1 大约从 50% 升到 66%，说明该 DeepSWE 设置下的提升并非只停留在训练外壳。这个结论只覆盖图中三个 held-out harness，不自动推广到任意 agent 框架。（PDF p. 23, Fig. 10）
+
+```paper-chart
+{"type":"paired","title":"Held-out harness 的平均 pass@1","subtitle":"近似读数；单位：%","source":"PDF p. 23, Fig. 10 与相邻正文","rows":[{"label":"训练前 → 训练后","before":50,"after":66,"approx":true}]}
+```
+
+![论文 Fig. 10：训练 harness 与 held-out harness 上的 DeepSWE pass@1。](assets/fig10-harness.webp)
+
+*原论文 Fig. 10，PDF p. 23。粗橙线是组内均值；不要把左、右两组的曲线混成同一种测试。*
+
+### 稳定性：为什么冻结 MoE router？
+
+Fig. 11 比较的两条 Pro RL 运行只在 router 是否冻结上不同。可训练 router 的第 9 层负载 CV 从约 0.78 到 2.0、峰值负载从 6× 到 16×、冷专家比例从 0.5% 到 22%；冻结后这些统计大致平稳。论文还把 step-20 checkpoint 的 router 参数恢复到 RL 前值：负载恢复，而 benchmark 表现不变。这一步帮助定位负载崩塌与 router 漂移的关系。（PDF pp. 23–24, Fig. 11）
+
+### 开放资源与最终模型：分清两个实验层级
+
+Table 6 从同一个 **Distill-Qwen-9B SFT checkpoint** 出发，分别在四个领域做 GRPO；报告的 11 项指标均高于 SFT。下图展示其中两项，保留各自的指标协议。Table 7 另做多 harness 代码实验，报告 3 种代码评测 × 7 个 harness 的 21 个组合均比 SFT 好。两张表属于开放小模型资源实验，不是 Pro/Flash 大规模混合 RL 的消融。（PDF pp. 34–36, Table 5–7）
+
+```paper-chart
+{"type":"paired","title":"开放小模型：SFT → 领域 RL","subtitle":"不同任务与 avg@n 协议分行展示；单位：%","source":"PDF p. 35, Table 6","rows":[{"label":"SWE-bench Verified · avg@3","before":61.1,"after":66.2},{"label":"Terminal Bench 2.1 · avg@1","before":37.1,"after":52.8}]}
+```
+
+最终模型 Table 3 则汇总 Pro/Flash 与前代、其他模型在多领域 benchmark 的表现。它展示整条训练链之后的能力，不可据此单独算出 GRS、GAR、多 harness 或 MOPD2 的增益。读表时必须逐行看任务、模型、指标和评测协议。（PDF pp. 25–26, Table 3）
+
+## 07 / 读完后应留下怎样的认识
+
+**可带走的系统图像：**训练吞吐决定能探索多少长轨迹；环境和 harness 决定探索空间与交互差异；GRS/GAR 决定通过测试之外还能学到什么；基础设施把这些异质轨迹稳定送到训练；MOPD2 再汇合不同领域的能力。（PDF pp. 3, 8–19, 24–32）
+
+**实验各回答各的问题：**Fig. 3 是整体训练趋势，Fig. 8 看 GAR 的定向比较，Fig. 10 看跨 harness 迁移，Fig. 11 看 router 稳定性，Table 6–7 看开放小模型资源。把它们并置，能理解报告的设计逻辑；把它们相加为“某个单一模块带来全部提升”则超出了证据。（PDF pp. 8, 18–26, 34–36）
+
+**原文的一处数字冲突：**PDF p. 3 写 Pro 为 1.02T 总参数、42B active parameters；p. 6 的 Table 1 却写 42T active parameters。本阅读文档保留两处原文，并把后者视为疑似表内笔误；不拿这个冲突值继续计算。
+
+**下一步读原文：**想看训练目标，读 pp. 8–9 的 Eq. 1；想核查两种 grader，读 pp. 16–19 的 Fig. 7、Eq. 2–3、Fig. 8；想看规模化实现，读 pp. 26–32 的 Fig. 14–16；想看开放复现资源，读 pp. 33–36 的 Table 4–7。若要复现或审稿，还需继续核查代码、数据和具体评测协议。

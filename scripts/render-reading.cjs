@@ -1,0 +1,104 @@
+// Build one offline reading page from a Markdown audit source and local visuals.
+// Usage: node scripts/render-reading.cjs input.md output.html
+const fs = require('node:fs');
+const path = require('node:path');
+const { marked } = require('marked');
+const katex = require('katex');
+
+const [sourceArg, outputArg] = process.argv.slice(2);
+if (!sourceArg || !outputArg) {
+  console.error('Usage: node scripts/render-reading.cjs input.md output.html');
+  process.exit(2);
+}
+const sourcePath = path.resolve(sourceArg);
+const outputPath = path.resolve(outputArg);
+const sourceDir = path.dirname(sourcePath);
+const source = fs.readFileSync(sourcePath, 'utf8');
+const css = fs.readFileSync(path.resolve(__dirname, '../assets/reading.css'), 'utf8');
+const slots = [];
+const slot = html => {
+  const id = `PAPER_READING_SLOT_${slots.length}_END`;
+  slots.push(html);
+  return `\n\n${id}\n\n`;
+};
+const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const localFile = relative => {
+  const absolute = path.resolve(sourceDir, relative.trim());
+  if (!absolute.startsWith(sourceDir + path.sep)) throw new Error(`Visual must stay beside source: ${relative}`);
+  return absolute;
+};
+const sourceBadge = source => `<span class="source-badge">${esc(source)}</span>`;
+
+function renderMap(data) {
+  if (!Array.isArray(data.items) || !data.items.length) throw new Error('paper-map needs items');
+  return `<div class="principle-grid" role="list">${data.items.map(x =>
+    `<article class="principle" role="listitem"><span class="principle-number">${esc(x.number)}</span><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p>${sourceBadge(x.source)}</article>`
+  ).join('')}</div>`;
+}
+function renderExperiments(data) {
+  if (!Array.isArray(data.rows) || !data.rows.length) throw new Error('paper-experiments needs rows');
+  return `<figure class="experiment-atlas"><figcaption><span class="figure-kicker">EXPERIMENT ATLAS</span><strong>${esc(data.title)}</strong></figcaption><div class="experiment-head" aria-hidden="true"><span>研究问题</span><span>设置 / 对照</span><span>观察</span></div><div class="experiment-rows">${data.rows.map((r, i) =>
+    `<article class="experiment-row"><div class="experiment-question"><span>${String(i + 1).padStart(2, '0')}</span><strong>${esc(r.question)}</strong></div><p>${esc(r.setup)}</p><div><p>${esc(r.observation)}</p>${sourceBadge(r.source)}</div></article>`
+  ).join('')}</div></figure>`;
+}
+function renderChart(data) {
+  const header = `<div class="figure-head"><div><span class="figure-kicker">DATA VIEW</span><h3>${esc(data.title)}</h3>${data.subtitle ? `<p>${esc(data.subtitle)}</p>` : ''}</div>${sourceBadge(data.source)}</div>`;
+  if (data.type === 'segments') {
+    const sum = data.rows.reduce((n, r) => n + Number(r.value), 0);
+    if (Math.abs(sum - 100) > 0.2) throw new Error(`Segments do not total 100: ${sum}`);
+    const bar = `<div class="segments" role="img" aria-label="${esc(data.rows.map(r => `${r.label} ${r.value}${data.unit || ''}`).join('；'))}">${data.rows.map((r, i) => `<span class="segment s${i}" style="width:${Number(r.value)}%"></span>`).join('')}</div>`;
+    const legend = `<div class="segment-legend">${data.rows.map((r, i) => `<div><span class="swatch s${i}"></span><span>${esc(r.label)}</span><strong>${esc(r.value)}${esc(data.unit || '')}</strong></div>`).join('')}</div>`;
+    return `<figure class="data-figure">${header}${bar}${legend}</figure>`;
+  }
+  if (data.type === 'paired') {
+    const rows = data.rows.map(r => {
+      for (const key of ['before', 'after']) if (!(Number(r[key]) >= 0 && Number(r[key]) <= 100)) throw new Error(`Invalid ${key} for ${r.label}`);
+      const prefix = r.approx ? '≈' : '';
+      return `<div class="pair-row"><div class="pair-label">${esc(r.label)}</div><div class="pair-line"><span class="pair-key">起点</span><div class="pair-track"><span class="pair-fill before" style="width:${r.before}%"></span></div><strong>${prefix}${r.before}</strong></div><div class="pair-line"><span class="pair-key">终点</span><div class="pair-track"><span class="pair-fill after" style="width:${r.after}%"></span></div><strong>${prefix}${r.after}</strong></div><p class="pair-delta">变化：${prefix}+${(r.after-r.before).toFixed(1)} 个百分点</p></div>`;
+    }).join('');
+    const table = `<details class="chart-table"><summary>查看图表数据</summary><table><thead><tr><th>项目</th><th>起点</th><th>终点</th><th>变化（百分点）</th></tr></thead><tbody>${data.rows.map(r => `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${r.before}</td><td>${r.approx?'≈':''}${r.after}</td><td>${r.approx?'≈':''}+${(r.after-r.before).toFixed(1)}</td></tr>`).join('')}</tbody></table></details>`;
+    return `<figure class="data-figure">${header}<div class="paired-chart">${rows}</div>${table}</figure>`;
+  }
+  throw new Error(`Unknown paper-chart type: ${data.type}`);
+}
+function renderArchify(relative, title) {
+  let html = fs.readFileSync(localFile(relative), 'utf8');
+  // Archify's fonts are optional; remove those requests from the one-file reader.
+  html = html.replace(/<link rel="preconnect" href="https:\/\/fonts\.gstatic\.com"[^>]*>/g, '')
+    .replace(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>/g, '')
+    .replace(/<noscript>\s*<link href="https:\/\/fonts\.googleapis\.com[^>]*>\s*<\/noscript>/g, '');
+  return `<figure class="archify-figure"><div class="figure-head"><div><span class="figure-kicker">EXPLORE THE STRUCTURE</span><h3>${esc(title)}</h3><p>可聚焦节点与追踪路径；图中的页码指向原论文。</p></div><span class="renderer-badge">Archify 渲染</span></div><iframe title="${esc(title)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="eager"></iframe><figcaption>本图由 paper-reading 组织论文内容、Archify 渲染结构；正文负责解释和核对来源。</figcaption></figure>`;
+}
+
+let prepared = source.replace(/\$\$([\s\S]+?)\$\$/g, (_, math) => slot(`<div class="display-math">${katex.renderToString(math.trim(), {output:'mathml',displayMode:true,throwOnError:true})}</div>`));
+prepared = prepared.replace(/\$([^$\n]+)\$/g, (_, math) => slot(katex.renderToString(math.trim(), {output:'mathml',throwOnError:true})));
+prepared = prepared.replace(/```paper-map\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderMap(JSON.parse(json))));
+prepared = prepared.replace(/```paper-experiments\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderExperiments(JSON.parse(json))));
+prepared = prepared.replace(/```paper-chart\s*\n([\s\S]*?)\n```/g, (_, json) => slot(renderChart(JSON.parse(json))));
+prepared = prepared.replace(/<!-- archify:([^|>]+)\|([^>]+) -->/g, (_, file, title) => slot(renderArchify(file, title.trim())));
+let body = marked.parse(prepared, {gfm:true});
+slots.forEach((html, i) => { body = body.replace(`<p>PAPER_READING_SLOT_${i}_END</p>`, html); });
+if (/PAPER_READING_SLOT_\d+_END/.test(body)) throw new Error('Unresolved visual slot');
+body = body.replace(/<img src="([^"]+)" alt="([^"]*)">/g, (_, relative, alt) => {
+  const file = localFile(relative);
+  const mime = file.endsWith('.webp') ? 'image/webp' : file.endsWith('.png') ? 'image/png' : null;
+  if (!mime) throw new Error(`Unsupported image: ${relative}`);
+  return `<img src="data:${mime};base64,${fs.readFileSync(file).toString('base64')}" alt="${alt}" loading="lazy" decoding="async">`;
+});
+body = body.replace(/<p>(<img [^>]+>)<\/p>\s*<p><em>([\s\S]*?)<\/em><\/p>/g, (_, img, caption) => `<figure class="paper-figure">${img}<figcaption>${caption}</figcaption></figure>`);
+const sections = [];
+body = body.replace(/<h2>([\s\S]*?)<\/h2>/g, (_, heading) => {
+  const id = `section-${sections.length + 1}`;
+  sections.push({id, heading:heading.replace(/<[^>]*>/g,'')});
+  return `<h2 id="${id}">${heading}</h2>`;
+});
+const title = (body.match(/<h1>([\s\S]*?)<\/h1>/) || [,'Paper Reading'])[1].replace(/<[^>]*>/g,'');
+body = body.replace(/<h1>[\s\S]*?<\/h1>/, '');
+const nav = sections.map(s => `<a href="#${s.id}">${esc(s.heading)}</a>`).join('');
+const output = `<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${esc(title)}：从全局路径到机制与实验的一体化论文深读。"><title>${esc(title)} · 深读图谱</title><style>${css}</style></head>
+<body><a class="skip-link" href="#content">跳到正文</a><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>原文证据驱动的深读图谱</span><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>${esc(title)}</h1><p class="hero-sub">一页贯通全局认知、关键机制与实验证据。</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div><div class="hero-visual" aria-hidden="true"><div class="orbit o1"></div><div class="orbit o2"></div><div class="orbit o3"></div><div class="hero-core">PAPER</div><span class="hero-tag t1">全局认知</span><span class="hero-tag t2">关键机制</span><span class="hero-tag t3">实验证据</span></div></div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span>Paper Reading Skill · 单文件阅读版</span><a href="#top">返回顶部 ↑</a></footer></body></html>`;
+const cleanOutput = output.replace(/[ \t]+$/gm, '');
+fs.writeFileSync(outputPath, cleanOutput);
+console.log(`Built ${outputPath} (${Buffer.byteLength(cleanOutput)} bytes, ${sections.length} sections, ${slots.length} visuals)`);

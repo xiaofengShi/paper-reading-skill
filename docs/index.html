@@ -13,7 +13,7 @@
   <header class="site-header"><a href="#main">Paper Reading Skill</a><span>论文 → 阅读图谱</span></header>
   <main id="main" class="reading-page"><article class="prose">
 <h1>Paper Reading Skill</h1>
-<p>把论文读成一份<strong>可探索、可追溯的深度阅读图谱</strong>：先看全局，再顺着方法路径进入关键机制与实验，最后形成有边界的综合理解。普通的“读这篇论文”默认执行完整深读；只有明确要求快筛时才停在概览，审稿式批评和研究规划是按需增加的视角。</p>
+<p>把论文读成<strong>一份可探索、可追溯的 HTML 深读文档</strong>：先看全局，再顺着方法路径进入关键机制与实验，最后形成有边界的综合理解。普通的“读这篇论文”默认执行完整深读；只有明确要求快筛时才停在概览，审稿式批评和研究规划是按需增加的视角。</p>
 <h2>读者会得到什么</h2>
 <ol>
 <li><strong>全局认知图</strong>：问题、研究场景、主要想法、贡献和证据所在位置。</li>
@@ -22,7 +22,7 @@
 <li><strong>实验图谱</strong>：问题 → 设置/对照 → 指标 → 结果 → 能得出的结论，附 PDF 页码与图表号。</li>
 <li><strong>综合理解</strong>：把机制与实验重新连起来，说明已展示的结果、适用范围和仍待回答的问题。</li>
 </ol>
-<p>这些层次按论文类型选择合适图形：方法论文常用工作流与机制图，理论论文常用定义与证明依赖图，基准论文常用构建流程与测量维度图。图负责导航，解释、公式、原始表格和来源定位仍保留在文字中。</p>
+<p>这些层次在<strong>同一份离线可读的 HTML</strong> 中展开，按论文类型选择合适图形：方法论文常用工作流与机制图，理论论文常用定义与证明依赖图，基准论文常用构建流程与测量维度图。图负责导航，解释、公式、原始表格和来源定位仍保留在正文中。</p>
 <h2>使用方式</h2>
 <p>将仓库复制到 agent 的 skill 目录后，直接说“阅读这篇论文”并给出 PDF、arXiv 链接或本地文件。入口是 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/SKILL.md">SKILL.md</a>。也可以指定任务：</p>
 <table>
@@ -34,7 +34,7 @@
 </thead>
 <tbody><tr>
 <td>“完整读这篇论文，给我图谱”</td>
-<td>默认完整深读</td>
+<td>默认一份完整深读 HTML</td>
 </tr>
 <tr>
 <td>“快速看看值不值得读”</td>
@@ -51,8 +51,14 @@
 </tbody></table>
 <p>如果用户没有给研究目标，skill 不会替用户虚构“要批判这篇论文”的目的，也不会因初步相关性判断而中止已要求的深读。</p>
 <h2>MiMo-V2.6 实操样例</h2>
-<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">深读 Markdown</a>从全局路径走到 GRS/GAR 机制与实验图谱。两个 Archify 交互图分别展示<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6.workflow.html">训练主线</a>和<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-grading.workflow.html">轨迹到学习信号</a>，相应的 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6.workflow.json">JSON 源</a>与<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-grading.workflow.json">评分图 JSON 源</a>可以继续编辑。样例依据用户提供的 44 页本地 PDF，页码指 PDF 页码；它演示阅读形式，不声称对论文发布版本、代码或外部实验做了独立复核。</p>
-<p>交互图由 <a href="https://github.com/tt-a1i/archify">Archify</a> 渲染；它提供自包含 HTML、节点聚焦、路径探索和数据源校验。这里借用它表达<strong>紧凑的结构/流程</strong>，但不把科学证据判断交给绘图器。没有 Archify 时，skill 仍可输出 Markdown、Mermaid、SVG 或表格。</p>
+<p><a href="mimo-v2.6-deep-read.html">打开 MiMo-V2.6 一体化深读 HTML</a>：一页从全局训练路径读到 GRS/GAR、系统架构、MOPD2 和实验。页内包含两幅可交互结构图、一张实验索引、四组数据图、六幅原论文图摘录、数学公式、解释与 PDF 定位。它参照 <a href="https://xiaofengshi.github.io/MechVQA/">MechVQA 项目页</a>的单页阅读组织方式，内容与图示针对本论文重新编写。</p>
+<p>两幅交互图的<strong>节点、关系、说明与论文来源由 paper-reading 阅读流程整理并写成 JSON</strong>；<a href="https://github.com/tt-a1i/archify">Archify</a> 将 JSON 渲染成可探索的图。它们不是 Archify 自动读 PDF 的结果。最终 HTML 把这些图与其余正文、数据图、原图摘录放在一起；Archify 只负责结构图的呈现与结构校验，科学内容仍需回到论文核查。</p>
+<p>样例依据用户提供的 44 页本地 PDF，页码指 PDF 页码；PDF 未随仓库分发。此文档演示完整阅读形式，不声称对论文发布版本、代码或外部实验做了独立复核。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">Markdown 审计源</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6.workflow.json">训练图 JSON</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-grading.workflow.json">评分图 JSON</a>及对应 Archify HTML 是生成输入，不需要读者逐一打开。</p>
+<p>本地重建样例：</p>
+<pre><code class="language-bash">npm ci
+npm run build:example
+</code></pre>
+<p>构建器 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">render-reading.cjs</a> 从 Markdown 与本地图形输入生成单文件 HTML，内嵌样式、图像和交互图，并把公式排为 MathML。没有 Archify 时，可以用内联 SVG、HTML 图表或其他合适图形完成阅读文档；它不是 skill 的必需依赖。</p>
 <h2>方法依据与取舍</h2>
 <ul>
 <li><a href="https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf">Keshav 的三遍阅读法</a>提供“先全局、再内容、再细节”的阅读节奏。本 skill 在用户要求深读时完成后两遍，不把第一遍筛选当成默认终点。</li>
@@ -93,8 +99,12 @@
 <td>RESEARCH 时可选的便携研究卡</td>
 </tr>
 <tr>
+<td><a href="mimo-v2.6-deep-read.html">docs/mimo-v2.6-deep-read.html</a></td>
+<td>一体化深读样例，读者入口</td>
+</tr>
+<tr>
 <td><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">examples/mimo-v2.6-deep-read.md</a></td>
-<td>完整深读样例与来源标注</td>
+<td>HTML 的 Markdown 审计源</td>
 </tr>
 </tbody></table>
 <p>本项目采用 MIT 许可证，见 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE">LICENSE</a>。</p>

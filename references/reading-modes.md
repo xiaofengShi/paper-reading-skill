@@ -4,10 +4,10 @@ Depth controls how much of the paper is read. Lens controls which extra question
 
 | Request | Depth | Reader-facing result |
 |---|---|---|
-| “Read this paper”, “仔细阅读”, “make a mind map” | DEEP READ (default) | Full reading atlas: whole → path → mechanism → experiments → synthesis |
+| “Read this paper”, “仔细阅读”, “make a mind map” | DEEP READ (default) | One HTML reading atlas: whole → path → mechanism → experiments → synthesis |
 | “What is this about?”, “worth reading?” | SCAN | Provisional global map, principal result, relevance if context exists |
-| “Review / find weaknesses / do claims hold?” | DEEP READ + REVIEW | Full atlas, followed by evidence and fairness audit |
-| “Compare with my work / reproduce / next experiments” | DEEP READ + RESEARCH | Full atlas, followed by grounded comparison, implementation details, or research card |
+| “Review / find weaknesses / do claims hold?” | DEEP READ + REVIEW | One HTML atlas, followed by evidence and fairness audit |
+| “Compare with my work / reproduce / next experiments” | DEEP READ + RESEARCH | One HTML atlas, followed by grounded comparison, implementation details, or research card |
 
 A user-supplied paper and a request to read it are sufficient intent for DEEP READ. Do not invent a purpose such as “judge how many claims are supported,” a research project, or a relevance threshold. Ask only if a missing choice would materially change the deliverable and cannot be inferred.
 

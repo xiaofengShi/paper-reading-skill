@@ -1,7 +1,7 @@
 ---
 name: paper-reading
 description: >-
-  Read an academic paper deeply and turn it into a source-linked visual reading atlas: a global concept map, method or argument flow, mechanism explanations, experiment map, and synthesis. Use for PDF, arXiv, URL, or local papers when the user asks to read, understand, explain, visualize, compare, review, or build on a paper. Ordinary “read this paper” requests use a complete understanding-first read; reviewer critique and research planning are optional lenses.
+  Read an academic paper deeply and deliver one self-contained visual HTML reading document: global concept map, method or argument flow, mechanism explanations, experiment map, and synthesis. Use for PDF, arXiv, URL, or local papers when the user asks to read, understand, explain, visualize, compare, review, or build on a paper. Ordinary “read this paper” requests use a complete understanding-first read; reviewer critique and research planning are optional lenses.
 ---
 
 # Paper Reading
@@ -21,7 +21,7 @@ Read [reading modes](references/reading-modes.md) only when depth or lens is amb
 
 Read the paper in passes: inspect the abstract, introduction, overview figures, conclusions, and main results for a provisional map; then read methods, experiments, captions, appendices, and definitions to correct and deepen that map. A provisional map is never the final answer in DEEP READ.
 
-Produce these layers in this reader-facing order, adapting diagram type to the paper:
+Produce these layers in this reader-facing order inside **one continuous reading document**, adapting diagram type to the paper:
 
 1. **Global map:** research problem, setting, prior limitation, main idea, contributions, and where evidence enters. Give a short orientation paragraph and a labeled concept map.
 2. **Main path:** method, training/inference pipeline, proof dependency, dataset construction, or benchmark protocol. Show inputs, transformations, decisions, outputs, and feedback loops. Explain each non-obvious arrow.
@@ -31,10 +31,16 @@ Produce these layers in this reader-facing order, adapting diagram type to the p
 
 For every diagram, use [visual-reading](references/visual-reading.md): one question per view, labeled relationships, selective detail, and source anchors. A diagram is a navigation layer, not a replacement for explanations, equations, tables, or the original figures. Do not flatten the paper into one giant graph or force a method flow onto a theory or survey paper.
 
+## Default deliverable
+
+For DEEP READ, deliver **one self-contained HTML file** that a reader can follow from overview to details without opening separate diagram pages. Put the overview, mechanism diagrams, original paper figure excerpts when useful, formulas, experiment visuals, explanations, and source pointers in the same document. Embed locally generated graphics and any Archify views into that file; separate JSON, Markdown, and diagram HTML are editable build inputs, not the primary reader-facing output. Keep a Markdown audit source alongside the HTML. For SCAN or when the user explicitly requests another format, match that request.
+
+A reusable renderer for this repository's examples is [render-reading.cjs](scripts/render-reading.cjs); use it when its Markdown/visual inputs fit the paper, or create an equivalent single-file HTML. Do not turn the example's layout into a fixed template for every paper type.
+
 ## Evidence and rendering contract
 
 - Tie important facts, nodes, arrows, formulas, and numbers to exact PDF page/section/figure/table/appendix references. In a PDF, verify captions and table cells visually when extraction is uncertain. Record source version and conflicting numbers instead of silently resolving them.
 - Mark **paper statement**, **observed result**, and **reader inference** distinctly. End-to-end comparisons describe system results; controlled ablations can isolate a mechanism. Do not automatically make claim auditing the reader's objective.
-- Use a readable Markdown source as the portable audit copy. If producing HTML, derive its substantive content from the same source or structured data; keep figures, numbers, equations, and qualifiers aligned. Important content must remain readable without scripts and offline. Render math as math, not code text.
-- Archify is an optional renderer for a compact interactive structure or workflow view. If available, follow its own skill/CLI for typed JSON, validation, and delivery. Preserve a readable static/Markdown counterpart and links to paper evidence. The reading skill must still work without Archify. See [visual-reading](references/visual-reading.md).
+- Use a readable Markdown source as the portable audit copy. Derive HTML content from that source and structured figure data; keep figures, numbers, equations, and qualifiers aligned. Important content must remain readable without scripts and offline. Render math as math, not code text.
+- Archify is an optional renderer for compact interactive structure or workflow views. Paper-reading selects and grounds the diagrams; Archify renders and validates their typed sources. When used, embed the result inside the final HTML and retain the source JSON as a build input. Preserve a readable static/Markdown counterpart and links to paper evidence. The reading skill must still work without Archify. See [visual-reading](references/visual-reading.md).
 - The response should let a reader answer: What is the whole paper about? How does its central mechanism work? Which experiments test which questions? What do the results actually say? What remains uncertain?

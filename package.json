@@ -2,9 +2,11 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "build:docs": "node scripts/build-docs.cjs"
+    "build:docs": "node scripts/build-docs.cjs",
+    "build:example": "node scripts/render-reading.cjs examples/mimo-v2.6-deep-read.md docs/mimo-v2.6-deep-read.html"
   },
   "devDependencies": {
+    "katex": "0.16.22",
     "marked": "17.0.5"
   }
 }

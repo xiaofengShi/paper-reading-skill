@@ -7,6 +7,7 @@ const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
 const repoBase = 'https://github.com/xiaofengShi/paper-reading-skill/blob/main/';
 const body = marked.parse(source).replace(/href="(?!https?:|#|mailto:)([^"]+)"/g, (_, target) => {
+  if (target === 'docs/mimo-v2.6-deep-read.html') return 'href="mimo-v2.6-deep-read.html"';
   return `href="${repoBase}${target}"`;
 });
 const html = `<!doctype html>

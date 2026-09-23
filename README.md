@@ -1,6 +1,6 @@
 # Paper Reading Skill
 
-把论文读成一份**可探索、可追溯的深度阅读图谱**：先看全局，再顺着方法路径进入关键机制与实验，最后形成有边界的综合理解。普通的“读这篇论文”默认执行完整深读；只有明确要求快筛时才停在概览，审稿式批评和研究规划是按需增加的视角。
+把论文读成**一份可探索、可追溯的 HTML 深读文档**：先看全局，再顺着方法路径进入关键机制与实验，最后形成有边界的综合理解。普通的“读这篇论文”默认执行完整深读；只有明确要求快筛时才停在概览，审稿式批评和研究规划是按需增加的视角。
 
 ## 读者会得到什么
 
@@ -10,7 +10,7 @@
 4. **实验图谱**：问题 → 设置/对照 → 指标 → 结果 → 能得出的结论，附 PDF 页码与图表号。
 5. **综合理解**：把机制与实验重新连起来，说明已展示的结果、适用范围和仍待回答的问题。
 
-这些层次按论文类型选择合适图形：方法论文常用工作流与机制图，理论论文常用定义与证明依赖图，基准论文常用构建流程与测量维度图。图负责导航，解释、公式、原始表格和来源定位仍保留在文字中。
+这些层次在**同一份离线可读的 HTML** 中展开，按论文类型选择合适图形：方法论文常用工作流与机制图，理论论文常用定义与证明依赖图，基准论文常用构建流程与测量维度图。图负责导航，解释、公式、原始表格和来源定位仍保留在正文中。
 
 ## 使用方式
 
@@ -18,7 +18,7 @@
 
 | 请求 | 输出 |
 |---|---|
-| “完整读这篇论文，给我图谱” | 默认完整深读 |
+| “完整读这篇论文，给我图谱” | 默认一份完整深读 HTML |
 | “快速看看值不值得读” | SCAN，初步全局图与主要结果 |
 | “审查证据、找薄弱点” | 完整深读 + REVIEW 视角 |
 | “与我的工作比较 / 准备复现” | 完整深读 + RESEARCH 视角 |
@@ -27,9 +27,20 @@
 
 ## MiMo-V2.6 实操样例
 
-[深读 Markdown](examples/mimo-v2.6-deep-read.md)从全局路径走到 GRS/GAR 机制与实验图谱。两个 Archify 交互图分别展示[训练主线](examples/mimo-v2.6.workflow.html)和[轨迹到学习信号](examples/mimo-v2.6-grading.workflow.html)，相应的 [JSON 源](examples/mimo-v2.6.workflow.json)与[评分图 JSON 源](examples/mimo-v2.6-grading.workflow.json)可以继续编辑。样例依据用户提供的 44 页本地 PDF，页码指 PDF 页码；它演示阅读形式，不声称对论文发布版本、代码或外部实验做了独立复核。
+[打开 MiMo-V2.6 一体化深读 HTML](docs/mimo-v2.6-deep-read.html)：一页从全局训练路径读到 GRS/GAR、系统架构、MOPD2 和实验。页内包含两幅可交互结构图、一张实验索引、四组数据图、六幅原论文图摘录、数学公式、解释与 PDF 定位。它参照 [MechVQA 项目页](https://xiaofengshi.github.io/MechVQA/)的单页阅读组织方式，内容与图示针对本论文重新编写。
 
-交互图由 [Archify](https://github.com/tt-a1i/archify) 渲染；它提供自包含 HTML、节点聚焦、路径探索和数据源校验。这里借用它表达**紧凑的结构/流程**，但不把科学证据判断交给绘图器。没有 Archify 时，skill 仍可输出 Markdown、Mermaid、SVG 或表格。
+两幅交互图的**节点、关系、说明与论文来源由 paper-reading 阅读流程整理并写成 JSON**；[Archify](https://github.com/tt-a1i/archify) 将 JSON 渲染成可探索的图。它们不是 Archify 自动读 PDF 的结果。最终 HTML 把这些图与其余正文、数据图、原图摘录放在一起；Archify 只负责结构图的呈现与结构校验，科学内容仍需回到论文核查。
+
+样例依据用户提供的 44 页本地 PDF，页码指 PDF 页码；PDF 未随仓库分发。此文档演示完整阅读形式，不声称对论文发布版本、代码或外部实验做了独立复核。[Markdown 审计源](examples/mimo-v2.6-deep-read.md)、[训练图 JSON](examples/mimo-v2.6.workflow.json)、[评分图 JSON](examples/mimo-v2.6-grading.workflow.json)及对应 Archify HTML 是生成输入，不需要读者逐一打开。
+
+本地重建样例：
+
+```bash
+npm ci
+npm run build:example
+```
+
+构建器 [render-reading.cjs](scripts/render-reading.cjs) 从 Markdown 与本地图形输入生成单文件 HTML，内嵌样式、图像和交互图，并把公式排为 MathML。没有 Archify 时，可以用内联 SVG、HTML 图表或其他合适图形完成阅读文档；它不是 skill 的必需依赖。
 
 ## 方法依据与取舍
 
@@ -48,7 +59,8 @@
 | [references/paper-types.md](references/paper-types.md) | 不同论文类型的重点 |
 | [references/critique-matrix.md](references/critique-matrix.md) | REVIEW 时使用的审稿矩阵 |
 | [references/research-card.md](references/research-card.md) | RESEARCH 时可选的便携研究卡 |
-| [examples/mimo-v2.6-deep-read.md](examples/mimo-v2.6-deep-read.md) | 完整深读样例与来源标注 |
+| [docs/mimo-v2.6-deep-read.html](docs/mimo-v2.6-deep-read.html) | 一体化深读样例，读者入口 |
+| [examples/mimo-v2.6-deep-read.md](examples/mimo-v2.6-deep-read.md) | HTML 的 Markdown 审计源 |
 
 本项目采用 MIT 许可证，见 [LICENSE](LICENSE)。
 
