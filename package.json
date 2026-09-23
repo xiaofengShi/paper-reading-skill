@@ -3,8 +3,9 @@
   "type": "commonjs",
   "scripts": {
     "build:docs": "node scripts/build-docs.cjs",
+    "check:docs": "node scripts/build-docs.cjs --check",
     "build:example": "node scripts/render-reading.cjs examples/mimo-v2.6-deep-read.md docs/mimo-v2.6-deep-read.html",
-    "test": "node --test scripts/test-render-reading.cjs"
+    "test": "node --test scripts/test-*.cjs"
   },
   "devDependencies": {
     "katex": "0.16.22",

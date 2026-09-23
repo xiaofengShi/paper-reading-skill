@@ -1,69 +1,71 @@
 # Paper Reading Skill
 
-把论文读成**一份可探索、可追溯的 HTML 深读文档**：先看全局，再顺着方法路径进入关键机制与实验，最后形成有边界的综合理解。普通的“读这篇论文”默认执行完整深读；只有明确要求快筛时才停在概览，审稿式批评和研究规划是按需增加的视角。
+**Turn a research paper into one visual reading atlas.** Start with the whole argument, follow the method or proof, work through important mechanisms, and read the experiments with their actual settings and numbers. The default request, “read this paper,” produces a complete, self-contained HTML deep read.
 
-## 读者会得到什么
+[Project website →](https://xiaofengshi.github.io/paper-reading-skill/) · [Explore the MiMo-V2.6 deep read →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html) · [中文说明](README.zh-CN.md)
 
-1. **全局认知图**：问题、研究场景、主要想法、贡献和证据所在位置。
-2. **方法或论证流程图**：输入、关键步骤、反馈与输出；每条重要箭头有解释。
-3. **机制放大**：必要定义、公式、算法、假设和一个便于理解的例子。
-4. **实验图谱**：问题 → 设置/对照 → 指标 → 结果 → 能得出的结论；PDF 定位按需显示。
-5. **综合理解**：把机制与实验重新连起来，说明已展示的结果、适用范围和仍待回答的问题。
+![A preview of the MiMo-V2.6 reading atlas, connecting the paper's global map, RL mechanism, and experiment evidence.](docs/assets/atlas-preview.svg)
 
-这些层次在**同一份离线可读的 HTML** 中展开，按论文类型选择合适图形：方法论文常用工作流与机制图，理论论文常用定义与证明依赖图，基准论文常用构建流程与测量维度图。图负责导航，解释、公式、原始表格和来源定位仍保留在正文中。
+## See a complete reading
 
-## 使用方式
+The [MiMo-V2.6 example](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html) is a Chinese-language single page that moves from the research problem and training path to the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments. It includes the complete relevant Eq. 1, worked examples, original figure excerpts beside their explanations, numerical comparisons, and optional PDF locations. Interactive diagrams are supplementary; the main explanation remains readable without them.
 
-将仓库复制到 agent 的 skill 目录后，直接说“阅读这篇论文”并给出 PDF、arXiv 链接或本地文件。入口是 [SKILL.md](SKILL.md)。也可以指定任务：
+The example was authored from a 44-page local PDF. The PDF itself is not redistributed here. The authors later [updated the online report](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d); the example incorporates the corrected Pro active-parameter figure, while other version differences have not been checked page by page.
 
-| 请求 | 输出 |
-|---|---|
-| “完整读这篇论文，给我图谱” | 默认一份完整深读 HTML |
-| “快速看看值不值得读” | SCAN，初步全局图与主要结果 |
-| “审查证据、找薄弱点” | 完整深读 + REVIEW 视角 |
-| “与我的工作比较 / 准备复现” | 完整深读 + RESEARCH 视角 |
+## What you get
 
-如果用户没有给研究目标，skill 不会替用户虚构“要批判这篇论文”的目的，也不会因初步相关性判断而中止已要求的深读。
+1. **Whole-paper map.** The question, setting, proposed idea, contributions, and where evidence enters.
+2. **Method or argument path.** Inputs, stages, branches, feedback, and outputs, with consequential arrows explained.
+3. **Mechanism close-ups.** Definitions, equations, assumptions, and a worked example where it helps.
+4. **Experiment atlas.** Each question linked to its setup, comparator, metric, observed result, and supported reading.
+5. **Connected synthesis.** What the method and evidence show together, with limits attached to the affected claims.
 
-## MiMo-V2.6 实操样例
+The diagrams guide reading; prose, formulas, tables, and original figures carry the detail. Source locations stay available for verification but are hidden by default in the HTML. The output is one offline-readable file, with Markdown as its audit source.
 
-[打开 MiMo-V2.6 一体化深读 HTML](docs/mimo-v2.6-deep-read.html)：一页从研究问题与训练路径读到 GRS/GAR、系统架构、MOPD2 和实验。正文直接给出 RL 的 Eq. 1、评分公式与算例、实验对照和完整关键数据。数据图标明是本文重绘还是近似整理，并指明原论文图及面板；原论文图在相关解释旁供核对，两幅 Archify 交互图供进一步探索。页内还有实验索引、七幅原论文图摘录与按需显示的 PDF 定位。它参照 [MechVQA 项目页](https://xiaofengshi.github.io/MechVQA/)的单页阅读组织方式，内容与图示针对本论文重新编写。
+## Get started
 
-两幅交互图的**节点、关系、说明与论文来源由 paper-reading 阅读流程整理并写成 JSON**；[Archify](https://github.com/tt-a1i/archify) 将 JSON 渲染成可探索的图。它们不是 Archify 自动读 PDF 的结果。最终 HTML 把这些图与其余正文、数据图、原图摘录放在一起；Archify 只负责结构图的呈现与结构校验，科学内容仍需回到论文核查。
+**Codex and Kimi Code:** install the repository as a personal skill, then install its rendering dependencies. Node.js 20 or newer is required for the bundled HTML renderer.
 
-样例的图与页码依据用户提供的 44 页本地 PDF；PDF 未随仓库分发。作者后来[更新了 PDF](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d)；[模型卡](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL)确认 Pro 是 1.02T 总参数、42B active parameters，本样例不再展示旧版 Table 1 的笔误提示。更新版 PDF 的其他差异尚未逐页核对。[Markdown 审计源](examples/mimo-v2.6-deep-read.md)、[训练图 JSON](examples/mimo-v2.6.workflow.json)、[评分图 JSON](examples/mimo-v2.6-grading.workflow.json)及对应 Archify HTML 是生成输入，不需要读者逐一打开。
+```bash
+mkdir -p "$HOME/.agents/skills"
+git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.agents/skills/paper-reading"
+npm ci --prefix "$HOME/.agents/skills/paper-reading"
+```
 
-本地重建样例：
+**Claude Code:** use its personal skills directory instead.
+
+```bash
+mkdir -p "$HOME/.claude/skills"
+git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/skills/paper-reading"
+npm ci --prefix "$HOME/.claude/skills/paper-reading"
+```
+
+Start a new agent session, attach a PDF or give an accessible paper URL, and ask: **“Read this paper deeply. Give me one visual HTML reading document that explains the main path, important equations, and experiments.”** The skill is named `paper-reading`; you can also invoke it explicitly as `$paper-reading` in Codex, `/paper-reading` in Claude Code, or `/skill:paper-reading` in Kimi Code. The agent needs access to the paper and must do the scientific reading; this repository supplies the workflow and renderer, not a service that automatically converts an arbitrary PDF into a verified explanation.
+
+Ask for a quick scan only when you want triage. Ask for a review or research comparison when you want those additional lenses. An ordinary request to read a paper stays understanding-first.
+
+## How it works
+
+The [skill instructions](SKILL.md) guide an agent through orientation, full reconstruction, explanation, and source checking. [Paper-type routes](references/paper-types.md) select suitable views for empirical, systems, benchmark, dataset, theory, and survey papers; [visual-reading rules](references/visual-reading.md) keep diagrams tied to explanations and evidence. [Reading modes](references/reading-modes.md) define the optional scan, review, and research lenses.
+
+The bundled [renderer](scripts/render-reading.cjs) turns a Markdown audit source and local visuals into a standalone HTML file with embedded images, diagrams, KaTeX math, and fonts. English audit sources start with `<!-- paper-reading-lang: en -->` to render English navigation and chart labels. Archify can render optional interactive structure views, but neither Archify nor another locally installed skill is required. The [MiMo Markdown source](examples/mimo-v2.6-deep-read.md) and its visual inputs show the format; they are build materials, not separate reading pages.
+
+To rebuild the published example locally:
 
 ```bash
 npm ci
 npm run build:example
+npm test
 ```
 
-构建器 [render-reading.cjs](scripts/render-reading.cjs) 从 Markdown 与仓库内的图形输入生成单文件 HTML，内嵌样式、图像和交互图；公式使用 KaTeX HTML 排版，并保留 MathML 供辅助技术读取。所需字体也内嵌在文件中。PDF 页码等核对信息保留在 Markdown 审计源中；HTML 默认隐藏，顶部的“显示原文定位”可按需展开。样例的两幅 Archify HTML 已作为输入保存在仓库；重建时不调用 Archify，也不依赖本机安装的其他 skill 或机器特定路径。新论文没有 Archify 图时，直接用内联 SVG、HTML 图表或其他合适图形完成阅读文档。运行 `npm test` 可检查行内/独立公式、首屏图谱、出处开关和数据图的生成契约。
+## Validation and scope
 
-## 方法依据与取舍
+The MiMo-V2.6 document demonstrates one complete empirical technical-report read. Renderer tests cover inline and display math, source-location visibility, figure context, and numerical chart behavior. These checks verify rendering contracts; they do not independently certify every scientific interpretation. Other paper types are described in the skill but do not yet have equally complete public examples or cross-paper user evaluation.
 
-- [Keshav 的三遍阅读法](https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf)提供“先全局、再内容、再细节”的阅读节奏。本 skill 在用户要求深读时完成后两遍，不把第一遍筛选当成默认终点。
-- [Novak 与 Cañas 的概念图方法](https://cmap.ihmc.us/publications/researchpapers/theoryunderlyingconceptmaps.pdf)启发有标签的关系与跨分支连接；图中的关系必须能被论文文本解释。
-- [SciDoc2Diagrammer-MAF](https://aclanthology.org/2024.findings-emnlp.780/)强调从文档到科学图示时的内容选择与忠实性检查。本 skill 要求图、文字和原论文位置能互相核对。
-- [Archify](https://github.com/tt-a1i/archify)提供交互展现与确定性的结构/布局验证；图是否科学准确仍需回到论文核查。
+The reading method draws on [Keshav’s three-pass approach](https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf), [Novak and Cañas’s concept maps](https://cmap.ihmc.us/publications/researchpapers/theoryunderlyingconceptmaps.pdf), and [SciDoc2Diagrammer-MAF](https://aclanthology.org/2024.findings-emnlp.780/). [Archify](https://github.com/tt-a1i/archify) is an optional presentation tool for interactive structure diagrams. Scientific fidelity still depends on reading and checking the source paper.
 
-## 仓库内容
+Questions, bug reports, and examples from other paper types are welcome in [GitHub Issues](https://github.com/xiaofengShi/paper-reading-skill/issues). The project is [MIT licensed](LICENSE).
 
-| 路径 | 用途 |
-|---|---|
-| [SKILL.md](SKILL.md) | agent 入口与默认行为 |
-| [references/visual-reading.md](references/visual-reading.md) | 图形选择、来源锚点、Archify 集成与检查 |
-| [references/reading-modes.md](references/reading-modes.md) | 阅读深度与可选视角 |
-| [references/paper-types.md](references/paper-types.md) | 不同论文类型的重点 |
-| [references/critique-matrix.md](references/critique-matrix.md) | REVIEW 时使用的审稿矩阵 |
-| [references/research-card.md](references/research-card.md) | RESEARCH 时可选的便携研究卡 |
-| [docs/mimo-v2.6-deep-read.html](docs/mimo-v2.6-deep-read.html) | 一体化深读样例，读者入口 |
-| [examples/mimo-v2.6-deep-read.md](examples/mimo-v2.6-deep-read.md) | HTML 的 Markdown 审计源 |
+## Maintainer notes
 
-本项目采用 MIT 许可证，见 [LICENSE](LICENSE)。
-
-## 文档维护
-
-[项目网页](docs/index.html)的正文由本 README 生成，避免两份文字分别维护。安装 `package.json` 中的依赖后运行 `npm run build:docs`；生成器见 [scripts/build-docs.cjs](scripts/build-docs.cjs)。
+This README is the English source for the default [project website](https://xiaofengshi.github.io/paper-reading-skill/); [README.zh-CN.md](README.zh-CN.md) is the source for the [Chinese page](https://xiaofengshi.github.io/paper-reading-skill/zh.html). Run `npm run build:docs` after editing either language, and commit the generated HTML together with the Markdown. The site generator is [scripts/build-docs.cjs](scripts/build-docs.cjs).

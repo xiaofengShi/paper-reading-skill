@@ -39,6 +39,8 @@ For DEEP READ, deliver **one self-contained HTML file** that a reader can follow
 
 A reusable renderer for this repository's examples is [render-reading.cjs](scripts/render-reading.cjs); use it when its Markdown/visual inputs fit the paper, or create an equivalent single-file HTML. Its build uses this repository's files and `package.json` dependencies only. Do not require a separately installed local skill, Archify CLI, or a machine-specific path. Pre-rendered interactive HTML may be embedded as an optional input. Do not turn the example's layout into a fixed template for every paper type.
 
+Write the reading document in the user's requested language. For an English document built with this renderer, begin the Markdown audit source with `<!-- paper-reading-lang: en -->`; the current default is `zh-CN` for existing Chinese sources. This marker selects the HTML navigation and chart labels as well as the document language. If the requested language is unsupported by the renderer, use an equivalent HTML build rather than mixing interface languages.
+
 ## Evidence and rendering contract
 
 - Tie important facts, nodes, arrows, formulas, and numbers to exact PDF page/section/figure/table/appendix references in the audit source. Keep those references retrievable in the HTML without showing them by default. In a PDF, verify captions and table cells visually when extraction is uncertain. Record source version and conflicting numbers instead of silently resolving them.

@@ -124,3 +124,54 @@ This chapter stays upright.
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('an English audit source produces an English reading page with a grounded map and chart', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-en-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    fs.writeFileSync(source, `<!-- paper-reading-lang: en -->
+# An Example Paper
+
+\`\`\`paper-map
+{"thesis":"An idea tested against a baseline.","items":[{"number":"01","label":"Idea","text":"The central mechanism.","source":"PDF p. 2"}]}
+\`\`\`
+
+## 01 / Main path
+
+\`\`\`paper-path
+{"title":"A two-stage method","stages":[{"title":"Prepare","role":"Input","action":"Collect evidence.","why":"The model needs examples.","output":"Examples for training.","source":"PDF p. 3"},{"title":"Test","role":"Output","action":"Compare outcomes.","why":"The claim needs a baseline.","output":"An observed result.","source":"PDF p. 4"}]}
+\`\`\`
+
+\`\`\`paper-chart
+{"type":"paired","title":"Result","source":"PDF p. 5, Fig. 1","rows":[{"label":"Method","before":40,"after":60}]}
+\`\`\`
+`);
+    execFileSync(process.execPath, [renderer, source, output]);
+    const html = fs.readFileSync(output, 'utf8');
+    assert.match(html, /<html lang="en">/);
+    assert.match(html, /Show source locations/);
+    assert.match(html, /Whole-paper map/);
+    assert.match(html, /Passed to the next stage/);
+    assert.match(html, /What this stage leaves behind/);
+    assert.match(html, /View chart data/);
+    assert.match(html, /Start <strong>40%<\/strong>/);
+    assert.match(html, /End <strong>60%<\/strong>/);
+    assert.doesNotMatch(html, /paper-reading-lang: en|跳到正文|论文全局图|起点|交给下一阶段/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('a visual fact without a source fails instead of publishing an untraceable diagram', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-source-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    fs.writeFileSync(source, '# Paper\n\n```paper-map\n{"items":[{"number":"01","label":"Claim","text":"An unverified claim."}]}\n```\n');
+    assert.throws(() => execFileSync(process.execPath, [renderer, source, output], { stdio: 'pipe' }), /A visual fact is missing its source/);
+    assert.equal(fs.existsSync(output), false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});

@@ -1,117 +1,96 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="把论文读成可探索、可追溯的深度阅读图谱。">
-  <title>Paper Reading Skill</title>
+  <meta name="description" content="Turn a research paper into one visual reading atlas. Start with the whole argument, follow the method or proof, work through important mechanisms, and read the experiments with their actu…">
+  <link rel="canonical" href="https://xiaofengshi.github.io/paper-reading-skill/">
+  <link rel="alternate" hreflang="en" href="https://xiaofengshi.github.io/paper-reading-skill/">
+  <link rel="alternate" hreflang="zh-CN" href="https://xiaofengshi.github.io/paper-reading-skill/zh.html">
+  <link rel="alternate" hreflang="x-default" href="https://xiaofengshi.github.io/paper-reading-skill/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Paper Reading Skill">
+  <meta property="og:title" content="Paper Reading Skill">
+  <meta property="og:description" content="Turn a research paper into one visual reading atlas. Start with the whole argument, follow the method or proof, work through important mechanisms, and read the experiments with their actu…">
+  <meta property="og:url" content="https://xiaofengshi.github.io/paper-reading-skill/">
+  <meta property="og:image" content="https://xiaofengshi.github.io/paper-reading-skill/assets/atlas-preview.png">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Paper Reading Skill — Visual deep reads for research papers</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a class="skip" href="#main">跳到正文</a>
-  <header class="site-header"><a href="#main">Paper Reading Skill</a><span>论文 → 阅读图谱</span></header>
-  <main id="main" class="reading-page"><article class="prose">
-<h1>Paper Reading Skill</h1>
-<p>把论文读成<strong>一份可探索、可追溯的 HTML 深读文档</strong>：先看全局，再顺着方法路径进入关键机制与实验，最后形成有边界的综合理解。普通的“读这篇论文”默认执行完整深读；只有明确要求快筛时才停在概览，审稿式批评和研究规划是按需增加的视角。</p>
-<h2>读者会得到什么</h2>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Paper Reading Skill"><span class="brand-mark" aria-hidden="true">P<span>↗</span></span><span>Paper Reading</span></a>
+    <nav aria-label="Navigation"><a href="#section-1">See a complete reading</a><a href="#section-2">What you get</a><a href="#section-3">Get started</a><a class="nav-repo" href="https://github.com/xiaofengShi/paper-reading-skill">GitHub ↗</a><a class="lang" href="zh.html" hreflang="zh-CN">中文</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy"><p class="eyebrow">AN AGENT SKILL FOR DEEP PAPER READING</p><h1 id="page-title">Turn a research paper into one visual reading atlas.</h1><p>Start with the whole argument, follow the method or proof, work through important mechanisms, and read the experiments with their actual settings and numbers. The default request, “read this paper,” produces a complete, self-contained HTML deep read.</p>
+<div class="hero-actions"><a class="button primary" href="mimo-v2.6-deep-read.html">Open the complete reading →</a><a class="button secondary" href="https://github.com/xiaofengShi/paper-reading-skill">View on GitHub ↗</a></div></div>
+      <figure class="hero-visual"><p><img src="assets/atlas-preview.svg" alt="A preview of the MiMo-V2.6 reading atlas, connecting the paper&#39;s global map, RL mechanism, and experiment evidence."></p>
+<figcaption>An editorial preview of the published MiMo-V2.6 deep read.</figcaption></figure>
+    </section>
+    <div class="content-wrap"><section class="content-section section-1" id="section-1">
+<h2>See a complete reading</h2>
+<p>The <a href="https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html">MiMo-V2.6 example</a> is a Chinese-language single page that moves from the research problem and training path to the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments. It includes the complete relevant Eq. 1, worked examples, original figure excerpts beside their explanations, numerical comparisons, and optional PDF locations. Interactive diagrams are supplementary; the main explanation remains readable without them.</p>
+<p>The example was authored from a 44-page local PDF. The PDF itself is not redistributed here. The authors later <a href="https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d">updated the online report</a>; the example incorporates the corrected Pro active-parameter figure, while other version differences have not been checked page by page.</p>
+
+</section>
+<section class="content-section section-2" id="section-2">
+<h2>What you get</h2>
 <ol>
-<li><strong>全局认知图</strong>：问题、研究场景、主要想法、贡献和证据所在位置。</li>
-<li><strong>方法或论证流程图</strong>：输入、关键步骤、反馈与输出；每条重要箭头有解释。</li>
-<li><strong>机制放大</strong>：必要定义、公式、算法、假设和一个便于理解的例子。</li>
-<li><strong>实验图谱</strong>：问题 → 设置/对照 → 指标 → 结果 → 能得出的结论；PDF 定位按需显示。</li>
-<li><strong>综合理解</strong>：把机制与实验重新连起来，说明已展示的结果、适用范围和仍待回答的问题。</li>
+<li><strong>Whole-paper map.</strong> The question, setting, proposed idea, contributions, and where evidence enters.</li>
+<li><strong>Method or argument path.</strong> Inputs, stages, branches, feedback, and outputs, with consequential arrows explained.</li>
+<li><strong>Mechanism close-ups.</strong> Definitions, equations, assumptions, and a worked example where it helps.</li>
+<li><strong>Experiment atlas.</strong> Each question linked to its setup, comparator, metric, observed result, and supported reading.</li>
+<li><strong>Connected synthesis.</strong> What the method and evidence show together, with limits attached to the affected claims.</li>
 </ol>
-<p>这些层次在<strong>同一份离线可读的 HTML</strong> 中展开，按论文类型选择合适图形：方法论文常用工作流与机制图，理论论文常用定义与证明依赖图，基准论文常用构建流程与测量维度图。图负责导航，解释、公式、原始表格和来源定位仍保留在正文中。</p>
-<h2>使用方式</h2>
-<p>将仓库复制到 agent 的 skill 目录后，直接说“阅读这篇论文”并给出 PDF、arXiv 链接或本地文件。入口是 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/SKILL.md">SKILL.md</a>。也可以指定任务：</p>
-<table>
-<thead>
-<tr>
-<th>请求</th>
-<th>输出</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>“完整读这篇论文，给我图谱”</td>
-<td>默认一份完整深读 HTML</td>
-</tr>
-<tr>
-<td>“快速看看值不值得读”</td>
-<td>SCAN，初步全局图与主要结果</td>
-</tr>
-<tr>
-<td>“审查证据、找薄弱点”</td>
-<td>完整深读 + REVIEW 视角</td>
-</tr>
-<tr>
-<td>“与我的工作比较 / 准备复现”</td>
-<td>完整深读 + RESEARCH 视角</td>
-</tr>
-</tbody></table>
-<p>如果用户没有给研究目标，skill 不会替用户虚构“要批判这篇论文”的目的，也不会因初步相关性判断而中止已要求的深读。</p>
-<h2>MiMo-V2.6 实操样例</h2>
-<p><a href="mimo-v2.6-deep-read.html">打开 MiMo-V2.6 一体化深读 HTML</a>：一页从研究问题与训练路径读到 GRS/GAR、系统架构、MOPD2 和实验。正文直接给出 RL 的 Eq. 1、评分公式与算例、实验对照和完整关键数据。数据图标明是本文重绘还是近似整理，并指明原论文图及面板；原论文图在相关解释旁供核对，两幅 Archify 交互图供进一步探索。页内还有实验索引、七幅原论文图摘录与按需显示的 PDF 定位。它参照 <a href="https://xiaofengshi.github.io/MechVQA/">MechVQA 项目页</a>的单页阅读组织方式，内容与图示针对本论文重新编写。</p>
-<p>两幅交互图的<strong>节点、关系、说明与论文来源由 paper-reading 阅读流程整理并写成 JSON</strong>；<a href="https://github.com/tt-a1i/archify">Archify</a> 将 JSON 渲染成可探索的图。它们不是 Archify 自动读 PDF 的结果。最终 HTML 把这些图与其余正文、数据图、原图摘录放在一起；Archify 只负责结构图的呈现与结构校验，科学内容仍需回到论文核查。</p>
-<p>样例的图与页码依据用户提供的 44 页本地 PDF；PDF 未随仓库分发。作者后来<a href="https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d">更新了 PDF</a>；<a href="https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL">模型卡</a>确认 Pro 是 1.02T 总参数、42B active parameters，本样例不再展示旧版 Table 1 的笔误提示。更新版 PDF 的其他差异尚未逐页核对。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">Markdown 审计源</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6.workflow.json">训练图 JSON</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-grading.workflow.json">评分图 JSON</a>及对应 Archify HTML 是生成输入，不需要读者逐一打开。</p>
-<p>本地重建样例：</p>
+<p>The diagrams guide reading; prose, formulas, tables, and original figures carry the detail. Source locations stay available for verification but are hidden by default in the HTML. The output is one offline-readable file, with Markdown as its audit source.</p>
+
+</section>
+<section class="content-section section-3" id="section-3">
+<h2>Get started</h2>
+<p><strong>Codex and Kimi Code:</strong> install the repository as a personal skill, then install its rendering dependencies. Node.js 20 or newer is required for the bundled HTML renderer.</p>
+<pre><code class="language-bash">mkdir -p &quot;$HOME/.agents/skills&quot;
+git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.agents/skills/paper-reading&quot;
+npm ci --prefix &quot;$HOME/.agents/skills/paper-reading&quot;
+</code></pre>
+<p><strong>Claude Code:</strong> use its personal skills directory instead.</p>
+<pre><code class="language-bash">mkdir -p &quot;$HOME/.claude/skills&quot;
+git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.claude/skills/paper-reading&quot;
+npm ci --prefix &quot;$HOME/.claude/skills/paper-reading&quot;
+</code></pre>
+<p>Start a new agent session, attach a PDF or give an accessible paper URL, and ask: <strong>“Read this paper deeply. Give me one visual HTML reading document that explains the main path, important equations, and experiments.”</strong> The skill is named <code>paper-reading</code>; you can also invoke it explicitly as <code>$paper-reading</code> in Codex, <code>/paper-reading</code> in Claude Code, or <code>/skill:paper-reading</code> in Kimi Code. The agent needs access to the paper and must do the scientific reading; this repository supplies the workflow and renderer, not a service that automatically converts an arbitrary PDF into a verified explanation.</p>
+<p>Ask for a quick scan only when you want triage. Ask for a review or research comparison when you want those additional lenses. An ordinary request to read a paper stays understanding-first.</p>
+
+</section>
+<section class="content-section section-4" id="section-4">
+<h2>How it works</h2>
+<p>The <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/SKILL.md">skill instructions</a> guide an agent through orientation, full reconstruction, explanation, and source checking. <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/paper-types.md">Paper-type routes</a> select suitable views for empirical, systems, benchmark, dataset, theory, and survey papers; <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/visual-reading.md">visual-reading rules</a> keep diagrams tied to explanations and evidence. <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/reading-modes.md">Reading modes</a> define the optional scan, review, and research lenses.</p>
+<p>The bundled <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">renderer</a> turns a Markdown audit source and local visuals into a standalone HTML file with embedded images, diagrams, KaTeX math, and fonts. English audit sources start with <code>&lt;!-- paper-reading-lang: en --&gt;</code> to render English navigation and chart labels. Archify can render optional interactive structure views, but neither Archify nor another locally installed skill is required. The <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">MiMo Markdown source</a> and its visual inputs show the format; they are build materials, not separate reading pages.</p>
+<p>To rebuild the published example locally:</p>
 <pre><code class="language-bash">npm ci
 npm run build:example
+npm test
 </code></pre>
-<p>构建器 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">render-reading.cjs</a> 从 Markdown 与仓库内的图形输入生成单文件 HTML，内嵌样式、图像和交互图；公式使用 KaTeX HTML 排版，并保留 MathML 供辅助技术读取。所需字体也内嵌在文件中。PDF 页码等核对信息保留在 Markdown 审计源中；HTML 默认隐藏，顶部的“显示原文定位”可按需展开。样例的两幅 Archify HTML 已作为输入保存在仓库；重建时不调用 Archify，也不依赖本机安装的其他 skill 或机器特定路径。新论文没有 Archify 图时，直接用内联 SVG、HTML 图表或其他合适图形完成阅读文档。运行 <code>npm test</code> 可检查行内/独立公式、首屏图谱、出处开关和数据图的生成契约。</p>
-<h2>方法依据与取舍</h2>
-<ul>
-<li><a href="https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf">Keshav 的三遍阅读法</a>提供“先全局、再内容、再细节”的阅读节奏。本 skill 在用户要求深读时完成后两遍，不把第一遍筛选当成默认终点。</li>
-<li><a href="https://cmap.ihmc.us/publications/researchpapers/theoryunderlyingconceptmaps.pdf">Novak 与 Cañas 的概念图方法</a>启发有标签的关系与跨分支连接；图中的关系必须能被论文文本解释。</li>
-<li><a href="https://aclanthology.org/2024.findings-emnlp.780/">SciDoc2Diagrammer-MAF</a>强调从文档到科学图示时的内容选择与忠实性检查。本 skill 要求图、文字和原论文位置能互相核对。</li>
-<li><a href="https://github.com/tt-a1i/archify">Archify</a>提供交互展现与确定性的结构/布局验证；图是否科学准确仍需回到论文核查。</li>
-</ul>
-<h2>仓库内容</h2>
-<table>
-<thead>
-<tr>
-<th>路径</th>
-<th>用途</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/SKILL.md">SKILL.md</a></td>
-<td>agent 入口与默认行为</td>
-</tr>
-<tr>
-<td><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/visual-reading.md">references/visual-reading.md</a></td>
-<td>图形选择、来源锚点、Archify 集成与检查</td>
-</tr>
-<tr>
-<td><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/reading-modes.md">references/reading-modes.md</a></td>
-<td>阅读深度与可选视角</td>
-</tr>
-<tr>
-<td><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/paper-types.md">references/paper-types.md</a></td>
-<td>不同论文类型的重点</td>
-</tr>
-<tr>
-<td><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/critique-matrix.md">references/critique-matrix.md</a></td>
-<td>REVIEW 时使用的审稿矩阵</td>
-</tr>
-<tr>
-<td><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/research-card.md">references/research-card.md</a></td>
-<td>RESEARCH 时可选的便携研究卡</td>
-</tr>
-<tr>
-<td><a href="mimo-v2.6-deep-read.html">docs/mimo-v2.6-deep-read.html</a></td>
-<td>一体化深读样例，读者入口</td>
-</tr>
-<tr>
-<td><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">examples/mimo-v2.6-deep-read.md</a></td>
-<td>HTML 的 Markdown 审计源</td>
-</tr>
-</tbody></table>
-<p>本项目采用 MIT 许可证，见 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE">LICENSE</a>。</p>
-<h2>文档维护</h2>
-<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/docs/index.html">项目网页</a>的正文由本 README 生成，避免两份文字分别维护。安装 <code>package.json</code> 中的依赖后运行 <code>npm run build:docs</code>；生成器见 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/build-docs.cjs">scripts/build-docs.cjs</a>。</p>
 
-  </article></main>
-  <footer><a href="https://github.com/xiaofengShi/paper-reading-skill">GitHub 仓库</a></footer>
+</section>
+<section class="content-section section-5" id="section-5">
+<h2>Validation and scope</h2>
+<p>The MiMo-V2.6 document demonstrates one complete empirical technical-report read. Renderer tests cover inline and display math, source-location visibility, figure context, and numerical chart behavior. These checks verify rendering contracts; they do not independently certify every scientific interpretation. Other paper types are described in the skill but do not yet have equally complete public examples or cross-paper user evaluation.</p>
+<p>The reading method draws on <a href="https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf">Keshav’s three-pass approach</a>, <a href="https://cmap.ihmc.us/publications/researchpapers/theoryunderlyingconceptmaps.pdf">Novak and Cañas’s concept maps</a>, and <a href="https://aclanthology.org/2024.findings-emnlp.780/">SciDoc2Diagrammer-MAF</a>. <a href="https://github.com/tt-a1i/archify">Archify</a> is an optional presentation tool for interactive structure diagrams. Scientific fidelity still depends on reading and checking the source paper.</p>
+<p>Questions, bug reports, and examples from other paper types are welcome in <a href="https://github.com/xiaofengShi/paper-reading-skill/issues">GitHub Issues</a>. The project is <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE">MIT licensed</a>.</p>
+
+</section>
+<section class="content-section section-6" id="section-6">
+<h2>Maintainer notes</h2>
+<p>This README is the English source for the default <a href="https://xiaofengshi.github.io/paper-reading-skill/">project website</a>; <a href="zh.html">README.zh-CN.md</a> is the source for the <a href="https://xiaofengshi.github.io/paper-reading-skill/zh.html">Chinese page</a>. Run <code>npm run build:docs</code> after editing either language, and commit the generated HTML together with the Markdown. The site generator is <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/build-docs.cjs">scripts/build-docs.cjs</a>.</p>
+
+</section></div>
+  </main>
+  <footer class="site-footer"><span>Read deeply. Keep the evidence close. · <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE">MIT</a></span><span><a href="https://github.com/xiaofengShi/paper-reading-skill">GitHub</a> · <a href="https://github.com/xiaofengShi/paper-reading-skill/issues">Issues</a> · <a href="zh.html" hreflang="zh-CN">中文</a></span></footer>
 </body>
 </html>

@@ -14,6 +14,33 @@ const sourcePath = path.resolve(sourceArg);
 const outputPath = path.resolve(outputArg);
 const sourceDir = path.dirname(sourcePath);
 const source = fs.readFileSync(sourcePath, 'utf8');
+const languageMarker = source.match(/^<!-- paper-reading-lang: (en|zh-CN) -->\r?\n/);
+const lang = languageMarker?.[1] || 'zh-CN';
+const labels = {
+  'zh-CN': {
+    why: '为什么需要', last: '这一阶段留下什么', next: '交给下一阶段',
+    scope: '用于哪些任务', judge: '怎样判断', signal: '如何进入学习', value: '关键价值',
+    question: '研究问题', setup: '设置 / 对照', observation: '观察', chart: '本文整理的数据图',
+    start: '起点', end: '终点', change: '变化', points: '个百分点', chartData: '查看图表数据', item: '项目',
+    openDiagram: '展开辅助交互图：', explore: '节点聚焦与路径探索', diagramNote: '交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。',
+    wholeMap: '论文全局图', description: '从全局路径到机制与实验的一体化论文深读。', titleSuffix: '深读图谱',
+    skip: '跳到正文', topbar: '原文证据驱动的深读图谱', showSources: '显示原文定位', startReading: '开始阅读',
+    defaultThesis: '从全局路径到关键机制与实验证据。', enter: '进入论文图谱', nav: '本文目录', route: '阅读路径',
+    footer: '单文件阅读版', back: '返回顶部',
+  },
+  en: {
+    why: 'Why it matters', last: 'What this stage leaves behind', next: 'Passed to the next stage',
+    scope: 'Where it applies', judge: 'How it is judged', signal: 'How it shapes learning', value: 'Why it matters',
+    question: 'Research question', setup: 'Setup / comparator', observation: 'Observation', chart: 'Chart prepared for this reading',
+    start: 'Start', end: 'End', change: 'Change', points: 'percentage points', chartData: 'View chart data', item: 'Item',
+    openDiagram: 'Explore interactive diagram: ', explore: 'Focus nodes and follow paths', diagramNote: 'The interactive view explores structure. The reading path, mechanisms, and experimental results remain visible on this page.',
+    wholeMap: 'Whole-paper map', description: 'A visual deep read from the global path to mechanisms and experiments.', titleSuffix: 'Deep reading atlas',
+    skip: 'Skip to content', topbar: 'A source-grounded reading atlas', showSources: 'Show source locations', startReading: 'Start reading',
+    defaultThesis: 'From the global path to mechanisms and experimental evidence.', enter: 'Enter the reading atlas', nav: 'Contents', route: 'Reading path',
+    footer: 'Single-file reading page', back: 'Back to top',
+  },
+};
+const t = labels[lang];
 const css = fs.readFileSync(path.resolve(__dirname, '../assets/reading.css'), 'utf8');
 const katexCssFile = require.resolve('katex/dist/katex.min.css');
 let katexCss = fs.readFileSync(katexCssFile, 'utf8');
@@ -49,7 +76,10 @@ const imageData = relative => {
   if (!mime) throw new Error(`Unsupported image: ${relative}`);
   return `data:${mime};base64,${fs.readFileSync(file).toString('base64')}`;
 };
-const sourceBadge = source => `<span class="source-badge">${esc(source)}</span>`;
+const sourceBadge = source => {
+  if (!source) throw new Error('A visual fact is missing its source');
+  return `<span class="source-badge">${esc(source)}</span>`;
+};
 
 function renderMap(data) {
   if (!Array.isArray(data.items) || !data.items.length) throw new Error('paper-map needs items');
@@ -60,28 +90,28 @@ function renderMap(data) {
 function renderPath(data) {
   if (!Array.isArray(data.stages) || !data.stages.length) throw new Error('paper-path needs stages');
   return `<figure class="reading-path"><figcaption><span class="figure-kicker">GUIDED PATH</span><strong>${esc(data.title)}</strong>${data.intro ? `<p>${esc(data.intro)}</p>` : ''}</figcaption><ol>${data.stages.map((s, i) =>
-    `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>为什么需要</dt><dd>${esc(s.why)}</dd></div><div><dt>${i === data.stages.length - 1 ? '这一阶段留下什么' : '交给下一阶段'}</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
+    `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>${t.why}</dt><dd>${esc(s.why)}</dd></div><div><dt>${i === data.stages.length - 1 ? t.last : t.next}</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
   ).join('')}</ol></figure>`;
 }
 function renderContrast(data) {
   if (!Array.isArray(data.branches) || data.branches.length !== 2) throw new Error('paper-contrast needs two branches');
   return `<figure class="mechanism-contrast"><figcaption><span class="figure-kicker">MECHANISM COMPARISON</span><strong>${esc(data.title)}</strong><p>${esc(data.intro)}</p></figcaption><div class="contrast-grid">${data.branches.map((b, i) =>
-    `<section class="contrast-branch b${i}"><h3>${esc(b.name)}</h3><p class="contrast-lead">${esc(b.lead)}</p><dl><div><dt>用于哪些任务</dt><dd>${esc(b.scope)}</dd></div><div><dt>怎样判断</dt><dd>${esc(b.judge)}</dd></div><div><dt>如何进入学习</dt><dd>${esc(b.signal)}</dd></div><div><dt>关键价值</dt><dd>${esc(b.why)}</dd></div></dl>${sourceBadge(b.source)}</section>`
+    `<section class="contrast-branch b${i}"><h3>${esc(b.name)}</h3><p class="contrast-lead">${esc(b.lead)}</p><dl><div><dt>${t.scope}</dt><dd>${esc(b.scope)}</dd></div><div><dt>${t.judge}</dt><dd>${esc(b.judge)}</dd></div><div><dt>${t.signal}</dt><dd>${esc(b.signal)}</dd></div><div><dt>${t.value}</dt><dd>${esc(b.why)}</dd></div></dl>${sourceBadge(b.source)}</section>`
   ).join('')}</div></figure>`;
 }
 function renderExperiments(data) {
   if (!Array.isArray(data.rows) || !data.rows.length) throw new Error('paper-experiments needs rows');
-  return `<figure class="experiment-atlas"><figcaption><span class="figure-kicker">EXPERIMENT ATLAS</span><strong>${esc(data.title)}</strong></figcaption><div class="experiment-head" aria-hidden="true"><span>研究问题</span><span>设置 / 对照</span><span>观察</span></div><div class="experiment-rows">${data.rows.map((r, i) =>
+  return `<figure class="experiment-atlas"><figcaption><span class="figure-kicker">EXPERIMENT ATLAS</span><strong>${esc(data.title)}</strong></figcaption><div class="experiment-head" aria-hidden="true"><span>${t.question}</span><span>${t.setup}</span><span>${t.observation}</span></div><div class="experiment-rows">${data.rows.map((r, i) =>
     `<article class="experiment-row"><div class="experiment-question"><span>${String(i + 1).padStart(2, '0')}</span><strong>${esc(r.question)}</strong></div><p>${esc(r.setup)}</p><div><p>${esc(r.observation)}</p>${sourceBadge(r.source)}</div></article>`
   ).join('')}</div></figure>`;
 }
 function renderChart(data) {
-  const header = `<div class="figure-head"><div><span class="figure-kicker">${esc(data.origin || '本文整理的数据图')}</span><h3>${esc(data.title)}</h3>${data.subtitle ? `<p>${esc(data.subtitle)}</p>` : ''}</div>${sourceBadge(data.source)}</div>`;
+  const header = `<div class="figure-head"><div><span class="figure-kicker">${esc(data.origin || t.chart)}</span><h3>${esc(data.title)}</h3>${data.subtitle ? `<p>${esc(data.subtitle)}</p>` : ''}</div>${sourceBadge(data.source)}</div>`;
   const note = data.note ? `<figcaption class="data-note">${esc(data.note)}</figcaption>` : '';
   if (data.type === 'segments') {
     const sum = data.rows.reduce((n, r) => n + Number(r.value), 0);
     if (Math.abs(sum - 100) > 0.2) throw new Error(`Segments do not total 100: ${sum}`);
-    const bar = `<div class="segments" role="img" aria-label="${esc(data.rows.map(r => `${r.label} ${r.value}${data.unit || ''}`).join('；'))}">${data.rows.map((r, i) => `<span class="segment s${i}" style="width:${Number(r.value)}%"></span>`).join('')}</div>`;
+    const bar = `<div class="segments" role="img" aria-label="${esc(data.rows.map(r => `${r.label} ${r.value}${data.unit || ''}`).join(lang === 'zh-CN' ? '；' : '; '))}">${data.rows.map((r, i) => `<span class="segment s${i}" style="width:${Number(r.value)}%"></span>`).join('')}</div>`;
     const legend = `<div class="segment-legend">${data.rows.map((r, i) => `<div><span class="swatch s${i}"></span><span>${esc(r.label)}</span><strong>${esc(r.value)}${esc(data.unit || '')}</strong></div>`).join('')}</div>`;
     return `<figure class="data-figure">${header}${bar}${legend}${note}</figure>`;
   }
@@ -93,9 +123,11 @@ function renderChart(data) {
       const delta = after - before;
       const change = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}`;
       const prefix = r.approx ? '≈' : '';
-      return `<div class="pair-row"><div class="pair-label">${esc(r.label)}</div><div class="pair-track" role="img" aria-label="${esc(`起点 ${prefix}${before}%，终点 ${prefix}${after}%，变化 ${prefix}${change} 个百分点`)}"><span class="pair-connector" style="left:${Math.min(before, after)}%;width:${Math.abs(delta)}%"></span><span class="pair-point before" style="left:${before}%"></span><span class="pair-point after" style="left:${after}%"></span></div><div class="pair-values"><span><i class="pair-symbol before" aria-hidden="true"></i>起点 <strong>${prefix}${before}%</strong></span><span><i class="pair-symbol after" aria-hidden="true"></i>终点 <strong>${prefix}${after}%</strong></span><span class="pair-delta">${prefix}${change} 个百分点</span></div></div>`;
+      const aria = lang === 'zh-CN' ? `起点 ${prefix}${before}%，终点 ${prefix}${after}%，变化 ${prefix}${change} 个百分点` : `${t.start} ${prefix}${before}%, ${t.end} ${prefix}${after}%, ${t.change} ${prefix}${change} ${t.points}`;
+      return `<div class="pair-row"><div class="pair-label">${esc(r.label)}</div><div class="pair-track" role="img" aria-label="${esc(aria)}"><span class="pair-connector" style="left:${Math.min(before, after)}%;width:${Math.abs(delta)}%"></span><span class="pair-point before" style="left:${before}%"></span><span class="pair-point after" style="left:${after}%"></span></div><div class="pair-values"><span><i class="pair-symbol before" aria-hidden="true"></i>${t.start} <strong>${prefix}${before}%</strong></span><span><i class="pair-symbol after" aria-hidden="true"></i>${t.end} <strong>${prefix}${after}%</strong></span><span class="pair-delta">${prefix}${change} ${t.points}</span></div></div>`;
     }).join('');
-    const table = `<details class="chart-table"><summary>查看图表数据</summary><table><thead><tr><th>项目</th><th>起点（%）</th><th>终点（%）</th><th>变化（百分点）</th></tr></thead><tbody>${data.rows.map(r => { const delta = Number(r.after) - Number(r.before); return `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${esc(r.before)}</td><td>${r.approx?'≈':''}${esc(r.after)}</td><td>${r.approx?'≈':''}${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</td></tr>`; }).join('')}</tbody></table></details>`;
+    const tableHead = lang === 'zh-CN' ? `<th>项目</th><th>起点（%）</th><th>终点（%）</th><th>变化（百分点）</th>` : `<th>${t.item}</th><th>${t.start} (%)</th><th>${t.end} (%)</th><th>${t.change} (${t.points})</th>`;
+    const table = `<details class="chart-table"><summary>${t.chartData}</summary><table><thead><tr>${tableHead}</tr></thead><tbody>${data.rows.map(r => { const delta = Number(r.after) - Number(r.before); return `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${esc(r.before)}</td><td>${r.approx?'≈':''}${esc(r.after)}</td><td>${r.approx?'≈':''}${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</td></tr>`; }).join('')}</tbody></table></details>`;
     return `<figure class="data-figure">${header}<div class="paired-chart">${rows}<div class="pair-axis" aria-hidden="true"><span>0%</span><span>100%</span></div></div>${table}${note}</figure>`;
   }
   throw new Error(`Unknown paper-chart type: ${data.type}`);
@@ -106,10 +138,10 @@ function renderArchify(relative, title) {
   html = html.replace(/<link rel="preconnect" href="https:\/\/fonts\.gstatic\.com"[^>]*>/g, '')
     .replace(/<link href="https:\/\/fonts\.googleapis\.com[^>]*>/g, '')
     .replace(/<noscript>\s*<link href="https:\/\/fonts\.googleapis\.com[^>]*>\s*<\/noscript>/g, '');
-  return `<details class="archify-disclosure"><summary>展开辅助交互图：${esc(title)} <span>节点聚焦与路径探索</span></summary><figure class="archify-figure"><iframe title="${esc(title)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="lazy"></iframe><figcaption>交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。</figcaption></figure></details>`;
+  return `<details class="archify-disclosure"><summary>${t.openDiagram}${esc(title)} <span>${t.explore}</span></summary><figure class="archify-figure"><iframe title="${esc(title)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="lazy"></iframe><figcaption>${t.diagramNote}</figcaption></figure></details>`;
 }
 
-let prepared = source;
+let prepared = languageMarker ? source.slice(languageMarker[0].length) : source;
 let heroMap = null;
 prepared = prepared.replace(/```paper-map\s*\n([\s\S]*?)\n```/g, (_, json) => {
   const data = JSON.parse(json);
@@ -148,10 +180,10 @@ body = body.replace(/<h2>([\s\S]*?)<\/h2>/g, (_, heading) => {
 const title = (body.match(/<h1>([\s\S]*?)<\/h1>/) || [,'Paper Reading'])[1].replace(/<[^>]*>/g,'');
 body = body.replace(/<h1>[\s\S]*?<\/h1>/, '');
 const nav = sections.map(s => `<a href="#${s.id}">${esc(s.heading)}</a>`).join('');
-const heroVisual = heroMap ? `<div class="hero-map"><p class="hero-map-title">论文全局图 <span>01 — ${String(heroMap.items.length).padStart(2, '0')}</span></p><ol>${heroMap.items.map(x => `<li><span class="hero-map-index">${esc(x.number)}</span><div><div class="hero-map-heading"><strong>${esc(x.label)}</strong>${x.signal ? `<b>${esc(x.signal)}</b>` : ''}</div><p>${esc(x.text)}</p>${sourceBadge(x.source)}</div></li>`).join('')}</ol>${heroMap.outcome ? `<div class="hero-map-outcome"><span aria-hidden="true">↳</span><div><strong>${esc(heroMap.outcome)}</strong>${heroMap.outcomeSource ? sourceBadge(heroMap.outcomeSource) : ''}</div></div>` : ''}</div>` : '';
+const heroVisual = heroMap ? `<div class="hero-map"><p class="hero-map-title">${t.wholeMap} <span>01 — ${String(heroMap.items.length).padStart(2, '0')}</span></p><ol>${heroMap.items.map(x => `<li><span class="hero-map-index">${esc(x.number)}</span><div><div class="hero-map-heading"><strong>${esc(x.label)}</strong>${x.signal ? `<b>${esc(x.signal)}</b>` : ''}</div><p>${esc(x.text)}</p>${sourceBadge(x.source)}</div></li>`).join('')}</ol>${heroMap.outcome ? `<div class="hero-map-outcome"><span aria-hidden="true">↳</span><div><strong>${esc(heroMap.outcome)}</strong>${heroMap.outcomeSource ? sourceBadge(heroMap.outcomeSource) : ''}</div></div>` : ''}</div>` : '';
 const output = `<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${esc(title)}：从全局路径到机制与实验的一体化论文深读。"><title>${esc(title)} · 深读图谱</title><style>${katexCss}\n${css}</style></head>
-<body><a class="skip-link" href="#content">跳到正文</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>原文证据驱动的深读图谱</span><label class="source-toggle-label" for="show-sources">显示原文定位</label><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>${esc(title)}</h1><p class="hero-sub">${esc(heroMap?.thesis || '从全局路径到关键机制与实验证据。')}</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span>Paper Reading Skill · 单文件阅读版</span><a href="#top">返回顶部 ↑</a></footer></body></html>`;
+<html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${esc(title)}${lang === 'zh-CN' ? '：' : ': '}${t.description}"><title>${esc(title)} · ${t.titleSuffix}</title><style>${katexCss}\n${css}</style></head>
+<body><a class="skip-link" href="#content">${t.skip}</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>${t.topbar}</span><label class="source-toggle-label" for="show-sources">${t.showSources}</label><a href="#content">${t.startReading} ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">DEEP READING ATLAS</p><h1>${esc(title)}</h1><p class="hero-sub">${esc(heroMap?.thesis || t.defaultThesis)}</p><a class="hero-link" href="#section-1">${t.enter} <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="${t.nav}"><div class="toc-title">${t.route}</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span>Paper Reading Skill · ${t.footer}</span><a href="#top">${t.back} ↑</a></footer></body></html>`;
 const cleanOutput = output.replace(/[ \t]+$/gm, '');
 fs.writeFileSync(outputPath, cleanOutput);
 console.log(`Built ${outputPath} (${Buffer.byteLength(cleanOutput)} bytes, ${sections.length} sections, ${slots.length} visuals)`);
