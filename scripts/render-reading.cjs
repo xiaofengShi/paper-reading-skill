@@ -43,6 +43,12 @@ const localFile = relative => {
   if (!absolute.startsWith(sourceDir + path.sep)) throw new Error(`Visual must stay beside source: ${relative}`);
   return absolute;
 };
+const imageData = relative => {
+  const file = localFile(relative);
+  const mime = file.endsWith('.webp') ? 'image/webp' : file.endsWith('.png') ? 'image/png' : null;
+  if (!mime) throw new Error(`Unsupported image: ${relative}`);
+  return `data:${mime};base64,${fs.readFileSync(file).toString('base64')}`;
+};
 const sourceBadge = source => `<span class="source-badge">${esc(source)}</span>`;
 
 function renderMap(data) {
@@ -122,18 +128,16 @@ prepared = prepared.replace(/（PDF[^）]+）/g, sourceRef);
 prepared = prepared.replace(/\(PDF[^)]+\)/g, sourceRef);
 prepared = prepared.replace(/，PDF pp?\.\s*\d+(?:[–-]\d+)?(?=。)/g, sourceRef);
 prepared = prepared.replace(/PDF pp?\.\s*\d+(?:[–-]\d+)?/g, sourceRef);
+prepared = prepared.replace(/^!\[([^\]\n]*)\]\(([^)\n]+)\)\r?\n\r?\n\*([^\n]+)\*$/gm, (_, alt, relative, caption) =>
+  slot(`<figure class="paper-figure"><img src="${imageData(relative)}" alt="${esc(alt)}" loading="lazy" decoding="async"><figcaption>${marked.parseInline(caption, {gfm:true})}</figcaption></figure>`));
 let body = marked.parse(prepared, {gfm:true});
 slots.forEach((html, i) => { body = body.replace(`<p>PAPER_READING_SLOT_${i}_END</p>`, html); });
 if (/PAPER_READING_SLOT_\d+_END/.test(body)) throw new Error('Unresolved visual slot');
 inlineSlots.forEach((html, i) => { body = body.replaceAll(`PAPERREADINGINLINE${i}END`, html); });
 if (/PAPERREADINGINLINE\d+END/.test(body)) throw new Error('Unresolved inline math slot');
 body = body.replace(/<img src="([^"]+)" alt="([^"]*)">/g, (_, relative, alt) => {
-  const file = localFile(relative);
-  const mime = file.endsWith('.webp') ? 'image/webp' : file.endsWith('.png') ? 'image/png' : null;
-  if (!mime) throw new Error(`Unsupported image: ${relative}`);
-  return `<img src="data:${mime};base64,${fs.readFileSync(file).toString('base64')}" alt="${alt}" loading="lazy" decoding="async">`;
+  return `<img src="${imageData(relative)}" alt="${alt}" loading="lazy" decoding="async">`;
 });
-body = body.replace(/<p>(<img [^>]+>)<\/p>\s*<p><em>([\s\S]*?)<\/em><\/p>/g, (_, img, caption) => `<figure class="paper-figure">${img}<figcaption>${caption}</figcaption></figure>`);
 const sections = [];
 body = body.replace(/<h2>([\s\S]*?)<\/h2>/g, (_, heading) => {
   const id = `section-${sections.length + 1}`;

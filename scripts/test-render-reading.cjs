@@ -70,3 +70,31 @@ $$x=y+z$$
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('a figure caption with bold text closes before the next chapter', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-figure-test-'));
+  try {
+    fs.writeFileSync(path.join(dir, 'pixel.png'), Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl7ZQAAAABJRU5ErkJggg==', 'base64'));
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    fs.writeFileSync(source, `# Test Paper
+
+## 01 / Figure
+
+![Figure 13](pixel.png)
+
+*原论文 Fig. 13，PDF p. 25。历史**上下文**决定接下来的一轮。*
+
+## 02 / Next chapter
+
+This chapter stays upright.
+`);
+    execFileSync(process.execPath, [renderer, source, output]);
+    const html = fs.readFileSync(output, 'utf8');
+    assert.match(html, /<figure class="paper-figure"><img src="data:image\/png;base64,[^"]+" alt="Figure 13"[^>]*><figcaption>原论文 Fig\. 13<span class="source-ref">，PDF p\. 25<\/span>。历史<strong>上下文<\/strong>决定接下来的一轮。<\/figcaption><\/figure>\s*<h2 id="section-2">02 \/ Next chapter<\/h2>/);
+    assert.doesNotMatch(html, /<em>/);
+    assert.match(html, /<p>This chapter stays upright\.<\/p>/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
