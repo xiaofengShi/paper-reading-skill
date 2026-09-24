@@ -23,6 +23,10 @@ test('the published homepages expose both languages, three complete readings, an
       assert.ok(html.includes(`${name}-deep-read.html`), `${file} is missing ${name}`);
     }
     assert.ok(html.includes('href="https://github.com/xiaofengShi/paper-reading-skill"'));
+    for (const resource of ['reading-quality.md', 'reader-tasks.md']) {
+      assert.ok(html.includes(`href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/${resource}"`));
+    }
+    assert.ok(html.includes('skills add xiaofengShi/paper-reading-skill --skill paper-reading --agent codex --copy --yes'));
     assert.ok(html.includes('rel="canonical"'));
     assert.ok(html.includes('hreflang="zh-CN"'));
     assert.ok(html.includes('hreflang="en"'));
@@ -36,6 +40,13 @@ test('the published homepages expose both languages, three complete readings, an
     }
   }
   assert.ok(fs.existsSync(path.join(docs, 'assets/atlas-preview.png')));
+});
+
+test('the published reader audit links its quality resources to GitHub', () => {
+  const html = fs.readFileSync(path.join(docs, 'reader-audit.html'), 'utf8');
+  for (const resource of ['reading-quality.md', 'reader-tasks.md']) {
+    assert.ok(html.includes(`href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/${resource}"`));
+  }
 });
 
 test('editorial maps explain paper relationships without depicting dead chapter controls', () => {

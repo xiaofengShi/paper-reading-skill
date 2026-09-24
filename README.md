@@ -36,7 +36,16 @@ The workflow combines established reading and knowledge-mapping ideas with a pap
 
 These ideas become the five reader-facing layers above: global map, main path, mechanism, experiment atlas, and synthesis. The test of a useful deep read is whether someone can explain the paper's central mechanism and say which evidence supports each important claim, without hunting through the PDF for missing essentials. This is the project's method design, not a claim that the published examples have been validated in a reader study.
 
+The [public reading-quality checks](evals/reading-quality.md) turn that intent into release gates for source coverage, scientific fidelity, claim-to-evidence links, reader completeness, and offline delivery. The [reader tasks and answer keys](evals/reader-tasks.md) make the three published examples testable by someone who did not write them. A renderer test or an author reviewing their own page is not an independent comprehension study.
+
 ## Get started
+
+**Quick try in a Codex project:** from your project directory, install the skill with the [skills CLI](https://github.com/vercel-labs/skills), then check its bundled renderer. This creates a project-local `.agents/skills/paper-reading` copy.
+
+```bash
+npx --yes skills add xiaofengShi/paper-reading-skill --skill paper-reading --agent codex --copy --yes
+(cd .agents/skills/paper-reading && npm ci && npm run doctor)
+```
 
 **Codex and Kimi Code:** install the repository as a personal skill, then install its rendering dependencies. Node.js 20 or newer is required for the bundled HTML renderer.
 
@@ -46,6 +55,8 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.agents/
 (cd "$HOME/.agents/skills/paper-reading" && npm ci)
 ```
 
+Check the installed renderer with `(cd "$HOME/.agents/skills/paper-reading" && npm run doctor)`. It builds a complete Transformer example in a temporary directory and checks its language, math, navigation, and embedded diagram.
+
 **Claude Code:** use its personal skills directory instead.
 
 ```bash
@@ -53,6 +64,8 @@ mkdir -p "$HOME/.claude/skills"
 git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/skills/paper-reading"
 (cd "$HOME/.claude/skills/paper-reading" && npm ci)
 ```
+
+For this installation, run `(cd "$HOME/.claude/skills/paper-reading" && npm run doctor)` before starting a new agent session.
 
 If the skill is already installed, update that checkout and its renderer dependencies instead of cloning over it. For Codex or Kimi Code, run `git -C "$HOME/.agents/skills/paper-reading" pull --ff-only` followed by `(cd "$HOME/.agents/skills/paper-reading" && npm ci)`; for Claude Code, use the same commands with `$HOME/.claude/skills/paper-reading`.
 
@@ -70,6 +83,7 @@ To rebuild all published examples locally:
 
 ```bash
 npm ci
+npm run doctor
 npm run build:examples
 npm test
 ```

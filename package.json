@@ -9,9 +9,10 @@
     "build:examples": "node scripts/render-reading.cjs examples/mimo-v2.6-deep-read.md docs/mimo-v2.6-deep-read.html && node scripts/render-reading.cjs examples/attention-is-all-you-need-deep-read.md docs/attention-is-all-you-need-deep-read.html && node scripts/render-reading.cjs examples/deepseek-v4.1-flash-deep-read.md docs/deepseek-v4.1-flash-deep-read.html",
     "build:audit": "node scripts/build-reader-audit.cjs",
     "check:audit": "node scripts/build-reader-audit.cjs --check",
+    "doctor": "node scripts/doctor.cjs",
     "test": "node --test scripts/test-*.cjs"
   },
-  "devDependencies": {
+  "dependencies": {
     "katex": "0.16.22",
     "marked": "17.0.5"
   }

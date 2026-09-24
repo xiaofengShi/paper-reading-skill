@@ -36,7 +36,16 @@ MiMo 样例基于一份 44 页的本地 PDF 编写，仓库不分发该 PDF。�
 
 这三项原则形成上文的五层阅读顺序：全局图、主路径、机制、实验图谱和综合理解。衡量深读是否有用，要看读者能否说清核心机制、指出重要结论由哪些证据支撑，而不必为补全关键解释反复查 PDF。这是本项目的方法设计；现有样例尚未经独立读者研究验证。
 
+[公开的深读质量检查](evals/reading-quality.md)将来源覆盖、科学事实、主张与证据的对应、独立可读性和离线交付变成交付门槛。[三篇样例的读者题目与答案](evals/reader-tasks.md)可供未参与编写的人测试理解效果。渲染器测试通过或作者自查，都不等于完成了独立读者研究。
+
 ## 开始使用
+
+**在 Codex 项目里快速试用：** 在项目目录运行 [skills CLI](https://github.com/vercel-labs/skills)，然后检查内置渲染器。安装结果位于项目内的 `.agents/skills/paper-reading`。
+
+```bash
+npx --yes skills add xiaofengShi/paper-reading-skill --skill paper-reading --agent codex --copy --yes
+(cd .agents/skills/paper-reading && npm ci && npm run doctor)
+```
 
 **Codex 与 Kimi Code：** 把仓库安装为个人 skill，再安装渲染依赖。仓库附带的 HTML 渲染器需要 Node.js 20 或更新版本。
 
@@ -46,6 +55,8 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.agents/
 (cd "$HOME/.agents/skills/paper-reading" && npm ci)
 ```
 
+运行 `(cd "$HOME/.agents/skills/paper-reading" && npm run doctor)` 检查安装。它会在临时目录生成一份完整的 Transformer 样例，并检查语种、公式、导航和内嵌图。
+
 **Claude Code：** 改用它的个人 skill 目录。
 
 ```bash
@@ -53,6 +64,8 @@ mkdir -p "$HOME/.claude/skills"
 git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/skills/paper-reading"
 (cd "$HOME/.claude/skills/paper-reading" && npm ci)
 ```
+
+此安装路径运行 `(cd "$HOME/.claude/skills/paper-reading" && npm run doctor)`，然后再打开新的 agent 会话。
 
 如果已经安装，直接更新已有目录及依赖，不要在同名目录上再次 `git clone`。Codex 或 Kimi Code 运行 `git -C "$HOME/.agents/skills/paper-reading" pull --ff-only`，再运行 `(cd "$HOME/.agents/skills/paper-reading" && npm ci)`；Claude Code 把路径换成 `$HOME/.claude/skills/paper-reading`。
 
@@ -70,6 +83,7 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/
 
 ```bash
 npm ci
+npm run doctor
 npm run build:examples
 npm test
 ```

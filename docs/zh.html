@@ -65,20 +65,27 @@
 <li><strong>解读能否回到论文核查？</strong> <a href="https://aclanthology.org/2024.findings-emnlp.780/">SciDoc2Diagrammer-MAF</a>指出生成的科学图示可能遗漏信息或偏离原文。本项目据此要求核对关键图、公式、数字和箭头，并把每项实验的设置、对照、指标与结果放在一起。本项目并未实现该论文的图示生成算法。</li>
 </ol>
 <p>这三项原则形成上文的五层阅读顺序：全局图、主路径、机制、实验图谱和综合理解。衡量深读是否有用，要看读者能否说清核心机制、指出重要结论由哪些证据支撑，而不必为补全关键解释反复查 PDF。这是本项目的方法设计；现有样例尚未经独立读者研究验证。</p>
+<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reading-quality.md">公开的深读质量检查</a>将来源覆盖、科学事实、主张与证据的对应、独立可读性和离线交付变成交付门槛。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reader-tasks.md">三篇样例的读者题目与答案</a>可供未参与编写的人测试理解效果。渲染器测试通过或作者自查，都不等于完成了独立读者研究。</p>
 
 </section>
 <section class="content-section section-4" id="section-4">
 <h2>开始使用</h2>
+<p><strong>在 Codex 项目里快速试用：</strong> 在项目目录运行 <a href="https://github.com/vercel-labs/skills">skills CLI</a>，然后检查内置渲染器。安装结果位于项目内的 <code>.agents/skills/paper-reading</code>。</p>
+<pre><code class="language-bash">npx --yes skills add xiaofengShi/paper-reading-skill --skill paper-reading --agent codex --copy --yes
+(cd .agents/skills/paper-reading &amp;&amp; npm ci &amp;&amp; npm run doctor)
+</code></pre>
 <p><strong>Codex 与 Kimi Code：</strong> 把仓库安装为个人 skill，再安装渲染依赖。仓库附带的 HTML 渲染器需要 Node.js 20 或更新版本。</p>
 <pre><code class="language-bash">mkdir -p &quot;$HOME/.agents/skills&quot;
 git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.agents/skills/paper-reading&quot;
 (cd &quot;$HOME/.agents/skills/paper-reading&quot; &amp;&amp; npm ci)
 </code></pre>
+<p>运行 <code>(cd &quot;$HOME/.agents/skills/paper-reading&quot; &amp;&amp; npm run doctor)</code> 检查安装。它会在临时目录生成一份完整的 Transformer 样例，并检查语种、公式、导航和内嵌图。</p>
 <p><strong>Claude Code：</strong> 改用它的个人 skill 目录。</p>
 <pre><code class="language-bash">mkdir -p &quot;$HOME/.claude/skills&quot;
 git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.claude/skills/paper-reading&quot;
 (cd &quot;$HOME/.claude/skills/paper-reading&quot; &amp;&amp; npm ci)
 </code></pre>
+<p>此安装路径运行 <code>(cd &quot;$HOME/.claude/skills/paper-reading&quot; &amp;&amp; npm run doctor)</code>，然后再打开新的 agent 会话。</p>
 <p>如果已经安装，直接更新已有目录及依赖，不要在同名目录上再次 <code>git clone</code>。Codex 或 Kimi Code 运行 <code>git -C &quot;$HOME/.agents/skills/paper-reading&quot; pull --ff-only</code>，再运行 <code>(cd &quot;$HOME/.agents/skills/paper-reading&quot; &amp;&amp; npm ci)</code>；Claude Code 把路径换成 <code>$HOME/.claude/skills/paper-reading</code>。</p>
 <p>重新打开 agent 会话，附上 PDF 或给出可访问的论文链接，然后说：<strong>“用中文深入阅读这篇论文，给我一份可视化 HTML 文档，讲清主线、重要公式和实验。”</strong> 也可以明确要求英文。Skill 默认遵循用户请求的语种；没有任何语种线索时使用英文。Skill 名称是 <code>paper-reading</code>；也可以在 Codex 输入 <code>$paper-reading</code>，在 Claude Code 输入 <code>/paper-reading</code>，在 Kimi Code 输入 <code>/skill:paper-reading</code>。Agent 必须能访问论文并完成科学阅读；本项目提供阅读流程与渲染器，并非把任意 PDF 自动转换成已核实解读的服务。</p>
 <p>只有需要快筛时才要求概览；需要审稿或与自己的研究比较时，再要求额外视角。普通读论文请求以理解论文为主。</p>
@@ -90,6 +97,7 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.cl
 <p>仓库附带的<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">渲染器</a>把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 <code>&lt;!-- paper-reading-lang: en --&gt;</code> 或 <code>&lt;!-- paper-reading-lang: zh-CN --&gt;</code>，导航和图表标签也据此选择语种。Archify 可以呈现可选的交互结构图，但构建不依赖 Archify 或其他本地 skill。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/attention-is-all-you-need-deep-read.md">Transformer</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/deepseek-v4.1-flash-deep-read.md">DeepSeek</a>和<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">MiMo</a>的 Markdown 与图形输入都是构建材料，不要求读者分别打开。</p>
 <p>本地重建所有已发布样例：</p>
 <pre><code class="language-bash">npm ci
+npm run doctor
 npm run build:examples
 npm test
 </code></pre>

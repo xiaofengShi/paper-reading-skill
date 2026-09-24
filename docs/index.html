@@ -65,20 +65,27 @@
 <li><strong>Can a reader check the explanation against the paper?</strong> <a href="https://aclanthology.org/2024.findings-emnlp.780/">SciDoc2Diagrammer-MAF</a> reports that generated scientific diagrams can be incomplete or unfaithful to their source. This project takes that as a fidelity check: significant figures, formulas, numbers, and arrows must be checked against the source, and each experiment is read with its setup, comparator, metric, and result. It does not implement that paper&#39;s diagram-generation algorithm.</li>
 </ol>
 <p>These ideas become the five reader-facing layers above: global map, main path, mechanism, experiment atlas, and synthesis. The test of a useful deep read is whether someone can explain the paper&#39;s central mechanism and say which evidence supports each important claim, without hunting through the PDF for missing essentials. This is the project&#39;s method design, not a claim that the published examples have been validated in a reader study.</p>
+<p>The <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reading-quality.md">public reading-quality checks</a> turn that intent into release gates for source coverage, scientific fidelity, claim-to-evidence links, reader completeness, and offline delivery. The <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reader-tasks.md">reader tasks and answer keys</a> make the three published examples testable by someone who did not write them. A renderer test or an author reviewing their own page is not an independent comprehension study.</p>
 
 </section>
 <section class="content-section section-4" id="section-4">
 <h2>Get started</h2>
+<p><strong>Quick try in a Codex project:</strong> from your project directory, install the skill with the <a href="https://github.com/vercel-labs/skills">skills CLI</a>, then check its bundled renderer. This creates a project-local <code>.agents/skills/paper-reading</code> copy.</p>
+<pre><code class="language-bash">npx --yes skills add xiaofengShi/paper-reading-skill --skill paper-reading --agent codex --copy --yes
+(cd .agents/skills/paper-reading &amp;&amp; npm ci &amp;&amp; npm run doctor)
+</code></pre>
 <p><strong>Codex and Kimi Code:</strong> install the repository as a personal skill, then install its rendering dependencies. Node.js 20 or newer is required for the bundled HTML renderer.</p>
 <pre><code class="language-bash">mkdir -p &quot;$HOME/.agents/skills&quot;
 git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.agents/skills/paper-reading&quot;
 (cd &quot;$HOME/.agents/skills/paper-reading&quot; &amp;&amp; npm ci)
 </code></pre>
+<p>Check the installed renderer with <code>(cd &quot;$HOME/.agents/skills/paper-reading&quot; &amp;&amp; npm run doctor)</code>. It builds a complete Transformer example in a temporary directory and checks its language, math, navigation, and embedded diagram.</p>
 <p><strong>Claude Code:</strong> use its personal skills directory instead.</p>
 <pre><code class="language-bash">mkdir -p &quot;$HOME/.claude/skills&quot;
 git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.claude/skills/paper-reading&quot;
 (cd &quot;$HOME/.claude/skills/paper-reading&quot; &amp;&amp; npm ci)
 </code></pre>
+<p>For this installation, run <code>(cd &quot;$HOME/.claude/skills/paper-reading&quot; &amp;&amp; npm run doctor)</code> before starting a new agent session.</p>
 <p>If the skill is already installed, update that checkout and its renderer dependencies instead of cloning over it. For Codex or Kimi Code, run <code>git -C &quot;$HOME/.agents/skills/paper-reading&quot; pull --ff-only</code> followed by <code>(cd &quot;$HOME/.agents/skills/paper-reading&quot; &amp;&amp; npm ci)</code>; for Claude Code, use the same commands with <code>$HOME/.claude/skills/paper-reading</code>.</p>
 <p>Start a new agent session, attach a PDF or give an accessible paper URL, and ask: <strong>“Read this paper deeply in English. Give me one visual HTML reading document that explains the main path, important equations, and experiments.”</strong> Replace “in English” with your preferred language. If you give no language cue, the skill defaults to English; an ordinary request in Chinese produces Chinese output. The skill is named <code>paper-reading</code>; you can also invoke it explicitly as <code>$paper-reading</code> in Codex, <code>/paper-reading</code> in Claude Code, or <code>/skill:paper-reading</code> in Kimi Code. The agent needs access to the paper and must do the scientific reading; this repository supplies the workflow and renderer, not a service that automatically converts an arbitrary PDF into a verified explanation.</p>
 <p>Ask for a quick scan only when you want triage. Ask for a review or research comparison when you want those additional lenses. An ordinary request to read a paper stays understanding-first.</p>
@@ -90,6 +97,7 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.cl
 <p>The bundled <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">renderer</a> turns a Markdown audit source and local visuals into a standalone HTML file with embedded images, diagrams, KaTeX math, and fonts. Every source begins with an explicit language marker, <code>&lt;!-- paper-reading-lang: en --&gt;</code> or <code>&lt;!-- paper-reading-lang: zh-CN --&gt;</code>, which also sets navigation and chart labels. Archify can render optional interactive structure views, but neither Archify nor another locally installed skill is required. The <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/attention-is-all-you-need-deep-read.md">Transformer</a>, <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/deepseek-v4.1-flash-deep-read.md">DeepSeek</a>, and <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">MiMo</a> Markdown sources and visual inputs are build materials, not separate reading pages.</p>
 <p>To rebuild all published examples locally:</p>
 <pre><code class="language-bash">npm ci
+npm run doctor
 npm run build:examples
 npm test
 </code></pre>
