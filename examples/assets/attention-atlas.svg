@@ -5,8 +5,13 @@
     text{font-family:Inter,Arial,sans-serif;fill:#203942}.small{font-size:15px;fill:#596b70}.caps{font-size:15px;font-weight:800;letter-spacing:2px;fill:#a05b38}.label{font-size:18px;font-weight:750}.large{font-size:27px;font-weight:800}.value{font-size:25px;font-weight:850;fill:#155f59}.topword{fill:#fff}.topmeta{fill:#d4e8df}.arrow{stroke:#6f9f91;stroke-width:3;fill:none;marker-end:url(#head)}
   </style><marker id="head" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9" fill="#6f9f91"/></marker></defs>
   <rect width="1200" height="730" fill="#fffefa"/><rect width="1200" height="76" fill="#173b40"/><text x="38" y="49" class="topword" font-size="24" font-weight="850" letter-spacing="2">PAPER READING</text><text x="920" y="47" class="topmeta" font-size="16">TRANSFORMER / DEEP READ</text>
-  <rect x="0" y="76" width="255" height="654" fill="#f3f8f5"/><line x1="255" y1="76" x2="255" y2="730" stroke="#d8e7e0" stroke-width="2"/><text x="35" y="133" class="caps">READING PATH</text>
-  <rect x="20" y="160" width="215" height="58" rx="8" fill="#e0f2ea"/><text x="39" y="197" class="label">01  Whole argument</text><text x="39" y="263" class="label">02  Encoder → decoder</text><text x="39" y="324" class="label">03  Attention equation</text><text x="39" y="385" class="label">04  Parallelism trade-off</text><text x="39" y="446" class="label">05  Translation tests</text><text x="39" y="507" class="label">06  Ablations &amp; parsing</text>
+  <rect x="0" y="76" width="255" height="654" fill="#f3f8f5"/><line x1="255" y1="76" x2="255" y2="730" stroke="#d8e7e0" stroke-width="2"/>
+  <text x="30" y="133" class="caps">PAPER QUESTION</text>
+  <text x="30" y="180" class="label">Can transduction</text><text x="30" y="208" class="label">work without</text><text x="30" y="236" class="label">recurrence?</text>
+  <path d="M65 258V302" class="arrow"/><text x="30" y="340" class="caps">DESIGN ANSWER</text>
+  <text x="30" y="388" class="label">Attention mixes</text><text x="30" y="416" class="label">token context;</text><text x="30" y="444" class="label">position preserves</text><text x="30" y="472" class="label">order information.</text>
+  <path d="M65 493V538" class="arrow"/><text x="30" y="578" class="caps">TESTED WITH</text>
+  <text x="30" y="621" class="label">Translation BLEU</text><text x="30" y="649" class="label">and ablations</text><text x="30" y="677" class="small">See evidence at right</text>
   <text x="295" y="132" class="caps">GLOBAL MAP</text><text x="295" y="174" class="large">From parallel token mixing to translation evidence</text>
   <rect x="295" y="215" width="155" height="81" rx="11" fill="#edf8f3" stroke="#b3d9c9"/><text x="320" y="251" class="label">Source tokens</text><text x="320" y="276" class="small">+ position</text>
   <path d="M451 255H480" class="arrow"/><rect x="489" y="215" width="155" height="81" rx="11" fill="#e3f3ec" stroke="#a6d0bf"/><text x="511" y="250" class="label">Encoder ×6</text><text x="511" y="275" class="small">self-attn + FFN</text>

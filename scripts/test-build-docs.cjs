@@ -6,13 +6,17 @@ const test = require('node:test');
 const docs = path.resolve(__dirname, '../docs');
 
 test('the published homepages expose both languages, three complete readings, and working local links', () => {
-  for (const [file, lang, switchTarget, phrase] of [
-    ['index.html', 'en', 'zh.html', 'Explore complete readings'],
-    ['zh.html', 'zh-CN', './', '阅读完整样例'],
+  for (const [file, lang, switchTarget, phrase, method, install] of [
+    ['index.html', 'en', 'zh.html', 'Explore complete readings', 'The reading method', 'Get started'],
+    ['zh.html', 'zh-CN', './', '阅读完整样例', '论文阅读方法', '开始使用'],
   ]) {
     const html = fs.readFileSync(path.join(docs, file), 'utf8');
     assert.match(html, new RegExp(`<html lang="${lang}">`));
     assert.ok(html.includes(phrase));
+    assert.ok(html.includes(`<h2>${method}</h2>`));
+    assert.ok(html.includes(`<h2>${install}</h2>`));
+    assert.ok(html.includes(`href="#section-3">${method}</a>`));
+    assert.ok(html.includes(`href="#section-4">${install}</a>`));
     assert.ok(html.includes(`href="${switchTarget}"`));
     assert.ok(html.includes('href="#section-1"'));
     for (const name of ['mimo-v2.6', 'attention-is-all-you-need', 'deepseek-v4.1-flash']) {
@@ -32,4 +36,21 @@ test('the published homepages expose both languages, three complete readings, an
     }
   }
   assert.ok(fs.existsSync(path.join(docs, 'assets/atlas-preview.png')));
+});
+
+test('editorial maps explain paper relationships without depicting dead chapter controls', () => {
+  for (const file of [
+    path.join(docs, 'assets/atlas-preview.svg'),
+    path.resolve(docs, '../examples/assets/attention-atlas.svg'),
+    path.resolve(docs, '../examples/assets/deepseek-atlas.svg'),
+  ]) {
+    const svg = fs.readFileSync(file, 'utf8');
+    assert.doesNotMatch(svg, /READING PATH|0[1-7]\s+(?:Whole|The whole|RL learning|GRS|Runtime|MOPD2|Experiments|CED|CSA2|Replay|Training|Evaluation)/);
+    assert.match(svg, /PAPER QUESTION|SYSTEM QUESTION/);
+  }
+  for (const file of ['attention-is-all-you-need-deep-read.html', 'deepseek-v4.1-flash-deep-read.html']) {
+    const html = fs.readFileSync(path.join(docs, file), 'utf8');
+    assert.match(html, /<nav class="toc"/);
+    assert.match(html, /href="#section-1"/);
+  }
 });

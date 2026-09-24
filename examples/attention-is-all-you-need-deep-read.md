@@ -20,9 +20,9 @@
 
 The contribution is a **model architecture**, not an attention score alone. Earlier sequence-to-sequence systems could use attention while retaining recurrent encoder and decoder layers. The Transformer replaces those layers with attention plus a position-wise network. That permits all source positions, and all target positions during teacher-forced training, to be processed together. At generation time the decoder remains autoregressive: it must predict the next target token from the prefix already produced. (PDF §§1–3)
 
-The editorial diagram below is a map of that argument. The top row follows data through the encoder and decoder; the mechanism card names the computation to unpack; the evidence card points to test-set results and a controlled development-set comparison. The arrows describe data flow, **not** the order of experiments. The chart-like typography lists exact values rather than implying an unreported measurement. (PDF Fig. 1, Eq. 1, Tables 2–3)
+The editorial diagram starts with the paper's question: can sequence transduction work without recurrent layers? Its answer links attention-based token mixing and position information to the encoder–decoder data path. The lower cards connect that design to the attention calculation and the translation tests and ablation used to examine it. The top-row arrows describe data flow. The listed BLEU values are exact reported results, with their settings explained below. (PDF Fig. 1, Eq. 1, Tables 2–3)
 
-![Editorial reading map: source tokens pass through six encoder layers; shifted target tokens enter six decoder layers, which use masked self-attention and encoder–decoder attention before predicting the next token.](assets/attention-atlas.svg)
+![Whole-paper concept map: the question of transduction without recurrence leads to attention and position information, an encoder–decoder data path, and translation evidence.](assets/attention-atlas.svg)
 
 *Editorial diagram based on the paper's Fig. 1 and Tables 2–3; the numbers are the paper's reported BLEU values. The full settings and comparisons appear in §§05–06 below.*
 

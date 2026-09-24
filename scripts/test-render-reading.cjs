@@ -90,8 +90,8 @@ test('MiMo reader leads with the paper, includes Eq. 1, and names both Fig. 3 re
     assert.match(html, /<span class="figure-kicker">本文重绘 · 原论文 Fig\. 3 左图<\/span>/);
     assert.match(html, /id="original-fig-3"/);
     assert.match(html, /这一阶段留下什么/);
-    assert.match(html, /<strong>原论文 Fig\. 7 把两种评分画成并行分支。<\/strong>[\s\S]*?<\/p>\s*<figure class="paper-figure">/);
-    assert.match(html, /<strong>原论文 Fig\. 13 分三层展示这一过程。<\/strong>[\s\S]*?<\/p>\s*<figure class="paper-figure">/);
+    assert.match(html, /<strong>原论文 Fig\. 7 把两种评分画成并行分支。<\/strong>[\s\S]*?<\/p>\s*<figure class="paper-figure"><div class="figure-hint">/);
+    assert.match(html, /<strong>原论文 Fig\. 13 分三层展示这一过程。<\/strong>[\s\S]*?<\/p>\s*<figure class="paper-figure"><div class="figure-hint">/);
     assert.doesNotMatch(html, /原文参数表的一处标注不一致/);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
@@ -119,7 +119,7 @@ This chapter stays upright.
 `);
     execFileSync(process.execPath, [renderer, source, output]);
     const html = fs.readFileSync(output, 'utf8');
-    assert.match(html, /<figure class="paper-figure"><img src="data:image\/png;base64,[^"]+" alt="Figure 13"[^>]*><figcaption>原论文 Fig\. 13<span class="source-ref">，PDF p\. 25<\/span>。历史<strong>上下文<\/strong>决定接下来的一轮。<\/figcaption><\/figure>\s*<h2 id="section-2">02 \/ Next chapter<\/h2>/);
+    assert.match(html, /<figure class="paper-figure"><div class="figure-hint">↔ 横向滚动查看图内细节<\/div><div class="figure-viewport" tabindex="0" aria-label="↔ 横向滚动查看图内细节"><img src="data:image\/png;base64,[^"]+" alt="Figure 13"[^>]*><\/div><figcaption>原论文 Fig\. 13<span class="source-ref">，PDF p\. 25<\/span>。历史<strong>上下文<\/strong>决定接下来的一轮。<\/figcaption><\/figure>\s*<h2 id="section-2">02 \/ Next chapter<\/h2>/);
     assert.doesNotMatch(html, /<em>/);
     assert.match(html, /<p>This chapter stays upright\.<\/p>/);
   } finally {

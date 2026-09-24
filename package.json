@@ -1,4 +1,5 @@
 {
+  "name": "paper-reading",
   "private": true,
   "type": "commonjs",
   "scripts": {

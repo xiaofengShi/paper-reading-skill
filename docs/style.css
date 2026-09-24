@@ -70,13 +70,19 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
 .section-2 li::before { content: counter(item, decimal-leading-zero); position: absolute; top: 1.05rem; left: 1.25rem; color: #a64d27; font: 800 .85rem ui-monospace, SFMono-Regular, monospace; }
 .section-2 li strong { display: block; margin-bottom: .45rem; font-size: 1.03rem; }
 .section-2 li:nth-child(1), .section-2 li:nth-child(4) { background: #edf6f0; }
-.section-3 { padding: clamp(3.2rem, 6vw, 6rem); margin: 0 -1.25rem; background: #ecf5f0; }
-.section-3 h2 { margin-bottom: 1.6rem; }
-.section-3 > p:first-of-type { font-size: 1.08rem; }
-.section-3 pre { border-left: 4px solid #70c0a0; }
-.section-5 { background: linear-gradient(90deg, #fffefa, #f7faf7); }
-.section-6 { border-bottom: 0; }
-.section-6 p { font-size: .94rem; }
+.section-3 { background: linear-gradient(90deg, #fffefa, #f7faf7); }
+.section-3 ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0; padding: 0; list-style: none; counter-reset: method; }
+.section-3 li { position: relative; margin: 0; padding: 3.3rem 1.3rem 1.4rem; border: 1px solid var(--line); border-radius: 9px; background: var(--wash); counter-increment: method; }
+.section-3 li::before { content: counter(method, decimal-leading-zero); position: absolute; top: 1.1rem; left: 1.3rem; color: #a64d27; font: 800 .85rem ui-monospace, SFMono-Regular, monospace; }
+.section-3 li strong { display: block; margin-bottom: .6rem; font-size: 1.12rem; line-height: 1.35; }
+.section-3 > p:last-child { padding: 1.2rem 1.4rem; border-left: 3px solid var(--teal); background: #edf6f0; }
+.section-4 { padding: clamp(3.2rem, 6vw, 6rem); margin: 0 -1.25rem; background: #ecf5f0; }
+.section-4 h2 { margin-bottom: 1.6rem; }
+.section-4 > p:first-of-type { font-size: 1.08rem; }
+.section-4 pre { border-left: 4px solid #70c0a0; }
+.section-6 { background: linear-gradient(90deg, #fffefa, #f7faf7); }
+.section-7 { border-bottom: 0; }
+.section-7 p { font-size: .94rem; }
 .site-footer { display: flex; justify-content: space-between; gap: 2rem; padding: 2rem max(1.25rem, calc((100vw - 1220px) / 2)); color: #d6e6df; background: var(--deep); font-size: .82rem; }
 .site-footer a { color: #eaf7ee; }
 
@@ -88,6 +94,7 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
   .hero-visual { max-width: 760px; }
   .section-1 ul { grid-template-columns: 1fr; }
   .section-2 ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .section-3 ol { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
   .site-header { padding: .8rem 1rem; }
@@ -99,10 +106,10 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
   .content-section { padding: 3.5rem 0; }
   .section-2 ol { grid-template-columns: 1fr; }
   .section-2 li { min-height: 0; }
-  .section-3 { margin: 0 -1rem; padding: 3.4rem 1rem; }
+  .section-4 { margin: 0 -1rem; padding: 3.4rem 1rem; }
   .content-section pre code { white-space: pre-wrap; overflow-wrap: anywhere; }
   .site-footer { display: block; padding: 2rem 1rem; }
   .site-footer span { display: block; margin-bottom: .75rem; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .button:hover { transform: none; } }
-@media print { .site-header, .hero-actions, .site-footer { display: none; } .hero { display: block; min-height: 0; padding: 1rem 0; color: var(--ink); background: none; } .hero .eyebrow, .hero-copy > p:nth-of-type(2) { color: var(--ink); } .hero-visual { max-width: 50%; box-shadow: none; border-color: var(--line); } .content-section { break-inside: avoid; padding: 1.5rem 0; } .section-3 { margin: 0; padding: 1.5rem 0; background: none; } .section-2 li { min-height: 0; } }
+@media print { .site-header, .hero-actions, .site-footer { display: none; } .hero { display: block; min-height: 0; padding: 1rem 0; color: var(--ink); background: none; } .hero .eyebrow, .hero-copy > p:nth-of-type(2) { color: var(--ink); } .hero-visual { max-width: 50%; box-shadow: none; border-color: var(--line); } .content-section { break-inside: avoid; padding: 1.5rem 0; } .section-4 { margin: 0; padding: 1.5rem 0; background: none; } .section-2 li { min-height: 0; } }

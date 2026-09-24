@@ -48,7 +48,7 @@ for (const page of pages) {
   const lead = intro.text.replace(/^\*\*.+?\*\*\s*/, '');
   const description = summary.length > 190 ? `${summary.slice(0, 187)}…` : summary;
   const url = page.lang === 'en' ? site : `${site}zh.html`;
-  const nav = sections.slice(0, 3).map((section, index) => `<a href="#section-${index + 1}">${esc(section[0].text)}</a>`).join('');
+  const nav = [0, 2, 3].map(index => `<a href="#section-${index + 1}">${esc(sections[index][0].text)}</a>`).join('');
   const content = sections.map((section, index) => `<section class="content-section section-${index + 1}" id="section-${index + 1}">\n${rewriteLinks(marked.parser(section))}\n</section>`).join('\n');
   const html = `<!doctype html>
 <html lang="${page.lang}">

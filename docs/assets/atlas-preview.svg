@@ -14,15 +14,13 @@
   <text x="88" y="88" fill="#eaf7ef" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="2">PAPER READING</text>
   <text x="1068" y="88" fill="#b9e3d0" font-family="Arial, sans-serif" font-size="15" text-anchor="end">MIMO-V2.6  /  DEEP READ</text>
   <line x1="315" y1="111" x2="315" y2="752" stroke="#dce8e3" stroke-width="2"/>
-  <text x="90" y="164" fill="#b26036" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">READING PATH</text>
-  <g font-family="Arial, sans-serif" font-size="17" fill="#2d4b4e">
-    <rect x="78" y="187" width="217" height="55" rx="7" fill="#e7f3ed"/>
-    <text x="94" y="221" font-weight="700">01   The whole paper</text>
-    <text x="94" y="278">02   RL learning loop</text>
-    <text x="94" y="331">03   GRS and GAR</text>
-    <text x="94" y="384">04   Runtime system</text>
-    <text x="94" y="437">05   MOPD2</text>
-    <text x="94" y="490">06   Experiments</text>
+  <text x="90" y="164" fill="#b26036" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">PAPER QUESTION</text>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#2d4b4e">
+    <text x="90" y="215" font-weight="700">How does mixed</text><text x="90" y="242" font-weight="700">agent RL scale?</text>
+    <text x="90" y="316" fill="#a65934" font-size="13" font-weight="700" letter-spacing="2">MAIN OBSTACLES</text>
+    <text x="90" y="359">Reward quality</text><text x="90" y="395">Task diversity</text><text x="90" y="431">Long rollouts</text>
+    <text x="90" y="504" fill="#a65934" font-size="13" font-weight="700" letter-spacing="2">PAPER RESPONSE</text>
+    <text x="90" y="547">GRS + GAR</text><text x="90" y="583">Mixed-task RL</text><text x="90" y="619">MOPD2</text>
   </g>
   <text x="348" y="159" fill="#a65934" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">GLOBAL MAP</text>
   <text x="348" y="202" fill="#173940" font-family="Arial, sans-serif" font-size="29" font-weight="700">From base model to evaluated agent</text>
@@ -61,10 +59,10 @@
   <text x="774" y="377" fill="#a65934" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2">EVIDENCE</text>
   <text x="774" y="414" fill="#173940" font-family="Arial, sans-serif" font-size="23" font-weight="700">What was tested?</text>
   <g font-family="Arial, sans-serif" font-size="16" fill="#476267">
-    <text x="774" y="455">RL scaling</text><rect x="892" y="440" width="177" height="17" rx="8" fill="#dbe8e1"/><rect x="892" y="440" width="146" height="17" rx="8" fill="#2c8a77"/>
-    <text x="774" y="501">GAR</text><rect x="892" y="486" width="177" height="17" rx="8" fill="#dbe8e1"/><rect x="892" y="486" width="114" height="17" rx="8" fill="#d48451"/>
-    <text x="774" y="547">Harness</text><rect x="892" y="532" width="177" height="17" rx="8" fill="#dbe8e1"/><rect x="892" y="532" width="135" height="17" rx="8" fill="#2c8a77"/>
+    <text x="774" y="458">Scaling → does more RL help?</text>
+    <text x="774" y="503">GAR → do online grades matter?</text>
+    <text x="774" y="548">Harness → what breaks at scale?</text>
   </g>
-  <text x="774" y="608" fill="#597076" font-family="Arial, sans-serif" font-size="15">Setup · Comparator · Metric · Result</text>
+  <text x="774" y="608" fill="#597076" font-family="Arial, sans-serif" font-size="15">Each question leads to setup, metric and result.</text>
   <text x="348" y="721" fill="#6e8282" font-family="Arial, sans-serif" font-size="14">An editorial preview of the published MiMo-V2.6 deep read · not a paper figure</text>
 </svg>

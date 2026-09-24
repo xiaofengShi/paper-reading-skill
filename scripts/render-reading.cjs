@@ -25,7 +25,7 @@ const labels = {
     start: '起点', end: '终点', change: '变化', points: '个百分点', chartData: '查看图表数据', item: '项目',
     openDiagram: '展开辅助交互图：', explore: '节点聚焦与路径探索', diagramNote: '交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。',
     wholeMap: '论文全局图', description: '从全局路径到机制与实验的一体化论文深读。', titleSuffix: '深读图谱',
-    skip: '跳到正文', topbar: '原文证据驱动的深读图谱', showSources: '显示原文定位', startReading: '开始阅读',
+    skip: '跳到正文', topbar: '原文证据驱动的深读图谱', showSources: '显示原文定位', startReading: '开始阅读', inspectFigure: '↔ 横向滚动查看图内细节',
     defaultThesis: '从全局路径到关键机制与实验证据。', enter: '进入论文图谱', nav: '本文目录', route: '阅读路径',
     footer: '单文件阅读版', back: '返回顶部', pathKicker: '方法路径', contrastKicker: '机制对照', experimentKicker: '实验图谱', heroKicker: '论文深读图谱 · 中文',
   },
@@ -36,7 +36,7 @@ const labels = {
     start: 'Start', end: 'End', change: 'Change', points: 'percentage points', chartData: 'View chart data', item: 'Item',
     openDiagram: 'Explore interactive diagram: ', explore: 'Focus nodes and follow paths', diagramNote: 'The interactive view explores structure. The reading path, mechanisms, and experimental results remain visible on this page.',
     wholeMap: 'Whole-paper map', description: 'A visual deep read from the global path to mechanisms and experiments.', titleSuffix: 'Deep reading atlas',
-    skip: 'Skip to content', topbar: 'A source-grounded reading atlas', showSources: 'Show source locations', startReading: 'Start reading',
+    skip: 'Skip to content', topbar: 'A source-grounded reading atlas', showSources: 'Show source locations', startReading: 'Start reading', inspectFigure: '↔ Scroll sideways to read the figure',
     defaultThesis: 'From the global path to mechanisms and experimental evidence.', enter: 'Enter the reading atlas', nav: 'Contents', route: 'Reading path',
     footer: 'Single-file reading page', back: 'Back to top', pathKicker: 'METHOD PATH', contrastKicker: 'MECHANISM COMPARISON', experimentKicker: 'EXPERIMENT ATLAS', heroKicker: 'DEEP READING ATLAS · ENGLISH',
   },
@@ -163,7 +163,7 @@ prepared = prepared.replace(/\(PDF[^)]+\)/g, sourceRef);
 prepared = prepared.replace(/，PDF pp?\.\s*\d+(?:[–-]\d+)?(?=。)/g, sourceRef);
 prepared = prepared.replace(/PDF pp?\.\s*\d+(?:[–-]\d+)?/g, sourceRef);
 prepared = prepared.replace(/^!\[([^\]\n]*)\]\(([^)\n]+)\)\r?\n\r?\n\*([^\n]+)\*$/gm, (_, alt, relative, caption) =>
-  slot(`<figure class="paper-figure"><img src="${imageData(relative)}" alt="${esc(alt)}" loading="lazy" decoding="async"><figcaption>${marked.parseInline(caption, {gfm:true})}</figcaption></figure>`));
+  slot(`<figure class="paper-figure"><div class="figure-hint">${t.inspectFigure}</div><div class="figure-viewport" tabindex="0" aria-label="${t.inspectFigure}"><img src="${imageData(relative)}" alt="${esc(alt)}" loading="lazy" decoding="async"></div><figcaption>${marked.parseInline(caption, {gfm:true})}</figcaption></figure>`));
 let body = marked.parse(prepared, {gfm:true});
 slots.forEach((html, i) => { body = body.replace(`<p>PAPER_READING_SLOT_${i}_END</p>`, html); });
 if (/PAPER_READING_SLOT_\d+_END/.test(body)) throw new Error('Unresolved visual slot');

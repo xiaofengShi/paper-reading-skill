@@ -71,7 +71,7 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .article li { margin: .35rem 0; }
 .article code { background: #edf3f1; padding: .1em .28em; border-radius: 3px; color: var(--ink); overflow-wrap: anywhere; }
 .article a:not(.hero-link) { font-weight: 650; }
-.article table { border-collapse: collapse; display: block; overflow-x: auto; max-width: 100%; margin: 1.4rem 0 2rem; font-size: .9rem; }
+.article table { border-collapse: collapse; display: block; overflow-x: auto; contain: paint; max-width: 100%; margin: 1.4rem 0 2rem; font-size: .9rem; }
 .article th, .article td { border-bottom: 1px solid var(--line); padding: .65rem .9rem; text-align: left; min-width: 7rem; }
 .article th { background: #eef5f1; color: var(--ink); }
 .principle-grid { margin: 2.2rem 0; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; border: 1px solid var(--line); background: var(--line); }
@@ -131,6 +131,9 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .archify-figure, .data-figure, .paper-figure { max-width: 100%; margin: 2rem 0 2.4rem; background: #fff; border: 1px solid var(--line); box-shadow: 0 10px 25px #18362e0b; border-radius: 7px; overflow: hidden; }
 .archify-figure iframe { display: block; width: 100%; height: 610px; border: 0; background: #f8faf9; }
 .archify-figure figcaption, .paper-figure figcaption { padding: .7rem 1.2rem; color: var(--subtle); background: #f8fbf9; border-top: 1px solid var(--line); font-size: .83rem; line-height: 1.5; }
+.figure-hint { display: none; }
+.figure-viewport { overflow-x: auto; }
+.figure-viewport:focus-visible { outline: 3px solid var(--orange); outline-offset: -3px; }
 .paper-figure img { display: block; width: 100%; height: auto; padding: .6rem; background: #fff; }
 .display-math { overflow-x: auto; padding: 1rem 1.2rem; margin: 1.5rem 0; background: #f2f7f4; border-left: 3px solid var(--teal); font-size: 1.17rem; }
 .inline-math { display: inline-block; vertical-align: -.08em; white-space: nowrap; color: var(--ink); line-height: 1; }
@@ -190,7 +193,8 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
   .figure-head .source-badge, .figure-head .renderer-badge { margin-top: .6rem; }
   .archify-figure iframe { height: 480px; }
   .segment-legend { grid-template-columns: 1fr; }
-  .paper-figure img { padding: .2rem; }
+  .figure-hint { display: block; padding: .45rem .65rem; color: var(--subtle); font-size: .72rem; background: #f8fbf9; }
+  .paper-figure img { width: 900px; max-width: none; padding: .2rem; }
   .pair-delta { margin-left: 0; width: 100%; }
 }
 @media print {

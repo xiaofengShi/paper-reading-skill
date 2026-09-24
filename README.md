@@ -1,6 +1,6 @@
 # Paper Reading Skill
 
-**Turn a research paper into one visual reading atlas.** Start with the whole argument, follow the method or proof, work through important mechanisms, and read the experiments with their actual settings and numbers. The default request, “read this paper,” produces a complete, self-contained HTML deep read.
+**Turn a research paper into one visual reading atlas.** This open-source agent skill helps researchers, students, and engineers read academic papers deeply. Give it a PDF or paper URL; the default “read this paper” request produces one self-contained HTML explanation of the argument, method or proof, important equations, and experiments.
 
 [Project website →](https://xiaofengshi.github.io/paper-reading-skill/) · [Read the Transformer example →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html) · [中文说明](README.zh-CN.md)
 
@@ -26,6 +26,16 @@ The MiMo example was authored from a 44-page local PDF. The PDF itself is not re
 
 The diagrams guide reading; prose, formulas, tables, and original figures carry the detail. Source locations stay available for verification but are hidden by default in the HTML. The output is one offline-readable file, with Markdown as its audit source.
 
+## The reading method
+
+The workflow combines established reading and knowledge-mapping ideas with a paper-specific editorial design. Its three checks answer different questions:
+
+1. **Can we reconstruct the paper before explaining it?** [Keshav's three-pass approach](https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf) moves from an overview to the paper's content and then to a detailed reconstruction. The skill uses the first pass to draft a provisional map, the second to follow methods and results, and the third to work through the decisive equations, assumptions, proofs, or experiments. A normal deep-read request completes the full route; a quick scan is a separate user choice.
+2. **Does each diagram express a meaningful relationship?** [Novak and Cañas's concept-map method](https://cmap.ihmc.us/docs/theory-of-concept-maps) starts with a focus question and connects concepts with labeled relationships and cross-links. Here, a map answers a paper-specific question such as “How does the mechanism change the result?” Arrows say whether they mean data flow, process order, or evidence; the accompanying text explains what they connect.
+3. **Can a reader check the explanation against the paper?** [SciDoc2Diagrammer-MAF](https://aclanthology.org/2024.findings-emnlp.780/) reports that generated scientific diagrams can be incomplete or unfaithful to their source. This project takes that as a fidelity check: significant figures, formulas, numbers, and arrows must be checked against the source, and each experiment is read with its setup, comparator, metric, and result. It does not implement that paper's diagram-generation algorithm.
+
+These ideas become the five reader-facing layers above: global map, main path, mechanism, experiment atlas, and synthesis. The test of a useful deep read is whether someone can explain the paper's central mechanism and say which evidence supports each important claim, without hunting through the PDF for missing essentials. This is the project's method design, not a claim that the published examples have been validated in a reader study.
+
 ## Get started
 
 **Codex and Kimi Code:** install the repository as a personal skill, then install its rendering dependencies. Node.js 20 or newer is required for the bundled HTML renderer.
@@ -33,7 +43,7 @@ The diagrams guide reading; prose, formulas, tables, and original figures carry 
 ```bash
 mkdir -p "$HOME/.agents/skills"
 git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.agents/skills/paper-reading"
-npm ci --prefix "$HOME/.agents/skills/paper-reading"
+(cd "$HOME/.agents/skills/paper-reading" && npm ci)
 ```
 
 **Claude Code:** use its personal skills directory instead.
@@ -41,10 +51,10 @@ npm ci --prefix "$HOME/.agents/skills/paper-reading"
 ```bash
 mkdir -p "$HOME/.claude/skills"
 git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/skills/paper-reading"
-npm ci --prefix "$HOME/.claude/skills/paper-reading"
+(cd "$HOME/.claude/skills/paper-reading" && npm ci)
 ```
 
-If the skill is already installed, update that checkout and its renderer dependencies instead of cloning over it. For Codex or Kimi Code, run `git -C "$HOME/.agents/skills/paper-reading" pull --ff-only` followed by `npm ci --prefix "$HOME/.agents/skills/paper-reading"`; for Claude Code, use the same commands with `$HOME/.claude/skills/paper-reading`.
+If the skill is already installed, update that checkout and its renderer dependencies instead of cloning over it. For Codex or Kimi Code, run `git -C "$HOME/.agents/skills/paper-reading" pull --ff-only` followed by `(cd "$HOME/.agents/skills/paper-reading" && npm ci)`; for Claude Code, use the same commands with `$HOME/.claude/skills/paper-reading`.
 
 Start a new agent session, attach a PDF or give an accessible paper URL, and ask: **“Read this paper deeply in English. Give me one visual HTML reading document that explains the main path, important equations, and experiments.”** Replace “in English” with your preferred language. If you give no language cue, the skill defaults to English; an ordinary request in Chinese produces Chinese output. The skill is named `paper-reading`; you can also invoke it explicitly as `$paper-reading` in Codex, `/paper-reading` in Claude Code, or `/skill:paper-reading` in Kimi Code. The agent needs access to the paper and must do the scientific reading; this repository supplies the workflow and renderer, not a service that automatically converts an arbitrary PDF into a verified explanation.
 
@@ -68,7 +78,7 @@ npm test
 
 The three documents exercise an influential architecture paper and two technical reports with different mechanism and evaluation structures. Renderer tests cover language declarations, inline and display math, source-location visibility, figure context, and numerical chart behavior. These checks verify rendering contracts; they do not independently certify every scientific interpretation. Theory, surveys, datasets, and independent reader studies remain outside the current example set.
 
-The reading method draws on [Keshav’s three-pass approach](https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf), [Novak and Cañas’s concept maps](https://cmap.ihmc.us/publications/researchpapers/theoryunderlyingconceptmaps.pdf), and [SciDoc2Diagrammer-MAF](https://aclanthology.org/2024.findings-emnlp.780/). [Archify](https://github.com/tt-a1i/archify) is an optional presentation tool for interactive structure diagrams. Scientific fidelity still depends on reading and checking the source paper.
+[Archify](https://github.com/tt-a1i/archify) is an optional presentation tool for interactive structure diagrams. Scientific fidelity still depends on reading and checking the source paper.
 
 Questions, bug reports, and examples from other paper types are welcome in [GitHub Issues](https://github.com/xiaofengShi/paper-reading-skill/issues). The project is [MIT licensed](LICENSE).
 
