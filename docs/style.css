@@ -21,8 +21,7 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
 
 .site-header { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 2rem; min-height: 74px; padding: .75rem max(1.25rem, calc((100vw - 1220px) / 2)); background: #fffefaee; border-bottom: 1px solid var(--line); backdrop-filter: blur(12px); }
 .brand { display: inline-flex; align-items: center; gap: .65rem; color: var(--ink); font-size: 1.04rem; font-weight: 850; letter-spacing: -.025em; text-decoration: none; white-space: nowrap; }
-.brand-mark { position: relative; display: grid; place-items: center; width: 35px; height: 35px; border: 2px solid var(--teal); border-radius: 8px; color: var(--teal); font: italic 800 1.3rem Georgia, serif; }
-.brand-mark span { position: absolute; margin: 20px 0 0 22px; color: #b65c30; font: 800 .72rem system-ui, sans-serif; }
+.brand img { display: block; flex: 0 0 35px; border-radius: 8px; }
 .site-header nav { display: flex; align-items: center; justify-content: flex-end; gap: clamp(.8rem, 2vw, 1.8rem); }
 .site-header nav a { color: var(--ink); font-size: .85rem; font-weight: 700; text-decoration: none; white-space: nowrap; }
 .site-header nav a:hover { color: var(--teal); text-decoration: underline; }

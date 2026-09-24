@@ -1,4 +1,5 @@
 <!-- paper-reading-lang: zh-CN -->
+<!-- paper-reading-theme: saffron -->
 # MiMo-V2.6：Agent 强化学习的规模化路径
 
 > **阅读定位**：从全局训练链、关键学习信号到实验与基础设施，完整理解这篇报告。原文为 LLM-Core Xiaomi 的 *MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement*。<span class="source-ref">本样例的图与页码依据用户提供的 44 页 PDF（SHA-256：7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b）。作者在 Hugging Face 提交 73875d0 更新 PDF（SHA-256：fb81e6e083801b3358f084ed6be953dc23b0d2e434690f4541d5eae03e01e7af）；模型卡标明 Pro 为 1.02T 总参数、42B active parameters。更新版 PDF 的其他内容未逐页对照。</span>
@@ -71,7 +72,7 @@ $$
 
 ```paper-contrast
 {
-  "title":"同样是通过测试，GRS 与 GAR 怎样产生不同学习信号？",
+  "title":"同样是通过测试，GRS 与 GAR 怎样产生不同学习信号",
   "intro":"两条分支都以可执行测试为基础，解决的却是不同任务子集里的质量区分问题。",
   "branches":[
     {"name":"GRS · 预先造质量尺","lead":"先分析一组历史解法，训练时逐条评分。","scope":"部分高通过率代码任务；整组都通过测试时仍需要质量差异。","judge":"离线对照任务要求、仓库和多条尝试，形成“解法质量”与“行为质量”两套任务专属 rubric；在线查看新轨迹的代码、执行结果与行为。","signal":"最终奖励 = 测试奖励 × 解法分 × 行为分；失败解仍为零，通过解按质量拉开差距。","why":"一次离线分析变成可重复使用的监督，不把某条成功轨迹的偶然做法误当成唯一标准。","source":"PDF pp. 17–18, Fig. 7a, Eq. 2"},
@@ -152,7 +153,7 @@ Sample Mixer 解决混合任务的**组成稳定性**：25 个数据源的平均
 
 ```paper-experiments
 {
-  "title":"每项实验分别回答什么？",
+  "title":"每项实验分别回答什么",
   "rows":[
     {"question":"RL 扩展后表现如何？","setup":"Pro 与 Flash 各自沿累计训练成本跟踪 DeepSWE average@3。","observation":"分别从 58.4→72.6、48.7→65.7；这是整体训练趋势。","source":"PDF p. 8, Fig. 3"},
     {"question":"GAR 改变了什么？","setup":"Flash code-only RL；同一配置比较有无 GAR。","observation":"pass rate 后续仍增长，turn 大致稳定，token 增长较缓。","source":"PDF pp. 18–19, Fig. 8"},
@@ -163,7 +164,7 @@ Sample Mixer 解决混合任务的**组成稳定性**：25 个数据源的平均
 }
 ```
 
-### 训练计算：同一模型随 RL 训练推进如何变化？
+### 训练计算：同一模型随 RL 训练推进如何变化
 
 原论文 Fig. 3 左图用 DeepSWE v1.1 **average@3** 对累计 RL 成本作图。Pro 从 58.4 到 72.6，Flash 从 48.7 到 65.7，分别提高 14.2 和 17.0 个百分点。这是各自运行的训练趋势；它不能隔离训练计算、环境多样性或 grader 中任何单一机制的贡献。（PDF p. 8, Fig. 3）
 
@@ -179,7 +180,7 @@ Sample Mixer 解决混合任务的**组成稳定性**：25 个数据源的平均
 
 *原论文 Fig. 3，PDF p. 8。左图横轴是累计成本，右图是成本组成；两个切面不可混为一个因果实验。*
 
-### 在线评分：GAR 是否改变训练动态？
+### 在线评分：GAR 是否改变训练动态
 
 Fig. 8 是更有针对性的对照：MiMo-V2.6-Flash 的 **code-only RL**，batch 128、token-mean loss，比较有无 GAR。报告称有 GAR 的 pass rate 后续仍增长，turn 数大致稳定，token 长度增长较缓。曲线未提供可直接引用的精确终点表值，因此这里描述趋势，不从图像臆造差值。（PDF pp. 18–19, Fig. 8）
 
@@ -187,7 +188,7 @@ Fig. 8 是更有针对性的对照：MiMo-V2.6-Flash 的 **code-only RL**，batc
 
 *原论文 Fig. 8，PDF p. 19。三幅图要一起读：表现变化与轨迹长度变化是同一对照中的不同观察量。*
 
-### 多 harness：能力能否迁移到没参加训练的外壳？
+### 多 harness：能力能否迁移到没参加训练的外壳
 
 Fig. 10 将 **4 个训练 mini-harness** 和 **3 个 held-out harness** 分开显示。后者的平均 pass@1 大约从 50% 升到 66%，说明该 DeepSWE 设置下的提升并非只停留在训练外壳。这个结论只覆盖图中三个 held-out harness，不自动推广到任意 agent 框架。（PDF p. 23, Fig. 10）
 
@@ -199,7 +200,7 @@ Fig. 10 将 **4 个训练 mini-harness** 和 **3 个 held-out harness** 分开�
 
 *原论文 Fig. 10，PDF p. 23。粗橙线是组内均值；不要把左、右两组的曲线混成同一种测试。*
 
-### 稳定性：为什么冻结 MoE router？
+### 稳定性：为什么冻结 MoE router
 
 Fig. 11 比较的两条 Pro RL 运行只在 router 是否冻结上不同。可训练 router 的第 9 层负载 CV 从约 0.78 到 2.0、峰值负载从 6× 到 16×、冷专家比例从 0.5% 到 22%；冻结后这些统计大致平稳。论文还把 step-20 checkpoint 的 router 参数恢复到 RL 前值：负载恢复，而 benchmark 表现不变。这一步帮助定位负载崩塌与 router 漂移的关系。（PDF pp. 23–24, Fig. 11）
 

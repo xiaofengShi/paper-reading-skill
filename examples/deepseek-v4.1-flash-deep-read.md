@@ -1,4 +1,5 @@
 <!-- paper-reading-lang: en -->
+<!-- paper-reading-theme: plum -->
 # DeepSeek-V4.1-Flash: reading a model through its three memory costs
 
 > **Reading orientation.** Long-running agents repeatedly ingest a large context, decode a small continuation, and reuse prior context after tool calls. The report proposes a model and serving system that attack **prefill computation**, **runtime global KV storage**, and **persistent KV storage** together. This reading uses the [DeepSeek-V4.1-Flash technical report](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/main/DeepSeek_V41_Tech_Report.pdf) and the corresponding [arXiv text](https://arxiv.org/abs/2609.19969). Benchmark values below are the report's results, not independently rerun measurements. <span class="source-ref">51-page PDF SHA-256: ba68e2e40408125ae6d2f63a9a241b61c73910691c74ec1a2a7023c851eac08d. PDF abstract, §§1–6, Figs. 1, 3–4, Tables 1, 3–4.</span>

@@ -1,4 +1,5 @@
 <!-- paper-reading-lang: en -->
+<!-- paper-reading-theme: cobalt -->
 # Attention Is All You Need: reading the Transformer from path to evidence
 
 > **Reading orientation.** The 2017 paper asks whether an encoder–decoder model can perform sequence transduction without recurrence or convolution. Its answer is a stack of attention and position-wise feed-forward layers, tested mainly on machine translation. This reading uses [arXiv version 7](https://arxiv.org/abs/1706.03762); the author's original figure is attributed below. <span class="source-ref">Version revised 2 August 2023. Local PDF SHA-256: bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697. PDF abstract, §§1–6; Fig. 1; Tables 1–4.</span>
@@ -112,7 +113,7 @@ Translation results use BLEU on **newstest2014**; architecture variations use En
 
 ```paper-experiments
 {
-  "title":"Which result tests which part of the argument?",
+  "title":"Which result tests which part of the argument",
   "rows":[
     {"question":"Can an attention-only model translate competitively?","setup":"WMT14 EN→DE newstest2014 BLEU; compare Transformer base and big with prior single models and ensembles in Table 2.","observation":"Base: 27.3 BLEU; big: 28.4. The strongest listed prior ensemble is ConvS2S at 26.36. This supports the full architecture's translation result, not a single component's isolated effect.","source":"PDF §6.1, Table 2"},
     {"question":"Does the result hold on a larger translation corpus?","setup":"WMT14 EN→FR newstest2014 BLEU; Table 2 compares the big model with earlier systems, including ConvS2S ensemble 41.29.","observation":"The table and abstract give 41.8 for Transformer big. The §6.1 prose says 41.0 instead; the discrepancy is recorded below rather than silently reconciled.","source":"PDF abstract, §6.1, Table 2"},

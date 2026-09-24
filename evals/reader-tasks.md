@@ -38,4 +38,22 @@ Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key
 
 **参考答案。** 两条缺口是监督与原模型输出不兼容、以及固定目标 SFT 没约束模型在自身前缀上的行为。融合答案既是学生 SFT 的目标，也是教师在学生轨迹上给出软目标时可见的参考上下文。改写与原答案的相似度低于阈值时回退原答案，以减少语义漂移。教师额外看到融合答案与参考提示；教师分布选出 Top-K token，学生和教师都在该集合重归一化；EMA 根据 SFT 与 KL 损失的滑动均值调整 KL 权重。Table 1 是三模型、五领域的整系统比较；Table 2 在 SmolLM3 的三个领域依次比较原始数据 SFT、融合数据 SFT 和完整 RAFT，分别检查数据与在线蒸馏的增益。论文未覆盖更大模型与任意领域，Table 1 也并非每个指标都由 RAFT 领先。对应 HTML 第 01–05 章。
 
+## MechVQA · [HTML](../docs/mechvqa-deep-read.html)
+
+1. What do the three capability axes measure, and why do the ten subtasks make Total and Avg. different summaries?
+2. Which gates turn source drawings into verifiable QA pairs, and how is drawing overlap controlled across the split?
+3. What does the MechVL-4B Total score of 84.85 compare with, and which tests can identify narrower contributions from training stages or rewards?
+4. What discrepancy appears between Figure 2c and the main tables, and how should a reader handle it?
+
+**Answer key.** Recognition reads explicit information, Reasoning infers structure or geometry, and Judging applies engineering rules. Total is question-weighted while Avg. is the macro mean of ten subtask scores; uneven subtask counts make them differ. Expert image filtering and metadata verification precede question generation, cross-model question validation, multi-model answering, and majority-voted labels. The split keeps each drawing and clustered near duplicates within one partition. The 84.85 Total is a full-system test-set score above the general MLLM baselines in Table 2; Table 3's stage, RL-algorithm, and reward ablations give narrower checks. Figure 2c prints 83.44 at its final point while Tables 2–3 report 84.85; preserve the discrepancy rather than silently equating them. See HTML §§01–05.
+
+## IAR · [HTML](../docs/iar-deep-read.html)
+
+1. Inject、Align、Recover 分别解决无检索文档问答的哪一道问题？Inject 与原始 CPT 的损失接口有何不同？
+2. Recover 从哪些候选中选择最终检查点？为什么领域分最高的候选不一定被选中？
+3. 主表的“7/8 全指标胜出”与恢复前“8/8 领域增益”分别检验什么？哪个设置是边界情形？
+4. BudgetMatch 和评委一致性审计各缩小了哪一种解释空间？它们不能排除什么？
+
+**参考答案。** Inject 用续写、改写、指令化重构密集暴露文档，只对助手目标计损；CPT 对原始文档流做 next-token 预测。Align 用 answer-only QA 对齐接口，Recover 将适应模型与原始指令模型合并，以恢复通用能力。Recover 从四族共 12 个固定候选中先按验证集领域与通用护栏筛选，再在领域优先前沿层内取通用均值较高者，因此未必选领域分最高点。7/8 是完整 IAR 与 Vanilla SFT 的四指标整系统比较；8/8 是恢复前 Inject+Align 相对 Vanilla 的领域结果。CCI 的 Phi 设置是主表边界。BudgetMatch 表明仅匹配训练 token 预算不足以解释全部收益，却不单独证明每个阶段的因果作用；评委一致性审计量化评分仪器的不确定性，不能证明标签是人工金标准，也不能覆盖训练种子鲁棒性。对应 HTML 第 01–05 章。
+
 For each paper, the reader should also identify one conclusion that the reported evidence **does not** isolate. Accept a paper-specific boundary explained with the relevant result, not generic skepticism.

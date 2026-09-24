@@ -56,6 +56,7 @@ $$x=y+z$$
     assert.doesNotMatch(html, /url\(fonts\//);
     assert.doesNotMatch(html, /\*\*Example:/);
     assert.match(html, /class="hero-sub">One idea grounded in the source/);
+    assert.match(html, /<body data-theme="forest">/);
     assert.match(html, /class="hero-map"[\s\S]*?A source fact/);
     assert.match(html, /class="pair-track"[\s\S]*?left:60%[\s\S]*?left:70%/);
     assert.match(html, /<span class="figure-kicker">本文整理的数据图<\/span>/);
@@ -133,6 +134,7 @@ test('an English audit source produces an English reading page with a grounded m
     const source = path.join(dir, 'paper.md');
     const output = path.join(dir, 'paper.html');
     fs.writeFileSync(source, `<!-- paper-reading-lang: en -->
+<!-- paper-reading-theme: cobalt -->
 # An Example Paper
 
 \`\`\`paper-map
@@ -152,6 +154,7 @@ test('an English audit source produces an English reading page with a grounded m
     execFileSync(process.execPath, [renderer, source, output]);
     const html = fs.readFileSync(output, 'utf8');
     assert.match(html, /<html lang="en">/);
+    assert.match(html, /<body data-theme="cobalt">/);
     assert.match(html, /Show source locations/);
     assert.match(html, /Whole-paper map/);
     assert.match(html, /Passed to the next stage/);
@@ -193,6 +196,19 @@ test('a reading source must declare a supported output language', () => {
   }
 });
 
+test('an unknown visual theme fails before creating an output', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-theme-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    fs.writeFileSync(source, '<!-- paper-reading-lang: en -->\n<!-- paper-reading-theme: neon -->\n# Paper\n');
+    assert.throws(() => execFileSync(process.execPath, [renderer, source, output], { stdio: 'pipe' }), /Unknown paper-reading theme: neon/);
+    assert.equal(fs.existsSync(output), false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('the two English examples embed their diagrams, original figures, and reading context', () => {
   for (const [file, figure, keyText] of [
     ['attention-is-all-you-need', 'Figure 1', 'Figure 1 is particularly useful here'],
@@ -224,4 +240,29 @@ test('the RAFT example keeps its method, equations, evidence, and figures in one
   assert.match(html, /原论文 Fig\. 3 提供参数层面的旁证/);
   assert.match(html, /<span class="source-ref">本图谱依据 <a href="https:\/\/arxiv\.org\/abs\/2606\.00147v1">arXiv:2606\.00147v1<\/a>/);
   assert.doesNotMatch(html, /class=“source-ref”|class="katex-error"|file:\/\//);
+});
+
+test('the new readings keep their language, theme, source images, and experiment path offline', () => {
+  for (const [name, lang, theme, images] of [
+    ['mechvqa', 'en', 'cobalt', 6],
+    ['iar', 'zh-CN', 'plum', 4],
+  ]) {
+    const html = fs.readFileSync(path.resolve(__dirname, `../docs/${name}-deep-read.html`), 'utf8');
+    assert.match(html, new RegExp(`<html lang="${lang}">`));
+    assert.match(html, new RegExp(`<body data-theme="${theme}">`));
+    assert.match(html, /class="experiment-atlas"/);
+    assert.match(html, /class="display-math"/);
+    assert.equal((html.match(/<figure class="paper-figure">/g) || []).length, images);
+    assert.doesNotMatch(html, /class="katex-error"|src="https?:|PAPER_READING_SLOT_/);
+  }
+});
+
+test('published reading headings do not end with sentence punctuation', () => {
+  for (const name of ['attention-is-all-you-need', 'deepseek-v4.1-flash', 'mimo-v2.6', 'raft', 'mechvqa', 'iar']) {
+    const html = fs.readFileSync(path.resolve(__dirname, `../docs/${name}-deep-read.html`), 'utf8');
+    for (const [, heading] of html.matchAll(/<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/g)) {
+      const text = heading.replace(/<[^>]+>/g, '').trim();
+      assert.doesNotMatch(text, /[.。?？!！:：]$/, `${name}: ${text}`);
+    }
+  }
 });

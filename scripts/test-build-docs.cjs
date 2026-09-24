@@ -5,7 +5,7 @@ const test = require('node:test');
 
 const docs = path.resolve(__dirname, '../docs');
 
-test('the published homepages expose both languages, four complete readings, and working local links', () => {
+test('the published homepages expose both languages, six complete readings, and working local links', () => {
   for (const [file, lang, switchTarget, phrase, method, install] of [
     ['index.html', 'en', 'zh.html', 'Explore complete readings', 'The reading method', 'Get started'],
     ['zh.html', 'zh-CN', './', '阅读完整样例', '论文阅读方法', '开始使用'],
@@ -19,8 +19,14 @@ test('the published homepages expose both languages, four complete readings, and
     assert.ok(html.includes(`href="#section-4">${install}</a>`));
     assert.ok(html.includes(`href="${switchTarget}"`));
     assert.ok(html.includes('href="#section-1"'));
-    for (const name of ['mimo-v2.6', 'attention-is-all-you-need', 'deepseek-v4.1-flash', 'raft']) {
+    for (const name of ['mimo-v2.6', 'attention-is-all-you-need', 'deepseek-v4.1-flash', 'raft', 'mechvqa', 'iar']) {
       assert.ok(html.includes(`${name}-deep-read.html`), `${file} is missing ${name}`);
+    }
+    assert.ok(html.includes('src="assets/logo.svg"'));
+    assert.ok(html.includes('href="#section-4"'));
+    assert.doesNotMatch(html, /<li><strong>[^<]*[.。]<\/strong>/);
+    for (const [, heading] of html.matchAll(/<h[1-6][^>]*>([^<]+)<\/h[1-6]>/g)) {
+      assert.doesNotMatch(heading.trim(), /[.。?？!！:：]$/);
     }
     assert.ok(html.includes('href="https://github.com/xiaofengShi/paper-reading-skill"'));
     for (const resource of ['reading-quality.md', 'reader-tasks.md']) {
@@ -40,6 +46,7 @@ test('the published homepages expose both languages, four complete readings, and
     }
   }
   assert.ok(fs.existsSync(path.join(docs, 'assets/atlas-preview.png')));
+  assert.ok(fs.existsSync(path.join(docs, 'assets/logo.svg')));
 });
 
 test('the published reader audit links its quality resources to GitHub', () => {

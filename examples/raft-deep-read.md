@@ -1,4 +1,5 @@
 <!-- paper-reading-lang: zh-CN -->
+<!-- paper-reading-theme: forest -->
 # RAFT：数据精炼 × 轨迹级蒸馏，治领域微调的“遗忘”
 
 > **阅读定位**：领域 SFT 提升领域能力的同时，往往损伤模型的通用能力。这篇论文把损伤归因到两条具体缺口，提出两阶段框架 RAFT，并让同一份“融合答案”同时充当兼容的监督信号与教师的答案上下文，把数据端和训练端的补救扣在一起。原文为 Yuduo Li、Xiaofeng Shi（通讯）、Qian Kou、Longbin Yu、Hua Zhou 的 *RAFT: Data Refinement and Adaptive Distillation for Domain Fine-Tuning with Alleviated Forgetting*（BAAI × 北京交通大学）。<span class="source-ref">本图谱依据 <a href="https://arxiv.org/abs/2606.00147v1">arXiv:2606.00147v1</a>（2026-05-29）PDF，共 19 页：正文 9 页 + 附录 A–H。覆盖 PDF §§1–6、Figs. 1–8、Tables 1–4、附录 A–H。</span>
@@ -89,7 +90,7 @@ $$
 
 ```paper-contrast
 {
-  "title":"同样是在线蒸馏：保守锚点，还是目标感知向导？",
+  "title":"同样是在线蒸馏：保守锚点，还是目标感知向导",
   "intro":"两种设计都在学生轨迹上做 KL 约束，差别只在教师是否看到目标答案；这个差别决定了约束的方向。",
   "branches":[
     {"name":"普通 on-policy 蒸馏","lead":"教师与学生看到相同的上下文，只反映原模型的自然行为。","scope":"约束学生轨迹不偏离原模型分布。","judge":"教师不知道领域目标答案，无法判断学生的偏离是'遗忘'还是'学会领域知识'。","signal":"把学生拉回「原模型本来会怎么写」；论文认为这会充当保守锚点，限制领域适应。","why":"只有行为约束、没有目标感知时，'保持原行为'与'学新知识'相互掣肘。","source":"PDF §§1–2, 3.3"},

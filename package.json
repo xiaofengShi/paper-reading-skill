@@ -6,7 +6,7 @@
     "build:docs": "node scripts/build-docs.cjs",
     "check:docs": "node scripts/build-docs.cjs --check",
     "build:example": "node scripts/render-reading.cjs examples/mimo-v2.6-deep-read.md docs/mimo-v2.6-deep-read.html",
-    "build:examples": "node scripts/render-reading.cjs examples/mimo-v2.6-deep-read.md docs/mimo-v2.6-deep-read.html && node scripts/render-reading.cjs examples/attention-is-all-you-need-deep-read.md docs/attention-is-all-you-need-deep-read.html && node scripts/render-reading.cjs examples/deepseek-v4.1-flash-deep-read.md docs/deepseek-v4.1-flash-deep-read.html && node scripts/render-reading.cjs examples/raft-deep-read.md docs/raft-deep-read.html",
+    "build:examples": "node scripts/render-reading.cjs examples/mimo-v2.6-deep-read.md docs/mimo-v2.6-deep-read.html && node scripts/render-reading.cjs examples/attention-is-all-you-need-deep-read.md docs/attention-is-all-you-need-deep-read.html && node scripts/render-reading.cjs examples/deepseek-v4.1-flash-deep-read.md docs/deepseek-v4.1-flash-deep-read.html && node scripts/render-reading.cjs examples/raft-deep-read.md docs/raft-deep-read.html && node scripts/render-reading.cjs examples/mechvqa-deep-read.md docs/mechvqa-deep-read.html && node scripts/render-reading.cjs examples/iar-deep-read.md docs/iar-deep-read.html",
     "build:audit": "node scripts/build-reader-audit.cjs",
     "check:audit": "node scripts/build-reader-audit.cjs --check",
     "doctor": "node scripts/doctor.cjs",

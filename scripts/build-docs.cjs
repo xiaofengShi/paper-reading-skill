@@ -8,8 +8,8 @@ const site = 'https://xiaofengshi.github.io/paper-reading-skill/';
 const repo = 'https://github.com/xiaofengShi/paper-reading-skill';
 const sourceBase = `${repo}/blob/main/`;
 const pages = [
-  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Explore complete readings →', github: 'View on GitHub ↗', footer: 'Read deeply. Keep the evidence close.' },
-  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '选择完整深读 →', github: '查看 GitHub ↗', footer: '读懂全文，证据就在身边。' },
+  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Explore six readings →', install: 'Install the skill ↓', footer: 'Read deeply. Keep the evidence close.' },
+  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '阅读六篇完整样例 →', install: '安装并开始使用 ↓', footer: '读懂全文，证据就在身边。' },
 ];
 
 const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -42,7 +42,7 @@ for (const page of pages) {
   const preview = hero.find(token => token.type === 'paragraph' && token.text.startsWith('!['));
   if (!preview) throw new Error(`${page.source} needs a preview image`);
   const intro = hero.find(token => token.type === 'paragraph');
-  const headline = intro?.text.match(/^\*\*(.+?)\*\*/)?.[1];
+  const headline = intro?.text.match(/^\*\*(.+?)\*\*/)?.[1]?.replace(/[.!?。！？]+$/, '');
   if (!headline) throw new Error(`${page.source} needs a bold lead sentence`);
   const summary = intro.text.replace(/\*\*/g, '');
   const lead = intro.text.replace(/^\*\*.+?\*\*\s*/, '');
@@ -75,13 +75,13 @@ for (const page of pages) {
 <body>
   <a class="skip" href="#main">${page.skip}</a>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="Paper Reading Skill"><span class="brand-mark" aria-hidden="true">P<span>↗</span></span><span>Paper Reading</span></a>
+    <a class="brand" href="./" aria-label="Paper Reading Skill"><img src="assets/logo.svg" alt="" width="35" height="35"><span>Paper Reading</span></a>
     <nav aria-label="${page.nav}">${nav}<a class="nav-repo" href="${repo}">GitHub ↗</a><a class="lang" href="${page.other}" hreflang="${page.lang === 'en' ? 'zh-CN' : 'en'}">${page.otherLabel}</a></nav>
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="#section-1">${page.example}</a><a class="button secondary" href="${repo}">${page.github}</a></div></div>
-      <figure class="hero-visual">${rewriteLinks(marked.parser([preview]))}<figcaption>${page.lang === 'en' ? 'Editorial preview of the MiMo-V2.6 reading (Chinese); English examples are below.' : 'MiMo-V2.6 中文深读文档的编辑式预览；下方另有两个英文样例。'}</figcaption></figure>
+      <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="#section-1">${page.example}</a><a class="button secondary" href="#section-4">${page.install}</a></div></div>
+      <figure class="hero-visual">${rewriteLinks(marked.parser([preview]))}<figcaption>${page.lang === 'en' ? 'Editorial preview of the MiMo-V2.6 reading (Chinese); English examples are below.' : 'MiMo-V2.6 中文深读文档的编辑式预览；下方还有英文样例。'}</figcaption></figure>
     </section>
     <div class="content-wrap">${content}</div>
   </main>
