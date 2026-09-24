@@ -1,8 +1,7 @@
-# <img src="docs/assets/logo.svg" alt="" width="44" height="44"> Paper Reading Skill
-
-**一页读懂整篇论文。** 提供 PDF 或论文链接，这个开源 agent skill 会生成一份自包含的 HTML 深读图谱，把全局论证、机制、原论文图、公式与实验连在一起。
-
-<p><a href="https://xiaofengshi.github.io/paper-reading-skill/zh.html"><img src="docs/assets/read-online-zh.svg" alt="阅读六篇完整样例" height="48"></a> <a href="#开始使用"><img src="docs/assets/install-zh.svg" alt="安装并开始使用" height="48"></a> <a href="README.md">English →</a></p>
+<p align="center"><img src="docs/assets/logo.svg" alt="" width="64" height="64"></p>
+<h1 align="center">Paper Reading Skill</h1>
+<p align="center"><strong>一页读懂整篇论文。</strong> 给这个开源 agent skill 一份 PDF 或论文链接，它会生成自包含的 HTML 深读图谱，串起全局论证、机制、原论文图、公式与实验。</p>
+<p align="center"><a href="https://xiaofengshi.github.io/paper-reading-skill/zh.html">项目主页 ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html">阅读完整样例 ↗</a> · <a href="#开始使用">开始使用</a> · <a href="README.md">English</a></p>
 
 ![MiMo-V2.6 阅读图谱预览：把论文全局、RL 机制和实验证据连在一起。](docs/assets/atlas-preview.svg)
 

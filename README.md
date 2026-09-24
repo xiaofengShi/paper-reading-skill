@@ -1,8 +1,7 @@
-# <img src="docs/assets/logo.svg" alt="" width="44" height="44"> Paper Reading Skill
-
-**Read the whole paper in one place.** Give this open-source agent skill a PDF or paper URL. It produces one self-contained HTML reading atlas that connects the paper's argument, mechanisms, original figures, equations, and experiments.
-
-<p><a href="https://xiaofengshi.github.io/paper-reading-skill/"><img src="docs/assets/read-online-en.svg" alt="Explore six complete readings" height="48"></a> <a href="#get-started"><img src="docs/assets/install-en.svg" alt="Install the skill" height="48"></a> <a href="README.zh-CN.md">中文文档 →</a></p>
+<p align="center"><img src="docs/assets/logo.svg" alt="" width="64" height="64"></p>
+<h1 align="center">Paper Reading Skill</h1>
+<p align="center"><strong>Read the whole paper in one place.</strong> Give this open-source agent skill a PDF or paper URL. It builds a self-contained HTML atlas of the argument, mechanisms, original figures, equations, and experiments.</p>
+<p align="center"><a href="https://xiaofengshi.github.io/paper-reading-skill/">Project website ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html">Read a complete example ↗</a> · <a href="#get-started">Get started</a> · <a href="README.zh-CN.md">中文</a></p>
 
 ![A preview of the MiMo-V2.6 reading atlas, connecting the paper's global map, RL mechanism, and experiment evidence.](docs/assets/atlas-preview.svg)
 

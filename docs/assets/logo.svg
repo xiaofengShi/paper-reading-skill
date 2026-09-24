@@ -1,8 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
   <title id="title">Paper Reading Skill</title>
-  <rect width="64" height="64" rx="14" fill="#173b40"/>
-  <path d="M11 15c8-2 15-1 21 3 6-4 13-5 21-3v33c-8-2-15-1-21 3-6-4-13-5-21-3z" fill="none" stroke="#f3f8f2" stroke-width="2.4" stroke-linejoin="round"/>
-  <path d="M32 18v33M16 22c5-.5 9 .1 12 2M36 24c3-2 7-2.5 12-2" fill="none" stroke="#f3f8f2" stroke-width="2" stroke-linecap="round"/>
-  <path d="M18 31l8 6 12-8 8 6" fill="none" stroke="#e9b582" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="18" cy="31" r="2.6" fill="#e9b582"/><circle cx="26" cy="37" r="2.6" fill="#e9b582"/><circle cx="38" cy="29" r="2.6" fill="#e9b582"/><circle cx="46" cy="35" r="2.6" fill="#e9b582"/>
+  <rect width="64" height="64" rx="16" fill="#eaf3ef"/>
+  <path d="M12 19c7-2 14-1 20 3 6-4 13-5 20-3v29c-7-2-14-1-20 3-6-4-13-5-20-3z" fill="#fffefa" stroke="#173b40" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M32 22v29M18 26c3-.4 6 0 9 1M37 27c3-1 6-1.4 9-1" fill="none" stroke="#173b40" stroke-width="2" stroke-linecap="round"/>
+  <path d="m18 35 8 4 12-9 8 5" fill="none" stroke="#c07750" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

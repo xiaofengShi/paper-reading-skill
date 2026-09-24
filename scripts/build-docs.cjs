@@ -24,7 +24,9 @@ const rewriteLinks = html => html.replace(/\b(href|src)="([^"]+)"/g, (_, attr, t
 for (const page of pages) {
   const tokens = marked.lexer(fs.readFileSync(path.join(root, page.source), 'utf8'));
   const title = tokens.shift();
-  if (title?.type !== 'heading' || title.depth !== 1) throw new Error(`${page.source} needs one leading H1`);
+  if (title?.type !== 'html' || !/<h1 align="center">Paper Reading Skill<\/h1>/.test(title.text)) throw new Error(`${page.source} needs one centered H1`);
+  const intro = title.text.match(/<p align="center"><strong>([^<]+)<\/strong>\s*([^<]+)<\/p>/);
+  if (!intro) throw new Error(`${page.source} needs a centered lead sentence`);
 
   const hero = [];
   const sections = [];
@@ -41,11 +43,9 @@ for (const page of pages) {
 
   const preview = hero.find(token => token.type === 'paragraph' && token.text.startsWith('!['));
   if (!preview) throw new Error(`${page.source} needs a preview image`);
-  const intro = hero.find(token => token.type === 'paragraph');
-  const headline = intro?.text.match(/^\*\*(.+?)\*\*/)?.[1]?.replace(/[.!?。！？]+$/, '');
-  if (!headline) throw new Error(`${page.source} needs a bold lead sentence`);
-  const summary = intro.text.replace(/\*\*/g, '');
-  const lead = intro.text.replace(/^\*\*.+?\*\*\s*/, '');
+  const headline = intro[1].replace(/[.!?。！？]+$/, '');
+  const lead = intro[2].trim();
+  const summary = `${intro[1]} ${lead}`;
   const description = summary.length > 190 ? `${summary.slice(0, 187)}…` : summary;
   const url = page.lang === 'en' ? site : `${site}zh.html`;
   const nav = [0, 2, 3].map(index => `<a href="#section-${index + 1}">${esc(sections[index][0].text)}</a>`).join('');
