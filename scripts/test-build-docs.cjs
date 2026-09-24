@@ -5,7 +5,7 @@ const test = require('node:test');
 
 const docs = path.resolve(__dirname, '../docs');
 
-test('the published homepages expose both languages, three complete readings, and working local links', () => {
+test('the published homepages expose both languages, four complete readings, and working local links', () => {
   for (const [file, lang, switchTarget, phrase, method, install] of [
     ['index.html', 'en', 'zh.html', 'Explore complete readings', 'The reading method', 'Get started'],
     ['zh.html', 'zh-CN', './', '阅读完整样例', '论文阅读方法', '开始使用'],
@@ -19,7 +19,7 @@ test('the published homepages expose both languages, three complete readings, an
     assert.ok(html.includes(`href="#section-4">${install}</a>`));
     assert.ok(html.includes(`href="${switchTarget}"`));
     assert.ok(html.includes('href="#section-1"'));
-    for (const name of ['mimo-v2.6', 'attention-is-all-you-need', 'deepseek-v4.1-flash']) {
+    for (const name of ['mimo-v2.6', 'attention-is-all-you-need', 'deepseek-v4.1-flash', 'raft']) {
       assert.ok(html.includes(`${name}-deep-read.html`), `${file} is missing ${name}`);
     }
     assert.ok(html.includes('href="https://github.com/xiaofengShi/paper-reading-skill"'));

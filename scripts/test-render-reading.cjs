@@ -210,3 +210,18 @@ test('the two English examples embed their diagrams, original figures, and readi
     assert.doesNotMatch(html, /class="katex-error"/);
   }
 });
+
+test('the RAFT example keeps its method, equations, evidence, and figures in one Chinese page', () => {
+  const html = fs.readFileSync(path.resolve(__dirname, '../docs/raft-deep-read.html'), 'utf8');
+  assert.match(html, /<html lang="zh-CN">/);
+  assert.match(html, /id="section-5">05 \/ 综合/);
+  assert.match(html, /class="reading-path"/);
+  assert.match(html, /class="experiment-atlas"/);
+  assert.match(html, /class="display-math"/);
+  assert.equal((html.match(/data:image\/png;base64,/g) || []).length, 3);
+  assert.match(html, /原论文 Fig\. 1 是整个框架的鸟瞰/);
+  assert.match(html, /原论文 Fig\. 2 回答/);
+  assert.match(html, /原论文 Fig\. 3 提供参数层面的旁证/);
+  assert.match(html, /<span class="source-ref">本图谱依据 <a href="https:\/\/arxiv\.org\/abs\/2606\.00147v1">arXiv:2606\.00147v1<\/a>/);
+  assert.doesNotMatch(html, /class=“source-ref”|class="katex-error"|file:\/\//);
+});

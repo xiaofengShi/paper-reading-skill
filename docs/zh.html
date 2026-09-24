@@ -40,6 +40,7 @@
 <li><strong>Attention Is All You Need · English。</strong> 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 <a href="https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html">打开完整深读 →</a></li>
 <li><strong>DeepSeek-V4.1-Flash · English。</strong> 分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。 <a href="https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-deep-read.html">打开完整深读 →</a></li>
 <li><strong>MiMo-V2.6 · 中文。</strong> 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。 <a href="https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html">打开完整深读 →</a></li>
+<li><strong>RAFT · 中文 · Kimi Code。</strong> 沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。使用安装后的本 skill 在 Kimi Code 中制作，依据 <a href="https://arxiv.org/abs/2606.00147v1">arXiv:2606.00147v1</a>。<a href="https://xiaofengshi.github.io/paper-reading-skill/raft-deep-read.html">打开完整深读 →</a></li>
 </ul>
 <p>MiMo 样例基于一份 44 页的本地 PDF 编写，仓库不分发该 PDF。作者后来<a href="https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d">更新了在线报告</a>；样例已采用修正后的 Pro 激活参数数值，其他版本差异尚未逐页核对。</p>
 
@@ -65,7 +66,7 @@
 <li><strong>解读能否回到论文核查？</strong> <a href="https://aclanthology.org/2024.findings-emnlp.780/">SciDoc2Diagrammer-MAF</a>指出生成的科学图示可能遗漏信息或偏离原文。本项目据此要求核对关键图、公式、数字和箭头，并把每项实验的设置、对照、指标与结果放在一起。本项目并未实现该论文的图示生成算法。</li>
 </ol>
 <p>这三项原则形成上文的五层阅读顺序：全局图、主路径、机制、实验图谱和综合理解。衡量深读是否有用，要看读者能否说清核心机制、指出重要结论由哪些证据支撑，而不必为补全关键解释反复查 PDF。这是本项目的方法设计；现有样例尚未经独立读者研究验证。</p>
-<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reading-quality.md">公开的深读质量检查</a>将来源覆盖、科学事实、主张与证据的对应、独立可读性和离线交付变成交付门槛。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reader-tasks.md">三篇样例的读者题目与答案</a>可供未参与编写的人测试理解效果。渲染器测试通过或作者自查，都不等于完成了独立读者研究。</p>
+<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reading-quality.md">公开的深读质量检查</a>将来源覆盖、科学事实、主张与证据的对应、独立可读性和离线交付变成交付门槛。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reader-tasks.md">四篇样例的读者题目与答案</a>可供未参与编写的人测试理解效果。渲染器测试通过或作者自查，都不等于完成了独立读者研究。</p>
 
 </section>
 <section class="content-section section-4" id="section-4">
@@ -94,7 +95,7 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$HOME/.cl
 <section class="content-section section-5" id="section-5">
 <h2>工作方式</h2>
 <p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/SKILL.md">Skill 指令</a>引导 agent 依次建立全局认知、重建全文、编写解释并核对来源。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/paper-types.md">论文类型协议</a>为实证、系统、基准、数据集、理论和综述论文选择合适图形；<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/visual-reading.md">可视化阅读规则</a>要求图示与解释、证据对应。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/reading-modes.md">阅读模式</a>定义可选的快筛、审稿和研究视角。</p>
-<p>仓库附带的<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">渲染器</a>把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 <code>&lt;!-- paper-reading-lang: en --&gt;</code> 或 <code>&lt;!-- paper-reading-lang: zh-CN --&gt;</code>，导航和图表标签也据此选择语种。Archify 可以呈现可选的交互结构图，但构建不依赖 Archify 或其他本地 skill。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/attention-is-all-you-need-deep-read.md">Transformer</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/deepseek-v4.1-flash-deep-read.md">DeepSeek</a>和<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">MiMo</a>的 Markdown 与图形输入都是构建材料，不要求读者分别打开。</p>
+<p>仓库附带的<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">渲染器</a>把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 <code>&lt;!-- paper-reading-lang: en --&gt;</code> 或 <code>&lt;!-- paper-reading-lang: zh-CN --&gt;</code>，导航和图表标签也据此选择语种。Archify 可以呈现可选的交互结构图，但构建不依赖 Archify 或其他本地 skill。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/attention-is-all-you-need-deep-read.md">Transformer</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/deepseek-v4.1-flash-deep-read.md">DeepSeek</a>、<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/mimo-v2.6-deep-read.md">MiMo</a>和<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/examples/raft-deep-read.md">RAFT</a>的 Markdown 与图形输入都是构建材料，不要求读者分别打开。</p>
 <p>本地重建所有已发布样例：</p>
 <pre><code class="language-bash">npm ci
 npm run doctor
@@ -105,7 +106,7 @@ npm test
 </section>
 <section class="content-section section-6" id="section-6">
 <h2>验证与适用范围</h2>
-<p>三个文档分别覆盖经典架构论文，以及机制和评测结构不同的两份技术报告。渲染测试覆盖语言声明、行内与独立公式、原文位置开关、原图上下文和数值图行为。这些检查验证排版与生成契约，不等于独立核证每一条科学解读。理论、综述、数据集和独立读者测试仍不在当前样例范围内。</p>
+<p>四个文档分别覆盖经典架构论文、两份技术报告和一篇领域微调方法论文。渲染测试覆盖语言声明、行内与独立公式、原文位置开关、原图上下文和数值图行为。这些检查验证排版与生成契约，不等于独立核证每一条科学解读。理论、综述、数据集和独立读者测试仍不在当前样例范围内。</p>
 <p><a href="https://github.com/tt-a1i/archify">Archify</a>是可选的交互结构图呈现工具。科学内容仍须对照论文核查。</p>
 <p>欢迎在 <a href="https://github.com/xiaofengShi/paper-reading-skill/issues">GitHub Issues</a>提交问题、缺陷或其他论文类型的样例。项目使用 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE">MIT 许可证</a>。</p>
 
