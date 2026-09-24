@@ -80,7 +80,7 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/
 
 [Skill 指令](SKILL.md)引导 agent 依次建立全局认知、重建全文、编写解释并核对来源。[论文类型协议](references/paper-types.md)为实证、系统、基准、数据集、理论和综述论文选择合适图形；[可视化阅读规则](references/visual-reading.md)要求图示与解释、证据对应。[阅读模式](references/reading-modes.md)定义可选的快筛、审稿和研究视角。
 
-仓库附带的[渲染器](scripts/render-reading.cjs)把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 `<!-- paper-reading-lang: en -->` 或 `<!-- paper-reading-lang: zh-CN -->`，导航和图表标签也据此选择语种。可在第二行选择四种内置视觉主题之一：`<!-- paper-reading-theme: forest -->`、`cobalt`、`plum`、`saffron`；省略时使用 `forest`。作者按论文内容选择主题，渲染器不猜测主题。Archify 可以呈现可选的交互结构图，但构建不依赖 Archify 或其他本地 skill。[Transformer](examples/attention-is-all-you-need-deep-read.md)、[DeepSeek](examples/deepseek-v4.1-flash-deep-read.md)、[MiMo](examples/mimo-v2.6-deep-read.md)、[RAFT](examples/raft-deep-read.md)、[MechVQA](examples/mechvqa-deep-read.md)和[IAR](examples/iar-deep-read.md)的 Markdown 与图形输入都是构建材料，不要求读者分别打开。
+仓库附带的[渲染器](scripts/render-reading.cjs)把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 `<!-- paper-reading-lang: en -->` 或 `<!-- paper-reading-lang: zh-CN -->`，导航和图表标签也据此选择语种。可在第二行选择四种内置视觉主题之一：`<!-- paper-reading-theme: forest -->`、`cobalt`、`plum`、`saffron`；省略时使用 `forest`。作者按论文内容选择主题，渲染器不猜测主题。Skill 会逐篇判断探索分支、状态变化或反馈环是否能增加理解；若不能，使用静态图。交互图可用 Archify 或自包含的 HTML/SVG 制作，关键解释仍须在无脚本时可读。构建不依赖 Archify 或其他本地 skill。[Transformer](examples/attention-is-all-you-need-deep-read.md)、[DeepSeek](examples/deepseek-v4.1-flash-deep-read.md)、[MiMo](examples/mimo-v2.6-deep-read.md)、[RAFT](examples/raft-deep-read.md)、[MechVQA](examples/mechvqa-deep-read.md)和[IAR](examples/iar-deep-read.md)的 Markdown 与图形输入都是构建材料，不要求读者分别打开。
 
 本地重建所有已发布样例：
 
