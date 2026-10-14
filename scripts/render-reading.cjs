@@ -23,7 +23,7 @@ if (!['forest', 'cobalt', 'plum', 'saffron'].includes(theme)) throw new Error(`U
 const labels = {
   'zh-CN': {
     why: '为什么需要', last: '这一阶段留下什么', next: '交给下一阶段',
-    scope: '用于哪些任务', judge: '怎样判断', signal: '如何进入学习', value: '关键价值',
+    scope: '用于哪些任务', judge: '怎样判断', signal: '作用机制', value: '关键价值',
     question: '研究问题', setup: '设置 / 对照', observation: '观察', conclusion: '结论', cost: '代价 / 假设', chart: '本文整理的数据图',
     start: '起点', end: '终点', change: '变化', points: '个百分点', chartData: '查看图表数据', item: '项目',
     openDiagram: '展开辅助交互图：', explore: '节点聚焦与路径探索', diagramNote: '交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。',
@@ -34,7 +34,7 @@ const labels = {
   },
   en: {
     why: 'Why it matters', last: 'What this stage leaves behind', next: 'Passed to the next stage',
-    scope: 'Where it applies', judge: 'How it is judged', signal: 'How it shapes learning', value: 'Why it matters',
+    scope: 'Where it applies', judge: 'How it is judged', signal: 'How it works', value: 'Why it matters',
     question: 'Research question', setup: 'Setup / comparator', observation: 'Observation', conclusion: 'Conclusion', cost: 'Cost / assumption', chart: 'Chart prepared for this reading',
     start: 'Start', end: 'End', change: 'Change', points: 'percentage points', chartData: 'View chart data', item: 'Item',
     openDiagram: 'Explore interactive diagram: ', explore: 'Focus nodes and follow paths', diagramNote: 'The interactive view explores structure. The reading path, mechanisms, and experimental results remain visible on this page.',
@@ -88,33 +88,53 @@ const strictNumber = (value, message) => {
   if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error(message);
   return value;
 };
+const requireText = (value, message) => {
+  if (typeof value !== 'string' || !value.trim()) throw new Error(message);
+  return value;
+};
+const requireRowText = (row, fields, kind, index) => {
+  for (const field of fields) requireText(row[field], `${kind} row ${index + 1} is missing "${field}"`);
+};
 
-function renderMap(data) {
+function validateMap(data) {
   if (!Array.isArray(data.items) || !data.items.length) throw new Error('paper-map needs items');
+  data.items.forEach((x, i) => requireRowText(x, ['number', 'label', 'text'], 'paper-map item', i));
+}
+function renderMap(data) {
+  validateMap(data);
   return `<div class="principle-grid" role="list">${data.items.map(x =>
     `<article class="principle" role="listitem"><span class="principle-number">${esc(x.number)}</span><h3>${esc(x.label)}</h3><p>${esc(x.text)}</p>${sourceBadge(x.source)}</article>`
   ).join('')}</div>`;
 }
 function renderPath(data) {
   if (!Array.isArray(data.stages) || !data.stages.length) throw new Error('paper-path needs stages');
+  requireText(data.title, 'paper-path is missing "title"');
+  data.stages.forEach((s, i) => requireRowText(s, ['title', 'role', 'action', 'why', 'output'], 'paper-path stage', i));
   return `<figure class="reading-path"><figcaption><span class="figure-kicker">${t.pathKicker}</span><strong>${esc(data.title)}</strong>${data.intro ? `<p>${esc(data.intro)}</p>` : ''}</figcaption><ol>${data.stages.map((s, i) =>
     `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>${t.why}</dt><dd>${esc(s.why)}</dd></div>${s.cost ? `<div><dt>${t.cost}</dt><dd>${esc(s.cost)}</dd></div>` : ''}<div><dt>${i === data.stages.length - 1 ? t.last : t.next}</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
   ).join('')}</ol></figure>`;
 }
 function renderContrast(data) {
   if (!Array.isArray(data.branches) || data.branches.length !== 2) throw new Error('paper-contrast needs two branches');
+  requireText(data.title, 'paper-contrast is missing "title"');
+  requireText(data.intro, 'paper-contrast is missing "intro"');
+  data.branches.forEach((b, i) => requireRowText(b, ['name', 'lead', 'scope', 'judge', 'signal', 'why'], 'paper-contrast branch', i));
   return `<figure class="mechanism-contrast"><figcaption><span class="figure-kicker">${t.contrastKicker}</span><strong>${esc(data.title)}</strong><p>${esc(data.intro)}</p></figcaption><div class="contrast-grid">${data.branches.map((b, i) =>
     `<section class="contrast-branch b${i}"><h3>${esc(b.name)}</h3><p class="contrast-lead">${esc(b.lead)}</p><dl><div><dt>${t.scope}</dt><dd>${esc(b.scope)}</dd></div><div><dt>${t.judge}</dt><dd>${esc(b.judge)}</dd></div><div><dt>${t.signal}</dt><dd>${esc(b.signal)}</dd></div><div><dt>${t.value}</dt><dd>${esc(b.why)}</dd></div></dl>${sourceBadge(b.source)}</section>`
   ).join('')}</div></figure>`;
 }
 function renderExperiments(data) {
   if (!Array.isArray(data.rows) || !data.rows.length) throw new Error('paper-experiments needs rows');
+  requireText(data.title, 'paper-experiments is missing "title"');
+  data.rows.forEach((r, i) => requireRowText(r, ['question', 'setup', 'observation'], 'paper-experiments', i));
   return `<figure class="experiment-atlas"><figcaption><span class="figure-kicker">${t.experimentKicker}</span><strong>${esc(data.title)}</strong></figcaption><div class="experiment-head" aria-hidden="true"><span>${t.question}</span><span>${t.setup}</span><span>${t.observation}</span></div><div class="experiment-rows">${data.rows.map((r, i) =>
     `<article class="experiment-row"><div class="experiment-question"><span>${String(i + 1).padStart(2, '0')}</span><strong>${esc(r.question)}</strong></div><p>${esc(r.setup)}</p><div><p>${esc(r.observation)}</p>${r.conclusion ? `<p class="experiment-conclusion"><span>${t.conclusion}</span>${esc(r.conclusion)}</p>` : ''}${sourceBadge(r.source)}</div></article>`
   ).join('')}</div></figure>`;
 }
 function renderChart(data) {
   if (!Array.isArray(data.rows) || !data.rows.length) throw new Error('paper-chart needs rows');
+  requireText(data.title, 'paper-chart is missing "title"');
+  data.rows.forEach((r, i) => requireText(r.label, `paper-chart row ${i + 1} is missing "label"`));
   const header = `<div class="figure-head"><div><span class="figure-kicker">${esc(data.origin || t.chart)}</span><h3>${esc(data.title)}</h3>${data.subtitle ? `<p>${esc(data.subtitle)}</p>` : ''}</div>${sourceBadge(data.source)}</div>`;
   const note = data.note ? `<figcaption class="data-note">${esc(data.note)}</figcaption>` : '';
   if (data.type === 'segments') {
@@ -184,7 +204,7 @@ let prepared = source.slice(languageMarker[0].length + (themeMarker?.[0].length 
 let heroMap = null;
 prepared = prepared.replace(/```paper-map\s*\n([\s\S]*?)\n```/g, (_, json) => {
   const data = JSON.parse(json);
-  if (!Array.isArray(data.items) || !data.items.length) throw new Error('paper-map needs items');
+  validateMap(data);
   if (!heroMap) { heroMap = data; return ''; }
   return slot(renderMap(data));
 });

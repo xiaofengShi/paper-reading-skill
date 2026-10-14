@@ -1,6 +1,6 @@
 # Renderer input format
 
-This is the complete input contract for [render-reading.cjs](../scripts/render-reading.cjs). The Markdown audit source it consumes becomes one offline HTML reading page; every constraint below is enforced by the build, and violations throw before any output is written. Example sources in [examples/](../examples/) are the reference for editorial style — this file is the reference for what the parser accepts.
+This is the complete input contract for [render-reading.cjs](../scripts/render-reading.cjs). The Markdown audit source it consumes becomes one offline HTML reading page. The build enforces the explicit structural and numeric checks listed below — missing required fields, bad numbers, escaping paths, and malformed blocks throw before any output is written. It cannot check semantic truthfulness: whether a number matches the paper, whether an explanation is right, or whether a reader will understand. Those stay in the human review gates ([evals/reading-quality.md](../evals/reading-quality.md)). Example sources in [examples/](../examples/) are the reference for editorial style — this file is the reference for what the parser accepts.
 
 ## File header
 
@@ -26,6 +26,8 @@ The first lines are positional:
 Place each block at the top level of the Markdown with blank lines around it. The info string must be exactly the keyword; the body is one JSON object. **All string fields are escaped plain text** — no Markdown, HTML, or math inside them. A block that ends up inside a table or list fails with `Unresolved visual slot`.
 
 Every block requires a non-empty `source` field on each fact-bearing item; a missing source throws `A visual fact is missing its source`. The source renders as a hidden badge revealed by the “显示原文定位 / Show source locations” toggle.
+
+Required non-empty text fields (empty strings and missing keys are rejected, never rendered as `undefined`): `paper-map` items need `number`, `label`, `text`; `paper-path` needs `title` and stage `title`, `role`, `action`, `why`, `output`; `paper-contrast` needs `title`, `intro` and branch `name`, `lead`, `scope`, `judge`, `signal`, `why`; `paper-experiments` needs `title` and row `question`, `setup`, `observation`; `paper-chart` needs `title` and row `label`. Everything else stays optional: `paper-path.cost`, `paper-experiments.conclusion`, `paper-map.thesis` / `outcome` / `outcomeSource` / `signal`, and chart `subtitle` / `origin` / `note` / `unit` / `domainMax` / `approx`. Note that `signal` is optional on a `paper-map` item but **required** on a `paper-contrast` branch (it is one of the branch fields listed above). The `signal` field on a contrast branch renders under the label “作用机制 / How it works” — describe the mechanism, not a learning effect.
 
 ### `paper-map` — whole-paper map cards
 
@@ -107,7 +109,7 @@ Charts carry a visible `origin`/`source` pair and a `<details>` data table so th
 
 ### `<!-- archify:file.html|title -->` — embedded interactive view
 
-An HTML comment, not a fence. The file path is relative to the audit source and must stay inside its directory subtree. The page is inlined as an iframe `srcdoc` inside a disclosure; Google Fonts links are stripped so the result works offline. Interactive views are optional — record why one helps (or why a static view suffices) in a Markdown comment in the audit source, per [visual-reading](visual-reading.md).
+An HTML comment, not a fence. The file path is relative to the audit source and must stay inside its directory subtree. The page is inlined as an iframe `srcdoc` inside a disclosure and only its Google Fonts `<link>` tags are removed — remote scripts, relative image references, and any other external resources pass through untouched. The renderer therefore does **not** make an arbitrary page offline or self-contained: embed only HTML that is already self-contained and has been verified offline (no remote scripts, fonts, or images; relative assets resolved and inlined) before it reaches the audit source. Interactive views are optional — record why one helps (or why a static view suffices) in a Markdown comment in the audit source, per [visual-reading](visual-reading.md).
 
 ## Figures and images
 

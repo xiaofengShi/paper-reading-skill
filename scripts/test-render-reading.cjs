@@ -436,3 +436,64 @@ test('the renderer accepts audit sources and assets outside the repository', () 
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('visual blocks reject missing required text fields instead of rendering undefined', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-required-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    const render = body => {
+      fs.writeFileSync(source, `<!-- paper-reading-lang: en -->
+# Paper
+
+## 01 / Block
+
+${body}
+`);
+      return () => execFileSync(process.execPath, [renderer, source, output], { stdio: 'pipe' });
+    };
+    assert.throws(render('```paper-map\n{"items":[{"source":"PDF p. 1"}]}\n```\n'), /paper-map item row 1 is missing "number"/);
+    assert.throws(render('```paper-path\n{"title":"T","stages":[{"source":"PDF §3"}]}\n```\n'), /paper-path stage row 1 is missing "title"/);
+    assert.throws(render('```paper-path\n{"stages":[{"title":"T","role":"R","action":"A","why":"W","output":"O","source":"PDF p. 1"}]}\n```\n'), /paper-path is missing "title"/);
+    assert.throws(render('```paper-contrast\n{"title":"T","intro":"I","branches":[{"source":"PDF p. 1"},{"source":"PDF p. 2"}]}\n```\n'), /paper-contrast branch row 1 is missing "name"/);
+    assert.throws(render('```paper-contrast\n{"title":"T","branches":[{"name":"A","lead":"L","scope":"S","judge":"J","signal":"G","why":"Y","source":"PDF p. 1"},{"name":"B","lead":"L","scope":"S","judge":"J","signal":"G","why":"Y","source":"PDF p. 2"}]}\n```\n'), /paper-contrast is missing "intro"/);
+    assert.throws(render('```paper-experiments\n{"title":"T","rows":[{"source":"PDF p. 1"}]}\n```\n'), /paper-experiments row 1 is missing "question"/);
+    assert.throws(render('```paper-chart\n{"type":"bars","title":"T","rows":[{"label":"","value":1}],"source":"PDF p. 1"}\n```\n'), /paper-chart row 1 is missing "label"/);
+    assert.throws(render('```paper-chart\n{"type":"bars","rows":[{"label":"A","value":1}],"source":"PDF p. 1"}\n```\n'), /paper-chart is missing "title"/);
+    const missingSource = render('```paper-path\n{"title":"T","stages":[{"title":"T","role":"R","action":"A","why":"W","output":"O"}]}\n```\n');
+    assert.throws(missingSource, /A visual fact is missing its source/);
+    assert.equal(fs.existsSync(output), false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('paper-contrast labels describe mechanism rather than learning', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-label-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    const contrast = (lang, theme) => `<!-- paper-reading-lang: ${lang} -->
+<!-- paper-reading-theme: ${theme} -->
+# Paper
+
+## 01 / Contrast
+
+\`\`\`paper-contrast
+{"title":"Two routes","intro":"A neutral comparison.","branches":[{"name":"A","lead":"L","scope":"S","judge":"J","signal":"M","why":"Y","source":"PDF p. 1"},{"name":"B","lead":"L","scope":"S","judge":"J","signal":"M","why":"Y","source":"PDF p. 2"}]}
+\`\`\`
+`;
+    fs.writeFileSync(source, contrast('zh-CN', 'forest'));
+    execFileSync(process.execPath, [renderer, source, output]);
+    let html = fs.readFileSync(output, 'utf8');
+    assert.match(html, /<dt>作用机制<\/dt><dd>M<\/dd>/);
+    assert.doesNotMatch(html, /如何进入学习/);
+    fs.writeFileSync(source, contrast('en', 'forest'));
+    execFileSync(process.execPath, [renderer, source, output]);
+    html = fs.readFileSync(output, 'utf8');
+    assert.match(html, /<dt>How it works<\/dt><dd>M<\/dd>/);
+    assert.doesNotMatch(html, /How it shapes learning/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
