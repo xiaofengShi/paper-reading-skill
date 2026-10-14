@@ -159,6 +159,10 @@ Figure identifiers (`Fig. 5`, `Table 1`) must stay visible even when page number
 
 ## Output placement
 
+For an ordinary reading, any self-contained directory works: keep the audit source and its `assets/` together (the renderer resolves images relative to the source and refuses paths that escape it), and write the HTML wherever the user wants it. Invoke the renderer from the installed skill directory; source and output may live outside this repository.
+
+When contributing to this repository's public gallery only:
+
 - Audit source: `examples/<slug>-deep-read.md`; assets beside it in `examples/assets/<slug>-figN-<desc>.png`.
 - Built page: `docs/<slug>-deep-read.html` (single offline file).
 - `node scripts/build-examples.cjs` renders every `examples/*-deep-read.md`; `npm run build:examples` runs it. Register new readings per [CONTRIBUTING.md](../CONTRIBUTING.md).

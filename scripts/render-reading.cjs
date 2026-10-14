@@ -84,6 +84,10 @@ const sourceBadge = source => {
   if (!source) throw new Error('A visual fact is missing its source');
   return `<span class="source-badge">${esc(source)}</span>`;
 };
+const strictNumber = (value, message) => {
+  if (typeof value !== 'number' || !Number.isFinite(value)) throw new Error(message);
+  return value;
+};
 
 function renderMap(data) {
   if (!Array.isArray(data.items) || !data.items.length) throw new Error('paper-map needs items');
@@ -110,10 +114,13 @@ function renderExperiments(data) {
   ).join('')}</div></figure>`;
 }
 function renderChart(data) {
+  if (!Array.isArray(data.rows) || !data.rows.length) throw new Error('paper-chart needs rows');
   const header = `<div class="figure-head"><div><span class="figure-kicker">${esc(data.origin || t.chart)}</span><h3>${esc(data.title)}</h3>${data.subtitle ? `<p>${esc(data.subtitle)}</p>` : ''}</div>${sourceBadge(data.source)}</div>`;
   const note = data.note ? `<figcaption class="data-note">${esc(data.note)}</figcaption>` : '';
   if (data.type === 'segments') {
-    const sum = data.rows.reduce((n, r) => n + Number(r.value), 0);
+    const values = data.rows.map(r => strictNumber(r.value, `Invalid segment value for ${r.label}`));
+    if (values.some(v => v < 0)) throw new Error(`Invalid segment value for ${data.rows.find((r, i) => values[i] < 0).label}`);
+    const sum = values.reduce((n, v) => n + v, 0);
     if (Math.abs(sum - 100) > 0.2) throw new Error(`Segments do not total 100: ${sum}`);
     const bar = `<div class="segments" role="img" aria-label="${esc(data.rows.map(r => `${r.label} ${r.value}${data.unit || ''}`).join(lang === 'zh-CN' ? '；' : '; '))}">${data.rows.map((r, i) => `<span class="segment s${i}" style="width:${Number(r.value)}%"></span>`).join('')}</div>`;
     const legend = `<div class="segment-legend">${data.rows.map((r, i) => `<div><span class="swatch s${i}"></span><span>${esc(r.label)}</span><strong>${esc(r.value)}${esc(data.unit || '')}</strong></div>`).join('')}</div>`;
@@ -121,9 +128,12 @@ function renderChart(data) {
   }
   if (data.type === 'paired') {
     const rows = data.rows.map(r => {
-      for (const key of ['before', 'after']) if (!(Number.isFinite(Number(r[key])) && Number(r[key]) >= 0 && Number(r[key]) <= 100)) throw new Error(`Invalid ${key} for ${r.label}`);
-      const before = Number(r.before);
-      const after = Number(r.after);
+      for (const key of ['before', 'after']) {
+        const v = strictNumber(r[key], `Invalid ${key} for ${r.label}`);
+        if (v < 0 || v > 100) throw new Error(`Invalid ${key} for ${r.label}`);
+      }
+      const before = r.before;
+      const after = r.after;
       const delta = after - before;
       const change = `${delta >= 0 ? '+' : ''}${delta.toFixed(1)}`;
       const prefix = r.approx ? '≈' : '';
@@ -131,16 +141,22 @@ function renderChart(data) {
       return `<div class="pair-row"><div class="pair-label">${esc(r.label)}</div><div class="pair-track" role="img" aria-label="${esc(aria)}"><span class="pair-connector" style="left:${Math.min(before, after)}%;width:${Math.abs(delta)}%"></span><span class="pair-point before" style="left:${before}%"></span><span class="pair-point after" style="left:${after}%"></span></div><div class="pair-values"><span><i class="pair-symbol before" aria-hidden="true"></i>${t.start} <strong>${prefix}${before}%</strong></span><span><i class="pair-symbol after" aria-hidden="true"></i>${t.end} <strong>${prefix}${after}%</strong></span><span class="pair-delta">${prefix}${change} ${t.points}</span></div></div>`;
     }).join('');
     const tableHead = lang === 'zh-CN' ? `<th>项目</th><th>起点（%）</th><th>终点（%）</th><th>变化（百分点）</th>` : `<th>${t.item}</th><th>${t.start} (%)</th><th>${t.end} (%)</th><th>${t.change} (${t.points})</th>`;
-    const table = `<details class="chart-table"><summary>${t.chartData}</summary><table><thead><tr>${tableHead}</tr></thead><tbody>${data.rows.map(r => { const delta = Number(r.after) - Number(r.before); return `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${esc(r.before)}</td><td>${r.approx?'≈':''}${esc(r.after)}</td><td>${r.approx?'≈':''}${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</td></tr>`; }).join('')}</tbody></table></details>`;
+    const table = `<details class="chart-table"><summary>${t.chartData}</summary><table><thead><tr>${tableHead}</tr></thead><tbody>${data.rows.map(r => { const delta = r.after - r.before; return `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${esc(r.before)}</td><td>${r.approx?'≈':''}${esc(r.after)}</td><td>${r.approx?'≈':''}${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</td></tr>`; }).join('')}</tbody></table></details>`;
     return `<figure class="data-figure">${header}<div class="paired-chart">${rows}<div class="pair-axis" aria-hidden="true"><span>0%</span><span>100%</span></div></div>${table}${note}</figure>`;
   }
   if (data.type === 'bars') {
     const rows = data.rows.map(r => {
-      const value = Number(r.value);
-      if (!Number.isFinite(value) || value < 0) throw new Error(`Invalid bar value for ${r.label}`);
+      const value = strictNumber(r.value, `Invalid bar value for ${r.label}`);
+      if (value < 0) throw new Error(`Invalid bar value for ${r.label}`);
       return { label: r.label, value, approx: r.approx };
     });
-    const domain = Number.isFinite(Number(data.domainMax)) && Number(data.domainMax) > 0 ? Number(data.domainMax) : Math.max(...rows.map(r => r.value), 0);
+    const maxRow = rows.reduce((m, r) => Math.max(m, r.value), 0);
+    let domain = maxRow;
+    if (data.domainMax !== undefined) {
+      domain = strictNumber(data.domainMax, `Invalid domainMax: ${String(data.domainMax)}`);
+      if (domain <= 0) throw new Error(`Invalid domainMax: ${domain}`);
+      if (rows.some(r => r.value > domain)) throw new Error(`domainMax ${domain} is smaller than row values`);
+    }
     const scale = domain > 0 ? domain : 1;
     const unit = data.unit || '';
     const bars = rows.map(r => {

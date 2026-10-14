@@ -343,3 +343,96 @@ test('bars charts reject negative values and honor domainMax', () => {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('charts reject missing or coerced numbers instead of drawing zeros', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-strict-num-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    const render = body => {
+      fs.writeFileSync(source, `<!-- paper-reading-lang: en -->
+# Paper
+
+## 01 / Chart
+
+${body}
+`);
+      return () => execFileSync(process.execPath, [renderer, source, output], { stdio: 'pipe' });
+    };
+    const chart = rows => `\`\`\`paper-chart
+{"type":"bars","title":"T","source":"PDF p. 1","rows":${rows}}
+\`\`\`
+`;
+    assert.throws(render(chart('[{"label":"A"}]')), /Invalid bar value for A/);
+    assert.throws(render(chart('[{"label":"A","value":null}]')), /Invalid bar value for A/);
+    assert.throws(render(chart('[{"label":"A","value":""}]')), /Invalid bar value for A/);
+    assert.throws(render(chart('[{"label":"A","value":"7"}]')), /Invalid bar value for A/);
+    assert.throws(render(chart('[]')), /paper-chart needs rows/);
+    assert.throws(render(`\`\`\`paper-chart
+{"type":"bars","title":"T","domainMax":10,"source":"PDF p. 1","rows":[{"label":"A","value":11}]}
+\`\`\`
+`), /domainMax 10 is smaller than row values/);
+    assert.throws(render(`\`\`\`paper-chart
+{"type":"bars","title":"T","domainMax":-5,"source":"PDF p. 1","rows":[{"label":"A","value":1}]}
+\`\`\`
+`), /Invalid domainMax/);
+    assert.throws(render(`\`\`\`paper-chart
+{"type":"bars","title":"T","domainMax":null,"source":"PDF p. 1","rows":[{"label":"A","value":1}]}
+\`\`\`
+`), /Invalid domainMax/);
+    assert.throws(render(`\`\`\`paper-chart
+{"type":"paired","title":"T","source":"PDF p. 1","rows":[{"label":"A","before":null,"after":50}]}
+\`\`\`
+`), /Invalid before for A/);
+    assert.throws(render(`\`\`\`paper-chart
+{"type":"paired","title":"T","source":"PDF p. 1","rows":[{"label":"A","before":10,"after":120}]}
+\`\`\`
+`), /Invalid after for A/);
+    assert.throws(render(`\`\`\`paper-chart
+{"type":"paired","title":"T","source":"PDF p. 1","rows":[]}
+\`\`\`
+`), /paper-chart needs rows/);
+    assert.throws(render(`\`\`\`paper-chart
+{"type":"segments","title":"T","source":"PDF p. 1","rows":[{"label":"A","value":null},{"label":"B","value":100}]}
+\`\`\`
+`), /Invalid segment value for A/);
+    assert.throws(render(`\`\`\`paper-chart
+{"type":"segments","title":"T","source":"PDF p. 1","rows":[]}
+\`\`\`
+`), /paper-chart needs rows/);
+    assert.equal(fs.existsSync(output), false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('the renderer accepts audit sources and assets outside the repository', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-external-'));
+  try {
+    const assets = path.join(dir, 'assets');
+    fs.mkdirSync(assets);
+    fs.writeFileSync(path.join(assets, 'figure.png'), Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Wl7ZQAAAABJRU5ErkJggg==', 'base64'));
+    const source = path.join(dir, 'external-paper.md');
+    const output = path.join(dir, 'out', 'external-paper.html');
+    fs.mkdirSync(path.dirname(output));
+    fs.writeFileSync(source, `<!-- paper-reading-lang: zh-CN -->
+# 外部项目阅读
+
+## 01 / 起点
+
+正文与配图共置在用户项目目录中。
+
+![外部配图](assets/figure.png)
+
+*本文配图，位于源文件旁的 assets/。*
+`);
+    execFileSync(process.execPath, [renderer, source, output]);
+    const html = fs.readFileSync(output, 'utf8');
+    assert.match(html, /<html lang="zh-CN">/);
+    assert.match(html, /data:image\/png;base64,/);
+    assert.match(html, /class="paper-figure"/);
+    assert.doesNotMatch(html, /src="assets\/|file:\/\//);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});

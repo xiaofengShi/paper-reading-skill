@@ -36,4 +36,4 @@ Then apply the release gates in [evals/reading-quality.md](evals/reading-quality
 
 ## 5. Install location (optional)
 
-Users install the skill by copying this repository (or its `SKILL.md` plus `references/`, `evals/`, `scripts/`, `assets/`, `package.json`) into their skills directory (e.g. `~/.agents/skills/paper-reading/`). Keep that copy in sync when the renderer or references change.
+Install by cloning or copying the **full checkout** into the skills directory (e.g. `~/.agents/skills/paper-reading/`), then run `npm ci` there. A partial copy must include at least `SKILL.md`, `references/`, `evals/`, `scripts/`, `assets/`, `examples/` with its `assets/` (the doctor smoke-renders an example and its figures), `package.json`, **and `package-lock.json`** — `npm ci` fails without the lockfile. Keep the install in sync when the renderer or references change.
