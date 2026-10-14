@@ -8,8 +8,8 @@ const site = 'https://xiaofengshi.github.io/paper-reading-skill/';
 const repo = 'https://github.com/xiaofengShi/paper-reading-skill';
 const sourceBase = `${repo}/blob/main/`;
 const pages = [
-  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Explore six readings →', install: 'Install the skill ↓', footer: 'Read deeply. Keep the evidence close.' },
-  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '阅读六篇完整样例 →', install: '安装并开始使用 ↓', footer: '读懂全文，证据就在身边。' },
+  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Explore the published readings →', install: 'Install the skill ↓', footer: 'Read deeply. Keep the evidence close.' },
+  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '阅读全部完整样例 →', install: '安装并开始使用 ↓', footer: '读懂全文，证据就在身边。' },
 ];
 
 const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);

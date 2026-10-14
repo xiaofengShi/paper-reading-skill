@@ -233,6 +233,16 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .chart-table summary { cursor: pointer; color: var(--teal); font-weight: 700; }
 .chart-table table { margin: .6rem 0 !important; }
 .data-note { padding: .7rem 1.2rem; color: var(--ink-soft); background: color-mix(in srgb, var(--teal) 2%, white); border-top: 1px solid var(--line); font-size: .82rem; line-height: 1.5; }
+.experiment-conclusion { margin-top: .45rem !important; padding: .45rem .65rem; background: color-mix(in srgb, var(--teal) 5%, white); border-left: 2px solid var(--teal); }
+.experiment-conclusion > span { display: block; color: var(--teal); font-size: .68rem; font-weight: 850; margin-bottom: .12rem; }
+.bars-chart { padding: 1rem 1.5rem .5rem; }
+.bar-row { padding: .55rem 0 .75rem; border-bottom: 1px solid var(--line); }
+.bar-row:last-of-type { border-bottom: 0; }
+.bar-label { font-weight: 750; font-size: .85rem; margin-bottom: .3rem; }
+.bar-track { height: 18px; margin: 0 .25rem .28rem; background: color-mix(in srgb, var(--teal) 12%, white); border-radius: 3px; overflow: hidden; }
+.bar-fill { display: block; height: 100%; background: var(--teal); border-radius: 3px; }
+.bar-values { color: var(--ink); font-size: .8rem; font-variant-numeric: tabular-nums; }
+.bar-axis { display: flex; justify-content: space-between; color: var(--subtle); font: 600 .67rem ui-monospace, monospace; margin: .2rem .25rem 0; }
 .page-footer { display: flex; justify-content: space-between; padding: 1.5rem clamp(1rem, 4vw, 4rem); color: var(--subtle); background: color-mix(in srgb, var(--teal) 9%, white); border-top: 1px solid var(--line); font-size: .8rem; }
 @media (max-width: 1000px) {
   .reading-shell { display: block; }

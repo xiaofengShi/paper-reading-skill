@@ -15,6 +15,7 @@
 - **RAFT** · 中文 · Kimi Code — 沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。使用安装后的本 skill 在 Kimi Code 中制作，依据 [arXiv:2606.00147v1](https://arxiv.org/abs/2606.00147v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/raft-deep-read.html)
 - **MechVQA** · English · Kimi Code — 沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。依据 [arXiv:2605.30794v2](https://arxiv.org/abs/2605.30794v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mechvqa-deep-read.html)
 - **IAR** · 中文 · Kimi Code — 沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。依据 [arXiv:2608.20281v1](https://arxiv.org/abs/2608.20281v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/iar-deep-read.html)
+- **VISTA** · 中文 · Kimi Code — 沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。依据 [arXiv:2610.02200v1](https://arxiv.org/abs/2610.02200v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/vista-deep-read.html)
 
 MiMo 样例基于一份 44 页的本地 PDF 编写，仓库不分发该 PDF。作者后来[更新了在线报告](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d)；样例已采用修正后的 Pro 激活参数数值，其他版本差异尚未逐页核对。
 
@@ -38,7 +39,7 @@ MiMo 样例基于一份 44 页的本地 PDF 编写，仓库不分发该 PDF。�
 
 这三项原则形成上文的五层阅读顺序：全局图、主路径、机制、实验图谱和综合理解。衡量深读是否有用，要看读者能否说清核心机制、指出重要结论由哪些证据支撑，而不必为补全关键解释反复查 PDF。这是本项目的方法设计；现有样例尚未经独立读者研究验证。
 
-[公开的深读质量检查](evals/reading-quality.md)将来源覆盖、科学事实、主张与证据的对应、独立可读性和离线交付变成交付门槛。[六篇样例的读者题目与答案](evals/reader-tasks.md)可供未参与编写的人测试理解效果。渲染器测试通过或作者自查，都不等于完成了独立读者研究。
+[公开的深读质量检查](evals/reading-quality.md)将来源覆盖、科学事实、主张与证据的对应、独立可读性和离线交付变成交付门槛。[各样例的读者题目与答案](evals/reader-tasks.md)可供未参与编写的人测试理解效果。渲染器测试通过或作者自查，都不等于完成了独立读者研究。
 
 ## 开始使用
 
@@ -79,7 +80,7 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/
 
 [Skill 指令](SKILL.md)引导 agent 依次建立全局认知、重建全文、编写解释并核对来源。[论文类型协议](references/paper-types.md)为实证、系统、基准、数据集、理论和综述论文选择合适图形；[可视化阅读规则](references/visual-reading.md)要求图示与解释、证据对应。[阅读模式](references/reading-modes.md)定义可选的快筛、审稿和研究视角。
 
-仓库附带的[渲染器](scripts/render-reading.cjs)把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 `<!-- paper-reading-lang: en -->` 或 `<!-- paper-reading-lang: zh-CN -->`，导航和图表标签也据此选择语种。可在第二行选择四种内置视觉主题之一：`<!-- paper-reading-theme: forest -->`、`cobalt`、`plum`、`saffron`；省略时使用 `forest`。作者按论文内容选择主题，渲染器不猜测主题。Skill 会逐篇判断探索分支、状态变化或反馈环是否能增加理解；若不能，使用静态图。交互图可用 Archify 或自包含的 HTML/SVG 制作，关键解释仍须在无脚本时可读。构建不依赖 Archify 或其他本地 skill。[Transformer](examples/attention-is-all-you-need-deep-read.md)、[DeepSeek](examples/deepseek-v4.1-flash-deep-read.md)、[MiMo](examples/mimo-v2.6-deep-read.md)、[RAFT](examples/raft-deep-read.md)、[MechVQA](examples/mechvqa-deep-read.md)和[IAR](examples/iar-deep-read.md)的 Markdown 与图形输入都是构建材料，不要求读者分别打开。
+仓库附带的[渲染器](scripts/render-reading.cjs)把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 `<!-- paper-reading-lang: en -->` 或 `<!-- paper-reading-lang: zh-CN -->`，导航和图表标签也据此选择语种。可在第二行选择四种内置视觉主题之一：`<!-- paper-reading-theme: forest -->`、`cobalt`、`plum`、`saffron`；省略时使用 `forest`。作者按论文内容选择主题，渲染器不猜测主题。Skill 会逐篇判断探索分支、状态变化或反馈环是否能增加理解；若不能，使用静态图。交互图可用 Archify 或自包含的 HTML/SVG 制作，关键解释仍须在无脚本时可读。构建不依赖 Archify 或其他本地 skill。[渲染器输入格式](references/renderer-format.md)给出 Markdown 的精确契约，[从 PDF 抽取插图](references/figure-extraction.md)说明原图裁切与数值核实方法。[Transformer](examples/attention-is-all-you-need-deep-read.md)、[DeepSeek](examples/deepseek-v4.1-flash-deep-read.md)、[MiMo](examples/mimo-v2.6-deep-read.md)、[RAFT](examples/raft-deep-read.md)、[MechVQA](examples/mechvqa-deep-read.md)、[IAR](examples/iar-deep-read.md)和[VISTA](examples/vista-deep-read.md)的 Markdown 与图形输入都是构建材料，不要求读者分别打开。
 
 本地重建所有已发布样例：
 
@@ -92,7 +93,7 @@ npm test
 
 ## 验证与适用范围
 
-六个文档覆盖经典架构论文、技术报告、领域微调方法、工程基准和文档知识内化。渲染测试覆盖语言和主题声明、行内与独立公式、原文位置开关、原图上下文和数值图行为。这些检查验证排版与生成契约，不等于独立核证每一条科学解读。理论、综述和独立读者测试仍不在当前样例范围内。
+已发布的样例覆盖经典架构论文、技术报告、领域微调方法、工程基准、文档知识内化和交互式视觉环境的智能体外骨架。渲染测试覆盖语言和主题声明、行内与独立公式、原文位置开关、原图上下文和数值图行为。这些检查验证排版与生成契约，不等于独立核证每一条科学解读。理论、综述和独立读者测试仍不在当前样例范围内。
 
 [Archify](https://github.com/tt-a1i/archify)是可选的交互结构图呈现工具。科学内容仍须对照论文核查。
 

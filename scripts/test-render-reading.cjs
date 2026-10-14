@@ -246,6 +246,7 @@ test('the new readings keep their language, theme, source images, and experiment
   for (const [name, lang, theme, images] of [
     ['mechvqa', 'en', 'cobalt', 6],
     ['iar', 'zh-CN', 'plum', 4],
+    ['vista', 'zh-CN', 'cobalt', 6],
   ]) {
     const html = fs.readFileSync(path.resolve(__dirname, `../docs/${name}-deep-read.html`), 'utf8');
     assert.match(html, new RegExp(`<html lang="${lang}">`));
@@ -258,11 +259,87 @@ test('the new readings keep their language, theme, source images, and experiment
 });
 
 test('published reading headings do not end with sentence punctuation', () => {
-  for (const name of ['attention-is-all-you-need', 'deepseek-v4.1-flash', 'mimo-v2.6', 'raft', 'mechvqa', 'iar']) {
+  const names = fs.readdirSync(path.resolve(__dirname, '../docs'))
+    .filter(file => file.endsWith('-deep-read.html'))
+    .map(file => file.replace(/-deep-read\.html$/, ''));
+  assert.ok(names.length >= 7, `expected published readings, found ${names.length}`);
+  for (const name of names) {
     const html = fs.readFileSync(path.resolve(__dirname, `../docs/${name}-deep-read.html`), 'utf8');
     for (const [, heading] of html.matchAll(/<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/g)) {
       const text = heading.replace(/<[^>]+>/g, '').trim();
       assert.doesNotMatch(text, /[.。?？!！:：]$/, `${name}: ${text}`);
     }
+  }
+});
+
+test('path stages can name a cost, experiment rows a conclusion, and bars charts carry non-percentage values', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-fields-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    fs.writeFileSync(source, `<!-- paper-reading-lang: zh-CN -->
+# Test Paper
+
+## 01 / Fields
+
+\`\`\`paper-path
+{"title":"A staged method","stages":[{"title":"Prepare","role":"Input","action":"Collect.","why":"Needs evidence.","cost":"Assumes the frames are complete.","output":"Evidence.","source":"PDF p. 3"}]}
+\`\`\`
+
+\`\`\`paper-experiments
+{"title":"Results","rows":[{"question":"Does it help?","setup":"Same model.","observation":"Score rises.","conclusion":"The harness contributes, not the base model.","source":"PDF p. 5"}]}
+\`\`\`
+
+\`\`\`paper-chart
+{"type":"bars","title":"Token cost","unit":"M","source":"PDF p. 6","rows":[{"label":"Text grid","value":71.9},{"label":"Image","value":30.7}]}
+\`\`\`
+`);
+    execFileSync(process.execPath, [renderer, source, output]);
+    const html = fs.readFileSync(output, 'utf8');
+    assert.match(html, /<dt>代价 \/ 假设<\/dt><dd>Assumes the frames are complete\./);
+    assert.match(html, /class="experiment-conclusion"><span>结论<\/span>The harness contributes, not the base model\./);
+    assert.match(html, /class="bars-chart"/);
+    assert.match(html, /bar-fill" style="width:100%"/);
+    assert.match(html, /bar-fill" style="width:42\.7%/);
+    assert.match(html, /<strong>71\.9M<\/strong>/);
+    assert.match(html, /<span>0<\/span><span>71\.9M<\/span>/);
+    assert.match(html, /<th>数值M<\/th>/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('bars charts reject negative values and honor domainMax', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-bars-test-'));
+  try {
+    const source = path.join(dir, 'paper.md');
+    const output = path.join(dir, 'paper.html');
+    fs.writeFileSync(source, `<!-- paper-reading-lang: en -->
+# Paper
+
+## 01 / Chart
+
+\`\`\`paper-chart
+{"type":"bars","title":"Scores","unit":"%","domainMax":100,"source":"PDF p. 2","rows":[{"label":"A","value":40},{"label":"B","value":80,"approx":true}]}
+\`\`\`
+`);
+    execFileSync(process.execPath, [renderer, source, output]);
+    const html = fs.readFileSync(output, 'utf8');
+    assert.match(html, /bar-fill" style="width:40%"/);
+    assert.match(html, /bar-fill" style="width:80%"/);
+    assert.match(html, /<strong>≈80%<\/strong>/);
+    assert.match(html, /<span>0<\/span><span>100%<\/span>/);
+    fs.writeFileSync(source, `<!-- paper-reading-lang: en -->
+# Paper
+
+## 01 / Chart
+
+\`\`\`paper-chart
+{"type":"bars","title":"Scores","source":"PDF p. 2","rows":[{"label":"A","value":-1}]}
+\`\`\`
+`);
+    assert.throws(() => execFileSync(process.execPath, [renderer, source, output], { stdio: 'pipe' }), /Invalid bar value for A/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
   }
 });

@@ -1,6 +1,6 @@
 # Reader tasks for the published examples
 
-Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key until the reader finishes. For each question, record the answer, time, backtracking, and whether the reader needed another source. Mark `2` when the answer includes the decisive mechanism and boundary, `1` when it is directionally right but loses an important condition, and `0` when it is missing or wrong. This task set is a protocol for future readers; it is not a report of an independent study.
+Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key until the reader finishes. For each question, record the answer, time, backtracking, and whether the reader needed another source. Mark `2` when the answer includes the decisive mechanism and boundary, `1` when it is directionally right but loses an important condition, and `0` when it is missing or wrong. This task set is a protocol for future readers; it is not a report of an independent study. Add one section per published reading — four questions plus an answer key — and keep counts and wording general rather than naming a fixed number of examples.
 
 ## Transformer · [HTML](../docs/attention-is-all-you-need-deep-read.html)
 
@@ -55,5 +55,14 @@ Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key
 4. BudgetMatch 和评委一致性审计各缩小了哪一种解释空间？它们不能排除什么？
 
 **参考答案。** Inject 用续写、改写、指令化重构密集暴露文档，只对助手目标计损；CPT 对原始文档流做 next-token 预测。Align 用 answer-only QA 对齐接口，Recover 将适应模型与原始指令模型合并，以恢复通用能力。Recover 从四族共 12 个固定候选中先按验证集领域与通用护栏筛选，再在领域优先前沿层内取通用均值较高者，因此未必选领域分最高点。7/8 是完整 IAR 与 Vanilla SFT 的四指标整系统比较；8/8 是恢复前 Inject+Align 相对 Vanilla 的领域结果。CCI 的 Phi 设置是主表边界。BudgetMatch 表明仅匹配训练 token 预算不足以解释全部收益，却不单独证明每个阶段的因果作用；评委一致性审计量化评分仪器的不确定性，不能证明标签是人工金标准，也不能覆盖训练种子鲁棒性。对应 HTML 第 01–05 章。
+
+## VISTA · [HTML](../docs/vista-deep-read.html)
+
+1. 为什么“编码一次 + 滑动窗口”会在长程交互里结构性地丢失视觉证据？VISTA 的哪两个组件各补上哪一半？
+2. RHAE 公式里的平方惩罚、115% 封顶、$w_\ell=\ell$ 加权与通关上限各起什么作用？“100.00”在这一记分法下意味着什么？
+3. 消融阶梯里 (iv)→(v) 一跳说明了什么？为什么接入无损记忆与检视之后，25 游戏的动作总数反而下降？
+4. 论文的哪些结论不能被这些实验隔离？指出一处并用相关结果解释它的边界。
+
+**参考答案。** 现有 VLM 把每张图编码一次后丢掉原始像素，表示随上下文被截断或摘要化，且编码时不知道什么细节日后关键。VISTA 用无损视觉记忆（每帧含动画中间帧按 turn/frame 原样存档）留住证据，用模型主导的检视（inspect 放大、read_pixels 读像素）在推理当下按问题取回。关卡得分 $S=\min(1.15,(h/a)^2)$：动作数等于人类参考 $h$ 时得满分 100%，更少可到 115% 封顶，翻倍掉到 25%；游戏得分取“加权完成度”与“加权平均分”的较小值，$w_\ell=\ell$ 让靠后关卡更重，因此“100.00”表示所有关卡通关且加权动作效率不低于人类参考（不是效率天花板）。(iv)→(v) 是接口可比阶梯内最大的一跳（70.05→94.10，+24.05），说明证据可达性是关键增量；动作回落（28,626→12,261）是因为免费检视替代了试探性动作，且配置 (v) 起每动作只自动给最后一帧。可指出的边界包括：模型发布晚于公开基准、不能排除训练污染（作者自述）；空间维与时间维检视捆绑测量、未正交分解；“免费检视换掉试探性动作”是读者推断而非论文因果结论；Opus 的 100.00 无重复运行数据。对应 HTML 第 01–05 章。
 
 For each paper, the reader should also identify one conclusion that the reported evidence **does not** isolate. Accept a paper-specific boundary explained with the relevant result, not generic skepticism.

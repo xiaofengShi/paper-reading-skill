@@ -24,7 +24,7 @@ const labels = {
   'zh-CN': {
     why: '为什么需要', last: '这一阶段留下什么', next: '交给下一阶段',
     scope: '用于哪些任务', judge: '怎样判断', signal: '如何进入学习', value: '关键价值',
-    question: '研究问题', setup: '设置 / 对照', observation: '观察', chart: '本文整理的数据图',
+    question: '研究问题', setup: '设置 / 对照', observation: '观察', conclusion: '结论', cost: '代价 / 假设', chart: '本文整理的数据图',
     start: '起点', end: '终点', change: '变化', points: '个百分点', chartData: '查看图表数据', item: '项目',
     openDiagram: '展开辅助交互图：', explore: '节点聚焦与路径探索', diagramNote: '交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。',
     wholeMap: '论文全局图', description: '从全局路径到机制与实验的一体化论文深读。', titleSuffix: '深读图谱',
@@ -35,7 +35,7 @@ const labels = {
   en: {
     why: 'Why it matters', last: 'What this stage leaves behind', next: 'Passed to the next stage',
     scope: 'Where it applies', judge: 'How it is judged', signal: 'How it shapes learning', value: 'Why it matters',
-    question: 'Research question', setup: 'Setup / comparator', observation: 'Observation', chart: 'Chart prepared for this reading',
+    question: 'Research question', setup: 'Setup / comparator', observation: 'Observation', conclusion: 'Conclusion', cost: 'Cost / assumption', chart: 'Chart prepared for this reading',
     start: 'Start', end: 'End', change: 'Change', points: 'percentage points', chartData: 'View chart data', item: 'Item',
     openDiagram: 'Explore interactive diagram: ', explore: 'Focus nodes and follow paths', diagramNote: 'The interactive view explores structure. The reading path, mechanisms, and experimental results remain visible on this page.',
     wholeMap: 'Whole-paper map', description: 'A visual deep read from the global path to mechanisms and experiments.', titleSuffix: 'Deep reading atlas',
@@ -94,7 +94,7 @@ function renderMap(data) {
 function renderPath(data) {
   if (!Array.isArray(data.stages) || !data.stages.length) throw new Error('paper-path needs stages');
   return `<figure class="reading-path"><figcaption><span class="figure-kicker">${t.pathKicker}</span><strong>${esc(data.title)}</strong>${data.intro ? `<p>${esc(data.intro)}</p>` : ''}</figcaption><ol>${data.stages.map((s, i) =>
-    `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>${t.why}</dt><dd>${esc(s.why)}</dd></div><div><dt>${i === data.stages.length - 1 ? t.last : t.next}</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
+    `<li><span class="path-index">${String(i + 1).padStart(2, '0')}</span><div class="path-content"><div class="path-title"><h3>${esc(s.title)}</h3><span>${esc(s.role)}</span></div><p>${esc(s.action)}</p><dl><div><dt>${t.why}</dt><dd>${esc(s.why)}</dd></div>${s.cost ? `<div><dt>${t.cost}</dt><dd>${esc(s.cost)}</dd></div>` : ''}<div><dt>${i === data.stages.length - 1 ? t.last : t.next}</dt><dd>${esc(s.output)}</dd></div></dl>${sourceBadge(s.source)}</div></li>`
   ).join('')}</ol></figure>`;
 }
 function renderContrast(data) {
@@ -106,7 +106,7 @@ function renderContrast(data) {
 function renderExperiments(data) {
   if (!Array.isArray(data.rows) || !data.rows.length) throw new Error('paper-experiments needs rows');
   return `<figure class="experiment-atlas"><figcaption><span class="figure-kicker">${t.experimentKicker}</span><strong>${esc(data.title)}</strong></figcaption><div class="experiment-head" aria-hidden="true"><span>${t.question}</span><span>${t.setup}</span><span>${t.observation}</span></div><div class="experiment-rows">${data.rows.map((r, i) =>
-    `<article class="experiment-row"><div class="experiment-question"><span>${String(i + 1).padStart(2, '0')}</span><strong>${esc(r.question)}</strong></div><p>${esc(r.setup)}</p><div><p>${esc(r.observation)}</p>${sourceBadge(r.source)}</div></article>`
+    `<article class="experiment-row"><div class="experiment-question"><span>${String(i + 1).padStart(2, '0')}</span><strong>${esc(r.question)}</strong></div><p>${esc(r.setup)}</p><div><p>${esc(r.observation)}</p>${r.conclusion ? `<p class="experiment-conclusion"><span>${t.conclusion}</span>${esc(r.conclusion)}</p>` : ''}${sourceBadge(r.source)}</div></article>`
   ).join('')}</div></figure>`;
 }
 function renderChart(data) {
@@ -133,6 +133,25 @@ function renderChart(data) {
     const tableHead = lang === 'zh-CN' ? `<th>项目</th><th>起点（%）</th><th>终点（%）</th><th>变化（百分点）</th>` : `<th>${t.item}</th><th>${t.start} (%)</th><th>${t.end} (%)</th><th>${t.change} (${t.points})</th>`;
     const table = `<details class="chart-table"><summary>${t.chartData}</summary><table><thead><tr>${tableHead}</tr></thead><tbody>${data.rows.map(r => { const delta = Number(r.after) - Number(r.before); return `<tr><th>${esc(r.label)}</th><td>${r.approx?'≈':''}${esc(r.before)}</td><td>${r.approx?'≈':''}${esc(r.after)}</td><td>${r.approx?'≈':''}${delta >= 0 ? '+' : ''}${delta.toFixed(1)}</td></tr>`; }).join('')}</tbody></table></details>`;
     return `<figure class="data-figure">${header}<div class="paired-chart">${rows}<div class="pair-axis" aria-hidden="true"><span>0%</span><span>100%</span></div></div>${table}${note}</figure>`;
+  }
+  if (data.type === 'bars') {
+    const rows = data.rows.map(r => {
+      const value = Number(r.value);
+      if (!Number.isFinite(value) || value < 0) throw new Error(`Invalid bar value for ${r.label}`);
+      return { label: r.label, value, approx: r.approx };
+    });
+    const domain = Number.isFinite(Number(data.domainMax)) && Number(data.domainMax) > 0 ? Number(data.domainMax) : Math.max(...rows.map(r => r.value), 0);
+    const scale = domain > 0 ? domain : 1;
+    const unit = data.unit || '';
+    const bars = rows.map(r => {
+      const width = Math.round((r.value / scale) * 10000) / 100;
+      const prefix = r.approx ? '≈' : '';
+      const aria = lang === 'zh-CN' ? `${r.label}：${prefix}${r.value}${unit}` : `${r.label}: ${prefix}${r.value}${unit}`;
+      return `<div class="bar-row"><div class="bar-label">${esc(r.label)}</div><div class="bar-track" role="img" aria-label="${esc(aria)}"><span class="bar-fill" style="width:${width}%"></span></div><div class="bar-values"><strong>${prefix}${esc(r.value)}${esc(unit)}</strong></div></div>`;
+    }).join('');
+    const tableHead = lang === 'zh-CN' ? `<th>项目</th><th>数值${esc(unit)}</th>` : `<th>${t.item}</th><th>Value${esc(unit)}</th>`;
+    const table = `<details class="chart-table"><summary>${t.chartData}</summary><table><thead><tr>${tableHead}</tr></thead><tbody>${rows.map(r => `<tr><th>${esc(r.label)}</th><td>${r.approx ? '≈' : ''}${esc(r.value)}</td></tr>`).join('')}</tbody></table></details>`;
+    return `<figure class="data-figure">${header}<div class="bars-chart">${bars}<div class="bar-axis" aria-hidden="true"><span>0</span><span>${esc(domain)}${esc(unit)}</span></div></div>${table}${note}</figure>`;
   }
   throw new Error(`Unknown paper-chart type: ${data.type}`);
 }
