@@ -247,6 +247,7 @@ test('the new readings keep their language, theme, source images, and experiment
     ['mechvqa', 'en', 'cobalt', 6],
     ['iar', 'zh-CN', 'plum', 4],
     ['vista', 'zh-CN', 'cobalt', 6],
+    ['deepseek-v4.1-flash-zh', 'zh-CN', 'saffron', 5],
   ]) {
     const html = fs.readFileSync(path.resolve(__dirname, `../docs/${name}-deep-read.html`), 'utf8');
     assert.match(html, new RegExp(`<html lang="${lang}">`));

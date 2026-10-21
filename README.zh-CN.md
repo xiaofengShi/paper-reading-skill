@@ -16,6 +16,7 @@
 - **MechVQA** · English · Kimi Code — 沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。依据 [arXiv:2605.30794v2](https://arxiv.org/abs/2605.30794v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mechvqa-deep-read.html)
 - **IAR** · 中文 · Kimi Code — 沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。依据 [arXiv:2608.20281v1](https://arxiv.org/abs/2608.20281v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/iar-deep-read.html)
 - **VISTA** · 中文 · Kimi Code — 沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。依据 [arXiv:2610.02200v1](https://arxiv.org/abs/2610.02200v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/vista-deep-read.html)
+- **DeepSeek-V4.1-Flash 中文** · 中文 · Kimi Code — KV 缓存压缩报告的中文深读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文深读同一份源 PDF。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-zh-deep-read.html)
 
 MiMo 样例基于一份 44 页的本地 PDF 编写，仓库不分发该 PDF。作者后来[更新了在线报告](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d)；样例已采用修正后的 Pro 激活参数数值，其他版本差异尚未逐页核对。
 

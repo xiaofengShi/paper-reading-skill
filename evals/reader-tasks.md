@@ -56,6 +56,15 @@ Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key
 
 **参考答案。** Inject 用续写、改写、指令化重构密集暴露文档，只对助手目标计损；CPT 对原始文档流做 next-token 预测。Align 用 answer-only QA 对齐接口，Recover 将适应模型与原始指令模型合并，以恢复通用能力。Recover 从四族共 12 个固定候选中先按验证集领域与通用护栏筛选，再在领域优先前沿层内取通用均值较高者，因此未必选领域分最高点。7/8 是完整 IAR 与 Vanilla SFT 的四指标整系统比较；8/8 是恢复前 Inject+Align 相对 Vanilla 的领域结果。CCI 的 Phi 设置是主表边界。BudgetMatch 表明仅匹配训练 token 预算不足以解释全部收益，却不单独证明每个阶段的因果作用；评委一致性审计量化评分仪器的不确定性，不能证明标签是人工金标准，也不能覆盖训练种子鲁棒性。对应 HTML 第 01–05 章。
 
+## DeepSeek-V4.1-Flash 中文 · [HTML](../docs/deepseek-v4.1-flash-zh-deep-read.html)
+
+1. 报告把长程智能体的部署成本拆成哪三类？CED、CSA2、FP4、SWA Bounded Replay 四件套各主要对准哪一类？
+2. CSA2 的 Full / Reindex / Reuse 三模式在 main KV、indexer K、Top-K 索引上分别自算还是复用？层次稀疏索引器改变了哪个量的复杂度？
+3. SWA Bounded Replay 相对精确重建放弃了什么、换回了什么？为什么作者仍敢把 SWA KV 整类移出持久缓存？
+4. 推理力度旋钮的证据链包含哪些环节？哪些结论是报告明确不主张的？
+
+**参考答案。** 三类成本是 prefill 计算（缓存未命中）、运行时全局 KV 存储（HBM）、持久 KV 存储与搬运（SSD/主机内存与带宽）。CED 对 prefill：解码器全局 KV 从第 $L/2$ 层投影，prefill 复杂度 $O(NL)\to O(NL/2 + n_{win}L/2)$；CSA2 对全局 KV 与索引：跨层共享去重；FP4 对存储精度（主 KV 相对 FP8 减半）；Bounded Replay 对持久 KV（去掉 SWA KV 近乎减半 × 全局 KV 1/4 ≈ 1/8）。Full 自算 main KV、indexer K 与 Top-K；Reindex 复用 main KV 与 indexer K、重选 Top-K；Reuse 全部复用；三模式都自算 main Q 与 SWA KV。层次稀疏索引器让深层索引层的每查询打分代价从随上下文线性变为候选池常数。Bounded Replay 放弃的是 SWA 状态的数学等价性（重建态近似、后缀输出依赖命中位置），换回的是整类持久 SWA 存储与 $L\times n_{win}$ 的精确重放开销；敢移出持久缓存的依据是实验显示质量影响可忽略 + 后训练中做同模拟适配。力度旋钮证据链：RL 长度惩罚（Eqs. 9–10）→ 附录 C 仿射偏好长度推导 → Fig. 12 八基准单调无退化 → Fig. 9 收益前置（60–80 性价比区间）→ Fig. 11 跨脚手架迁移。报告明确不主张：实测长度必然线性/单调（推导是局部奖励近似）；分数接近 Fable-5、GPT-6 Astra 不等于在最难任务上匹配前沿能力；多智能体结果为初步；稳健性边界（CSA2 选择错误、近似重建）未完整刻画。对应 HTML 第 01–05 章。
+
 ## VISTA · [HTML](../docs/vista-deep-read.html)
 
 1. 为什么“编码一次 + 滑动窗口”会在长程交互里结构性地丢失视觉证据？VISTA 的哪两个组件各补上哪一半？
