@@ -98,6 +98,16 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 #show-sources:focus-visible + .topbar .source-toggle-label { outline: 3px solid var(--orange); outline-offset: 3px; }
 #show-sources:not(:checked) ~ * .source-ref, #show-sources:not(:checked) ~ * .source-badge { display: none; }
 .source-ref { color: var(--subtle); font-size: .82em; }
+.source-ref, .source-badge, .article a { overflow-wrap: anywhere; }
+.understanding-check { margin: 2rem 0; padding: 1.2rem 1.4rem; border: 1px solid var(--line); border-top: 3px solid var(--teal); border-radius: 6px; background: var(--paper); }
+.understanding-check > h3 { margin: .3rem 0 1rem; }
+.understanding-check ol { padding-left: 1.25rem; }
+.understanding-check li + li { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+.check-question { font-weight: 750; color: var(--ink); }
+.check-hint { color: var(--subtle); font-size: .88rem; }
+.understanding-check summary { cursor: pointer; color: var(--teal); padding: .5rem 0; font-weight: 700; }
+.understanding-check summary:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.understanding-check details[open] { padding-bottom: .5rem; }
 .hero { background: var(--hero); color: var(--hero-ink); overflow: hidden; }
 .hero-inner { max-width: 1440px; min-height: 440px; margin: 0 auto; padding: clamp(3rem, 6vw, 6rem) clamp(1.5rem, 5vw, 5rem); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(340px, .9fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
 .eyebrow { color: var(--hero-kicker); font-size: .73rem; font-weight: 800; letter-spacing: .18em; margin: 0 0 1.2rem; }

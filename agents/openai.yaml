@@ -1,0 +1,4 @@
+interface:
+  display_name: "Paper Reading Atlas"
+  short_description: "Read a paper deeply as one visual, source-grounded HTML atlas"
+  default_prompt: "Use $paper-reading to read this paper deeply. Deliver one self-contained HTML atlas with its Markdown audit source, explaining the main mechanism, important equations or proofs, decisive evidence, and limits in my preferred language."

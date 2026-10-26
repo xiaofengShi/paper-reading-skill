@@ -9,10 +9,18 @@
     "build:audit": "node scripts/build-reader-audit.cjs",
     "check:audit": "node scripts/build-reader-audit.cjs --check",
     "doctor": "node scripts/doctor.cjs",
-    "test": "node --test scripts/test-*.cjs"
+    "test": "node --test scripts/test-*.cjs",
+    "init:reading": "node scripts/init-reading.cjs",
+    "pack:skill": "node scripts/pack-skill.cjs",
+    "render": "node scripts/render-reading.cjs",
+    "check:examples": "node scripts/build-examples.cjs --check"
   },
   "dependencies": {
-    "katex": "0.16.22",
+    "katex": "0.18.2",
     "marked": "17.0.5"
+  },
+  "version": "0.2.0",
+  "engines": {
+    "node": ">=20"
   }
 }

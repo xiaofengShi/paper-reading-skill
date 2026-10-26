@@ -5,7 +5,7 @@ const test = require('node:test');
 
 const docs = path.resolve(__dirname, '../docs');
 
-test('the published homepages expose both languages, six complete readings, and working local links', () => {
+test('the homepages offer a first-paper path, every published reading, and working local links', () => {
   for (const [file, lang, switchTarget, phrase, method, install] of [
     ['index.html', 'en', 'zh.html', 'Explore complete readings', 'The reading method', 'Get started'],
     ['zh.html', 'zh-CN', './', '阅读完整样例', '论文阅读方法', '开始使用'],
@@ -15,15 +15,23 @@ test('the published homepages expose both languages, six complete readings, and 
     assert.ok(html.includes(phrase));
     assert.ok(html.includes(`<h2>${method}</h2>`));
     assert.ok(html.includes(`<h2>${install}</h2>`));
-    assert.ok(html.includes(`href="#section-3">${method}</a>`));
-    assert.ok(html.includes(`href="#section-4">${install}</a>`));
+    assert.ok(html.includes('href="#start"'));
+    assert.ok(html.includes('href="#readings"'));
+    assert.ok(html.includes('id="method"'));
+    assert.ok(html.includes('id="get-started"'));
+    assert.ok(html.indexOf('id="start"') < html.indexOf('id="readings"'));
+    assert.ok(html.includes('2106.09685v2'));
+    assert.ok(html.includes('paper-readings/lora/reading.html'));
+    assert.ok(html.includes('data-filter="zh-CN"'));
+    assert.ok(html.includes('class="copy-code" hidden'));
+    assert.ok(html.includes('src="site.js"'));
     assert.ok(html.includes(`href="${switchTarget}"`));
-    assert.ok(html.includes('href="#section-1"'));
-    for (const name of ['mimo-v2.6', 'attention-is-all-you-need', 'deepseek-v4.1-flash', 'raft', 'mechvqa', 'iar']) {
-      assert.ok(html.includes(`${name}-deep-read.html`), `${file} is missing ${name}`);
+    assert.ok(html.includes('href="#readings"'));
+    for (const name of fs.readdirSync(path.resolve(docs, '../examples')).filter(name => name.endsWith('-deep-read.md'))) {
+      assert.ok(html.includes(name.replace(/\.md$/, '.html')), `${file} is missing ${name}`);
     }
     assert.ok(html.includes('src="assets/logo.svg"'));
-    assert.ok(html.includes('href="#section-4"'));
+    assert.ok(html.includes('href="#start"'));
     assert.doesNotMatch(html, /<li><strong>[^<]*[.。]<\/strong>/);
     for (const [, heading] of html.matchAll(/<h[1-6][^>]*>([^<]+)<\/h[1-6]>/g)) {
       assert.doesNotMatch(heading.trim(), /[.。?？!！:：]$/);
@@ -41,7 +49,7 @@ test('the published homepages expose both languages, six complete readings, and 
       if (/^(?:https?:|mailto:)/.test(target) || target === './') continue;
       assert.ok(fs.existsSync(path.join(docs, target)), `${file} points to missing ${target}`);
     }
-    for (const [, anchor] of html.matchAll(/href="#(section-\d+)"/g)) {
+    for (const [, anchor] of html.matchAll(/href="#([^"]+)"/g)) {
       assert.ok(html.includes(`id="${anchor}"`), `${file} is missing ${anchor}`);
     }
   }

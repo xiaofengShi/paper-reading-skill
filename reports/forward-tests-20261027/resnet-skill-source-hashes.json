@@ -1,0 +1,18 @@
+{
+  "captured_at": "2026-10-26T17:07:40.408607+00:00",
+  "head": "dc23208687116f6296c08f59f1fcd2ad6f80b6f4",
+  "files": {
+    "SKILL.md": "cbcca3650eeba68e0d3a6253c2408412047b5ba9a743e3575c108bfff4454258",
+    "assets/reading.css": "ed749573ace3e5fac45c0fa20a9fed26beb8e53097d1dc880321095e313e7aaa",
+    "package-lock.json": "78bb678d490e814215de72db0ded7f1e2971d7ab282d3da399e2b49190cbf590",
+    "package.json": "7f73862b87fe4d08904e1bc4cca4aaab7ff297b9c7b50ed4b3524da5c18af885",
+    "references/figure-extraction.md": "e5c9c930d95a7482d93d8968eb5a79d7b07e3114c15a7cbfd85afafda217746b",
+    "references/learning-checks.md": "bca78a70ae022c2c9f05c798eb31d006b3569d8ce6616769db17d9003449db33",
+    "references/paper-types.md": "4f2b11e5c7a0086934fdd7beb168656bdf92d4b290ac15bf79bd419910ea3906",
+    "references/renderer-format.md": "fadf43c3f14d33c381bab625ec68cbb2deb15e5dea1624721953f8d9921a84e5",
+    "references/visual-reading.md": "da7cc28156387b583581c0bb8827a16f336303ae21de59cd9d8e99009a2dd433",
+    "scripts/lib/offline-assets.cjs": "dae170f9819bfc0a69a945e0c1a1b97fd0943ef27f1b7c459203db247685e04b",
+    "scripts/lib/reading-markdown.cjs": "990b3ef72f6bd61ec2910ea535c8a809b7c08c362dd1ec0d9765bfbda59615aa",
+    "scripts/render-reading.cjs": "0af0805193eaa53feb9bfac7ce6c7a8da09078c72412d3717617c16e3dac199c"
+  }
+}

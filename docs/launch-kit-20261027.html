@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Paper Reading Skill：v0.2 发布与反馈材料</title><style>
+:root{color-scheme:light;--ink:#18313b;--muted:#485f65;--line:#dce6e2;--teal:#16685f;--paper:#fffefa}*{box-sizing:border-box}body{margin:0;background:#f2f7f4;color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}a{color:var(--teal);text-underline-offset:3px}.top{padding:1.1rem max(1rem,calc((100vw - 1120px)/2));background:#173b40;color:#eff8f3;font-weight:800;letter-spacing:.12em}.top a{color:inherit;text-decoration:none}.wrap{max-width:1120px;margin:0 auto;padding:3rem 1.5rem 5rem;background:var(--paper)}h1{font-size:clamp(2rem,4vw,3.5rem);line-height:1.16;letter-spacing:-.035em}h2{margin:3rem 0 1rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:1.7rem;line-height:1.3}p,li{color:var(--muted)}p{margin:0 0 1.2rem}li{margin:.4rem 0}strong{color:var(--ink)}table{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse;margin:1.5rem 0 2rem;font-size:.92rem}th,td{min-width:11rem;padding:.7rem .85rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#eaf3ef}code,a{overflow-wrap:anywhere}pre{overflow-x:auto;padding:1rem;background:#eaf3ef;border-radius:6px}a:focus-visible{outline:3px solid #c16736;outline-offset:3px}@media(max-width:600px){.wrap{padding:1.5rem 1rem 3rem}h2{font-size:1.4rem}th,td{min-width:10rem}}@media print{body{background:#fff}.wrap{max-width:none;padding:0}.top{display:none}table{overflow:visible}tr{break-inside:avoid}}
+</style></head><body><header class="top"><a href="./">PAPER / READING</a></header><main class="wrap"><h1>Paper Reading Skill：v0.2 发布与反馈材料</h1>
+<p>状态：本地准备，尚未发布。日期：2026-10-27。下文文案中的新示例链接须在 main 更新、GitHub Pages 部署完成并现场打开后再使用。没有对外发送、提交目录收录或购买推广。</p>
+<h2>面向读者的主张</h2>
+<p>读过，还能讲清楚。把一篇完整论文交给现有 coding agent，得到一份可以转发的 HTML：主线、机制、公式、原图与实验条件连在一起，原文定位可随时展开。</p>
+<p>定位是「可讲解、可核查的深读」，使用场景是组会准备、自学一个机制和审视实验结论。费用来自用户原有 agent 的模型使用；Skill 本身免费，不增加单独的 API key。输入须有完整论文，生成时间取决于论文、模型和工具。</p>
+<h2>中文发布文案草稿</h2>
+<blockquote>
+<p>论文读完，还是讲不清它究竟做了什么？我更新了开源 Paper Reading Skill，让 coding agent 把完整论文做成一份可分享的深读 HTML。</p>
+<p>新的 LoRA 示例从冻结底座、A/B 两条路径讲起，能手算一次更新，也能调 rank 看参数预算变化；再回到原论文，区分 checkpoint、显存和吞吐的不同分母。末尾有三道理解自测，答案可展开，关键结论保留原文定位。</p>
+<p>支持 Codex、Claude Code、Kimi Code。MIT 开源；模型使用费按你现有 agent 的方式计算。这是阅读辅助，没有做实验复现或真人理解效果研究。</p>
+<p>先看示例，再决定要不要安装：<a href="https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html">LoRA 完整阅读</a>。<a href="https://github.com/xiaofengShi/paper-reading-skill">仓库与安装</a>。如果试了，最想知道你在哪一段仍需要回到 PDF。</p>
+</blockquote>
+<h2>English launch draft</h2>
+<blockquote>
+<p>Read it. Trace it. Explain it.</p>
+<p>Paper Reading Skill helps your coding agent turn a complete research paper into one shareable HTML reading: mechanisms, worked equations, original figures, and experimental conditions, with source locations you can reveal.</p>
+<p>The update adds a first-paper workflow, paper-specific understanding checks, and a small runtime package. The new English ResNet reading follows the original post-addition ReLU, works through a residual block, and separates ImageNet protocols from CIFAR results. The Chinese LoRA reading adds a rank/parameter teaching experiment and keeps discrepancies in the source visible.</p>
+<p>MIT licensed; works with Codex, Claude Code, and Kimi Code. Your existing agent provides the model access. Source checks and rendering tests are not experimental reproduction or a human comprehension study.</p>
+<p><a href="https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html">Read ResNet</a> · <a href="https://github.com/xiaofengShi/paper-reading-skill">Install</a>. Feedback on a confusing passage is especially useful.</p>
+</blockquote>
+<h2>60 秒演示脚本</h2>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>画面</th>
+<th>讲什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0–10 秒</td>
+<td>LoRA 阅读页标题和全局图</td>
+<td>「不是只有摘要：先知道整篇论文的论证路径。」</td>
+</tr>
+<tr>
+<td>10–25 秒</td>
+<td>第03节的公式、手算例与 rank 滑块</td>
+<td>「把参数变化算出来。滑块是教学算术，不是模拟训练效果。」</td>
+</tr>
+<tr>
+<td>25–40 秒</td>
+<td>第04节共同尺度的 WikiSQL/MNLI 对照</td>
+<td>「小参数并不等于所有任务都领先；比较必须保留条件。」</td>
+</tr>
+<tr>
+<td>40–50 秒</td>
+<td>来源开关，展开一处原文定位</td>
+<td>「你能查到结论对应哪张表、哪个版本。」</td>
+</tr>
+<tr>
+<td>50–60 秒</td>
+<td>原生理解自测、主页安装入口</td>
+<td>「先试着自己讲一遍，再展开答案。欢迎反馈讲不通的地方。」</td>
+</tr>
+</tbody></table>
+<p>这是录制分镜，尚未录制视频；不要把静态截图称作完成的视频演示。</p>
+<h2>传播顺序与可检验的假设</h2>
+<ol>
+<li>先发布仓库版本与示例，现场验证匿名打开、移动端入口和安装包。发布动作需仓库维护者授权；本文件不是发布记录。</li>
+<li>在本人已有、允许分享工具的渠道发一次具体演示，用实际阅读场景邀请反馈。不要群发私信、刷星或复制到无关社区。</li>
+<li>邀请少量实际目标读者尝试自己的论文，记录首次安装、首次成功产物和最具体的理解障碍。邀请或发消息须另有用户明确授权。</li>
+<li>再考虑社区目录。2026-10-27 已核查 <a href="https://github.com/ComposioHQ/awesome-claude-skills/blob/master/CONTRIBUTING.md">Awesome Claude Skills 的贡献规则</a>：强调真实用例、文档、示例与测试。页面同时显示当前仅协作者可创建 PR，不能承诺可直接投稿。skills.sh 的目标网页本次不可访问；但官方CLI的<code>npx --yes skills find paper-reading</code>已检索到本项目，显示14 installs。因此已有CLI索引证据，不应重复提交或宣称上榜；计数窗口、去重与自动化占比未知。</li>
+</ol>
+<p>验证两项假设：完整经典论文的演示是否比功能列表更容易让目标读者理解用途；更明确的首篇工作流是否减少安装后无产物。它们仍是假设，不能从本次代码测试推断成立。</p>
+<h2>衡量方式</h2>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>记录什么</th>
+<th>不应如何解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>触达</td>
+<td>GitHub 14天访客、views、已公开来源；若有站点数据另列</td>
+<td>GitHub views 不能代表 Pages 阅读次数</td>
+</tr>
+<tr>
+<td>首次成功</td>
+<td>自愿反馈的首次任务是否完成、agent/模型、耗时边界、失败原因</td>
+<td>clones 不是安装完成，也不是活跃用户</td>
+</tr>
+<tr>
+<td>使用价值</td>
+<td>能否解释机制与证据、具体误解、是否需要回到 PDF、是否再次使用</td>
+<td>AI 自答题或展开答案不等于真人理解效果</td>
+</tr>
+<tr>
+<td>后续关注</td>
+<td>同一时间窗口新增 stars、实际反馈、回访</td>
+<td>总 stars ÷ 当期访客不是转化率</td>
+</tr>
+</tbody></table>
+<p>先记录基线，再按同样时间窗口复核；低样本只报告计数与个案，不宣布显著提升。未增加追踪脚本、付费推广或自动消息。</p>
+</main></body></html>

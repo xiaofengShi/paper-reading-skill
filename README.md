@@ -1,14 +1,37 @@
 <p align="center"><img src="docs/assets/logo.svg" alt="" width="64" height="64"></p>
 <h1 align="center">Paper Reading Skill</h1>
-<p align="center"><strong>Read the whole paper in one place.</strong> Give this open-source agent skill a PDF or paper URL. It builds a self-contained HTML atlas of the argument, mechanisms, original figures, equations, and experiments.</p>
-<p align="center"><a href="https://xiaofengshi.github.io/paper-reading-skill/">Project website ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html">Read a complete example ↗</a> · <a href="#get-started">Get started</a> · <a href="README.zh-CN.md">中文</a></p>
+<p align="center"><strong>Read it. Trace it. Explain it.</strong> Give your coding agent a paper. Get one offline HTML that connects the problem, mechanism, equations, figures, and evidence — with source locations you can check.</p>
+<p align="center"><a href="https://xiaofengshi.github.io/paper-reading-skill/">Project website ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html">Read a complete example ↗</a> · <a href="#get-started">Get started</a> · <a href="README.zh-CN.md">中文</a></p>
 
 ![A preview of the MiMo-V2.6 reading atlas, connecting the paper's global map, RL mechanism, and experiment evidence.](docs/assets/atlas-preview.svg)
+
+## Start with one paper
+
+**Already use Codex?** Run these in your project (Node.js 20+):
+
+```bash
+npx --yes skills add xiaofengShi/paper-reading-skill --skill paper-reading --agent codex --copy --yes
+(cd .agents/skills/paper-reading && npm ci && npm run doctor)
+```
+
+Start a new agent session and paste:
+
+```text
+Use $paper-reading to explain https://arxiv.org/abs/2106.09685v2 in English.
+I know basic neural networks but am new to LoRA. Explain why it saves
+trainable parameters, work through a small example, and distinguish
+reported results from interpretation. Save the offline HTML and Markdown
+in paper-readings/lora/. Check the full paper before writing.
+```
+
+Expect `paper-readings/lora/reading.html` and its Markdown audit source after the agent completes the reading. The agent reads and authors the explanation; the renderer turns that Markdown into HTML. The skill is free and needs no separate API key; your agent's normal model access and charges still apply. [Other agents, installation options, and troubleshooting](#get-started).
 
 ## Explore complete readings
 
 Choose a paper and read its full argument in one page. Each example has a paper-specific editorial map, linked mechanism explanations, original figure excerpts where useful, equations, and experiment conditions beside the results.
 
+- **LoRA** · 中文 — Follow the frozen weight and low-rank update, work through a small parameter-count example, and inspect the experimental conditions. Three built-in understanding checks let you reconstruct the mechanism and interpret the evidence before revealing an answer. Based on [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2). [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **Deep Residual Learning / ResNet** · English — Reconstruct the original post-addition-ReLU block, separate training degradation from generalization, and compare ImageNet/CIFAR and transfer evidence. Four understanding checks. Based on [arXiv:1512.03385v1](https://arxiv.org/abs/1512.03385v1). [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html)
 - **Attention Is All You Need** · English — Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer. [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **DeepSeek-V4.1-Flash** · English — Separate prefill computation, runtime global KV, and persistent KV; inspect CED and CSA2 with original figures, then read agent benchmarks with their harness conditions. [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-deep-read.html)
 - **MiMo-V2.6** · 中文 — Follow the training path through the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments. [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
@@ -28,6 +51,7 @@ The MiMo example was authored from a 44-page local PDF. The PDF itself is not re
 3. **Mechanism close-ups** Definitions, equations, assumptions, and a worked example where it helps.
 4. **Experiment atlas** Each question linked to its setup, comparator, metric, observed result, and supported reading.
 5. **Connected synthesis** What the method and evidence show together, with limits attached to the affected claims.
+6. **Understanding checks** Paper-specific questions about a mechanism, small application, or evidence boundary, with answers you reveal when ready. These are learning aids, not a measured comprehension score.
 
 The diagrams guide reading; prose, formulas, tables, and original figures carry the detail. Source locations stay available for verification but are hidden by default in the HTML. The output is one offline-readable file, with Markdown as its audit source.
 
@@ -39,50 +63,84 @@ The workflow combines established reading and knowledge-mapping ideas with a pap
 2. **Does each diagram express a meaningful relationship** [Novak and Cañas's concept-map method](https://cmap.ihmc.us/docs/theory-of-concept-maps) starts with a focus question and connects concepts with labeled relationships and cross-links. Here, a map answers a paper-specific question such as “How does the mechanism change the result?” Arrows say whether they mean data flow, process order, or evidence; the accompanying text explains what they connect.
 3. **Can a reader check the explanation against the paper** [SciDoc2Diagrammer-MAF](https://aclanthology.org/2024.findings-emnlp.780/) reports that generated scientific diagrams can be incomplete or unfaithful to their source. This project takes that as a fidelity check: significant figures, formulas, numbers, and arrows must be checked against the source, and each experiment is read with its setup, comparator, metric, and result. It does not implement that paper's diagram-generation algorithm.
 
-These ideas become the five reader-facing layers above: global map, main path, mechanism, experiment atlas, and synthesis. The test of a useful deep read is whether someone can explain the paper's central mechanism and say which evidence supports each important claim, without hunting through the PDF for missing essentials. This is the project's method design, not a claim that the published examples have been validated in a reader study.
+These ideas guide five explanatory layers: global map, main path, mechanism, experiment atlas, and synthesis. The [understanding checks](references/learning-checks.md) supplement the explanation when useful. The test of a useful deep read is whether someone can explain the paper's central mechanism and say which evidence supports each important claim, without hunting through the PDF for missing essentials. This is the project's method design, not a claim that the published examples have been validated in a reader study.
 
 The [public reading-quality checks](evals/reading-quality.md) turn that intent into release gates for source coverage, scientific fidelity, claim-to-evidence links, reader completeness, and offline delivery. The [reader tasks and answer keys](evals/reader-tasks.md) make every published example testable by someone who did not write them. A renderer test or an author reviewing their own page is not an independent comprehension study.
 
 ## Get started
 
-**Quick try in a Codex project:** from your project directory, install the skill with the [skills CLI](https://github.com/vercel-labs/skills), then check its bundled renderer. This creates a project-local `.agents/skills/paper-reading` copy.
+The quickstart above installs a project-local Codex copy using the [skills CLI](https://github.com/vercel-labs/skills). The bundled renderer needs Node.js 20 or newer. Your agent also needs access to the complete paper and tools to read it.
+
+### Personal installation and other agents
+
+Choose an unused personal skill directory:
+
+| Agent | Personal directory | Explicit invocation |
+|---|---|---|
+| Codex | `~/.agents/skills/paper-reading` | `$paper-reading` |
+| Kimi Code | `~/.agents/skills/paper-reading` | `/skill:paper-reading` |
+| Claude Code | `~/.claude/skills/paper-reading` | `/paper-reading` |
+
+For Codex or Kimi Code, clone the repository as follows. For Claude Code, change the first line to `paper_reading_dir="$HOME/.claude/skills/paper-reading"`.
 
 ```bash
-npx --yes skills add xiaofengShi/paper-reading-skill --skill paper-reading --agent codex --copy --yes
-(cd .agents/skills/paper-reading && npm ci && npm run doctor)
+paper_reading_dir="$HOME/.agents/skills/paper-reading"
+mkdir -p "$(dirname "$paper_reading_dir")"
+git clone https://github.com/xiaofengShi/paper-reading-skill.git "$paper_reading_dir"
+(cd "$paper_reading_dir" && npm ci && npm run doctor)
 ```
 
-**Codex and Kimi Code:** install the repository as a personal skill, then install its rendering dependencies. Node.js 20 or newer is required for the bundled HTML renderer.
+`doctor` renders a small, explicitly synthetic fixture in a temporary directory and checks language, navigation, embedded math fonts, an SVG, and a chart. It does not download or read a paper, and passing it does not verify scientific content.
+
+Start a new agent session, attach a PDF or give an accessible paper URL, and ask: **“Read this paper deeply in English. Give me one visual HTML reading document that explains the main path, important equations, and experiments.”** Replace “in English” with your preferred language. With no language cue, the skill defaults to English; a request in Chinese produces Chinese output. The native renderer provides English and Chinese navigation.
+
+For an existing Git clone, review local changes, run `git -C "$paper_reading_dir" pull --ff-only`, then rerun `npm ci` and `npm run doctor` there. CLI-installed copies and lightweight packages may have no Git history: preserve local changes before replacing them with a fresh installation.
+
+### Start a reading directory
+
+An optional initializer creates a place to work. From a project with the quickstart installation:
 
 ```bash
-mkdir -p "$HOME/.agents/skills"
-git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.agents/skills/paper-reading"
-(cd "$HOME/.agents/skills/paper-reading" && npm ci)
+node .agents/skills/paper-reading/scripts/init-reading.cjs \
+  --out paper-readings/my-paper --title "My paper" \
+  --paper "https://arxiv.org/abs/2106.09685v2" --lang en
 ```
 
-Check the installed renderer with `(cd "$HOME/.agents/skills/paper-reading" && npm run doctor)`. It builds a complete Transformer example in a temporary directory and checks its language, math, navigation, and embedded diagram.
+This creates `reading.md`, `brief.md`, and an `assets/` directory. The Markdown is visibly marked **unfinished**. The command does not fetch the paper, write a deep read, or generate HTML; the agent must complete and check the draft before rendering. An existing destination is refused. Use `--lang zh-CN` for a Chinese draft, or run `npm run init:reading -- --help` inside the installed skill for all options.
 
-**Claude Code:** use its personal skills directory instead.
+### Build a lightweight local package
+
+To install without the public gallery and website, build a runtime package from a repository checkout:
 
 ```bash
-mkdir -p "$HOME/.claude/skills"
-git clone https://github.com/xiaofengShi/paper-reading-skill.git "$HOME/.claude/skills/paper-reading"
-(cd "$HOME/.claude/skills/paper-reading" && npm ci)
+npm ci
+npm run pack:skill
 ```
 
-For this installation, run `(cd "$HOME/.claude/skills/paper-reading" && npm run doctor)` before starting a new agent session.
+The result is `dist/paper-reading/`, including a SHA-256 `manifest.json`, and `dist/paper-reading.tar.gz` when the system `tar` command is available. Copy the whole runtime directory to an unused skill location from the table, then run `npm ci` and `npm run doctor` inside that copy. It includes the renderer, helpers, references, and synthetic check fixture; it excludes `docs/`, `examples/`, dependencies, and tests. This is a local build procedure, not a published release download. Existing package outputs are refused; use `npm run pack:skill -- --out <new-output-parent>` for another build.
 
-If the skill is already installed, update that checkout and its renderer dependencies instead of cloning over it. For Codex or Kimi Code, run `git -C "$HOME/.agents/skills/paper-reading" pull --ff-only` followed by `(cd "$HOME/.agents/skills/paper-reading" && npm ci)`; for Claude Code, use the same commands with `$HOME/.claude/skills/paper-reading`.
+### Troubleshooting
 
-Start a new agent session, attach a PDF or give an accessible paper URL, and ask: **“Read this paper deeply in English. Give me one visual HTML reading document that explains the main path, important equations, and experiments.”** Replace “in English” with your preferred language. If you give no language cue, the skill defaults to English; an ordinary request in Chinese produces Chinese output. The skill is named `paper-reading`; you can also invoke it explicitly as `$paper-reading` in Codex, `/paper-reading` in Claude Code, or `/skill:paper-reading` in Kimi Code. The agent needs access to the paper and must do the scientific reading; this repository supplies the workflow and renderer, not a service that automatically converts an arbitrary PDF into a verified explanation.
+| Symptom | What to check |
+|---|---|
+| Missing `marked` or `katex` | Run `npm ci` inside the installed skill, with its `package-lock.json` present. |
+| Missing helper or fixture files | Install the full checkout or generated runtime directory; copying `SKILL.md` alone is insufficient. |
+| `ERR_REQUIRE_ESM` with an older installation | Update the skill and reinstall its dependencies. The current renderer supports Node.js 20.18 and newer. |
+| Agent cannot find the skill | Confirm its installation directory and start a new session; use the explicit invocation above. |
+| Initializer says the destination exists | Choose a new reading directory; the initializer preserves existing files. |
+| Agent only has an abstract or inaccessible PDF | Provide the full source or keep the result explicitly incomplete. A summary cannot stand in for a complete deep read. |
 
-Ask for a quick scan only when you want triage. Ask for a review or research comparison when you want those additional lenses. An ordinary request to read a paper stays understanding-first.
+The agent performs the scientific reading and authors the Markdown; the renderer converts that Markdown to HTML. Ask for a quick scan when you want triage, or a review or research comparison for those additional lenses. An ordinary request stays understanding-first.
 
 ## How it works
 
 The [skill instructions](SKILL.md) guide an agent through orientation, full reconstruction, explanation, and source checking. [Paper-type routes](references/paper-types.md) select suitable views for empirical, systems, benchmark, dataset, theory, and survey papers; [visual-reading rules](references/visual-reading.md) keep diagrams tied to explanations and evidence. [Reading modes](references/reading-modes.md) define the optional scan, review, and research lenses.
 
-The bundled [renderer](scripts/render-reading.cjs) turns a Markdown audit source and local visuals into a standalone HTML file with embedded images, diagrams, KaTeX math, and fonts. Every source begins with an explicit language marker, `<!-- paper-reading-lang: en -->` or `<!-- paper-reading-lang: zh-CN -->`, which sets navigation and chart labels. An optional second line chooses one of four built-in visual themes: `<!-- paper-reading-theme: forest -->`, `cobalt`, `plum`, or `saffron`; the default is `forest`. The author selects a theme for each paper rather than having the renderer guess from its text. For each paper, the skill judges whether exploring a branch, state change, or feedback loop adds understanding; otherwise it uses a static view. An interactive view can use Archify or self-contained HTML/SVG, with the key explanation still visible without scripts. Neither Archify nor another locally installed skill is required. The [renderer input format](references/renderer-format.md) documents the exact Markdown contract, and [figure extraction](references/figure-extraction.md) covers taking original figures out of a PDF. The [Transformer](examples/attention-is-all-you-need-deep-read.md), [DeepSeek](examples/deepseek-v4.1-flash-deep-read.md), [MiMo](examples/mimo-v2.6-deep-read.md), [RAFT](examples/raft-deep-read.md), [MechVQA](examples/mechvqa-deep-read.md), [IAR](examples/iar-deep-read.md), [VISTA](examples/vista-deep-read.md), and [OpenDS-World](examples/opensds-world-deep-read.md) Markdown sources and visual inputs are build materials, not separate reading pages.
+The bundled [renderer](scripts/render-reading.cjs) turns a Markdown audit source and local visuals into a standalone HTML file with embedded images, diagrams, KaTeX math, and fonts. Every source begins with an explicit language marker, `<!-- paper-reading-lang: en -->` or `<!-- paper-reading-lang: zh-CN -->`, which sets navigation and chart labels. An optional second line chooses one of four built-in visual themes: `<!-- paper-reading-theme: forest -->`, `cobalt`, `plum`, or `saffron`; the default is `forest`. The author selects a theme for each paper rather than having the renderer guess from its text.
+
+For each paper, the skill judges whether exploring a branch, state change, or feedback loop adds understanding; otherwise it uses a static view. An interactive view can use Archify or self-contained HTML/SVG, with the key explanation still visible without scripts. Neither Archify nor another locally installed skill is required. The [renderer input format](references/renderer-format.md) documents the Markdown contract, [figure extraction](references/figure-extraction.md) covers original figures, and [understanding checks](references/learning-checks.md) describe focused questions with native answer disclosures.
+
+The [ResNet](examples/resnet-deep-read.md), [LoRA](examples/lora-deep-read.md), [Transformer](examples/attention-is-all-you-need-deep-read.md), [DeepSeek](examples/deepseek-v4.1-flash-deep-read.md), [MiMo](examples/mimo-v2.6-deep-read.md), [RAFT](examples/raft-deep-read.md), [MechVQA](examples/mechvqa-deep-read.md), [IAR](examples/iar-deep-read.md), [VISTA](examples/vista-deep-read.md), and [OpenDS-World](examples/opensds-world-deep-read.md) Markdown sources and visual inputs are build materials, not separate reading pages.
 
 To rebuild all published examples locally:
 
@@ -90,12 +148,21 @@ To rebuild all published examples locally:
 npm ci
 npm run doctor
 npm run build:examples
+npm run check:examples
 npm test
 ```
 
 ## Validation and scope
 
-The published readings exercise an influential architecture paper, technical reports, a domain fine-tuning method, an engineering benchmark, document knowledge internalization, and an agent harness for interactive visual environments. Renderer tests cover language and theme declarations, inline and display math, source-location visibility, figure context, and numerical chart behavior. These checks verify rendering contracts; they do not independently certify every scientific interpretation. Theory, surveys, and independent reader studies remain outside the current example set.
+Different checks support different claims:
+
+| Check | What it can establish | Boundary |
+|---|---|---|
+| Automated structure and rendering checks | Input contracts, language and theme declarations, math, declared embedded assets, chart behavior, and generated-file freshness. | A passing renderer cannot establish scientific correctness or reader understanding. The doctor uses synthetic material. |
+| AI-assisted source checks | Trace an explanation's equations, figures, numbers, and claims to an identified paper version; record discrepancies and missing coverage. | Report what was checked and what remains uncertain. These checks are not experimental reproduction or independent human review. |
+| Independent reader evaluation | The [reader tasks](evals/reader-tasks.md) provide questions and answer keys for a future evaluation. | No independent reader study has been reported. Answer disclosures and AI answers are not evidence of measured human learning. |
+
+The gallery covers architecture, parameter-efficient adaptation, technical reports, domain fine-tuning, engineering benchmarks, document knowledge internalization, and agent harnesses. Theory and surveys remain outside the current example set. LoRA's small matrix and parameter-count exercises are labeled teaching examples, separate from the paper's reported experiments. The project has not established that its format improves comprehension over other reading methods.
 
 [Archify](https://github.com/tt-a1i/archify) is an optional presentation tool for interactive structure diagrams. Scientific fidelity still depends on reading and checking the source paper.
 

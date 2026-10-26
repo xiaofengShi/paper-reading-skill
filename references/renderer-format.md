@@ -23,7 +23,7 @@ The first lines are positional:
 
 ## Custom fenced blocks
 
-Place each block at the top level of the Markdown with blank lines around it. The info string must be exactly the keyword; the body is one JSON object. **All string fields are escaped plain text** — no Markdown, HTML, or math inside them. A block that ends up inside a table or list fails with `Unresolved visual slot`.
+Place each block at the top level of the Markdown with blank lines around it. The info string must be exactly the keyword; the body is one JSON object. **All string fields are escaped plain text** — no Markdown, HTML, or math inside them. Custom blocks inside a list or blockquote fail with `Custom visual blocks and display math must be at the top level`. Ordinary fenced or indented code and inline code spans are preserved; showing the block syntax inside a Markdown code example does not execute it.
 
 Every block requires a non-empty `source` field on each fact-bearing item; a missing source throws `A visual fact is missing its source`. The source renders as a hidden badge revealed by the “显示原文定位 / Show source locations” toggle.
 
@@ -109,7 +109,9 @@ Charts carry a visible `origin`/`source` pair and a `<details>` data table so th
 
 ### `<!-- archify:file.html|title -->` — embedded interactive view
 
-An HTML comment, not a fence. The file path is relative to the audit source and must stay inside its directory subtree. The page is inlined as an iframe `srcdoc` inside a disclosure and only its Google Fonts `<link>` tags are removed — remote scripts, relative image references, and any other external resources pass through untouched. The renderer therefore does **not** make an arbitrary page offline or self-contained: embed only HTML that is already self-contained and has been verified offline (no remote scripts, fonts, or images; relative assets resolved and inlined) before it reaches the audit source. Interactive views are optional — record why one helps (or why a static view suffices) in a Markdown comment in the audit source, per [visual-reading](visual-reading.md).
+An HTML comment at the top level, not a fence. The file path is relative to the audit source and must stay inside its directory subtree after symlinks are resolved. The page is inlined as an iframe `srcdoc` inside a disclosure; its inline scripts remain available under `sandbox="allow-scripts"`. Optional Google Fonts `<link>` tags are removed so the page uses its system-font fallback. Any other unresolved resource (including remote or relative scripts, images, stylesheets, and CSS `url()` requests) aborts the build. SVG namespaces, fragment references such as `url(#arrowhead)`, embedded data URLs, and ordinary external hyperlinks remain valid.
+
+Embed HTML that is already self-contained: the renderer validates its declared assets rather than fetching or bundling arbitrary websites. It adds a Content Security Policy to the reading and embedded page, including `connect-src 'none'`, to block runtime network requests. Static checks cannot establish that arbitrary inline JavaScript is useful without a network; exercise each interaction in an offline browser before publishing. Interactive views are optional — record why one helps (or why a static view suffices) in a Markdown comment in the audit source, per [visual-reading](visual-reading.md).
 
 ## Figures and images
 
@@ -121,10 +123,16 @@ An HTML comment, not a fence. The file path is relative to the audit source and 
   *原论文 Fig. 1，PDF p. 2。reading notes…*
   ```
 
-  This produces the scrollable `<figure class="paper-figure">` with a reading hint. A multi-line caption, a bold-wrapped caption (`**…**`), or a missing blank line silently falls back to a bare image — keep captions single-line and wrapped in one `*…*`.
-- Image paths are relative to the audit source and must resolve inside its directory (`../` and absolute paths throw). Supported extensions: `.png`, `.svg`, `.webp` only (`.jpg` and others throw). Images are inlined as base64 — the output HTML has no external assets.
-- Hand-written `<img>` HTML is also inlined, but only when it carries `alt="…"` in that exact form.
+  This produces the scrollable `<figure class="paper-figure">` with a reading hint. Markdown image titles (`![Alt](figure.png "Title")`) and reference-style images also work. A multi-line caption, a bold-wrapped caption (`**…**`), or a missing blank line falls back to a bare image — keep captions single-line and wrapped in one `*…*` (or `_…_`). Bold text inside the italic caption is supported.
+- Image paths are relative to the audit source and must resolve inside its directory both lexically and after symlinks are resolved (`../`, absolute paths, and symlinks to outside files throw). URL-encoded filenames and parenthesized filenames in normal Markdown syntax are supported. Extensions are case-insensitive: `.png`, `.jpg`, `.jpeg`, `.svg`, `.webp`. Images are inlined as base64; supported image data URLs may also be used directly. SVG assets are checked for unresolved nested resources.
+- Hand-written `<img>` HTML is also inlined, independently of attribute order, quote style, case, or presence of `alt`. Write useful alt text for readers even though the parser does not require it. Preserve display attributes such as `width`, `height`, and `class` as needed. `srcset`/`imagesrcset` are rejected; use one image source for a standalone reading.
 - Put a visible reading cue in the prose **before** every original figure; the caption adds provenance and is not the only explanation.
+
+## Offline asset checks
+
+The renderer checks browser asset requests in HTML attributes, inline styles, `<style>` blocks, SVG images, and embedded iframe documents. A regular HTTPS paper link is navigation and remains clickable; it does not make the reading depend on a network. Local images in the Markdown or raw `<img>` tags are embedded. Other source assets must already be embedded: a relative stylesheet or script is a build error, as is a remote asset. Inline SVG fragment references and data URLs remain valid. CSS `@import` and `image-set()` are unsupported; inline the stylesheet and use an embedded `url()` instead. Document bases, redirects, external XML entities, and object/embed resources are rejected.
+
+These are delivery checks, not an HTML sanitization service or a scientific-fidelity check. Use trusted source files. The generated CSP blocks network assets and connections, while allowing the inline styles and scripts needed by self-contained interactive diagrams. It does not prove the meaning or correctness of arbitrary scripts; browser interaction checks remain necessary.
 
 ## Source citations
 
@@ -139,7 +147,8 @@ Figure identifiers (`Fig. 5`, `Table 1`) must stay visible even when page number
 
 - `$$…$$` on its own line(s) for display math; `$…$` for inline math (single line, no nested `$`). A trailing `，。；：、,.;:` right after the closing `$` is absorbed into the math unit so punctuation stays attached.
 - KaTeX renders with `throwOnError` — invalid LaTeX aborts the build. Avoid bare `$` (e.g. prices).
-- Keep display math at the top level like other blocks; an inline formula that lands alone in a paragraph usually belongs in a display block.
+- Keep display math at the top level with blank lines around the block; an inline formula that lands alone in a paragraph usually belongs in a display block.
+- Dollar syntax inside inline, fenced, or indented code remains literal, including invalid LaTeX shown as a code example. For a literal dollar in ordinary prose, escape it as `\$`.
 
 ## Build errors (quick index)
 
@@ -154,14 +163,28 @@ Figure identifiers (`Fig. 5`, `Table 1`) must stay visible even when page number
 | `Unknown paper-chart type: …` | `type` not `segments` / `paired` / `bars` |
 | `Segments do not total 100: …` | segment values off by more than 0.2 |
 | `Invalid before/after for …` / `Invalid bar value for …` | out-of-domain chart number |
-| `Visual must stay beside source: …` | image/archify path escaping the source directory |
-| `Unsupported image: …` | extension outside png/svg/webp |
-| `Unresolved visual slot` / `Unresolved inline math slot` | a block or formula landed inside a table/list and lost its placeholder |
+| `Visual must stay beside source: …` | image/archify path escaping the source directory, including a symlink escape |
+| `Unsupported image: …` / `Unsupported image source: …` | unsupported image extension, MIME type, or remote image URL |
+| `Offline asset …` | unresolved image, CSS, script, iframe, or other unsupported asset request |
+| `Custom visual blocks and display math must be at the top level` | a custom block is nested in a list or blockquote |
+| `Output must not overwrite the source …` | output aliases the Markdown input, including symlinks or hard links |
 | KaTeX `ParseError` | invalid LaTeX |
+
+## Understanding checks: `paper-check`
+
+Use a native answer disclosure for paper-specific reconstruct, apply, or evidence questions. It works without JavaScript and does not measure comprehension automatically. See [learning-checks.md](learning-checks.md) for question design.
+
+````markdown
+```paper-check
+{"title":"Check your understanding","items":[{"question":"What condition makes this mechanism work?","hint":"Optional pointer to the explanation","answer":"Explain the transformation and its necessary condition.","source":"PDF §4, Eq. 3"}]}
+```
+````
+
+`title` and a non-empty `items` array are required. Every item requires non-empty plain-text `question`, `answer`, and `source`; `hint` is optional but must be non-empty when supplied. Fields are escaped as text. Keep substantial math and derivations in the adjacent explanation. The question stays visible while the answer starts collapsed. Use the normal source-location switch to reveal its source.
 
 ## Output placement
 
-For an ordinary reading, any self-contained directory works: keep the audit source and its `assets/` together (the renderer resolves images relative to the source and refuses paths that escape it), and write the HTML wherever the user wants it. Invoke the renderer from the installed skill directory; source and output may live outside this repository.
+For an ordinary reading, any self-contained directory works: keep the audit source and its `assets/` together (the renderer resolves images relative to the source and refuses paths that escape it), and write the HTML wherever the user wants it. The output must be a different file from the Markdown input; symlink and hard-link aliases of the input are also refused. Invoke the renderer from the installed skill directory; source and output may live outside this repository. The footer links to the skill's GitHub repository so a forwarded reading retains its tool provenance; the reading itself remains available offline.
 
 When contributing to this repository's public gallery only:
 

@@ -1,0 +1,67 @@
+{
+  "source": "https://arxiv.org/pdf/1512.03385v1",
+  "sha256": "1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+  "pdf_pages": 12,
+  "crops": [
+    {
+      "file": "resnet-fig2-block.png",
+      "page": 2,
+      "box_pdf_points": [
+        65,
+        45,
+        290,
+        157
+      ],
+      "text": "identity\nweight layer\nweight layer\nrelu\nrelu\nF(x)\u0001+\u0001x\nx\nF(x)\nx\n",
+      "sha256": "d6f1655792fa6f4132942547b39e223c758822680c557e04743d2233510733d5"
+    },
+    {
+      "file": "resnet-fig4-imagenet-curves.png",
+      "page": 5,
+      "box_pdf_points": [
+        70,
+        246,
+        559,
+        391
+      ],
+      "text": "0\n10\n20\n30\n40\n50\n20\n30\n40\n50\n60\niter. (1e4)\nerror (%)\n \n \nplain-18\nplain-34\n0\n10\n20\n30\n40\n50\n20\n30\n40\n50\n60\niter. (1e4)\nerror (%)\n \n \nResNet-18\nResNet-34\n18-layer\n34-layer\n18-layer\n34-layer\n",
+      "sha256": "2578aa91e9691a1f00ebdf7504a08d26e0ffe69f1073ca8ee46be1a278ea5ec6"
+    },
+    {
+      "file": "resnet-fig5-bottleneck.png",
+      "page": 6,
+      "box_pdf_points": [
+        318,
+        55,
+        558,
+        155
+      ],
+      "text": "3x3, 64\n1x1, 64\nrelu\n1x1, 256\nrelu\nrelu\n3x3, 64\n3x3, 64\nrelu\nrelu\n64-d\n256-d\n",
+      "sha256": "4f1f3f26b9e1eedb0012d62bc5c2d0228bdaa5b965b5cc6e37643d219f9171ba"
+    },
+    {
+      "file": "resnet-fig6-cifar-curves.png",
+      "page": 8,
+      "box_pdf_points": [
+        75,
+        70,
+        558,
+        172
+      ],
+      "text": "0\n1\n2\n3\n4\n5\n6\n0\n5\n10\n20\niter. (1e4)\nerror (%)\n \n \nplain-20\nplain-32\nplain-44\nplain-56\n0\n1\n2\n3\n4\n5\n6\n0\n5\n10\n20\niter. (1e4)\nerror (%)\n \n \nResNet-20\nResNet-32\nResNet-44\nResNet-56\nResNet-110\n56-layer\n20-layer\n110-layer\n20-layer\n4\n5\n6\n0\n1\n5\n10\n20\niter. (1e4)\nerror (%)\n \n \nresidual-110\nresidual-1202\n",
+      "sha256": "ae5109213affcf7933c3a7b0f11dac5134ae9b38cf6d5821402f16e3f670a9ee"
+    },
+    {
+      "file": "resnet-fig7-responses.png",
+      "page": 8,
+      "box_pdf_points": [
+        55,
+        208,
+        288,
+        328
+      ],
+      "text": "0\n20\n40\n60\n80\n100\n1\n2\n3\nlayer index (sorted by magnitude)\nstd\n \n \nplain-20\nplain-56\nResNet-20\nResNet-56\nResNet-110\n0\n20\n40\n60\n80\n100\n1\n2\n3\nlayer index (original)\nstd\n \n \nplain-20\nplain-56\nResNet-20\nResNet-56\nResNet-110\n",
+      "sha256": "7154a6ea67e7ab9210f0401698fccb518206fe2ed816f4f46545517d77d19303"
+    }
+  ]
+}

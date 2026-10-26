@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Paper Reading Skill：v0.2 优化、证据与交付边界</title><style>
+:root{color-scheme:light;--ink:#18313b;--muted:#485f65;--line:#dce6e2;--teal:#16685f;--paper:#fffefa}*{box-sizing:border-box}body{margin:0;background:#f2f7f4;color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC",sans-serif}a{color:var(--teal);text-underline-offset:3px}.top{padding:1.1rem max(1rem,calc((100vw - 1120px)/2));background:#173b40;color:#eff8f3;font-weight:800;letter-spacing:.12em}.top a{color:inherit;text-decoration:none}.wrap{max-width:1120px;margin:0 auto;padding:3rem 1.5rem 5rem;background:var(--paper)}h1{font-size:clamp(2rem,4vw,3.5rem);line-height:1.16;letter-spacing:-.035em}h2{margin:3rem 0 1rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:1.7rem;line-height:1.3}p,li{color:var(--muted)}p{margin:0 0 1.2rem}li{margin:.4rem 0}strong{color:var(--ink)}table{display:block;max-width:100%;overflow-x:auto;border-collapse:collapse;margin:1.5rem 0 2rem;font-size:.92rem}th,td{min-width:11rem;padding:.7rem .85rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#eaf3ef}code,a{overflow-wrap:anywhere}pre{overflow-x:auto;padding:1rem;background:#eaf3ef;border-radius:6px}a:focus-visible{outline:3px solid #c16736;outline-offset:3px}@media(max-width:600px){.wrap{padding:1.5rem 1rem 3rem}h2{font-size:1.4rem}th,td{min-width:10rem}}@media print{body{background:#fff}.wrap{max-width:none;padding:0}.top{display:none}table{overflow:visible}tr{break-inside:avoid}}
+</style></head><body><header class="top"><a href="./">PAPER / READING</a></header><main class="wrap"><h1>Paper Reading Skill：v0.2 优化、证据与交付边界</h1>
+<p>数据日期：2026-10-27（Asia/Shanghai）。范围：<code>xiaofengShi/paper-reading-skill</code>，基线提交 <code>dc23208687116f6296c08f59f1fcd2ad6f80b6f4</code>，本地分支 <code>feat/paper-reading-experience</code>。本报告随本地交付保存；远端发布与后续流量变化须另外确认。</p>
+<p><strong>结论：原版本的深读骨架已有价值，首次使用、运行可靠性和可核查的新手示例仍有具体缺口。本轮已经实现并验证这些改进；没有证据能把历史关注量归因于某一缺口，也不能承诺因此成为爆款。</strong></p>
+<h2>当前证据支持什么</h2>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>基线 / 观察</th>
+<th>本轮结果</th>
+<th>判断边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>核心深读</td>
+<td>旧版21项测试通过；已有全文、机制、公式、原图与实验条件</td>
+<td>新做LoRA全文阅读并由另一个AI代理对照原始PDF核查，修正1处页码定位，补足协议冲突</td>
+<td>AI核查，不是真人盲审，也未复现论文实验</td>
+</tr>
+<tr>
+<td>运行兼容</td>
+<td>声称Node20+；Node20.18.3实际发生<code>ERR_REQUIRE_ESM</code></td>
+<td>renderer与站点/报告生成采用动态import；20.18.3、22.23.4、24.22.1各39项测试通过</td>
+<td>本地矩阵已执行；远端GitHub Actions未运行</td>
+</tr>
+<tr>
+<td>资产与文本</td>
+<td>带标题图片未内嵌；代码里的美元数学语法被改写</td>
+<td>以Markdown token处理图片/数学；保留代码；审计离线资产</td>
+<td>任意自定义JS的实际离线功能仍须逐个验收</td>
+</tr>
+<tr>
+<td>文件完整性</td>
+<td>词法路径检查挡不住符号链接逃逸或输入输出别名</td>
+<td>realpath约束、拒绝源文件覆盖、打包输入回写保护，均有回归复现</td>
+<td>未声称是通用不可信HTML沙箱或全面安全审计</td>
+</tr>
+<tr>
+<td>首篇路径</td>
+<td>安装说明与示例列表较长，环境检查依赖完整样例</td>
+<td>双语首篇任务、明确输出位置、合成doctor、未完成草稿初始化器</td>
+<td>agent仍须读取完整论文并完成科学解释</td>
+</tr>
+<tr>
+<td>阅读辅助</td>
+<td>没有原生理解自测块</td>
+<td><code>paper-check</code>支持问题、提示、可展开答案和来源；LoRA有3题及参数预算演示</td>
+<td>自测是辅助，不是测得的理解增益</td>
+</tr>
+<tr>
+<td>分发体积</td>
+<td>基线122个跟踪文件共25,601,103 bytes，其中网站/样例约占99.2%</td>
+<td>可选runtime包29个文件共165,245 bytes；tar.gz为64,605 bytes；另装npm依赖</td>
+<td>与基线仓库文件之和比较，未计Git/依赖；默认skills CLI仍会取得完整仓库</td>
+</tr>
+</tbody></table>
+<p>同为未压缩文件字节口径，可选runtime树比基线仓库小约99.35%。它是本地构建产物，尚非已发布下载。小包和完整仓库服务不同用途，不能把压缩包字节直接当作安装速度提升。</p>
+<h2>关注量诊断：有访问，真实使用仍未知</h2>
+<p>2026-10-27通过GitHub API读取的窗口为2026-10-12至2026-10-25（UTC）：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th align="right">实测值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>views / unique visitors</td>
+<td align="right">317 / 202</td>
+<td>仓库访问，不包含所有Pages阅读</td>
+</tr>
+<tr>
+<td>clones / unique cloners</td>
+<td align="right">365 / 181</td>
+<td>不等于安装成功或活跃用户，可能含自动化</td>
+</tr>
+<tr>
+<td>Overview views / unique visitors</td>
+<td align="right">241 / 187</td>
+<td>主要浏览入口</td>
+</tr>
+<tr>
+<td>中文README views / unique visitors</td>
+<td align="right">32 / 24</td>
+<td>有读者查看中文入口；不能仅据此归因语言偏好</td>
+</tr>
+<tr>
+<td>SKILL.md views / unique visitors</td>
+<td align="right">7 / 7</td>
+<td>不包含通过clone读取文件的行为</td>
+</tr>
+<tr>
+<td>累计stars / forks</td>
+<td align="right">10 / 0</td>
+<td>当时快照；与14天访客不是同一cohort</td>
+</tr>
+<tr>
+<td>skills CLI显示的installs</td>
+<td align="right">14</td>
+<td><code>npx --yes skills find paper-reading</code>能检索到本项目；计数窗口、去重和自动化占比未知</td>
+</tr>
+</tbody></table>
+<p>GitHub返回的已知referrers有Bing、github.com、Google、Brave和项目网站，但计数很少，不能把未列来源归为“没有来源”。未取得首次任务成功率、留存、转发率或独立理解效果。此前“完全无人看到”的假设不成立；“主要卡在转化/留存”仍是待验证假设。</p>
+<p>复核入口：<a href="https://github.com/xiaofengShi/paper-reading-skill/graphs/traffic">仓库流量</a>（需权限）。使用的只读API路径为<code>/repos/xiaofengShi/paper-reading-skill/traffic/views</code>、<code>traffic/clones</code>、<code>traffic/popular/paths</code>、<code>traffic/popular/referrers</code>。Pages API确认发布来源为<code>main:/docs</code>，当时状态为<code>built</code>；这不证明本地新版已部署。Releases API当时返回空列表。</p>
+<h2>产品改进如何对应读者任务</h2>
+<p>首屏现在先给一个具体任务：为知道基础神经网络、尚不懂LoRA的读者解释指定v2论文，输出<code>paper-readings/lora/reading.html</code>及Markdown。安装命令、环境检查、语言与费用边界都在同一路径中。主页可按阅读语言筛选，安装命令可复制；无脚本时正文、案例与命令仍在HTML里。</p>
+<p>LoRA示例把“参数少”拆成机制、单矩阵算术、整模型checkpoint、显存和吞吐。保留原文4.7M预算对应多个配置、37.7M附录配置冲突、Table5 caption与数值不一致等边界。不能用漂亮图形掩盖源材料问题。rank滑块只计算参数预算，正文和静态表保留相同公式与基线。</p>
+<p>理解自测围绕重构、应用和证据判断。读者可以先自己回答，再打开原生HTML答案；来源开关仍可查证。Skill指令采用渐进引用，区分普通深读、明确请求的scan/review/research，避免一开始向用户发问卷，也不把论文内容当作工具指令。</p>
+<h2>实际执行的验证</h2>
+<table>
+<thead>
+<tr>
+<th>验证</th>
+<th>结果</th>
+<th>实际内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基线测试</td>
+<td>21/21通过</td>
+<td>只能说明旧测试覆盖范围，不代表没有缺陷</td>
+</tr>
+<tr>
+<td>本地Node矩阵</td>
+<td>20.18.3、22.23.4、24.22.1各39/39通过</td>
+<td><code>npx --yes --package=node@&lt;version&gt; node --test scripts/test-*.cjs</code></td>
+</tr>
+<tr>
+<td>生成物新鲜度</td>
+<td>通过</td>
+<td><code>check:docs</code>、<code>check:audit</code>、<code>check:examples</code>；全部正式阅读源重新渲染</td>
+</tr>
+<tr>
+<td>安装环境</td>
+<td>通过</td>
+<td>doctor合成输入；最终归档解压到新临时目录，实际<code>npm ci</code>、Node20.18.3 doctor、初始化与渲染；manifest逐文件SHA-256一致</td>
+</tr>
+<tr>
+<td>依赖检查</td>
+<td>0条已知漏洞</td>
+<td><code>npm audit --omit=dev</code>，当时registry结果；KaTeX升至0.18.2</td>
+</tr>
+<tr>
+<td>Skill格式</td>
+<td>通过</td>
+<td>skill-creator的<code>quick_validate.py</code>；并未替代语义评估</td>
+</tr>
+<tr>
+<td>代码独立复核</td>
+<td>发现2处并修复</td>
+<td>HTML实体双重转义、打包目录符号链接绕过；均加入回归</td>
+</tr>
+<tr>
+<td>浏览器：主页</td>
+<td>已验证</td>
+<td>localhost中英页；11项gallery，English筛为4项、中文7项；复制后实际剪贴板与命令164字符一致</td>
+</tr>
+<tr>
+<td>浏览器：LoRA</td>
+<td>已验证</td>
+<td>两张原图加载、6章、3道自测、无KaTeX error；来源label/Space、自测Enter、rank方向键8→16及65,536→131,072</td>
+</tr>
+<tr>
+<td>浏览器：ResNet</td>
+<td>已验证</td>
+<td>9章、4道自测、5张原图加载、39个KaTeX节点；键盘来源开关与答案展开、390px无横向溢出</td>
+</tr>
+<tr>
+<td>页面几何</td>
+<td>已验证</td>
+<td>1280px与390px视口；显示来源后无页面横向溢出（390px含滚动条时内容宽375px）</td>
+</tr>
+<tr>
+<td>直接file/offline浏览器运行</td>
+<td>未验证</td>
+<td>浏览器工具只允许http/https并拒绝file协议；未绕过。结构性内嵌检查与CSP不等于此项通过</td>
+</tr>
+<tr>
+<td>正式视觉、打印、真人理解</td>
+<td>未验证</td>
+<td>指定GLM-5.3-Flash不在可用模型；未宣称完成该视觉验收，未做真实打印或真人研究</td>
+</tr>
+</tbody></table>
+<p>浏览器截图保存为交付附件；几何、控件和日志检查支持上述技术结论，截图本身不是正式视觉通过证据。浏览器console warn/error检查为空。无脚本可读性的结构性基础为内嵌正文/公式、原生details与静态演示表，未把本轮脚本关闭后的直接离线浏览器检查记为通过。</p>
+<h2>两次实际前向试用</h2>
+<p><strong>LoRA基线试用。</strong> 一个代理仅按旧版Skill做新论文，生成中文全文阅读；完整源为arXiv:2106.09685v2，26页，PDF SHA-256为<code>e9a0d3128767db616085dc0f4e6e455e672e89af823e8ed1282793682787395a</code>。可计时的取材至浏览器功能检查约8分49秒，至报告约10分35秒；初始Skill读取更早，不是完整任务耗时。该时长不可当作产品承诺。随后由另一代理只读原PDF与阅读稿核查，核心公式、算例与引用数字吻合，修正1处页码定位，补协议边界。新增自测和参数演示再次复核通过。这是AI作者加AI来源检查，不是人类理解实验。</p>
+<p><strong>更新后ResNet试用。</strong> 一个新代理只读当前Skill及按需references，未读取旧样例或eval答案，实际读完arXiv:1512.03385v1全部12页并生成英文Markdown与805,729-byte HTML。PDF SHA-256为<code>1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a</code>。首次renderer成功，9章、39个KaTeX节点、5张内嵌原图和4道原生理解自测；后续小修以实际记录为准。运行期间Skill/renderer文件仍在变化，已记录初读与渲染时hash，因此不是固定版本的对照实验。另一个代理已独立对照原PDF及窄查后续摘要，核心公式、算例、实验数字和条件吻合；收紧一处把后续分析称为theorem的措辞后，已纳入公开gallery。该代理未做视觉验收或实验复现。模型精确身份未暴露，记为unknown。</p>
+<p>以上试用只能证明在这两篇论文和这些工具条件下实际生成并检查了阅读产物，不能证明在所有领域稳定有效，更不能外推为比其他Skill理解效果更好。理论论文、综述和长期用户效果仍缺证据。</p>
+<h2>发布与下一步</h2>
+<p>本地代码、文档、示例、包与提交可供审核。按工作区规则，push、PR和合并需要明确授权；本报告不是发布完成记录。完整发布前应推送指定提交、等待CI，部署Pages并现场复核新示例，再把相同源码的轻量包附在版本发布中。</p>
+<p>已准备<a href="launch-kit-20261027.html">发布文案、60秒分镜与反馈衡量方法</a>。这些材料尚未对外发送，视频尚未录制。先邀请真实目标读者提供具体失败点，再判断是否扩大传播；不刷星、不群发、不把总stars与当期访客相除当作转化率。</p>
+</main></body></html>

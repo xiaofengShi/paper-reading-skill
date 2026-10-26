@@ -1,19 +1,25 @@
 // Each README is the audit source for its corresponding static homepage.
 const fs = require('node:fs');
 const path = require('node:path');
-const { marked } = require('marked');
+async function main() {
+const { marked } = await import('marked');
 
 const root = path.resolve(__dirname, '..');
 const site = 'https://xiaofengshi.github.io/paper-reading-skill/';
 const repo = 'https://github.com/xiaofengShi/paper-reading-skill';
 const sourceBase = `${repo}/blob/main/`;
 const pages = [
-  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Explore the published readings →', install: 'Install the skill ↓', footer: 'Read deeply. Keep the evidence close.' },
-  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '阅读全部完整样例 →', install: '安装并开始使用 ↓', footer: '读懂全文，证据就在身边。' },
+  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Open a complete reading →', install: 'Try it with your paper ↓', footer: 'Read deeply. Keep the evidence close.' },
+  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '打开一份完整深读 →', install: '用你自己的论文试试 ↓', footer: '读懂全文，证据就在身边。' },
 ];
 
 const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const rewriteLinks = html => html.replace(/\b(href|src)="([^"]+)"/g, (_, attr, target) => {
+  if (target.startsWith('#')) {
+    const label = decodeURIComponent(target.slice(1));
+    return `${attr}="#${esc(sectionIds[label] || label)}"`;
+  }
+  if (target.startsWith(site)) return `${attr}="${esc(target.slice(site.length) || './')}"`;
   if (/^(https?:|mailto:|#|data:)/.test(target)) return `${attr}="${target}"`;
   if (target === 'README.md') return `${attr}="./"`;
   if (target === 'README.zh-CN.md') return `${attr}="zh.html"`;
@@ -21,6 +27,28 @@ const rewriteLinks = html => html.replace(/\b(href|src)="([^"]+)"/g, (_, attr, t
   return `${attr}="${sourceBase}${esc(target)}"`;
 });
 
+const sectionIds = {
+  'Start with one paper': 'start', '从一篇论文开始': 'start',
+  'Explore complete readings': 'readings', '阅读完整样例': 'readings',
+  'What you get': 'deliverables', '你会得到什么': 'deliverables',
+  'The reading method': 'method', '论文阅读方法': 'method',
+  'Get started': 'get-started', '开始使用': 'get-started',
+  'How it works': 'how-it-works', '工作方式': 'how-it-works',
+  'Validation and scope': 'quality', '验证与适用范围': 'quality',
+  'Maintainer notes': 'maintainers', '维护说明': 'maintainers',
+};
+function copyBlocks(html, page) {
+  const label = page.lang === 'en' ? 'Copy' : '复制';
+  return html.replace(/<pre>([\s\S]*?)<\/pre>/g, (_, code) => `<div class="copy-block"><button type="button" class="copy-code" hidden>${label}</button><pre>${code}</pre><span class="copy-status" role="status"></span></div>`);
+}
+function gallery(html) {
+  return html.replace(/<li>([\s\S]*?)<\/li>/g, (whole, text) => {
+    const slug = text.match(/([a-z0-9.-]+-deep-read)\.html/); if (!slug) return whole;
+    const source = fs.readFileSync(path.join(root, 'examples', `${slug[1]}.md`), 'utf8');
+    const lang = source.match(/^<!-- paper-reading-lang: (en|zh-CN) -->/)[1];
+    return `<li data-reading-lang="${lang}">${text}</li>`;
+  });
+}
 for (const page of pages) {
   const tokens = marked.lexer(fs.readFileSync(path.join(root, page.source), 'utf8'));
   const title = tokens.shift();
@@ -48,8 +76,22 @@ for (const page of pages) {
   const summary = `${intro[1]} ${lead}`;
   const description = summary.length > 190 ? `${summary.slice(0, 187)}…` : summary;
   const url = page.lang === 'en' ? site : `${site}zh.html`;
-  const nav = [0, 2, 3].map(index => `<a href="#section-${index + 1}">${esc(sections[index][0].text)}</a>`).join('');
-  const content = sections.map((section, index) => `<section class="content-section section-${index + 1}" id="section-${index + 1}">\n${rewriteLinks(marked.parser(section))}\n</section>`).join('\n');
+  const sectionList = sections.map((section, index) => ({ section, id: sectionIds[section[0].text] || `section-${index + 1}` }));
+  const nav = ['start', 'readings', 'quality'].map(id => {
+    const entry = sectionList.find(item => item.id === id);
+    if (!entry) throw new Error(`${page.source} needs ${id}`);
+    return `<a href="#${id}">${esc(entry.section[0].text)}</a>`;
+  }).join('');
+  const content = sectionList.map(({section, id}) => {
+    let body = copyBlocks(rewriteLinks(marked.parser(section)), page);
+    if (id === 'readings') {
+      body = gallery(body);
+      const labels = page.lang === 'en' ? ['Reading language', 'All', 'English', '中文'] : ['深读文档语言', '全部', 'English', '中文'];
+      const filter = `<fieldset class="gallery-filter" hidden><legend>${labels[0]}</legend>${['all', 'en', 'zh-CN'].map((value, index) => `<button type="button" data-filter="${value}" aria-pressed="${index === 0}">${labels[index+1]}</button>`).join('')}<span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>`;
+      body = body.replace('</h2>', `</h2>${filter}`);
+    }
+    return `<section class="content-section ${id}" id="${id}">\n${body}\n</section>`;
+  }).join('\n');
   const html = `<!doctype html>
 <html lang="${page.lang}">
 <head>
@@ -68,9 +110,11 @@ for (const page of pages) {
   <meta property="og:image" content="${site}assets/atlas-preview.png">
   <meta property="og:locale" content="${page.lang === 'en' ? 'en_US' : 'zh_CN'}">
   <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">${JSON.stringify({"@context":"https://schema.org","@type":"SoftwareSourceCode",name:"Paper Reading Skill",codeRepository:repo,license:`${repo}/blob/main/LICENSE`,programmingLanguage:"JavaScript",description})}</script>
   <title>Paper Reading Skill — ${page.lang === 'en' ? 'Visual deep reads for research papers' : '把论文读成可视化深读文档'}</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">${page.skip}</a>
@@ -80,7 +124,7 @@ for (const page of pages) {
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="#section-1">${page.example}</a><a class="button secondary" href="#section-4">${page.install}</a></div></div>
+      <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="${page.lang === 'en' ? 'resnet-deep-read.html' : 'lora-deep-read.html'}">${page.example}</a><a class="button secondary" href="#start">${page.install}</a></div><p class="works-with">Codex · Claude Code · Kimi Code <span> / MIT · ${page.lang === 'en' ? 'Open source' : '开源'}</span></p></div>
       <figure class="hero-visual">${rewriteLinks(marked.parser([preview]))}<figcaption>${page.lang === 'en' ? 'Editorial preview of the MiMo-V2.6 reading (Chinese); English examples are below.' : 'MiMo-V2.6 中文深读文档的编辑式预览；下方还有英文样例。'}</figcaption></figure>
     </section>
     <div class="content-wrap">${content}</div>
@@ -96,3 +140,18 @@ for (const page of pages) {
     fs.writeFileSync(output, html);
   }
 }
+// Static discovery metadata follows the actual generated gallery; no invented
+// modification dates or traffic trackers are added.
+const pageNames = ['index.html', 'zh.html', ...fs.readdirSync(path.join(root, 'docs')).filter(file => file.endsWith('-deep-read.html')).sort()];
+const discovery = {
+  'sitemap.xml': '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + pageNames.map(file => `  <url><loc>${site}${file === 'index.html' ? '' : file}</loc></url>`).join('\n') + '\n</urlset>\n',
+};
+for (const [file, content] of Object.entries(discovery)) {
+  const output = path.join(root, 'docs', file);
+  if (process.argv.includes('--check')) {
+    if (!fs.existsSync(output) || fs.readFileSync(output, 'utf8') !== content) throw new Error(`${file} is stale; run npm run build:docs`);
+  } else fs.writeFileSync(output, content);
+}
+
+}
+main().catch(error => { console.error(error.message); process.exitCode = 1; });

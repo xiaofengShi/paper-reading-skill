@@ -50,7 +50,7 @@ $$x=y+z$$
     assert.match(html, /class="display-math"/);
     assert.match(html, /class="katex-html" aria-hidden="true"/);
     assert.match(html, /class="katex-mathml"><math/);
-    assert.match(html, /\.katex \.katex-mathml\{clip:/);
+    assert.match(html, /\.katex \.katex-mathml\{[^}]*\b(?:clip|clip-path):/);
     assert.match(html, /\.inline-math \{ display: inline-block;/);
     assert.match(html, /data:font\/woff2;base64,/);
     assert.doesNotMatch(html, /url\(fonts\//);

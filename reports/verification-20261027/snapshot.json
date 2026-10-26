@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-27 Asia/Shanghai",
+  "baseCommit": "dc23208687116f6296c08f59f1fcd2ad6f80b6f4",
+  "branch": "feat/paper-reading-experience",
+  "githubSnapshot": {
+    "windowUTC": [
+      "2026-10-12",
+      "2026-10-25"
+    ],
+    "views": 317,
+    "uniqueVisitors": 202,
+    "clones": 365,
+    "uniqueCloners": 181,
+    "stars": 10,
+    "forks": 0,
+    "releases": 0,
+    "pagesSource": "main:/docs"
+  },
+  "runtime": {
+    "filesIncludingManifest": 29,
+    "bytesIncludingManifest": 165245,
+    "manifestInputBytes": 160661,
+    "archiveBytes": 64605,
+    "archiveSha256": "9c9a891f4f82fcc210d484c2d8fd0c056c2c22f0f65e4bf8f9bc883282a67f96",
+    "baselineTrackedBytes": 25601103,
+    "excludes": [
+      "npm dependencies",
+      ".git",
+      "public gallery"
+    ]
+  },
+  "limits": {
+    "humanReaderStudy": "unknown",
+    "formalFlashVisualAcceptance": "unknown",
+    "directFileOfflineBrowser": "unknown",
+    "liveNewDeployment": "not published"
+  },
+  "skillsDirectory": {
+    "command": "npx --yes skills find paper-reading",
+    "found": "xiaofengshi/paper-reading-skill@paper-reading",
+    "displayedInstalls": 14,
+    "countWindowAndDeduplication": "unknown",
+    "directWebPage": "unavailable in this run"
+  }
+}

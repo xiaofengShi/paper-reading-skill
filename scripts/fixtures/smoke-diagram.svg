@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="100" viewBox="0 0 420 100" role="img" aria-label="Synthetic input to output diagram">
+  <rect width="420" height="100" rx="12" fill="#f0f6f5"/>
+  <rect x="20" y="25" width="130" height="50" rx="6" fill="#d2e7e3"/>
+  <path d="M160 50h90m-10-7 10 7-10 7" fill="none" stroke="#195e54" stroke-width="3"/>
+  <rect x="270" y="25" width="130" height="50" rx="6" fill="#d2e7e3"/>
+  <g fill="#173b40" font-family="sans-serif" font-size="18" text-anchor="middle"><text x="85" y="57">Input</text><text x="335" y="57">Output</text></g>
+</svg>

@@ -1,0 +1,47 @@
+✔ the homepages offer a first-paper path, every published reading, and working local links (2.130166ms)
+✔ the published reader audit links its quality resources to GitHub (0.140917ms)
+✔ editorial maps explain paper relationships without depicting dead chapter controls (2.311583ms)
+✔ an installation can check its renderer without downloading a paper or shipping the gallery (94.047ms)
+✔ initializer help and invalid arguments do not create a reading (213.2185ms)
+✔ English and Chinese starters render as explicit unfinished drafts without inventing paper evidence (188.296375ms)
+✔ initialization refuses an existing destination and preserves its contents (27.7105ms)
+✔ the runtime package has a verifiable small manifest and works without gallery or build scripts (224.353875ms)
+✔ packaging rejects output inside its own runtime inputs before creating files (26.540209ms)
+✔ packaging rejects symlinked output ancestors inside inputs, including a not-yet-created suffix (57.175625ms)
+✔ inline math stays in prose, display math stays separate, and paired values share one scale (79.5615ms)
+✔ MiMo reader leads with the paper, includes Eq. 1, and names both Fig. 3 redraws (152.173667ms)
+✔ a figure caption with bold text closes before the next chapter (68.829375ms)
+✔ an English audit source produces an English reading page with a grounded map and chart (62.199ms)
+✔ a visual fact without a source fails instead of publishing an untraceable diagram (52.2105ms)
+✔ a reading source must declare a supported output language (86.557333ms)
+✔ an unknown visual theme fails before creating an output (40.571917ms)
+✔ the two English examples embed their diagrams, original figures, and reading context (2.572458ms)
+✔ the RAFT example keeps its method, equations, evidence, and figures in one Chinese page (2.499375ms)
+✔ the new readings keep their language, theme, source images, and experiment path offline (9.872708ms)
+✔ published reading headings do not end with sentence punctuation (19.742334ms)
+✔ path stages can name a cost, experiment rows a conclusion, and bars charts carry non-percentage values (59.572833ms)
+✔ bars charts reject negative values and honor domainMax (109.105ms)
+✔ charts reject missing or coerced numbers instead of drawing zeros (632.250458ms)
+✔ the renderer accepts audit sources and assets outside the repository (60.137667ms)
+✔ visual blocks reject missing required text fields instead of rendering undefined (457.66075ms)
+✔ paper-contrast labels describe mechanism rather than learning (100.206084ms)
+✔ understanding checks disclose grounded answers without scripts and reject incomplete items (337.493542ms)
+✔ Markdown images with titles, reference links, and parenthesized filenames are embedded (64.390042ms)
+✔ Markdown entities display once in titles, navigation, and alt text while code keeps angle brackets (123.764459ms)
+✔ raw HTML images embed regardless of attribute order, case, quoting, and optional alt (63.461209ms)
+✔ the supported raster formats include JPEG and WebP with case-insensitive extensions (62.408834ms)
+✔ inline, fenced, indented, and escaped code keeps dollar syntax literally (62.601333ms)
+✔ image and diagram paths cannot escape through symlinks, absolute paths, or traversal (208.807917ms)
+✔ output may never overwrite the Markdown source through a path, symlink, or hard link alias (111.380291ms)
+✔ remote and unresolved asset requests fail before output while ordinary external links remain usable (607.985ms)
+✔ self-contained SVG/data fragments and inline interactive scripts survive offline validation (105.703583ms)
+✔ SVG image dependencies and embedded iframe resources must also be self-contained (98.113209ms)
+✔ invalid real math still fails and teaching examples do not execute custom fences (101.019333ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2037.552459

@@ -1,0 +1,117 @@
+{
+  "task": "Updated paper-reading Skill real forward trial on arXiv:1512.03385v1",
+  "model": "unknown",
+  "output_language": "en",
+  "observed_start_utc": "2026-10-26T16:59:51+00:00",
+  "audit_completed_utc": "2026-10-26T17:17:44.844442+00:00",
+  "observed_wall_seconds": 1073.844442,
+  "timing_boundary": "First tool clock through audit completion; excludes parent setup/prior dependencies and human reading time; includes reading, authoring, tool/browser work and audit.",
+  "first_html_elapsed_from_observed_start_seconds": 469.727623,
+  "first_renderer_success": true,
+  "first_renderer_wall_seconds": 0.30870629099999997,
+  "renderer_invocations": 2,
+  "final_render_wall_seconds": 0.155663041,
+  "source_scope": "all 12 primary PDF pages including appendices A-C; later 2016 paper abstract only",
+  "source_pdf_sha256": "1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+  "skill_source_state": "Live dirty working tree changed during run; initial and renderer-time hashes are explicitly recorded in run-audit.md and skill-source-hashes.json.",
+  "output_directory": "/tmp/paper-reading-updated-forward",
+  "scientific_verification": "author self-review only",
+  "experimental_reproduction": "not performed",
+  "independent_reader_comprehension": "unknown",
+  "formal_visual_acceptance": "unknown",
+  "literal_offline_file_open": "unknown: browser policy rejected file protocol",
+  "precise_anchor_alignment": "unknown",
+  "repository_written_by_this_agent": false,
+  "shared_node_modules_mutated": false,
+  "server_port_closed_verified": true,
+  "artifacts": {
+    "1512.03385v1.pdf": {
+      "bytes": 819383,
+      "sha256": "1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a"
+    },
+    "assets/resnet-fig2-block.png": {
+      "bytes": 17549,
+      "sha256": "d6f1655792fa6f4132942547b39e223c758822680c557e04743d2233510733d5"
+    },
+    "assets/resnet-fig4-imagenet-curves.png": {
+      "bytes": 62720,
+      "sha256": "2578aa91e9691a1f00ebdf7504a08d26e0ffe69f1073ca8ee46be1a278ea5ec6"
+    },
+    "assets/resnet-fig5-bottleneck.png": {
+      "bytes": 19437,
+      "sha256": "4f1f3f26b9e1eedb0012d62bc5c2d0228bdaa5b965b5cc6e37643d219f9171ba"
+    },
+    "assets/resnet-fig6-cifar-curves.png": {
+      "bytes": 95408,
+      "sha256": "ae5109213affcf7933c3a7b0f11dac5134ae9b38cf6d5821402f16e3f670a9ee"
+    },
+    "assets/resnet-fig7-responses.png": {
+      "bytes": 49761,
+      "sha256": "7154a6ea67e7ab9210f0401698fccb518206fe2ed816f4f46545517d77d19303"
+    },
+    "browser-observations.json": {
+      "bytes": 2980,
+      "sha256": "e6aacc8e70faf140d859c41ea290cc7a5467c088f06ec094365d135ad84f3eb2"
+    },
+    "execution-log.md": {
+      "bytes": 4164,
+      "sha256": "10da34787f12585b369ab4bc5cdafee14c55688ccea09ae4d0adf5064e27dccf"
+    },
+    "figure-crops.json": {
+      "bytes": 2397,
+      "sha256": "821f69a7ab6d0a3e5a8aa2eb29d89c2d529d146f12485d09cde73c5ba1f60715"
+    },
+    "page-2.png": {
+      "bytes": 185413,
+      "sha256": "fe69d42b1e502a13cbdc2aaf3e7de75cd83baef9a8897fb060a3405e5750fea8"
+    },
+    "page-5.png": {
+      "bytes": 137432,
+      "sha256": "4bf6c208982b05cde7036fb3fe9d259bb8f0ad0473eb46209b1a0e343986d16d"
+    },
+    "page-6.png": {
+      "bytes": 180680,
+      "sha256": "470f1bfd9ea9a7c71594262f53769bc707c890ae193f4fe2c0f0e98c1c1c4e30"
+    },
+    "page-8.png": {
+      "bytes": 183362,
+      "sha256": "ee9d39572a8ad09b784820c464f8ff1fa3e18cc3048b85be2a7f3b237cc79147"
+    },
+    "paper-full.txt": {
+      "bytes": 99843,
+      "sha256": "552b5bfb4fc195d456d45b7e3540515f5012d5633924248791008d63876cf89a"
+    },
+    "pdf-metadata.json": {
+      "bytes": 336,
+      "sha256": "aa3e58b97c3952b5c06a71188fd60d9af4535968b2bd1cf186cba8e8a4bf09ad"
+    },
+    "reading.html": {
+      "bytes": 805754,
+      "sha256": "1c8d335db6391d292012389e8d0b4bff9c214bd09bf260b6e9df32185e3d5086"
+    },
+    "reading.md": {
+      "bytes": 33828,
+      "sha256": "23b3f4ab9a0ed737c9da7a3a5cb8e3c27853919f4e0f24b4d915369b0fbdacac"
+    },
+    "renderer-attempt-1.json": {
+      "bytes": 769,
+      "sha256": "47f0fc6db0af6a6583bf8c21b76307d922bb6f8b07b5d624b97eb268435395e4"
+    },
+    "renderer-attempt-2.json": {
+      "bytes": 680,
+      "sha256": "da4061d99e6c95e20b365dd8bbaa1bc2ceeab11e7440addd836bf485720dd55c"
+    },
+    "run-audit.md": {
+      "bytes": 13981,
+      "sha256": "3bb0a7345fd6d20f0171b636d87a653546e62528486c9872f43134124fbe3a83"
+    },
+    "skill-source-hashes.json": {
+      "bytes": 1323,
+      "sha256": "e7069d3848d75cce980c5f50b2198461301a7f9b480166a62a7e1f1d37612a43"
+    },
+    "static-checks.json": {
+      "bytes": 1193,
+      "sha256": "53b0553cf4435be95c68634f60ba3619014eb6b77674648a3033b0c17c658657"
+    }
+  }
+}

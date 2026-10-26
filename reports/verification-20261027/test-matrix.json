@@ -1,0 +1,44 @@
+[
+  {
+    "node": "20.18.3",
+    "exitCode": 0,
+    "tail": [
+      "ℹ tests 39",
+      "ℹ suites 0",
+      "ℹ pass 39",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "ℹ todo 0",
+      "ℹ duration_ms 2689.531125"
+    ]
+  },
+  {
+    "node": "22.23.4",
+    "exitCode": 0,
+    "tail": [
+      "ℹ tests 39",
+      "ℹ suites 0",
+      "ℹ pass 39",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "ℹ todo 0",
+      "ℹ duration_ms 2104.455166"
+    ]
+  },
+  {
+    "node": "24.22.1",
+    "exitCode": 0,
+    "tail": [
+      "ℹ tests 39",
+      "ℹ suites 0",
+      "ℹ pass 39",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "ℹ todo 0",
+      "ℹ duration_ms 2037.552459"
+    ]
+  }
+]

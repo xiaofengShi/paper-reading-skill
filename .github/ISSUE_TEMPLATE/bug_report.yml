@@ -1,0 +1,29 @@
+name: Installation or reading problem
+description: Report a reproducible installation, rendering, or source interpretation problem.
+body:
+  - type: textarea
+    id: expected
+    attributes:
+      label: What were you trying to do?
+      description: Include the command or reading request, and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+      description: Include the exact error, smallest reproducible Markdown, or affected output passage. Remove private material and credentials.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Agent and model, operating system, Node.js version, and installation method.
+    validations:
+      required: true
+  - type: textarea
+    id: paper
+    attributes:
+      label: Paper and evidence, if relevant
+      description: Give the source URL and version, page / section / figure, and the output passage. Say if access or redistribution is restricted.

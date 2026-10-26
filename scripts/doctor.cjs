@@ -21,10 +21,10 @@ for (const dependency of ['marked', 'katex']) {
 
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-doctor-'));
 try {
-  const output = path.join(temporary, 'transformer.html');
+  const output = path.join(temporary, 'smoke.html');
   const result = spawnSync(process.execPath, [
     path.join(root, 'scripts/render-reading.cjs'),
-    path.join(root, 'examples/attention-is-all-you-need-deep-read.md'),
+    path.join(root, 'scripts/fixtures/smoke-reading.md'),
     output,
   ], { cwd: root, encoding: 'utf8' });
   if (result.error || result.status !== 0) {
@@ -33,11 +33,14 @@ try {
   } else {
     const html = fs.readFileSync(output, 'utf8');
     if (!html.includes('<html lang="en">') || !html.includes('class="katex"') ||
-        !html.includes('href="#section-1"') || !html.includes('data:image/svg+xml;base64,')) {
-      console.error('Example rendered, but its language, math, navigation, or embedded diagram is incomplete.');
+        !html.includes('href="#section-1"') || !html.includes('data:image/svg+xml;base64,') ||
+        !html.includes('class="bars-chart"') || !html.includes('SYNTHETIC SMOKE TEST') ||
+        !html.includes('data:font/woff2;base64,') || /<[^>]+\bsrc=["']https?:/i.test(html)) {
+      console.error('Smoke fixture rendered, but its language, math, navigation, chart, or embedded assets are incomplete.');
       process.exitCode = 1;
     } else {
-      console.log(`Ready: Node.js ${process.versions.node}, dependencies, and one offline example render passed.`);
+      console.log(`Ready: Node.js ${process.versions.node}, dependencies, and an offline synthetic smoke render passed.`);
+      console.log('This checks the renderer, not paper access, scientific accuracy, or reading completeness.');
       console.log('Restart your agent and ask it to read a PDF or paper URL deeply.');
     }
   }

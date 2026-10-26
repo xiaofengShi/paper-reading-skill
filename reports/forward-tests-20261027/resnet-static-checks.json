@@ -1,0 +1,37 @@
+{
+  "language": true,
+  "one_h1": true,
+  "nine_h2": true,
+  "five_embedded_figures": true,
+  "native_answers": true,
+  "scripts": 0,
+  "broken_fragments": [],
+  "external_asset_attributes": [],
+  "external_css_urls": [],
+  "csp": [
+    "default-src 'none'; script-src 'unsafe-inline' data: blob:; style-src 'unsafe-inline' data:; img-src data: blob:; font-src data:; media-src data: blob:; frame-src about: data: blob:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+  ],
+  "numeric_tokens_present": true,
+  "arithmetic": {
+    "plain_depth_delta_pp": 0.6,
+    "resnet_depth_delta_pp": -2.85,
+    "34_layer_delta_pp": -3.51,
+    "1202_minus_110_mean_pp": 1.32,
+    "1202_minus_110_best_pp": 1.5,
+    "coco_relative_gain_percent": 28.3
+  },
+  "files": {
+    "reading.md": {
+      "bytes": 33828,
+      "sha256": "23b3f4ab9a0ed737c9da7a3a5cb8e3c27853919f4e0f24b4d915369b0fbdacac"
+    },
+    "reading.html": {
+      "bytes": 805754,
+      "sha256": "1c8d335db6391d292012389e8d0b4bff9c214bd09bf260b6e9df32185e3d5086"
+    },
+    "1512.03385v1.pdf": {
+      "bytes": 819383,
+      "sha256": "1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a"
+    }
+  }
+}

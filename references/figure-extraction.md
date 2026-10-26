@@ -1,10 +1,10 @@
 # Getting figures out of a PDF
 
-A deep read embeds readable excerpts of the paper's own figures. This is the working recipe for turning PDF figure regions into PNG/WebP files beside the audit source, plus the verification method for labels the text layer mangles. The renderer accepts `.png`, `.svg`, `.webp` only; see [renderer-format](renderer-format.md).
+A deep read embeds readable excerpts of the paper's own figures. This is the working recipe for turning PDF figure regions into PNG/WebP files beside the audit source, plus the verification method for labels the text layer mangles. The renderer accepts `.png`, `.svg`, `.webp`, `.jpg`, and `.jpeg` (case-insensitive); see [renderer-format](renderer-format.md).
 
 ## Naming and placement
 
-Put crops in the example's asset folder and name them for what they show:
+For an ordinary reading, put crops in `assets/` beside its Markdown source. For a gallery contribution, use the layout below and name crops for what they show:
 
 ```
 examples/assets/<slug>-figN-<desc>.png     # original paper figures: vista-fig5-harness-configs.png
@@ -16,10 +16,17 @@ Keep the paper's figure number in the filename even when the desc slug changes â
 
 ## Crop recipe (PyMuPDF)
 
-`pip install pymupdf`, then render only the figure region at high zoom rather than screenshotting pages:
+Use an available PDF extraction tool first. If PyMuPDF is needed and absent, install it in an isolated environment rather than changing system Python:
+
+```bash
+python3 -m venv .paper-pdf-env
+.paper-pdf-env/bin/python -m pip install pymupdf
+```
+
+Run the following with that environment's Python. Record the source URL/version, PDF SHA-256, page number, and crop rectangle beside the reading. Render only the figure region at high zoom:
 
 ```python
-import fitz
+import pymupdf as fitz
 doc = fitz.open('paper.pdf')
 page = doc[0]                      # 0-based index
 hits = page.search_for('Figure 1:')  # caption text locates the region

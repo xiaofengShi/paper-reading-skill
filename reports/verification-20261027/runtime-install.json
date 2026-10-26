@@ -1,0 +1,62 @@
+{
+  "archive": "dist/v0.2.0-final/paper-reading.tar.gz",
+  "archiveSha256": "9c9a891f4f82fcc210d484c2d8fd0c056c2c22f0f65e4bf8f9bc883282a67f96",
+  "proofDirectory": "/var/folders/2h/0049prkd1b148x_ffgbq2c400000gn/T/paper-reading-v020-verified-nd1hn74p",
+  "manifestHashes": "pass",
+  "commands": [
+    {
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exitCode": 0,
+      "output": "\nadded 3 packages, and audited 4 packages in 2s\n\n1 package is looking for funding\n  run `npm fund` for details\n\nfound 0 vulnerabilities\n"
+    },
+    {
+      "command": [
+        "npx",
+        "--yes",
+        "--package=node@20.18.3",
+        "node",
+        "scripts/doctor.cjs"
+      ],
+      "exitCode": 0,
+      "output": "Ready: Node.js 20.18.3, dependencies, and an offline synthetic smoke render passed.\nThis checks the renderer, not paper access, scientific accuracy, or reading completeness.\nRestart your agent and ask it to read a PDF or paper URL deeply.\n"
+    },
+    {
+      "command": [
+        "npx",
+        "--yes",
+        "--package=node@20.18.3",
+        "node",
+        "scripts/init-reading.cjs",
+        "--out",
+        "/var/folders/2h/0049prkd1b148x_ffgbq2c400000gn/T/paper-reading-v020-verified-nd1hn74p/first-reading",
+        "--title",
+        "A <test> & evidence",
+        "--paper",
+        "https://arxiv.org/abs/2106.09685v2",
+        "--lang",
+        "en"
+      ],
+      "exitCode": 0,
+      "output": "Created unfinished reading inputs: /var/folders/2h/0049prkd1b148x_ffgbq2c400000gn/T/paper-reading-v020-verified-nd1hn74p/first-reading\nFiles: reading.md, brief.md, assets/\nNext: give brief.md and the paper to your agent. This command has not read the paper.\n"
+    },
+    {
+      "command": [
+        "npx",
+        "--yes",
+        "--package=node@20.18.3",
+        "node",
+        "scripts/render-reading.cjs",
+        "/var/folders/2h/0049prkd1b148x_ffgbq2c400000gn/T/paper-reading-v020-verified-nd1hn74p/first-reading/reading.md",
+        "/var/folders/2h/0049prkd1b148x_ffgbq2c400000gn/T/paper-reading-v020-verified-nd1hn74p/first-reading/reading.html"
+      ],
+      "exitCode": 0,
+      "output": "Built /var/folders/2h/0049prkd1b148x_ffgbq2c400000gn/T/paper-reading-v020-verified-nd1hn74p/first-reading/reading.html (396060 bytes, 6 sections, 0 visuals)\n"
+    }
+  ],
+  "draftTitleRoundTrip": "pass",
+  "parsedH1": "UNFINISHED DRAFT — NOT A DEEP READ: A <test> & evidence",
+  "harnessNote": "Earlier ad hoc assertions omitted or abbreviated the deliberate draft warning. The final check parses heading text and checks the full input title and unfinished warning, with no product change."
+}

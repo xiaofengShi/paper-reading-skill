@@ -1,0 +1,24 @@
+name: First reading feedback
+description: Help improve what a new reader can understand from an atlas.
+body:
+  - type: input
+    id: atlas
+    attributes:
+      label: Which atlas did you read or generate?
+      description: Link a public example or identify your paper, language, and agent.
+    validations:
+      required: true
+  - type: textarea
+    id: understanding
+    attributes:
+      label: What could you explain after reading it?
+      description: Describe the mechanism and the experiment or proof supporting its main conclusion in your own words.
+    validations:
+      required: true
+  - type: textarea
+    id: friction
+    attributes:
+      label: Where did you get stuck?
+      description: Include the passage or figure, what was unclear, and whether you had to reopen the PDF. Installation feedback is welcome too.
+    validations:
+      required: true

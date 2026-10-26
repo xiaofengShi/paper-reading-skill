@@ -2,6 +2,24 @@
 
 Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key until the reader finishes. For each question, record the answer, time, backtracking, and whether the reader needed another source. Mark `2` when the answer includes the decisive mechanism and boundary, `1` when it is directionally right but loses an important condition, and `0` when it is missing or wrong. This task set is a protocol for future readers; it is not a report of an independent study. Add one section per published reading — four questions plus an answer key — and keep counts and wording general rather than naming a fixed number of examples.
 
+## ResNet · [HTML](../docs/resnet-deep-read.html)
+
+1. What is learned by the residual branch, where does the 2015 block place its final ReLU, and when does a zero branch preserve the input?
+2. Which ImageNet comparison most directly tests the shortcut without adding parameters? What does its training error diagnose?
+3. Why does the 1202-layer CIFAR result separate successful fitting from generalization? Give the relevant error values and run-reporting boundary.
+4. Can the 4.49% and 3.57% ImageNet top-5 errors isolate ensemble benefit, or the 2016 identity-mapping analysis be attributed to the 2015 paper?
+
+**Answer key.** The branch learns F(x) around the shortcut; the original unit applies ReLU after F(x)+x, so F=0 is identity for nonnegative x, not arbitrary signed x. Same-depth option-A plain/residual 34-layer models have matched parameter count; Table 2 10-crop validation error is28.54%→25.03%, and Fig. 4 supplies training degradation evidence. The 1202-layer model has <0.1% training error but 7.93% test error; 110-layer mean is 6.61±0.16% over 5 runs, best 6.43%. The authors suggest overfitting, but no corresponding stronger-regularization ablation or 1202 repeated-run uncertainty establishes a general causal account. 4.49% is single-model multi-scale validation, 3.57% six-model test; different protocols prevent a matched estimate. The 2016 propagation/pre-activation work is a separate source, not a theorem or architecture from 2015. See the named mechanism, ImageNet, CIFAR, and later-interpretation chapters; withhold native answer disclosures during an independent diagnostic.
+
+## LoRA · [HTML](../docs/lora-deep-read.html)
+
+1. 为什么冻结 W0、让 B 从零开始，仍能在训练后改变模型行为？合并又依赖什么条件？
+2. 设一个 4,096 × 4,096 矩阵，r=8，A、B 一共有多少参数？这能否预测总显存或准确率？
+3. 4.7M LoRA 的 WikiSQL 73.4 对全量微调 73.8、MNLI 91.7 对 89.5，各支持什么方向的结论？
+4. 为什么不能把 Table 4 的预算标签直接当作唯一的可复现配置？
+
+**参考答案。** A 随机、B=0 使初始 BA=0；任务梯度更新 A、B 后增量可以非零，W0 保持冻结。线性支路允许将缩放后的 BA 加进 W0，合并后保持原前向形状；这不是任意非线性 adapter 都具备的性质。A、B 有 r(d+k)=65,536 个参数，占全矩阵 0.390625%，少256倍；这是单矩阵算术，底座和激活仍在，任务质量需要另测。WikiSQL 验证准确率低0.4个百分点、MNLI高2.2个百分点，需分别看任务、比较条件和典型种子波动，不能说处处领先或统计显著。4.7M 可以对应不同矩阵/rank组合；37.7M 的附录说明与 Table 15 还存在冲突。本页保留冲突，不补造唯一配置。见 HTML 第02–05节。若做独立诊断，先不向读者展示页面末尾的答案 disclosures，也不给本答题键。
+
 ## Transformer · [HTML](../docs/attention-is-all-you-need-deep-read.html)
 
 1. Why are position information and a causal decoder mask both needed if the model uses attention?
