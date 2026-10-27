@@ -5,6 +5,8 @@
   "scripts": {
     "build:docs": "node scripts/build-docs.cjs",
     "check:docs": "node scripts/build-docs.cjs --check",
+    "build:readings": "node scripts/build-readings-index.cjs",
+    "check:readings": "node scripts/build-readings-index.cjs --check",
     "build:examples": "node scripts/build-examples.cjs",
     "build:audit": "node scripts/build-reader-audit.cjs",
     "check:audit": "node scripts/build-reader-audit.cjs --check",

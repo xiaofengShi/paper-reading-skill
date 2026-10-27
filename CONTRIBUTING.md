@@ -25,13 +25,14 @@ npm run check:examples
 
 ## 3. Register the reading
 
-- [README.md](README.md) and [README.zh-CN.md](README.zh-CN.md): add one gallery bullet in each language, keeping the same order and source/version information.
+- [readings.json](readings.json): append one entry (`slug`, `title`, `lang`, `tool`, `arxiv`, `date`, `pinned`, `summaryEn`, `summaryZh`) at the end of the chronological array. It is the single source of truth for the published readings.
 - [evals/reader-tasks.md](evals/reader-tasks.md): add paper-specific reader questions and an answer key following the existing entries. These evaluation tasks are separate from the optional checks embedded in the reading.
-- Keep wording count-neutral (“the published examples”) so future additions do not require sweeping edits.
+- Do not hand-edit the reading lists in the READMEs. `npm run build:readings` regenerates the capped index (pinned entries plus the most recent, six bullets total) between the `readings-index` markers in both READMEs; the homepage gallery renders every entry from the same JSON.
 
-Rebuild the homepages from the READMEs:
+Rebuild the generated files:
 
 ```bash
+npm run build:readings
 npm run build:docs
 ```
 

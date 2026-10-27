@@ -8,6 +8,7 @@ const root = path.resolve(__dirname, '..');
 const site = 'https://xiaofengshi.github.io/paper-reading-skill/';
 const repo = 'https://github.com/xiaofengShi/paper-reading-skill';
 const sourceBase = `${repo}/blob/main/`;
+const readings = JSON.parse(fs.readFileSync(path.join(root, 'readings.json'), 'utf8')).readings;
 const pages = [
   { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Open a complete reading →', install: 'Try it with your paper ↓', footer: 'Read deeply. Keep the evidence close.' },
   { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '打开一份完整深读 →', install: '用你自己的论文试试 ↓', footer: '读懂全文，证据就在身边。' },
@@ -41,13 +42,29 @@ function copyBlocks(html, page) {
   const label = page.lang === 'en' ? 'Copy' : '复制';
   return html.replace(/<pre>([\s\S]*?)<\/pre>/g, (_, code) => `<div class="copy-block"><button type="button" class="copy-code" hidden>${label}</button><pre>${code}</pre><span class="copy-status" role="status"></span></div>`);
 }
-function gallery(html) {
-  return html.replace(/<li>([\s\S]*?)<\/li>/g, (whole, text) => {
-    const slug = text.match(/([a-z0-9.-]+-deep-read)\.html/); if (!slug) return whole;
-    const source = fs.readFileSync(path.join(root, 'examples', `${slug[1]}.md`), 'utf8');
-    const lang = source.match(/^<!-- paper-reading-lang: (en|zh-CN) -->/)[1];
-    return `<li data-reading-lang="${lang}">${text}</li>`;
+// The README keeps only a capped index between the readings-index markers;
+// the homepage renders the complete gallery from readings.json instead.
+function readingsSectionTokens(section) {
+  const kept = [];
+  let skipping = false;
+  for (const token of section) {
+    const text = token.text || '';
+    if (token.type === 'html' && text.includes('readings-index:start')) { skipping = true; continue; }
+    if (token.type === 'html' && text.includes('readings-index:end')) { skipping = false; continue; }
+    if (!skipping) kept.push(token);
+  }
+  return kept;
+}
+function readingsGallery(page) {
+  const items = readings.slice().reverse().map(r => {
+    const langLabel = r.lang === 'en' ? 'English' : '中文';
+    const tool = r.tool ? ` · ${esc(r.tool)}` : '';
+    const arxiv = r.arxiv ? ` <a href="https://arxiv.org/abs/${esc(r.arxiv)}">arXiv:${esc(r.arxiv)}</a>.` : '';
+    const summary = page.lang === 'en' ? r.summaryEn : r.summaryZh;
+    const open = page.lang === 'en' ? 'Open the complete reading →' : '打开完整深读 →';
+    return `<li data-reading-lang="${r.lang}"><strong>${esc(r.title)}</strong> · ${langLabel}${tool} — ${esc(summary)}${arxiv} <a href="${esc(r.slug)}-deep-read.html">${open}</a></li>`;
   });
+  return `<ul>\n${items.join('\n')}\n</ul>`;
 }
 for (const page of pages) {
   const tokens = marked.lexer(fs.readFileSync(path.join(root, page.source), 'utf8'));
@@ -83,9 +100,10 @@ for (const page of pages) {
     return `<a href="#${id}">${esc(entry.section[0].text)}</a>`;
   }).join('');
   const content = sectionList.map(({section, id}) => {
-    let body = copyBlocks(rewriteLinks(marked.parser(section)), page);
+    const tokens = id === 'readings' ? readingsSectionTokens(section) : section;
+    let body = copyBlocks(rewriteLinks(marked.parser(tokens)), page);
     if (id === 'readings') {
-      body = gallery(body);
+      body = `${body}\n${readingsGallery(page)}`;
       const labels = page.lang === 'en' ? ['Reading language', 'All', 'English', '中文'] : ['深读文档语言', '全部', 'English', '中文'];
       const filter = `<fieldset class="gallery-filter" hidden><legend>${labels[0]}</legend>${['all', 'en', 'zh-CN'].map((value, index) => `<button type="button" data-filter="${value}" aria-pressed="${index === 0}">${labels[index+1]}</button>`).join('')}<span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>`;
       body = body.replace('</h2>', `</h2>${filter}`);

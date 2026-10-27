@@ -29,18 +29,16 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 
 每篇先说明适合谁读、读完能尝试什么，再沿全局图、机制算例或操作追踪、原论文图与实验证据读完整篇。最后用论文特定的理解题尝试计算、迁移与判断；完整协议按需展开，主线与关键限制保持可见。
 
-- **LoRA** · 中文 — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
-- **Deep Residual Learning / ResNet** · English — 先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。依据 [arXiv:1512.03385v1](https://arxiv.org/abs/1512.03385v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html)
-- **Attention Is All You Need** · English — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
-- **DeepSeek-V4.1-Flash** · English — 分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-deep-read.html)
+<!-- readings-index:start -->
+- **Attention Is All You Need** · English — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 依据 [arXiv:1706.03762](https://arxiv.org/abs/1706.03762)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
-- **RAFT** · 中文 — 沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。依据 [arXiv:2606.00147v1](https://arxiv.org/abs/2606.00147v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/raft-deep-read.html)
-- **MechVQA** · English — 沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。依据 [arXiv:2605.30794v2](https://arxiv.org/abs/2605.30794v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mechvqa-deep-read.html)
-- **IAR** · 中文 — 沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。依据 [arXiv:2608.20281v1](https://arxiv.org/abs/2608.20281v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/iar-deep-read.html)
-- **VISTA** · 中文 — 沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。依据 [arXiv:2610.02200v1](https://arxiv.org/abs/2610.02200v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/vista-deep-read.html)
-- **DeepSeek-V4.1-Flash 中文** · 中文 — KV 缓存压缩报告的中文深读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文深读同一份源 PDF。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-zh-deep-read.html)
-- **OpenDS-World** · 中文 — 沿"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。依据 [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/opensds-world-deep-read.html)
-- **OmniDR-Bench** · 中文 · ZCode — 沿"视频为锚点的研究报告任务 + 七阶段工作流"读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。依据 [arXiv:2610.31158v1](https://arxiv.org/abs/2610.31158v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/omnidr-bench-deep-read.html)
+- **LoRA** · 中文 — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。 依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **Deep Residual Learning / ResNet** · English — 先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。 依据 [arXiv:1512.03385v1](https://arxiv.org/abs/1512.03385v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html)
+- **OmniDR-Bench** · 中文 · ZCode — 沿"视频为锚点的研究报告任务 + 七阶段工作流"读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。 依据 [arXiv:2610.31158v1](https://arxiv.org/abs/2610.31158v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/omnidr-bench-deep-read.html)
+- **OpenDS-World** · 中文 · ZCode — 沿"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。 依据 [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/opensds-world-deep-read.html)
+
+目前已发布 **12** 篇完整深读——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
+<!-- readings-index:end -->
 
 重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。
 
@@ -140,7 +138,7 @@ Agent 完成科学阅读与 Markdown 撰写，渲染器再把 Markdown 生成 HT
 
 Skill 会逐篇判断探索分支、状态变化或反馈环是否能增加理解；若不能，使用静态图。交互图可用 Archify 或自包含的 HTML/SVG 制作，关键解释仍须在无脚本时可读。构建不依赖 Archify 或其他本地 skill。[渲染器输入格式](references/renderer-format.md)给出 Markdown 契约，[从 PDF 抽取插图](references/figure-extraction.md)说明原图处理方法，[理解自测](references/learning-checks.md)说明如何用原生答案展开区辅助理解。
 
-[ResNet](examples/resnet-deep-read.md)、[LoRA](examples/lora-deep-read.md)、[Transformer](examples/attention-is-all-you-need-deep-read.md)、[DeepSeek](examples/deepseek-v4.1-flash-deep-read.md)、[MiMo](examples/mimo-v2.6-deep-read.md)、[RAFT](examples/raft-deep-read.md)、[MechVQA](examples/mechvqa-deep-read.md)、[IAR](examples/iar-deep-read.md)、[VISTA](examples/vista-deep-read.md)、[OpenDS-World](examples/opensds-world-deep-read.md)和[OmniDR-Bench](examples/omnidr-bench-deep-read.md)的 Markdown 与图形输入都是构建材料，不要求读者分别打开。
+每篇已发布深读的 Markdown 审计源与图形输入都在 `examples/` 下，索引见 [readings.json](readings.json)；它们是构建材料，不要求读者分别打开。
 
 本地重建所有已发布样例：
 

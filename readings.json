@@ -1,0 +1,136 @@
+{
+  "readings": [
+    {
+      "slug": "attention-is-all-you-need",
+      "title": "Attention Is All You Need",
+      "lang": "en",
+      "tool": null,
+      "arxiv": "1706.03762",
+      "date": "2026-09-23",
+      "pinned": true,
+      "summaryEn": "Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer.",
+      "summaryZh": "沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。"
+    },
+    {
+      "slug": "deepseek-v4.1-flash",
+      "title": "DeepSeek-V4.1-Flash",
+      "lang": "en",
+      "tool": null,
+      "arxiv": null,
+      "date": "2026-09-23",
+      "pinned": false,
+      "summaryEn": "Separate prefill computation, runtime global KV, and persistent KV; inspect CED and CSA2 with original figures, then read agent benchmarks with their harness conditions.",
+      "summaryZh": "分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。"
+    },
+    {
+      "slug": "mimo-v2.6",
+      "title": "MiMo-V2.6",
+      "lang": "zh-CN",
+      "tool": null,
+      "arxiv": null,
+      "date": "2026-09-23",
+      "pinned": true,
+      "summaryEn": "Follow the training path through the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments.",
+      "summaryZh": "从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。"
+    },
+    {
+      "slug": "raft",
+      "title": "RAFT",
+      "lang": "zh-CN",
+      "tool": "Kimi Code",
+      "arxiv": "2606.00147v1",
+      "date": "2026-09-24",
+      "pinned": false,
+      "summaryEn": "See how data refinement and answer-conditioned on-policy distillation work together, then inspect the domain-versus-general-capability evidence.",
+      "summaryZh": "沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。"
+    },
+    {
+      "slug": "mechvqa",
+      "title": "MechVQA",
+      "lang": "en",
+      "tool": "Kimi Code",
+      "arxiv": "2605.30794v2",
+      "date": "2026-09-24",
+      "pinned": false,
+      "summaryEn": "Trace how expert-verified mechanical drawings become a ten-task benchmark, then follow MechVL's SFT and RL training ladder and read its ablations.",
+      "summaryZh": "沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。"
+    },
+    {
+      "slug": "iar",
+      "title": "IAR",
+      "lang": "zh-CN",
+      "tool": "Kimi Code",
+      "arxiv": "2608.20281v1",
+      "date": "2026-09-24",
+      "pinned": false,
+      "summaryEn": "Follow Inject → Align → Recover from document exposure to retrieval-free QA, and compare domain gains with general-ability recovery across eight settings.",
+      "summaryZh": "沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。"
+    },
+    {
+      "slug": "vista",
+      "title": "VISTA",
+      "lang": "zh-CN",
+      "tool": "Kimi Code",
+      "arxiv": "2610.02200v1",
+      "date": "2026-10-15",
+      "pinned": false,
+      "summaryEn": "Follow the visual harness from lossless visual memory and model-directed inspection to a perfect ARC-AGI-3 score, then read the harness ablation ladder and cross-benchmark evidence.",
+      "summaryZh": "沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。"
+    },
+    {
+      "slug": "deepseek-v4.1-flash-zh",
+      "title": "DeepSeek-V4.1-Flash 中文",
+      "lang": "zh-CN",
+      "tool": "Kimi Code",
+      "arxiv": null,
+      "date": "2026-10-21",
+      "pinned": false,
+      "summaryEn": "A Chinese reading of the KV-cache compression report: three deployment costs, the CED/CSA2/FP4/SWA-Bounded-Replay trade-offs, and the reasoning-effort knob with its evidence chain. Same source PDF as the English reading above.",
+      "summaryZh": "KV 缓存压缩报告的中文深读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文深读同一份源 PDF。"
+    },
+    {
+      "slug": "opensds-world",
+      "title": "OpenDS-World",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.30181v1",
+      "date": "2026-10-27",
+      "pinned": false,
+      "summaryEn": "Trace the benchmark pipeline from audiovisual anchors through open-web evidence expansion and question inversion to human calibration, then read the 12-model evaluation and the cost/termination/failure analyses.",
+      "summaryZh": "沿\"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定\"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。"
+    },
+    {
+      "slug": "omnidr-bench",
+      "title": "OmniDR-Bench",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.31158v1",
+      "date": "2026-10-27",
+      "pinned": false,
+      "summaryEn": "Follow the video-centered research task and seven-stage workflow, then read how ARC builds audited rubric trees and what 18 agent configurations fail on: presentation near 82 while content and citation stay under 48.",
+      "summaryZh": "沿\"视频为锚点的研究报告任务 + 七阶段工作流\"读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。"
+    },
+    {
+      "slug": "lora",
+      "title": "LoRA",
+      "lang": "zh-CN",
+      "tool": null,
+      "arxiv": "2106.09685v2",
+      "date": "2026-10-27",
+      "pinned": true,
+      "summaryEn": "Change an input and trace the low-rank correction through both branches and merged weights. Work from initialization gradients to a two-dimensional subspace example, then inspect the evidence. Four understanding checks, including a new-budget transfer task.",
+      "summaryZh": "改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。"
+    },
+    {
+      "slug": "resnet",
+      "title": "Deep Residual Learning / ResNet",
+      "lang": "en",
+      "tool": null,
+      "arxiv": "1512.03385v1",
+      "date": "2026-10-27",
+      "pinned": false,
+      "summaryEn": "Calculate the original block's forward and backward passes, separate training degradation from generalization, and trace an appendix detection improvement. Five understanding checks, including an altered-shortcut transfer task.",
+      "summaryZh": "先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。"
+    }
+  ]
+}
