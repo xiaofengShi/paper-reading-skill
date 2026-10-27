@@ -1,18 +1,45 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>LoRA 单矩阵参数预算实验</title><style>
-:root{color-scheme:light;font:16px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#1b2b44;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;padding:1.2rem}main{max-width:900px;margin:auto}h1{font-size:1.35rem;line-height:1.3;margin:0 0 .5rem}p{margin:.5rem 0}.note{color:#3f536f;font-size:.85rem}.controls{display:none;margin:1rem 0;padding:1rem;background:white;border:1px solid #c9d6e8;border-radius:.4rem}label{font-weight:750}input{display:block;width:100%;margin:1rem 0;accent-color:#255ea2;min-height:32px}input:focus-visible{outline:3px solid #b85a34;outline-offset:4px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1rem 0}.metric{padding:.8rem;background:#fff;border:1px solid #c9d6e8;border-radius:.35rem;min-width:0}.metric strong{display:block;color:#194879;font-size:clamp(1rem,3vw,1.65rem);overflow-wrap:anywhere;font-variant-numeric:tabular-nums}.metric span{font-size:.78rem}.track{height:22px;background:#d6e2f1;border:1px solid #8aa5c8;margin:.7rem 0}.fill{height:100%;width:.390625%;min-width:2px;background:#255ea2}table{width:100%;border-collapse:collapse;font-size:.86rem}th,td{text-align:right;padding:.35rem;border-bottom:1px solid #c9d6e8}th:first-child,td:first-child{text-align:left}caption{text-align:left;font-weight:700;margin:.6rem 0}code{overflow-wrap:anywhere}@media(max-width:480px){body{padding:.8rem}.metrics{grid-template-columns:1fr}.metric{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem}.metric strong{font-size:1.15rem}}@media print{.controls,.track{display:none}}
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>LoRA：跟算更新与权重合并</title><style>
+:root{color-scheme:light;font:16px/1.55 system-ui,-apple-system,"PingFang SC",sans-serif;color:#1b2b44;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;padding:1rem}main{max-width:900px;margin:auto}h1{font-size:1.25rem;line-height:1.35;margin:0 0 .5rem}p{margin:.5rem 0}.note{color:#3f536f;font-size:.84rem}.interactive{display:none}.input-grid{grid-template-columns:1fr 1fr;gap:1rem;margin:.8rem 0}label{display:block;font-size:.88rem;font-weight:750}input{display:block;width:100%;margin:.2rem 0;accent-color:#255ea2;min-height:44px}input:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #b85a34;outline-offset:3px}button{font:inherit;min-height:44px;border:1px solid #255ea2;border-radius:4px;background:white;color:#194879;padding:.4rem .8rem;cursor:pointer}.flow{list-style:none;margin:.7rem 0;padding:0;border:1px solid #c9d6e8;border-radius:5px;background:white}.flow li{display:grid;grid-template-columns:10rem minmax(0,1fr);gap:.5rem;padding:.45rem .7rem;border-bottom:1px solid #dde5ef}.flow li:last-child{border:0}.flow strong{font-size:.83rem;color:#3f536f}.flow output{font:700 1rem/1.5 ui-monospace,monospace;color:#194879;overflow-wrap:anywhere}.result{padding:.6rem .8rem;border-left:3px solid #255ea2;background:#e8f0fa;font-size:.88rem}.budget{margin:1rem 0;border-top:1px solid #c9d6e8}.budget>summary{padding:.7rem 0;cursor:pointer;font-weight:750;color:#194879}.metrics{display:flex;flex-wrap:wrap;gap:.5rem 1rem;background:white;border:1px solid #c9d6e8;border-radius:4px;padding:.6rem;margin:.7rem 0}.metrics span{font-size:.84rem}.metrics strong{display:block;font-size:1.1rem;color:#194879;font-variant-numeric:tabular-nums}table{width:100%;border-collapse:collapse;font-size:.83rem}th,td{text-align:right;padding:.4rem .2rem;border-bottom:1px solid #c9d6e8}th:first-child,td:first-child{text-align:left}caption{text-align:left;font-weight:700;margin:.6rem 0}code{overflow-wrap:anywhere}@media(max-width:480px){body{padding:.75rem}.flow li{grid-template-columns:7.3rem minmax(0,1fr)}.flow output{font-size:.88rem}}@media print{.interactive{display:none!important}}
 </style></head><body><main>
-<h1>rank 变大，哪一项成本在增长？</h1>
-<p>固定一个 4,096 × 4,096 矩阵。全量更新有 16,777,216 个参数；LoRA 更新的 A、B 共 <strong>r × (4,096 + 4,096)</strong> 个。</p>
-<p class="note">本文构造的参数算术演示，依据原文 §4.1–4.2 的参数化。没有运行训练，也不预测准确率、显存或耗时。</p>
-<div class="controls" id="controls"><label for="rank">选择 rank：<output id="rank-label" for="rank">8</output></label><input id="rank" type="range" min="0" max="7" value="3" step="1" aria-valuetext="rank 8"><p class="note">可用方向键调整：r = 1、2、4、8、16、32、64、128。</p></div>
-<div class="metrics" aria-live="polite" aria-atomic="true"><div class="metric"><span>LoRA 可训练参数</span><strong id="count">65,536</strong></div><div class="metric"><span>占全量矩阵</span><strong id="ratio">0.390625%</strong></div><div class="metric"><span>参数数量少</span><strong id="factor">256 倍</strong></div></div>
-<div class="track" aria-hidden="true"><div class="fill" id="fill"></div></div><p class="note">横条以完整矩阵为 100%。小于 2px 的条段保留 2px 以便辨认，准确比例以数字为准。</p>
-<table><caption>静态对照（断网、无脚本时仍可读）</caption><thead><tr><th>r</th><th>A、B 参数</th><th>占全量矩阵</th><th>少多少倍</th></tr></thead><tbody><tr><td>1</td><td>8,192</td><td>0.048828125%</td><td>2,048</td></tr><tr><td>8</td><td>65,536</td><td>0.390625%</td><td>256</td></tr><tr><td>64</td><td>524,288</td><td>3.125%</td><td>32</td></tr><tr><td>128</td><td>1,048,576</td><td>6.25%</td><td>16</td></tr></tbody></table>
-<p class="note">固定维度时，r 翻倍使 A、B 参数翻倍。底座仍然存在；整个模型还可能包含多个适配矩阵。小 rank 是否够用，须看目标任务的验证结果。</p>
+<h1>改输入，沿两条支路算到同一个输出</h1>
+<p class="note">固定正文的 W0、A=(1,0,−1)、B=(1,2,0,−1)ᵀ，缩放为1。只改变输入 x=(x1,1,x3)。这是教学算术，不进行训练，也不预测准确率或显存。</p>
+<div class="input-grid interactive" id="input-controls"><div><label for="x1">输入 x1：<output id="x1-label" for="x1">2</output></label><input id="x1" type="range" min="-2" max="3" value="2" step="1"></div><div><label for="x3">输入 x3：<output id="x3-label" for="x3">1</output></label><input id="x3" type="range" min="-2" max="3" value="1" step="1"></div></div>
+<ol class="flow" aria-label="低秩更新计算路径"><li><strong>1 · 窄通道 Ax</strong><output id="ax">1</output></li><li><strong>2 · 修正 B(Ax)</strong><output id="delta">(1, 2, 0, −1)</output></li><li><strong>3 · 底座 W0x</strong><output id="base">(2, 1, 1, 4)</output></li><li><strong>4 · 两路相加 h</strong><output id="sum">(3, 3, 1, 3)</output></li><li><strong>5 · 合并后 Wx</strong><output id="merged">(3, 3, 1, 3)</output></li></ol>
+<p class="result" id="explanation" role="status" aria-live="polite">Ax=1，修正沿 B 方向；两路相加与合并矩阵的输出一致。</p>
+<button class="interactive" id="reset" type="button">恢复输入 (2,1,1)</button>
+<p class="note">试令 x1=x3，观察修正消失；再让 x1&lt;x3，观察修正反向。合并矩阵 W=W0+BA 的四行为 (2,0,−1)、(2,1,−2)、(0,0,1)、(0,1,2)。默认算例与矩阵在无脚本时仍可核对。</p>
+<details class="budget"><summary>再看 rank：单矩阵参数预算怎样变化</summary>
+<p class="note">此处独立固定 d=k=4,096。全量矩阵有16,777,216个数，A、B 共有 r×8,192 个数；下面的 rank 控件不改变上方 rank-1 机制例。</p>
+<div class="interactive" id="rank-controls"><label for="rank">选择 rank：<output id="rank-label" for="rank">8</output></label><input id="rank" type="range" min="0" max="7" value="3" step="1" aria-valuetext="rank 8"><p class="note">用方向键选择 r=1、2、4、8、16、32、64、128。</p></div>
+<div class="metrics"><span>LoRA 可训练参数<strong id="count">65,536</strong></span><span>占全量矩阵<strong id="ratio">0.390625%</strong></span><span>全量 / LoRA<strong id="factor">256 倍</strong></span></div>
+<table><caption>静态预算对照</caption><thead><tr><th>r</th><th>A、B 参数</th><th>占全量矩阵</th><th>全量 / LoRA</th></tr></thead><tbody><tr><td>1</td><td>8,192</td><td>0.048828125%</td><td>2,048</td></tr><tr><td>8</td><td>65,536</td><td>0.390625%</td><td>256</td></tr><tr><td>64</td><td>524,288</td><td>3.125%</td><td>32</td></tr><tr><td>128</td><td>1,048,576</td><td>6.25%</td><td>16</td></tr></tbody></table>
+<p class="note">r 翻倍使参数翻倍；整个模型仍有冻结底座和其他矩阵。小 rank 是否够用，需要目标任务验证。</p>
+</details>
+<p class="note">依据 LoRA v2 §4.1–4.2 的参数化；矩阵、输入与算例由本页构造。</p>
 </main><script>
+function loraExample(x1,x3){
+  const x=[x1,1,x3], ax=x1-x3;
+  const base=[x1,1,x3,x1+1+x3], delta=[ax,2*ax,0,-ax];
+  const sum=base.map((v,i)=>v+delta[i]);
+  const weights=[[2,0,-1],[2,1,-2],[0,0,1],[0,1,2]];
+  const merged=weights.map(row=>row.reduce((s,v,i)=>s+v*x[i],0));
+  return {ax,base,delta,sum,merged};
+}
+const element=id=>document.getElementById(id);
+const vector=values=>'('+values.map(v=>Object.is(v,-0)?0:v).join(', ')+')';
+function updateExample(){
+  const x1=Number(element('x1').value),x3=Number(element('x3').value);
+  const result=loraExample(x1,x3);
+  element('x1-label').textContent=x1;element('x3-label').textContent=x3;
+  element('ax').textContent=result.ax;
+  for(const key of ['base','delta','sum','merged']) element(key).textContent=vector(result[key]);
+  element('explanation').textContent=result.ax===0?'Ax=0：低秩修正消失，输出等于底座输出；两路与合并仍相等。':'Ax='+result.ax+'：修正沿 B 的'+(result.ax>0?'正':'反')+'方向；两路相加与合并矩阵的输出一致。';
+}
+for(const id of ['x1','x3']) element(id).addEventListener('input',updateExample);
+element('reset').addEventListener('click',()=>{element('x1').value=2;element('x3').value=1;updateExample();});
 const ranks=[1,2,4,8,16,32,64,128];
-const rankInput=document.getElementById('rank');
-function update(){const r=ranks[Number(rankInput.value)];const count=r*8192;const ratio=count/16777216*100;document.getElementById('rank-label').textContent=r;rankInput.setAttribute('aria-valuetext','rank '+r);document.getElementById('count').textContent=count.toLocaleString('en-US');document.getElementById('ratio').textContent=ratio+'%';document.getElementById('factor').textContent=(16777216/count).toLocaleString('en-US')+' 倍';document.getElementById('fill').style.width=ratio+'%';}
-rankInput.addEventListener('input',update);update();document.getElementById('controls').style.display='block';
+function updateRank(){const r=ranks[Number(element('rank').value)],count=r*8192;element('rank-label').textContent=r;element('rank').setAttribute('aria-valuetext','rank '+r);element('count').textContent=count.toLocaleString('en-US');element('ratio').textContent=(count/16777216*100)+'%';element('factor').textContent=(16777216/count).toLocaleString('en-US')+' 倍';}
+element('rank').addEventListener('input',updateRank);updateRank();updateExample();
+element('input-controls').style.display='grid';element('rank-controls').style.display='block';element('reset').style.display='inline-block';
 </script></body></html>

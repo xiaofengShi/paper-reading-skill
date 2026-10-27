@@ -32,24 +32,24 @@ const labels = {
     scope: '用于哪些任务', judge: '怎样判断', signal: '作用机制', value: '关键价值',
     question: '研究问题', setup: '设置 / 对照', observation: '观察', conclusion: '结论', cost: '代价 / 假设', chart: '本文整理的数据图',
     start: '起点', end: '终点', change: '变化', points: '个百分点', chartData: '查看图表数据', item: '项目',
-    openDiagram: '展开辅助交互图：', explore: '节点聚焦与路径探索', diagramNote: '交互图用于探索结构；本页的阅读路径、机制解释和实验数据可直接阅读。',
+    openDiagram: '展开辅助交互图：', explore: '可选交互', diagramNote: '按图中提示调整控件；本页的机制解释、算例与实验证据不依赖交互。',
     wholeMap: '论文全局图', description: '从全局路径到机制与实验的一体化论文深读。', titleSuffix: '深读图谱',
     skip: '跳到正文', topbar: '原文证据驱动的深读图谱', showSources: '显示原文定位', startReading: '开始阅读', inspectFigure: '↔ 横向滚动查看图内细节',
     defaultThesis: '从全局路径到关键机制与实验证据。', enter: '进入论文图谱', nav: '本文目录', route: '阅读路径',
     footer: '单文件阅读版', back: '返回顶部', pathKicker: '方法路径', contrastKicker: '机制对照', experimentKicker: '实验图谱', heroKicker: '论文深读图谱 · 中文',
-    checkKicker: '理解自测', checkAnswer: '展开参考答案',
+    checkKicker: '理解自测', checkAnswer: '展开参考答案', reader: '适合谁读', goals: '读完可以尝试',
   },
   en: {
     why: 'Why it matters', last: 'What this stage leaves behind', next: 'Passed to the next stage',
     scope: 'Where it applies', judge: 'How it is judged', signal: 'How it works', value: 'Why it matters',
     question: 'Research question', setup: 'Setup / comparator', observation: 'Observation', conclusion: 'Conclusion', cost: 'Cost / assumption', chart: 'Chart prepared for this reading',
     start: 'Start', end: 'End', change: 'Change', points: 'percentage points', chartData: 'View chart data', item: 'Item',
-    openDiagram: 'Explore interactive diagram: ', explore: 'Focus nodes and follow paths', diagramNote: 'The interactive view explores structure. The reading path, mechanisms, and experimental results remain visible on this page.',
+    openDiagram: 'Explore interactive diagram: ', explore: 'Optional interaction', diagramNote: 'Follow the controls in the view. The mechanism, worked example, and evidence remain readable without interaction.',
     wholeMap: 'Whole-paper map', description: 'A visual deep read from the global path to mechanisms and experiments.', titleSuffix: 'Deep reading atlas',
     skip: 'Skip to content', topbar: 'A source-grounded reading atlas', showSources: 'Show source locations', startReading: 'Start reading', inspectFigure: '↔ Scroll sideways to read the figure',
     defaultThesis: 'From the global path to mechanisms and experimental evidence.', enter: 'Enter the reading atlas', nav: 'Contents', route: 'Reading path',
     footer: 'Single-file reading page', back: 'Back to top', pathKicker: 'METHOD PATH', contrastKicker: 'MECHANISM COMPARISON', experimentKicker: 'EXPERIMENT ATLAS', heroKicker: 'DEEP READING ATLAS · ENGLISH',
-    checkKicker: 'CHECK YOUR UNDERSTANDING', checkAnswer: 'Reveal a grounded answer',
+    checkKicker: 'CHECK YOUR UNDERSTANDING', checkAnswer: 'Reveal a grounded answer', reader: 'Who this is for', goals: 'After reading, try to',
   },
 };
 const t = labels[lang];
@@ -86,6 +86,11 @@ const requireRowText = (row, fields, kind, index) => {
 function validateMap(data) {
   if (!Array.isArray(data.items) || !data.items.length) throw new Error('paper-map needs items');
   data.items.forEach((x, i) => requireRowText(x, ['number', 'label', 'text'], 'paper-map item', i));
+  if (data.reader !== undefined) requireText(data.reader, 'paper-map has an empty "reader"');
+  if (data.goals !== undefined) {
+    if (!Array.isArray(data.goals) || !data.goals.length) throw new Error('paper-map needs a non-empty "goals" array');
+    data.goals.forEach(goal => requireText(goal, 'paper-map has an empty goal'));
+  }
 }
 function renderMap(data) {
   validateMap(data);
@@ -203,9 +208,10 @@ const { heroMap, sections, title, visualCount } = reading;
 const body = auditHtml(reading.body, { context: 'reading', imageData });
 const nav = sections.map(s => `<a href="#${s.id}">${escapeMarkdownText(s.heading, esc)}</a>`).join('');
 const heroVisual = heroMap ? `<div class="hero-map"><p class="hero-map-title">${t.wholeMap} <span>01 — ${String(heroMap.items.length).padStart(2, '0')}</span></p><ol>${heroMap.items.map(x => `<li><span class="hero-map-index">${esc(x.number)}</span><div><div class="hero-map-heading"><strong>${esc(x.label)}</strong>${x.signal ? `<b>${esc(x.signal)}</b>` : ''}</div><p>${esc(x.text)}</p>${sourceBadge(x.source)}</div></li>`).join('')}</ol>${heroMap.outcome ? `<div class="hero-map-outcome"><span aria-hidden="true">↳</span><div><strong>${esc(heroMap.outcome)}</strong>${heroMap.outcomeSource ? sourceBadge(heroMap.outcomeSource) : ''}</div></div>` : ''}</div>` : '';
+const readerGuide = `${heroMap?.reader ? `<p class="hero-reader"><strong>${t.reader}</strong> · ${esc(heroMap.reader)}</p>` : ''}${heroMap?.goals ? `<div class="hero-goals"><p>${t.goals}</p><ul>${heroMap.goals.map(goal => `<li>${esc(goal)}</li>`).join('')}</ul></div>` : ''}`;
 const output = `<!doctype html>
 <html lang="${lang}"><head><meta charset="utf-8">${policyMeta}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escapeMarkdownText(title, esc)}${lang === 'zh-CN' ? '：' : ': '}${t.description}"><title>${escapeMarkdownText(title, esc)} · ${t.titleSuffix}</title><style>${katexCss}\n${css}</style></head>
-<body data-theme="${theme}"><a class="skip-link" href="#content">${t.skip}</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>${t.topbar}</span><label class="source-toggle-label" for="show-sources">${t.showSources}</label><a href="#content">${t.startReading} ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">${t.heroKicker}</p><h1>${escapeMarkdownText(title, esc)}</h1><p class="hero-sub">${esc(heroMap?.thesis || t.defaultThesis)}</p><a class="hero-link" href="#section-1">${t.enter} <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="${t.nav}"><div class="toc-title">${t.route}</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span><a href="https://github.com/xiaofengShi/paper-reading-skill">Paper Reading Skill</a> · ${t.footer}</span><a href="#top">${t.back} ↑</a></footer></body></html>`;
+<body data-theme="${theme}"><a class="skip-link" href="#content">${t.skip}</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>${t.topbar}</span><label class="source-toggle-label" for="show-sources">${t.showSources}</label><a href="#content">${t.startReading} ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">${t.heroKicker}</p><h1>${escapeMarkdownText(title, esc)}</h1><p class="hero-sub">${esc(heroMap?.thesis || t.defaultThesis)}</p>${readerGuide}<a class="hero-link" href="#section-1">${t.enter} <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="${t.nav}"><div class="toc-title">${t.route}</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span><a href="https://github.com/xiaofengShi/paper-reading-skill">Paper Reading Skill</a> · ${t.footer}</span><a href="#top">${t.back} ↑</a></footer></body></html>`;
 const cleanOutput = output.replace(/[ \t]+$/gm, '');
 fs.writeFileSync(outputPath, cleanOutput);
 console.log(`Built ${outputPath} (${Buffer.byteLength(cleanOutput)} bytes, ${sections.length} sections, ${visualCount} visuals)`);

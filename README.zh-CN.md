@@ -29,8 +29,8 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 
 选一篇论文，就能在一个页面里沿全局图、机制说明、原论文图、公式和实验证据读完整篇。图示与重要数字均有相邻解释，原文定位按需显示。
 
-- **LoRA** · 中文 — 沿冻结权重与低秩增量读懂适配机制，动手算一遍参数预算，再对照实验条件读结果。三个原生理解自测分别帮助重建机制、应用算例和判断证据，答案按需展开。依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
-- **Deep Residual Learning / ResNet** · English — 从原始加法后 ReLU 残差块开始，区分训练退化与泛化，逐项读 ImageNet、CIFAR 和迁移证据；附四道理解自测。依据 [arXiv:1512.03385v1](https://arxiv.org/abs/1512.03385v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html)
+- **LoRA** · 中文 — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **Deep Residual Learning / ResNet** · English — 先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。依据 [arXiv:1512.03385v1](https://arxiv.org/abs/1512.03385v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html)
 - **Attention Is All You Need** · English — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **DeepSeek-V4.1-Flash** · English — 分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-deep-read.html)
 - **MiMo-V2.6** · 中文 — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)

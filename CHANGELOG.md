@@ -4,7 +4,9 @@
 
 - Add a first-paper route in English and Chinese, language filters, copyable commands, and generated sitemap metadata.
 - Add an English ResNet v1 reading separating optimization, generalization, evaluation protocols, and later interpretations.
-- Add a LoRA v2 reading with source conflicts preserved, a parameter-budget teaching experiment, and three understanding checks.
+- Add a LoRA v2 reading with source conflicts preserved, input-to-update and merged-weight exploration, a parameter-budget experiment, and four understanding checks.
+- Bridge LoRA initialization/subspace analysis and ResNet scalar backpropagation; explain representative appendix operations and keep full supporting evidence in native disclosures.
+- Add optional reader prerequisites and learning goals to the reading hero. ResNet now includes five understanding checks.
 - Add native `paper-check` answer disclosures and a guide to reconstruct, apply, and assess evidence.
 - Add an unfinished-reading initializer, synthetic installation doctor, lightweight runtime packager, and file-hash manifest.
 - Support the documented Node 20 runtime through dynamic ESM imports. Upgrade KaTeX to 0.18.2.

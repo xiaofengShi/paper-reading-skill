@@ -28,6 +28,21 @@ function fixture(run) {
 function succeeds(result) { assert.equal(result.status, 0, result.stderr); return result.html; }
 function fails(result, pattern) { assert.notEqual(result.status, 0, 'expected the build to reject this input'); assert.match(result.stderr, pattern); }
 
+test('reader goals are optional escaped text and evidence disclosures retain rendered math and tables', () => fixture(({ render }) => {
+  const item = { number: '01', label: 'Question', text: 'A mechanism', source: 'PDF §1' };
+  const map = extra => '```paper-map\n' + JSON.stringify({ items: [item], ...extra }) + '\n```\n';
+  const html = succeeds(render(map({ reader: 'Vectors & derivatives', goals: ['Compute <one> example'] }) + '\n<details class="reading-detail">\n<summary>Full evidence</summary>\n\n$$x^2$$\n\n| Run | Value |\n|---|---|\n| A | 42 |\n\n</details>\n'));
+  assert.match(html, /class="hero-reader"[\s\S]*?Vectors &amp; derivatives/);
+  assert.match(html, /class="hero-goals"[\s\S]*?Compute &lt;one&gt; example/);
+  assert.match(html, /<details class="reading-detail">[\s\S]*?class="display-math"[\s\S]*?<table>[\s\S]*?<td>42<\/td>[\s\S]*?<\/details>/);
+  assert.doesNotMatch(html, /<details class="reading-detail" open/);
+  const legacy = succeeds(render(map({})));
+  assert.doesNotMatch(legacy, /<p class="hero-reader"|<div class="hero-goals"/);
+  for (const extra of [{ reader: '' }, { goals: [] }, { goals: 'not an array' }, { goals: [''] }, { goals: [3] }]) {
+    fails(render(map(extra)), /paper-map/);
+  }
+}));
+
 test('understanding checks disclose grounded answers without scripts and reject incomplete items', () => fixture(({ render }) => {
   const block = data => '```paper-check\n' + JSON.stringify(data) + '\n```\n';
   const item = { question: 'Why freeze W0?', answer: 'To learn A & B while retaining the base.', source: 'PDF §4', hint: 'Trace the training step.' };

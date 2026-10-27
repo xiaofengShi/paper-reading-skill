@@ -2,7 +2,7 @@
 <!-- paper-reading-theme: cobalt -->
 # Why residual learning makes depth usable
 
-**A complete reading of _Deep Residual Learning for Image Recognition_ — Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun, arXiv:1512.03385v1, 10 December 2015.** Written for a reader who knows basic neural networks. The main source is all 12 PDF pages, including detection and localization appendices A–C. This is an explanation and author self-check, not an experimental reproduction or a reader study. [Versioned paper](https://arxiv.org/abs/1512.03385v1) · [Original PDF](https://arxiv.org/pdf/1512.03385v1).
+**A complete reading of _Deep Residual Learning for Image Recognition_ — Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun, arXiv:1512.03385v1, 10 December 2015.** You should know a neural network's forward pass, training loss, vectors, and scalar derivatives; the chain rule is refreshed below, and the matrix extension is optional. The main source is all 12 PDF pages, including detection and localization appendices A–C. This is an explanation and author self-check, not an experimental reproduction or a reader study. [Versioned paper](https://arxiv.org/abs/1512.03385v1) · [Original PDF](https://arxiv.org/pdf/1512.03385v1).
 
 <span class="source-ref">PDF SHA-256: 1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a. Retrieved 27 October 2026, Asia/Shanghai. Page numbers below are the PDF's printed page numbers.</span>
 
@@ -11,6 +11,12 @@
 ```paper-map
 {
   "thesis": "Keep an identity route through a block and train its layers to modify that route. The 2015 evidence shows easier optimization and useful depth, while a 1202-layer counterexample separates fitting from generalization.",
+  "reader": "For readers who know a neural network's forward pass, loss, vectors, and scalar derivatives. No Jacobian knowledge is assumed.",
+  "goals": [
+    "Compute a residual block's output and a small backward pass, including the ReLU gate.",
+    "Use the matched 34-layer test and the 1202-layer counterexample to separate optimization from generalization.",
+    "Trace a detection improvement from its input boxes to its measured result without attributing the whole system to shortcuts."
+  ],
   "outcome": "A practical architecture and an empirical case for residual parameterization, with a hypothesis about why it helps rather than a general optimization theorem.",
   "outcomeSource": "PDF §§1, 3.1, 4.1–4.3; Figs. 4, 6; Table 6",
   "items": [
@@ -23,6 +29,8 @@
   ]
 }
 ```
+
+**A first reading:** follow the [block and scalar calculation](#section-2), the [matched ImageNet test](#section-4), and the [CIFAR counterexample](#section-5), then try the [understanding checks](#section-8). For an implementation or group presentation, add the classifier path and transfer section. Optional disclosures retain the matrix derivation and full appendix evidence; their conditions remain attached to the relevant claims.
 
 The argument runs from problem to mechanism to evidence: **training degradation motivates a new parameterization; matched tests check whether it helps; deeper models test its practical reach; the extreme-depth test limits the conclusion.** The paper does not establish that depth always improves predictions or that residual connections guarantee non-vanishing gradients.
 
@@ -52,14 +60,34 @@ In **Fig. 2**, follow the curved identity path from $x$ to the plus sign, then n
 
 ### What happens to gradients
 
-The following is an **editorial chain-rule explanation**, not a theorem proved or a measurement reported in the 2015 paper. For a same-shape block, away from the ReLU kink:
+The following is an **editorial chain-rule explanation**, not a theorem proved or a measurement reported in the 2015 paper. Start with one scalar feature. Write the sum as $u=x+f(x)$ and the outgoing value as $z=\max(0,u)$. A derivative measures how a small input change affects the next value. Addition contributes $du/dx=1+f'(x)$: the copied input contributes 1, and the learned branch contributes its own slope. ReLU then acts as a gate, passing that change when $u>0$ and blocking it when $u<0$.
+
+If the later network sends back $\delta=\partial L/\partial z$, the chain rule multiplies the slopes along this path:
+
+$$
+\frac{\partial L}{\partial x}
+=\underbrace{\delta}_{\text{from later layers}}
+\underbrace{\mathbf{1}_{u>0}}_{\text{ReLU gate}}
+\underbrace{\bigl(1+f'(x)\bigr)}_{\text{copy + learned branch}}.
+$$
+
+**Teaching calculation — invented scalar branch.** Let $x=2$, $f(x)=0.2x$, and $\delta=3$. Forward: $u=2.4$ and $z=2.4$. Backward: the gate is open, so $\partial L/\partial x=3\times1\times1.2=3.6$. The shortcut supplies the 1 in 1.2; it does not bypass the final ReLU. If the sum were negative, that gate would block this coordinate. At the zero kink, the ordinary derivative is undefined and implementations choose a convention.
+
+<details class="reading-detail">
+<summary>Vector extension: the same calculation as a Jacobian</summary>
+
+A **Jacobian** collects these local slopes for many coordinates: entry $(i,j)$ says how output coordinate $i$ changes with input coordinate $j$. The scalar 1 becomes the identity matrix $I$; the scalar ReLU gate becomes a diagonal matrix of coordinate-wise gates. For a same-shape block, away from the ReLU kink:
 
 $$
 z=\operatorname{ReLU}(x+F(x)), \qquad
 J_z = D_{\mathrm{ReLU}}(x+F(x))\bigl(I+J_F(x)\bigr).
 $$
 
-$J_z$ and $J_F$ are the Jacobians of the block output and residual branch with respect to $x$; $I$ is the identity matrix; $D_{\mathrm{ReLU}}$ is diagonal with entries 1 for positive preactivations and 0 for negative ones. An additive identity contribution is available before the gate, giving backpropagation another route besides the learned branch. Yet the gate can zero a coordinate, $J_F$ can cancel part of $I$, and a stack multiplies many block Jacobians. “Gradients are guaranteed to survive” does not follow.
+$J_z$ and $J_F$ are the Jacobians of the block output and residual branch with respect to $x$. $D_{\mathrm{ReLU}}$ has entries 1 for positive preactivations and 0 for negative ones. Stacking blocks multiplies their Jacobians, just as a scalar chain multiplies local derivatives.
+
+</details>
+
+The additive copy route is available **before** the gate. The gate can block a coordinate, and a branch slope of $-1$ can cancel the copied input's slope. Across many blocks these local effects combine. “Gradients are guaranteed to survive” does not follow from addition alone.
 
 The 2015 authors explicitly report healthy gradient norms and BN-stabilized signal variances in their plain ImageNet networks, and leave the precise optimization difficulty open. They conjecture slow convergence. Therefore “the only problem was vanishing gradients, and ResNet solved it” misstates their diagnosis. They also report trying three times as many iterations without removing degradation. (PDF §4.1, p. 5 and footnote 3)
 
@@ -189,6 +217,24 @@ The detection experiments test whether an ImageNet-pretrained representation is 
 
 **mAP** averages detection precision summaries across classes; the COCO metric additionally averages across intersection-over-union thresholds 0.50, 0.55, …, 0.95. IoU is overlap area divided by union area for predicted and reference boxes. Higher is better. These mAP values are not percentages of images classified correctly.
 
+The baseline-backbone comparisons favor ResNet-101: VOC 2007/2012 mAP improves by 3.2/3.4 points, and standard COCO mAP by 6.0 points. Those are useful transfer results under the tested detector recipes. **The later competition scores also include detector changes, extra training data, test-time processing, and ensembles; their full gain cannot be assigned to residual connections.**
+
+### One appendix mechanism: look again after moving the box
+
+Why refine a box twice? The first prediction pools features from a proposal region, then moves the box. Its features therefore describe the **old** region. Appendix B's refinement pools again from the newly predicted region, letting the detector reconsider both the class and location using the updated region. This is an inference operation, not another residual block. (PDF Appendix B, p. 10)
+
+| Step | Input → operation → output |
+|---|---|
+| First pass | 300 RPN proposals → the detector pools regional features and predicts classes and box corrections → 300 scored, regressed boxes. |
+| Look again | Those regressed boxes → pool new features at their updated locations and run the prediction head again → 300 new scores and regressed boxes. |
+| Consolidate | Original 300 plus new 300 predictions → non-maximum suppression at IoU threshold 0.3, followed by box voting → the final detection set. NMS removes overlapping alternatives; the PDF cites the box-voting method rather than specifying its aggregation formula. |
+| Measure | Keep COCO train → validation and the ResNet-101 baseline setting → standard mAP rises **27.2% → 29.9%**, while mAP@0.5 rises **48.4% → 49.9%**. These are +2.7 and +1.5 percentage points respectively. |
+
+The explanation predicts a benefit from evaluating the updated region; Table 9 measures the complete refinement package, including prediction merging and voting. It does not isolate a second pooling pass by itself, prove that every box moves closer to ground truth, or show a benefit at no extra inference cost. The later 32.5/34.9/37.4 results use further changes and must retain their separate settings.
+
+<details class="reading-detail">
+<summary>Full transfer evidence: datasets, detector changes, and localization conditions</summary>
+
 ```paper-experiments
 {
   "title":"What the transfer results support",
@@ -202,6 +248,8 @@ The detection experiments test whether an ImageNet-pretrained representation is 
 ```
 
 The appendix's improved PASCAL results, 85.6% mAP on VOC 2007 and 83.8% on VOC 2012, additionally use COCO pretraining and the improved detector recipe. They should not be merged with the baseline-backbone comparisons. Localization Appendix C replaces Fast R-CNN with RoI-centric R-CNN training because the authors argue that highly overlapping proposals provide too little sample variation. That is a separate system design choice, not a property implied by $x+F(x)$. (PDF Appendix B, Tables 10–11; Appendix C)
+
+</details>
 
 The abstract also announces a COCO segmentation competition win. This PDF does not provide a comparable segmentation method-and-result analysis. That announcement alone cannot establish the segmentation mechanism or isolate a residual effect. This reading does not invent missing mask experiments.
 
@@ -225,12 +273,13 @@ Try to answer before revealing each disclosure. These questions help you reconst
 
 ```paper-check
 {
-  "title":"Four checks tied to this paper",
+  "title":"Four reconstruction checks and one transfer task",
   "items":[
     {"question":"A same-shape block receives (2,1) and should output (2.2,0.7). What should its residual branch output, and where does the original design apply its final ReLU? Is zero residual identity for an arbitrary signed input?","hint":"Separate the preactivation sum from the outgoing block signal.","answer":"The residual is (0.2,−0.3). Addition gives (2.2,0.7), then ReLU leaves these positive coordinates unchanged. The 2015 unit applies its final ReLU after addition. With zero residual it outputs ReLU(x), which is identity for nonnegative x but not for an arbitrary signed vector. These are teaching numbers, not paper measurements.","source":"PDF §3.2; Eq. 1; Fig. 2; worked example in this reading"},
     {"question":"Why does plain-34's higher training error than plain-18 diagnose an optimization problem, and which comparison controls for extra shortcut parameters?","hint":"Distinguish the existence of a good parameter setting from the optimizer finding one.","answer":"A deeper network can in principle retain a useful shallow mapping by adding identity behavior, yet the trained plain-34 fits worse. That implicates the training process rather than explaining the degradation solely as overfitting. The same-depth option-A 34-layer comparison holds depth, width, and parameter count fixed; ImageNet 10-crop validation error falls from 28.54% to 25.03%, while Fig. 4 supplies the training-error evidence. It does not prove a universal optimizer guarantee.","source":"PDF §§1, 4.1; Fig. 4; Table 2"},
     {"question":"The 1202-layer CIFAR-10 network has below 0.1% training error but 7.93% test error. What does this establish, and what is still a hypothesis? How should it be compared with 110 layers?","hint":"The 110-layer table entry includes both a best run and a five-run mean.","answer":"It establishes successful fitting alongside worse reported test performance than 110 layers: 6.61 ± 0.16% mean ± std over five runs, best 6.43%. The test-error gaps are 1.32 points versus the mean and 1.50 versus the best. The authors' overfitting explanation is plausible but no stronger-regularization ablation establishes it here; repeated-run uncertainty for 1202 layers is absent. Easy optimization does not imply better generalization.","source":"PDF §4.2; Fig. 6 right; Table 6"},
-    {"question":"Can you subtract the 3.57% competition error from the 4.49% single-model error to isolate the benefit of an ensemble? Can the 2016 propagation argument be reported as a theorem of this 2015 paper?","hint":"Name the split, model setting, and historical source for each number or claim.","answer":"No. The 4.49% result is single-model multi-scale top-5 validation error; 3.57% is six-model ensemble top-5 test error. Different splits and submission settings prevent a matched causal estimate. The 2016 identity-mapping/pre-activation analysis belongs to a later paper; the 2015 work motivates residual learning and supplies empirical evidence, not that later propagation analysis or architecture.","source":"PDF §4.1; Tables 4–5; He et al. 2016 arXiv:1603.05027v1 abstract"}
+    {"question":"Can you subtract the 3.57% competition error from the 4.49% single-model error to isolate the benefit of an ensemble? Can the 2016 propagation argument be reported as a theorem of this 2015 paper?","hint":"Name the split, model setting, and historical source for each number or claim.","answer":"No. The 4.49% result is single-model multi-scale top-5 validation error; 3.57% is six-model ensemble top-5 test error. Different splits and submission settings prevent a matched causal estimate. The 2016 identity-mapping/pre-activation analysis belongs to a later paper; the 2015 work motivates residual learning and supplies empirical evidence, not that later propagation analysis or architecture.","source":"PDF §4.1; Tables 4–5; He et al. 2016 arXiv:1603.05027v1 abstract"},
+    {"question":"Transfer task: you propose a different scalar block, z = ReLU(0.1x + f(x)). At one point its ReLU gate is open, f′(x) = 0.2, and the later loss sends ∂L/∂z = 3. What reaches x? Does the matched 34-layer result establish that your altered block will train better?","hint":"Replace the copied route's slope in the scalar chain rule, then check which architecture the experiment actually tested.","answer":"The local input gradient is 3 × (0.1 + 0.2) = 0.9, compared with 3.6 for an identity shortcut at the same open gate and branch slope. The route now contributes 0.1 rather than 1; a closed ReLU gate would still give zero. This is an editorial local calculation, not a claim about an entire network's convergence. Table 2 tested the original option-A residual architecture, so its result does not establish an advantage for this altered block. That would require a new matched experiment.","source":"Editorial application of the scalar derivation in this reading; original architecture in PDF §3.2; tested comparison in Table 2"}
   ]
 }
 ```
@@ -239,7 +288,7 @@ Try to answer before revealing each disclosure. These questions help you reconst
 
 - **Primary source read in full:** [arXiv:1512.03385v1 PDF](https://arxiv.org/pdf/1512.03385v1), all 12 pages: introduction and related work; method and implementation; ImageNet and CIFAR-10 results; response analysis; transfer; bibliography; detection baselines and improvements; localization. No newer version was substituted.
 - **Later context checked narrowly:** [arXiv:1603.05027v1 abstract](https://arxiv.org/abs/1603.05027v1), for the historical separation of propagation analysis and a new residual unit. No full audit of that paper is claimed.
-- **Original excerpts:** Figs. 2, 4, 5, 6, and 7 are cropped from the pinned main PDF. Their captions, axes/paths, and nearby text were author-checked. Numerical tables were transcribed from the main PDF, not inferred from curves. Teaching examples and the Jacobian explanation are labeled editorial material.
+- **Original excerpts:** Figs. 2, 4, 5, 6, and 7 are cropped from the pinned main PDF. Their captions, axes/paths, and nearby text were author-checked. Numerical tables were transcribed from the main PDF, not inferred from curves. Teaching examples, the scalar/Jacobian derivation, and the altered-shortcut transfer task are labeled editorial material. Box refinement was checked against Appendix B and Table 9; the cited box-voting algorithm was not independently audited.
 - **Verification scope:** scientific content received author self-review and a separate AI-assisted source check against the pinned PDF. No paper experiment was run. No independent human reader, comprehension study, or independent visual acceptance is claimed.
 
 <!-- Interaction decision: the mechanism and protocol distinctions fit in static diagrams/figures and tables. No parameter slider is needed. Native answer disclosures let the reader attempt paper-specific reconstruction before revealing an answer, and remain available without JavaScript. No Archify or other skill was used. -->

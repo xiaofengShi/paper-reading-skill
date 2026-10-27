@@ -34,6 +34,8 @@ Required non-empty text fields (empty strings and missing keys are rejected, nev
 ```json
 {
   "thesis": "One-sentence claim of the paper (hero subtitle; only the first map uses it)",
+  "reader": "Optional: relevant background and any prerequisite explained in this reading",
+  "goals": ["Optional: one concrete task the reader can attempt afterward"],
   "outcome": "What the work delivers (hero footer line)",
   "outcomeSource": "PDF §§…",
   "items": [
@@ -43,6 +45,23 @@ Required non-empty text fields (empty strings and missing keys are rejected, nev
 ```
 
 `items` is required and non-empty. `number`, `label`, `text`, `source` are used for every item; `thesis`/`outcome`/`outcomeSource`/`signal` matter only on the **first** `paper-map`, which becomes the hero map beside the title. Later maps render as an inline card grid.
+
+Optional `reader` and `goals` appear beside the first map in the title area. `reader` must be non-empty text; `goals` must be a non-empty array of non-empty text. Use a short set of concrete learning tasks, not a claim that understanding has been measured. Existing sources without these fields keep their original layout.
+
+### Optional evidence disclosures
+
+For extended protocols, complete secondary tables, or an advanced derivation, use native HTML with **blank lines around the Markdown inside**:
+
+````markdown
+<details class="reading-detail">
+<summary>Full comparison table and evaluation conditions</summary>
+
+The detailed explanation, a Markdown table, display math, or a custom block goes here.
+
+</details>
+````
+
+Keep these tags at the Markdown top level; do not indent them into a list or quote. Use `###` rather than `##` for headings inside a disclosure so the chapter navigation does not point into closed content. The control works without scripts. Keep the decisive comparison, counterexample, and interpretation visible outside it; disclosures hold supporting detail rather than the explanation needed to understand the conclusion.
 
 ### `paper-path` — staged method path
 
