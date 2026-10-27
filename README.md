@@ -20,8 +20,6 @@ Choose a paper and read its full argument in one page. Each example has a paper-
 - **OpenDS-World** · 中文 · ZCode — Trace the benchmark pipeline from audiovisual anchors through open-web evidence expansion and question inversion to human calibration, then read the 12-model evaluation and the cost/termination/failure analyses. Based on [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1). [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/opensds-world-deep-read.html)
 - **OmniDR-Bench** · 中文 · ZCode — Follow the video-centered research task and seven-stage workflow, then read how ARC builds audited rubric trees and what 18 agent configurations fail on: presentation near 82 while content and citation stay under 48. Based on [arXiv:2610.31158v1](https://arxiv.org/abs/2610.31158v1). [Open the complete reading →](https://xiaofengshi.github.io/paper-reading-skill/omnidr-bench-deep-read.html)
 
-The MiMo example was authored from a 44-page local PDF. The PDF itself is not redistributed here. The authors later [updated the online report](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d); the example incorporates the corrected Pro active-parameter figure, while other version differences have not been checked page by page.
-
 ## What you get
 
 1. **Whole-paper map** The question, setting, proposed idea, contributions, and where evidence enters.

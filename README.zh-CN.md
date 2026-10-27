@@ -20,8 +20,6 @@
 - **OpenDS-World** · 中文 · ZCode — 沿"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。依据 [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/opensds-world-deep-read.html)
 - **OmniDR-Bench** · 中文 · ZCode — 沿"视频为锚点的研究报告任务 + 七阶段工作流"读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。依据 [arXiv:2610.31158v1](https://arxiv.org/abs/2610.31158v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/omnidr-bench-deep-read.html)
 
-MiMo 样例基于一份 44 页的本地 PDF 编写，仓库不分发该 PDF。作者后来[更新了在线报告](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d)；样例已采用修正后的 Pro 激活参数数值，其他版本差异尚未逐页核对。
-
 ## 你会得到什么
 
 1. **全局认知图** 研究问题、场景、主要想法、贡献及证据进入的位置。
