@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 — Unreleased
+## 0.2.0 — 2026-10-27
 
 - Rebuild all 11 gallery readings with the updated teaching contract: reader goals, worked mechanisms or operation traces, paper-specific checks, and supporting evidence disclosures. Recheck primary sources and correct source-version, equation, evaluator, and benchmark-scope errors; retain dated reconstruction evidence.
 - Add a first-paper route in English and Chinese, language filters, copyable commands, and generated sitemap metadata.
@@ -15,4 +15,4 @@
 - Prevent source overwrite aliases, symlink escapes, and packaging back into runtime inputs.
 - Add runtime CI on Node 20.18.3, 22, and 24. Automated checks do not establish scientific correctness or human comprehension.
 
-The source and artifacts are prepared locally. A GitHub release and a live Pages deployment require publication.
+This version includes the source, generated reading artifacts, and dated validation records. Automated checks and AI-assisted source review do not constitute an independent human evaluation.

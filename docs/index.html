@@ -142,11 +142,11 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$paper_re
 </code></pre><span class="copy-status" role="status"></span></div>
 <p>This creates <code>reading.md</code>, <code>brief.md</code>, and an <code>assets/</code> directory. The Markdown is visibly marked <strong>unfinished</strong>. The command does not fetch the paper, write a deep read, or generate HTML; the agent must complete and check the draft before rendering. An existing destination is refused. Use <code>--lang zh-CN</code> for a Chinese draft, or run <code>npm run init:reading -- --help</code> inside the installed skill for all options.</p>
 <h3>Build a lightweight local package</h3>
-<p>To install without the public gallery and website, build a runtime package from a repository checkout:</p>
+<p>To install without the public gallery and website, download <code>paper-reading.tar.gz</code> from the <a href="https://github.com/xiaofengShi/paper-reading-skill/releases/tag/v0.2.0">v0.2.0 release</a>, or build a runtime package from a repository checkout:</p>
 <div class="copy-block"><button type="button" class="copy-code" hidden>Copy</button><pre><code class="language-bash">npm ci
 npm run pack:skill
 </code></pre><span class="copy-status" role="status"></span></div>
-<p>The result is <code>dist/paper-reading/</code>, including a SHA-256 <code>manifest.json</code>, and <code>dist/paper-reading.tar.gz</code> when the system <code>tar</code> command is available. Copy the whole runtime directory to an unused skill location from the table, then run <code>npm ci</code> and <code>npm run doctor</code> inside that copy. It includes the renderer, helpers, references, and synthetic check fixture; it excludes <code>docs/</code>, <code>examples/</code>, dependencies, and tests. This is a local build procedure, not a published release download. Existing package outputs are refused; use <code>npm run pack:skill -- --out &lt;new-output-parent&gt;</code> for another build.</p>
+<p>The result is <code>dist/paper-reading/</code>, including a SHA-256 <code>manifest.json</code>, and <code>dist/paper-reading.tar.gz</code> when the system <code>tar</code> command is available. Copy the whole runtime directory to an unused skill location from the table, then run <code>npm ci</code> and <code>npm run doctor</code> inside that copy. It includes the renderer, helpers, references, and synthetic check fixture; it excludes <code>docs/</code>, <code>examples/</code>, dependencies, and tests. Existing package outputs are refused; use <code>npm run pack:skill -- --out &lt;new-output-parent&gt;</code> for another build.</p>
 <h3>Troubleshooting</h3>
 <table>
 <thead>

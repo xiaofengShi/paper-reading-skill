@@ -111,14 +111,14 @@ node .agents/skills/paper-reading/scripts/init-reading.cjs \
 
 ### 本地构建轻量包
 
-如果不需要公开样例和网站，可在仓库 checkout 中构建运行包：
+如果不需要公开样例和网站，可从 [v0.2.0 release](https://github.com/xiaofengShi/paper-reading-skill/releases/tag/v0.2.0) 下载 `paper-reading.tar.gz`，或在仓库 checkout 中构建运行包：
 
 ```bash
 npm ci
 npm run pack:skill
 ```
 
-输出为 `dist/paper-reading/`，内含 SHA-256 `manifest.json`；系统有 `tar` 命令时，还会生成 `dist/paper-reading.tar.gz`。将整个运行目录复制到上表中尚未占用的 skill 位置，再进入该副本运行 `npm ci` 和 `npm run doctor`。包中保留渲染器、辅助模块、参考文件与合成检查样例，不含 `docs/`、`examples/`、依赖和测试。这是本地构建方法，当前并非已发布的 release 下载。已有打包输出会被拒绝；再次构建可用 `npm run pack:skill -- --out <新的输出父目录>`。
+输出为 `dist/paper-reading/`，内含 SHA-256 `manifest.json`；系统有 `tar` 命令时，还会生成 `dist/paper-reading.tar.gz`。将整个运行目录复制到上表中尚未占用的 skill 位置，再进入该副本运行 `npm ci` 和 `npm run doctor`。包中保留渲染器、辅助模块、参考文件与合成检查样例，不含 `docs/`、`examples/`、依赖和测试。已有打包输出会被拒绝；再次构建可用 `npm run pack:skill -- --out <新的输出父目录>`。
 
 ### 故障排查
 

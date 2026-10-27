@@ -112,14 +112,14 @@ This creates `reading.md`, `brief.md`, and an `assets/` directory. The Markdown 
 
 ### Build a lightweight local package
 
-To install without the public gallery and website, build a runtime package from a repository checkout:
+To install without the public gallery and website, download `paper-reading.tar.gz` from the [v0.2.0 release](https://github.com/xiaofengShi/paper-reading-skill/releases/tag/v0.2.0), or build a runtime package from a repository checkout:
 
 ```bash
 npm ci
 npm run pack:skill
 ```
 
-The result is `dist/paper-reading/`, including a SHA-256 `manifest.json`, and `dist/paper-reading.tar.gz` when the system `tar` command is available. Copy the whole runtime directory to an unused skill location from the table, then run `npm ci` and `npm run doctor` inside that copy. It includes the renderer, helpers, references, and synthetic check fixture; it excludes `docs/`, `examples/`, dependencies, and tests. This is a local build procedure, not a published release download. Existing package outputs are refused; use `npm run pack:skill -- --out <new-output-parent>` for another build.
+The result is `dist/paper-reading/`, including a SHA-256 `manifest.json`, and `dist/paper-reading.tar.gz` when the system `tar` command is available. Copy the whole runtime directory to an unused skill location from the table, then run `npm ci` and `npm run doctor` inside that copy. It includes the renderer, helpers, references, and synthetic check fixture; it excludes `docs/`, `examples/`, dependencies, and tests. Existing package outputs are refused; use `npm run pack:skill -- --out <new-output-parent>` for another build.
 
 ### Troubleshooting
 

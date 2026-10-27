@@ -141,11 +141,11 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$paper_re
 </code></pre><span class="copy-status" role="status"></span></div>
 <p>它创建 <code>reading.md</code>、<code>brief.md</code> 和 <code>assets/</code> 目录。Markdown 会明确标为<strong>未完成草稿</strong>；命令不获取论文、不代写深读，也不生成 HTML。Agent 需要完成草稿并核对来源后再渲染。已有目标目录会被拒绝，避免覆盖文件。英文草稿使用 <code>--lang en</code>；在安装目录运行 <code>npm run init:reading -- --help</code> 查看全部参数。</p>
 <h3>本地构建轻量包</h3>
-<p>如果不需要公开样例和网站，可在仓库 checkout 中构建运行包：</p>
+<p>如果不需要公开样例和网站，可从 <a href="https://github.com/xiaofengShi/paper-reading-skill/releases/tag/v0.2.0">v0.2.0 release</a> 下载 <code>paper-reading.tar.gz</code>，或在仓库 checkout 中构建运行包：</p>
 <div class="copy-block"><button type="button" class="copy-code" hidden>复制</button><pre><code class="language-bash">npm ci
 npm run pack:skill
 </code></pre><span class="copy-status" role="status"></span></div>
-<p>输出为 <code>dist/paper-reading/</code>，内含 SHA-256 <code>manifest.json</code>；系统有 <code>tar</code> 命令时，还会生成 <code>dist/paper-reading.tar.gz</code>。将整个运行目录复制到上表中尚未占用的 skill 位置，再进入该副本运行 <code>npm ci</code> 和 <code>npm run doctor</code>。包中保留渲染器、辅助模块、参考文件与合成检查样例，不含 <code>docs/</code>、<code>examples/</code>、依赖和测试。这是本地构建方法，当前并非已发布的 release 下载。已有打包输出会被拒绝；再次构建可用 <code>npm run pack:skill -- --out &lt;新的输出父目录&gt;</code>。</p>
+<p>输出为 <code>dist/paper-reading/</code>，内含 SHA-256 <code>manifest.json</code>；系统有 <code>tar</code> 命令时，还会生成 <code>dist/paper-reading.tar.gz</code>。将整个运行目录复制到上表中尚未占用的 skill 位置，再进入该副本运行 <code>npm ci</code> 和 <code>npm run doctor</code>。包中保留渲染器、辅助模块、参考文件与合成检查样例，不含 <code>docs/</code>、<code>examples/</code>、依赖和测试。已有打包输出会被拒绝；再次构建可用 <code>npm run pack:skill -- --out &lt;新的输出父目录&gt;</code>。</p>
 <h3>故障排查</h3>
 <table>
 <thead>
