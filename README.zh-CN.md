@@ -40,10 +40,9 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 - **VISTA** · 中文 — 沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。依据 [arXiv:2610.02200v1](https://arxiv.org/abs/2610.02200v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/vista-deep-read.html)
 - **DeepSeek-V4.1-Flash 中文** · 中文 — KV 缓存压缩报告的中文深读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文深读同一份源 PDF。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-zh-deep-read.html)
 - **OpenDS-World** · 中文 — 沿"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。依据 [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/opensds-world-deep-read.html)
+- **OmniDR-Bench** · 中文 · ZCode — 沿"视频为锚点的研究报告任务 + 七阶段工作流"读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。依据 [arXiv:2610.31158v1](https://arxiv.org/abs/2610.31158v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/omnidr-bench-deep-read.html)
 
-11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。
-
-MiMo 深读现统一采用[官方修订后的 44 页报告](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/resolve/73875d00b30a89ef8cc353a0b60b0e9f9561952d/MiMo_V2_6_technical_report.pdf)。逐页文本比对发现唯一变化为 Table 1 的 Pro 激活参数由 42T 修正为 42B；保留的七幅图所在页在两版中的文本与渲染像素完全相同，裁图仍保留原始来源记录。仓库不分发 PDF。
+重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。
 
 ## 你会得到什么
 
@@ -141,7 +140,7 @@ Agent 完成科学阅读与 Markdown 撰写，渲染器再把 Markdown 生成 HT
 
 Skill 会逐篇判断探索分支、状态变化或反馈环是否能增加理解；若不能，使用静态图。交互图可用 Archify 或自包含的 HTML/SVG 制作，关键解释仍须在无脚本时可读。构建不依赖 Archify 或其他本地 skill。[渲染器输入格式](references/renderer-format.md)给出 Markdown 契约，[从 PDF 抽取插图](references/figure-extraction.md)说明原图处理方法，[理解自测](references/learning-checks.md)说明如何用原生答案展开区辅助理解。
 
-[ResNet](examples/resnet-deep-read.md)、[LoRA](examples/lora-deep-read.md)、[Transformer](examples/attention-is-all-you-need-deep-read.md)、[DeepSeek](examples/deepseek-v4.1-flash-deep-read.md)、[MiMo](examples/mimo-v2.6-deep-read.md)、[RAFT](examples/raft-deep-read.md)、[MechVQA](examples/mechvqa-deep-read.md)、[IAR](examples/iar-deep-read.md)、[VISTA](examples/vista-deep-read.md)和[OpenDS-World](examples/opensds-world-deep-read.md)的 Markdown 与图形输入都是构建材料，不要求读者分别打开。
+[ResNet](examples/resnet-deep-read.md)、[LoRA](examples/lora-deep-read.md)、[Transformer](examples/attention-is-all-you-need-deep-read.md)、[DeepSeek](examples/deepseek-v4.1-flash-deep-read.md)、[MiMo](examples/mimo-v2.6-deep-read.md)、[RAFT](examples/raft-deep-read.md)、[MechVQA](examples/mechvqa-deep-read.md)、[IAR](examples/iar-deep-read.md)、[VISTA](examples/vista-deep-read.md)、[OpenDS-World](examples/opensds-world-deep-read.md)和[OmniDR-Bench](examples/omnidr-bench-deep-read.md)的 Markdown 与图形输入都是构建材料，不要求读者分别打开。
 
 本地重建所有已发布样例：
 
