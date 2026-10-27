@@ -112,6 +112,16 @@ For same-shape blocks, the identity shortcut adds no learned weights and only th
 
 When a stage halves spatial resolution and increases channels, the two paths must still have matching shapes. **Option A** subsamples the shortcut and pads extra channels with zeros; it adds no parameters. **Option B** uses a learned $1\times1$ convolution, $W_s$, at dimension changes and identity elsewhere. **Option C** uses learned projections at every shortcut. The sum becomes $y=F(x)+W_sx$ for a projected shortcut. A projection introduces parameters and is not an identity map. (PDF §§3.2–3.3; §4.1)
 
+**Trace a shape change before adding.** At the first conv3_x block of the 34-layer ImageNet design, the incoming tensor is 56×56×64 and the learned branch leaves 28×28×128. The following table reconstructs the two permitted shortcut choices; dimensions are height × width × channels. (PDF Table 1; §3.3)
+
+| Route | Input → operation → output | What the sum means |
+|---|---|---|
+| Learned branch | 56×56×64 → stride-2 convolution followed by the block's second convolution → 28×28×128 | The learned correction has the required outgoing shape. |
+| Option A shortcut | 56×56×64 → subsample spatial positions → 28×28×64 → pad extra channels with zeros → 28×28×128 | Copy and correction can now be added coordinate by coordinate; the shortcut has no learned weights. |
+| Option B shortcut | 56×56×64 → stride-2, 1×1 projection from 64 to 128 channels → 28×28×128 | Same-shaped addition, but the copied route has become a learned projection. |
+
+The option-B kernel needs 64×128=8,192 weights, excluding biases and BN. Those weights are reused at every spatial location; multiplying by 28×28 would count applications, not additional learned parameters. This is an editorial calculation from the architecture, not a runtime measurement. An unchanged 56×56×64 tensor cannot simply be added to 28×28×128. This is why the identity-gradient explanation above applies directly to same-shape blocks, while a transition needs its actual shortcut derivative.
+
 ### Why bottlenecks appear
 
 In **Fig. 5**, compare the left block's two $3\times3$ convolutions with the right block's $1\times1\rightarrow3\times3\rightarrow1\times1$ branch. The right branch narrows channels before its expensive spatial convolution and expands them afterward. The identity route still carries the wide representation. The purpose is economical depth, not a new residual objective.
@@ -293,3 +303,4 @@ Try to answer before revealing each disclosure. These questions help you reconst
 
 <!-- Interaction decision: the mechanism and protocol distinctions fit in static diagrams/figures and tables. No parameter slider is needed. Native answer disclosures let the reader attempt paper-specific reconstruction before revealing an answer, and remain available without JavaScript. No Archify or other skill was used. -->
 <!-- Author self-audit: equations checked against §3.2 with the after-addition ReLU made explicit; Table 2/3/6 and transfer metrics checked against PDF rows; Fig. 4 center-crop curves kept distinct from 10-crop table; CIFAR best/mean/run reporting preserved; 2016 context quarantined; no curve digitization or experimental reproduction. Rendering observations are recorded separately from source evidence in the repository validation report. -->
+<!-- New-Skill reconstruction check, 2026-10-27: retrieved the pinned v1 PDF again; its SHA-256 matches assets/resnet-provenance.json. Rechecked the method, Table 1 transition shapes, matched ImageNet/CIFAR evidence, and task-transfer appendices. The shape/weight trace is editorial reconstruction; no new paper experiment or human learning test was performed. -->

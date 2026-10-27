@@ -1,265 +1,282 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: saffron -->
-# DeepSeek-V4.1-Flash：把 KV 缓存的三类成本一起压下去
+# DeepSeek-V4.1-Flash：跟一段提示走过三类缓存成本
 
-> **阅读定位**：这份技术报告回答的是部署侧的问题——长程智能体让负载变得输入重、缓存重，模型该为「算、存、传」三种成本分别做什么设计。DeepSeek-V4.1-Flash 是一个 552B 骨干参数的多模态 MoE 模型（prefill 每 token 激活 8B、decode 16B，支持 1M 上下文），用 CED 砍掉近半 prefill 计算，用 CSA2 跨层复用 + FP4 把全局 KV 压到 890 字节/token（约为 DeepSeek-V4-Flash 的 1/4），再用 SWA Bounded Replay 把持久 KV 压到约 1/8，同时在多数基准上超过前代。原文为 DeepSeek-AI 的 *DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression*。<span class="source-ref">本图谱依据所附 PDF《DeepSeek_V41_Tech_Report.pdf》（51 页，2026-09 生成，SHA-256 ba68e2e4…），覆盖 PDF §§1–6、Figs. 1–12、Tables 1–5、附录 A–C；与仓库英文样例同一份源文件，本篇为中文读者独立成篇。</span>
+> **阅读定位**：这份图谱阅读 DeepSeek-AI 的 *DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression*，沿着一次智能体回合，从长前缀走到短续写，再判断哪些测量支持这套设计。文中基准成绩均为作者报告，本次没有复现实验。<span class="source-ref">主源：[官方 51 页 PDF，固定上传提交 53e70b17d9acb8e0c423f0e4fe5702f25562b63d](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/resolve/53e70b17d9acb8e0c423f0e4fe5702f25562b63d/DeepSeek_V41_Tech_Report.pdf)，访问日期 2026-10-27；PDF 创建日期 2026-09-10；SHA-256 ba68e2e40408125ae6d2f63a9a241b61c73910691c74ec1a2a7023c851eac08d。本篇与英文样例使用完全相同的文件。覆盖 §§1–6、图表图注、评测附录 B 与数学附录 C；附录 A 是作者名单。[arXiv 条目](https://arxiv.org/abs/2609.19969)用于识别论文，本篇不以其 PDF 替换上述固定主源。</span>
 
 ```paper-map
 {
-  "thesis":"长程智能体的部署瓶颈已经从长序列计算转移到 KV 缓存的算、存、传三类成本；DeepSeek-V4.1-Flash 用 CED、CSA2、FP4 与 SWA Bounded Replay 分别对症，在压缩缓存的同时提升能力。",
-  "outcome":"552B 多模态 MoE（8B/16B 激活）：全局 KV 890 字节/token（约 1/4），持久 KV 约 1/8，prefill 计算约减半；后训练靠数据管线在多数智能体基准上追平或超过闭源前沿。",
-  "outcomeSource":"PDF 摘要， §§1, 6, Figs. 1–2, Table 3",
+  "thesis":"长上下文智能体需要分别降低长前缀计算、活跃全局 KV 存储和旧会话恢复的成本；三者不能混成一个压缩率。",
+  "reader":"面向知道 token 与 Transformer 注意力、尚未实现稀疏注意力或 KV 服务的读者。正文会补齐缓存术语，并用小算例解释 effort 控制的微积分。",
+  "goals":["追踪一回合中哪些状态被计算、共享或重建。","手算一个 CED 投影、稀疏候选选择和有界重放窗口。","为基准成绩补齐脚手架与评测条件，区分局部长度模型和实测精度。"],
+  "outcome":"CED、CSA2、FP4 主 KV 与有界重放组成模型和部署的联合设计；完整训练后模型的能力另用具名协议评测。",
+  "outcomeSource":"PDF 摘要，§§1–3, 5–6",
   "items":[
-    {"number":"01","label":"问题","signal":"算、存、传三类成本","text":"长程智能体负载输入重、上下文长：prefill 计算昂贵（缓存未命中时），全局 KV 撑满 HBM，持久 KV 撑满 SSD/主机内存，I/O 与互联带宽限制缓存迁移。稀疏注意力已把长序列计算成本压下来，存储与搬运成为主瓶颈。","source":"PDF §1"},
-    {"number":"02","label":"机制","signal":"四件套各对一类成本","text":"CED：解码器全局 KV 从编码器末层投影而来，prefill 只算前一半层。CSA2：全局 KV 与索引 K 跨层共享、Top-K 索引可复用（Full/Reindex/Reuse 三模式）+ 层次稀疏索引器。FP4 主 KV（QAT）。SWA Bounded Replay：只重放最近 n_win 个 token 近似重建 SWA 状态，持久层不再存 SWA KV。","source":"PDF §§2.2–2.4, 3.2"},
-    {"number":"03","label":"证据","signal":"压缩不失能 + 可控推理","text":"Base 模型对比（Table 1、Fig. 6 BPB）；后训练主表（Table 3）覆盖推理/智能体/安全/视觉 20 项；推理力度旋钮 25→100 的成本-质量曲线（Figs. 9, 12）；8 种脚手架稳健性（Tables 4–5）；多智能体初步实验（Fig. 10）。","source":"PDF §§4.3, 5.3, 附录 B"}
+    {"number":"01","label":"反复到来的长前缀","signal":"计算","text":"工具调用带回大段上下文。CED 减少需要遍历整段前缀的模型深度。","source":"PDF §§1, 2.2"},
+    {"number":"02","label":"正在使用的上下文","signal":"HBM","text":"CSA2 跨层共享全局 KV，FP4 缩小主 KV 条目；报告的全局 KV 为 890 字节/token。","source":"PDF §§2.3–2.4.4, 6"},
+    {"number":"03","label":"返回旧会话","signal":"持久缓存","text":"近似重建短命的 SWA 状态，让持久层保留全局 KV 而不再长期存 SWA KV。","source":"PDF §§3.2.1–3.2.2"},
+    {"number":"04","label":"生成有用续写","signal":"能力与预算","text":"训练得到 checkpoint；脚手架、推理力度和任务协议决定怎样测量它。","source":"PDF §§4–5, 附录 B–C"}
   ]
 }
 ```
 
-**证据入口总览：** 压缩主张的证据在摘要与结论的三项账本数字（890 字节/token、约 1/4、约 1/8）及其分解（§3.2.1）；「不失能」的证据分两层——Base 模型在内部评测框架下与 V4-Pro-Base 相当（Table 1、Fig. 6），后训练模型在 Table 3 上对比七个系统；effort 旋钮、脚手架稳健性、多智能体各有专门小节。注意全部评测除注明外均为作者内部或官方协议复测，非第三方独立测量。（PDF §§4–6）
+**第一遍路线：** 先沿 §01–04 讲清部署路径，再读 §05–06 分开训练与评测。§07 重建重要附录论证，同时保留反例；§08 用问题检验能否实际应用。完整比较表放在可选展开区，主要比较和限制留在正文。
 
-## 01 / 全局：瓶颈换了地方，设计就跟着换
+## 01 / 先把每个字节放对位置
 
-**一句话主线：** 作者认为，稀疏注意力把「长序列计算」这个旧瓶颈解决之后，真正卡住长程智能体规模化部署的是 KV 缓存的三类成本——prefill 计算（缓存未命中时的重算）、运行时全局 KV 存储（HBM）、持久 KV 存储与搬运（SSD/主机内存 + 带宽）——因此模型架构、缓存精度、部署策略必须联合设计，而不是各自优化。（PDF §1）
+注意力里的 **query**（查询）决定当前 token 想读什么，**key**（键）帮助匹配历史位置，**value**（值）提供内容。**KV cache** 保存历史键值，避免每生成一个 token 都重新计算全部历史。**Prefill** 处理已给定的前缀，**decode** 逐个生成新 token。智能体的 **harness**（脚手架）在模型外提供提示、工具、上下文管理和轮次控制。工具调用后，可能只有很短的新后缀，却带着很长的历史前缀，因此这些成本必须分开。（PDF §§1–2, 5.3.4）
 
-问题设定来自真实负载形态：长程智能体频繁调用工具，每次都产生大量 prefill 请求；上下文跨回合累积，KV 缓存既要撑住单请求的运行时容量，又要持久化以复用前缀。前代 DeepSeek-V4 用「全局注意力 + 滑动窗口注意力（SWA）」的组合：SWA 的 KV 在窗口固定时与序列长度无关，但全局 KV（main KV + indexer K）随上下文增长，长序列下主导 HBM 占用；持久 KV 则受 SSD 与主机内存约束。（PDF §1）
+报告将全局稀疏注意力与 **SWA**（滑动窗口注意力）组合：全局 KV 随序列变长，局部 SWA 在窗口固定时有界，却仍需跨层、跨会话占据存储。**HBM** 是活跃序列使用的加速器内存；SSD 或主机内存上的**持久前缀缓存**则让后来的请求恢复旧会话。活跃缓存变小与持久缓存变小有关联，但分母不同。（PDF §§1, 3.2.1）
 
-报告把解法组织成**四件套**，每件对准一类成本：
+| 成本 | 对应机制 | 报告量与适用边界 |
+|---|---|---|
+| 计算长前缀 | 因果编码器—解码器 CED，加解码器 SWA 重放 | 前缀远大于 SWA 窗口时，接近全栈 prefill 工作量的一半；不是所有负载的延迟测量 |
+| 保存活跃全局上下文 | CSA2 跨层复用，加 FP4 主 KV 存储 | **890 字节/token**，同等序列长度下约为 **V4-Flash 全局 KV 的 1/4**；局部 SWA 与模型权重另算 |
+| 请求之间保存前缀 | 持久层移出 SWA KV，未命中时重建 | 按报告负载和账本，约为 **V4-Flash 持久 KV 的 1/8**；同时包含移除 SWA 与全局 KV 压缩 |
 
-1. **CED（Causal Encoder-Decoder）** 对 prefill 计算：解码器的全局 KV 不从各层隐状态生成，而是从编码器末层（第 $L/2$ 层）投影而来，prefill 只需计算前一半层，整体 prefill 复杂度从 $O(NL)$ 降到约 $O(NL/2)$。（PDF §2.2）
-2. **CSA2（Compressed Sparse Attention 2）** 对全局 KV 存储与索引计算：跨层共享 main KV 与 indexer K、复用 Top-K 索引，配合层次稀疏索引器把深层索引的打分范围限制在候选池内。（PDF §2.3）
-3. **FP4 主 KV 缓存** 对存储精度：训练后量化感知训练（QAT），主 KV 用 E2M1 格式存储，约为 FP8 的一半。（PDF §2.4.4）
-4. **SWA Bounded Replay** 对持久 KV 与搬运：不再把 SWA KV 写入持久缓存，缺失时只重放最近 $n_{\text{win}}$ 个 token 近似重建——用一点 prefill 重算换掉一整类持久存储。（PDF §§3.2.1–3.2.2）
+模型有 552B 骨干参数，另有 196B Engram 参数；prefill 每 token 激活 8B 骨干参数，decode 激活 16B。参数量描述容量或计算，字节/token 描述服务状态，不能互相除乘成一个压缩分数。一百万 token 乘 890 字节/token，得到十进制 **890 MB 全局 KV**，还未包括局部状态等内存；这是教学换算，并非实测设备总占用。（PDF §§2.1, 2.4.2, 4.2.1, 6）
 
-配套还有 Single-Pass mHC、Engram 条件记忆、DSpark 投机解码三个扩展，以及训练/推理基础设施的协同改造。后训练部分的立场鲜明：**不引入算法新意**（SFT→RL→OPD 标准配方），全部增量投入在任务合成与环境构建的数据管线上，作者称观察到的收益几乎全部来自数据与环境的规模、多样性、可验证性。（PDF §5.1）
+**读 Fig. 1(b) 时看存储轴：** 纵轴是对数刻度的全局 KV 字节/token，比较历代模型；Fig. 1(a) 则比较任务成绩。两者并排展示设计目标，不代表缓存组件对精度的独立因果实验。（PDF Fig. 1）
 
-贡献可以概括为：(1) 一套「三类成本」问题分解与对应的架构/精度/部署联合设计；(2) 890 字节/token 的全局 KV 与约 1/8 的持久 KV 账本，decode FLOPs 随上下文几乎不涨（4K→1M 上下文只增加约 1/4）；(3) 后训练模型在多数推理与智能体基准上追平或超过闭源前沿，并暴露一个可控的推理力度旋钮；(4) 大规模智能体训练基建 DSec 与异步后训练系统。（PDF §§1, 6）
+![原论文 Fig. 1：左侧比较智能体基准成绩，右侧以对数刻度比较历代 DeepSeek 模型的全局 KV 字节/token。](assets/ds41-fig1-agentic-kv-per-token.png)
 
-**原论文 Fig. 1 是全篇的证据鸟瞰，建议这样读：** 左半 (a) 是智能体基准上的性能对比条形图，看 DeepSeek-V4.1-Flash 相对各对手的位置；右半 (b) 是历代 DeepSeek 模型的全局 KV 字节/token 递减曲线，注意纵轴是对数刻度——V4.1-Flash 相对 V4-Flash 约 4 倍、相对 V1 约 437 倍的压缩都画在这条线上。（PDF p. 1, Fig. 1）
+*原论文 Fig. 1，PDF p. 1。890 字节/token 指全局 KV；任务成绩需带上 §06 的独立评测条件。*
 
-![原论文 Fig. 1：(a) 智能体基准性能对比；(b) 历代模型全局 KV 缓存字节/token 递减，V4.1-Flash 相对 V4-Flash 约 1/4、相对 V1 约 1/437。](assets/ds41-fig1-agentic-kv-per-token.png)
+## 02 / 跟前缀走过 CED
 
-*原论文 Fig. 1，PDF p. 1。(b) 的纵轴为每 token 全局 KV 字节数（对数刻度），是「890 字节/token」主张的原始出处；(a) 的具体数值以正文 Table 3 为准。*
+语言骨干有 **40 层：20 层因果编码器，接 20 层解码器**。这里“因果”表示某位置的编码状态只依赖可见过去，不读未来。CED 改变的是解码器**全局 KV 的来源**：不必让每个提示 token 走完解码器才得到这些缓存，而是从编码器末层投影。解码器各层仍保留自己的 query 和所需的局部 SWA 状态。（PDF §§2.1–2.2, 4.2.1）
 
-## 02 / 主路径：从部署瓶颈到联合优化
+**Fig. 3 先顺着文本或图像 embedding 走过编码器，再追踪投影到解码器全局 KV 的箭头。** 解码器的 Full/Reindex/Reuse 标签描述全局分支；保留下来的局部 SWA 路径解释了为什么 prefill 捷径后仍有短段解码器重放。这张图回答“哪些计算没有被省掉”。（PDF Fig. 3）
 
-这份报告的主线不是训练流程，而是「把一类成本定住、逐个拆掉」的设计路径。下面的路径按成本对症的顺序展开：每一步先说它对准哪类成本、用什么机制、付出什么代价。（PDF §§1–3）
+![原论文 Fig. 3：多模态输入、20 层因果编码器、投影得到的解码器全局 KV，以及标有 CSA2 模式的 20 层解码器。](assets/ds41-fig3-architecture-ced.png)
+
+*原论文 Fig. 3，PDF p. 7。编码器前两层是纯 SWA；剩余编码器层与解码器使用下文所述的 CSA2 分组。*
 
 ```paper-path
 {
-  "title":"三类成本的对症路径",
-  "intro":"四件套各对准一类成本；注意 (iii) 与 (iv) 都是用「一点计算」换「一大块存储」，(i) 是纯节省，(ii) 是共享去重。",
+  "title":"一回合：从前缀到续写",
   "stages":[
-    {"title":"分解瓶颈","role":"设计前提","action":"把长程智能体的部署成本拆成三类：prefill 计算（缓存未命中）、运行时全局 KV（HBM）、持久 KV 与搬运（SSD/主机内存 + 带宽）。","why":"稀疏注意力已压低长序列计算成本，存储与搬运成为主导；混在一起优化会找错对手。","output":"三类成本各自的优化目标。","source":"PDF §1"},
-    {"title":"CED 砍 prefill","role":"对症：计算","action":"把 40 层网络切成 20 层因果编码器 + 20 层解码器；解码器的全局 KV 从第 L/2 层隐状态投影（Eq. 1），prefill 只算前一半层；SWA 仍逐层计算。","why":"工具调用频繁、缓存未命中时 prefill 是主要算力开销；全局 KV 的生成深度可以由投影替代。","cost":"解码器 SWA KV 需额外重放 n_win×L/2 个 token——由 Decoder SWA Bounded Replay 截短到 n_win。","output":"prefill 复杂度 O(NL) → O(NL/2 + n_win·L/2) ≈ O(NL/2)。","source":"PDF §2.2, Eq. 1"},
-    {"title":"CSA2 跨层复用","role":"对症：全局 KV 存储","action":"每层静态分配 Full / Reindex / Reuse 三模式之一：Full 算自己的 main KV 与索引并选出 Top-K；Reindex 复用前层 main KV 与索引 K、用自己的索引 Q 重打分出新 Top-K；Reuse 全部复用、直接做稀疏注意力。配合层次稀疏索引器（解码器）限制深层打分范围。","why":"沿条目、序列、层三个乘性维度联合压缩；只复用索引不省 main KV，只共享路由又伤性能，三种模式让「共享什么」与「重选什么」解耦。","cost":"稀疏选择可能出错（作者列为未刻画的稳健性边界）；模式是静态分配，不随输入自适应。","output":"全局 KV（含 FP4 后）约 890 字节/token，约为 V4-Flash 的 1/4。","source":"PDF §§2.3–2.3.2, Figs. 4–5"},
-    {"title":"FP4 主 KV","role":"对症：存储精度","action":"后训练阶段引入 QAT，主 KV 用 E2M1 + 每 16 通道一个 E4M3 scale（NVFP4 风格、去掉二级全局 scale），RoPE 之后量化；SWA KV 保持 FP8。","why":"主 KV 量化只为省存储而非加速矩阵乘，可在注意力前反量化、对硬件无原生低精度 GEMM 要求；省去全局 scale 经幅值上界论证无损。","cost":"量化敏感的 SWA KV 仍占 FP8；QAT 需要在后训练中进行。","output":"主 KV 存储（HBM 与 SSD 落盘）相对 FP8 约减半。","source":"PDF §2.4.4"},
-    {"title":"SWA Bounded Replay","role":"对症：持久 KV","action":"持久缓存不再存 SWA KV（迁入 10% 主机 DRAM 的分布式内存池、分钟级 TTL），全局 KV 留在 SSD 保证 ≥72 小时；缺失 SWA 时只重放最近 n_win 个 token 近似重建，查询在 [max(s, i−W+1), i] 上截断。","why":"SWA KV 只在会话内分钟级窗口复用，与持久缓存的长保留策略错配；精确重建要重放 L×n_win 个 token，成本在生产中不可接受。","cost":"重建的 SWA 状态是近似的，后缀计算结果依赖缓存命中位置；作者在后训练中模拟同样重放以适配。","output":"持久 KV 占用约为 V4-Flash 的 1/8（去掉 SWA KV 近乎减半 × 全局 KV 再 1/4）。","source":"PDF §§3.2.1–3.2.2"},
-    {"title":"训练/推理协同","role":"让设计落地","action":"训练侧：视觉编码器分离执行、长序列图像分片、CSA2 影子索引器与流水线共享态；推理侧：EPD 分离、核融合（Reuse 模式层 prefill 15 核/decode 11 核）、Engram 表主机预取。","why":"跨层共享的组件可能落在不同流水线阶段；不改造基建，架构收益无法兑现。","output":"大规模多模态训练与长上下文部署的吞吐/延迟表现。","source":"PDF §§3.1–3.2"},
-    {"title":"后训练数据管线","role":"对症：能力","action":"标准 SFT→RL→OPD，无算法改动；投入集中在任务三元组（问题、环境、验证系统）合成、通用/编码双环境流水线、DSec 百万级沙箱、可控推理力度 RL 与异步基础设施。","why":"作者称在固定且平常的优化流程下，数据与环境的规模、多样性、可验证性贡献了几乎全部增益。","cost":"数据管线复杂且强依赖内部工作流与人工反馈；评测奖励黑客风险上升。","output":"Table 3 的推理/智能体/安全/视觉能力面。","source":"PDF §§5.1–5.2"}
+    {"title":"编码给定上下文","role":"长前缀 prefill","action":"嵌入文本和视觉输入，让前缀经过因果编码器。","why":"长前缀需要深层表示，但每次工具调用后重复全栈计算很贵。","output":"编码器末层隐状态与编码器全局 KV。","source":"PDF §§2.1–2.2, Fig. 3"},
+    {"title":"准备解码器全局 KV","role":"CED 投影","action":"解码器 Full 层从编码器末层投影全局 KV；后续解码器层按照静态 CSA2 模式共享。","why":"让解码器读到提示信息，不再要求每个提示 token 走完整个上半栈。","cost":"局部 SWA 仍需要逐层生成自己的状态。","output":"解码器注意力可读取的全局上下文。","source":"PDF §§2.2–2.3.1, 4.2.1"},
+    {"title":"重建近期局部状态","role":"有界重放","action":"只让近期窗口经过解码器；编码器 SWA 未命中时，还利用已缓存的全局 KV 补建近期编码器局部状态。","why":"首批 decode 需要局部状态，但为它们保留整类持久存储很贵。","cost":"重建态是近似的，取决于重放边界。","output":"可支持继续生成的 SWA KV。","source":"PDF §3.2.2"},
+    {"title":"生成下一回合","role":"自回归 decode","action":"新 token 读取局部 SWA 与选中的全局条目；decode 仍使用全部 40 层。","why":"捷径针对旧前缀，新 token 仍需要完整计算路径。","output":"智能体回复或工具调用；全局前缀状态可留待后续复用。","source":"PDF §§2.2–2.3, 3.2"}
   ]
 }
 ```
 
-**两处「用计算换存储」的交换是主线的枢纽。** 其一，CED 让解码器全局 KV 由投影生成，代价是 SWA 侧要多算一点，而 Decoder SWA Bounded Replay 把这一点也截短到 $n_{\text{win}}$；其二，SWA Bounded Replay 用近似重建换掉整类持久存储，作者明确承认重建态「在数学上不等价」于完整前向，靠「实验显示质量影响可忽略」与后训练中的同模拟适配来兜底。这两处都是用少量重算换存储/带宽，读者应把「近似」当作设计的一部分而不是实现瑕疵。（PDF §§2.2, 3.2.2）
-
-**原论文 Fig. 3 是架构总览，建议按「先分层、再看模块」读：** 40 层切分为左半因果编码器（20 层）与右半解码器（20 层）；编码器前两层是 SWA，其余为 CSA2(2, Full/Reuse) 分组；解码器是 CSA2(1, Full/Reindex/Reuse) 五组，注意 Reindex 组与层次稀疏索引器（Hierarchical Sparse Indexer）的位置；四周标注 Single-Pass mHC、Engram、DSpark、CED 投影关系。图中 CSA2(ratio, mode) 括号里的数字是压缩率 $m$。（PDF p. 7, Fig. 3）
-
-![原论文 Fig. 3：DeepSeek-V4.1-Flash 总体架构。40 层 = 20 层因果编码器 + 20 层解码器；前两层 SWA，其余 CSA2；配合 Single-Pass mHC、Engram、DSpark 与层次稀疏索引器。](assets/ds41-fig3-architecture-ced.png)
-
-*原论文 Fig. 3，PDF p. 7。阅读时对照 §4.2.1 的具体分组：编码器 18 个 CSA2 层（m=2）分三组、每组第 1 层 Full 其余 Reuse；解码器 20 层（m=1）分五组、第一组 Full 其余 Reuse，后四组第 1 层 Reindex 其余 Reuse。*
-
-## 03 / 机制特写：四个关键操作
-
-理解这份报告不需要记住全部模块，抓住四个操作即可：**KV 怎么来**（CED 投影）、**KV 怎么共享**（CSA2 三模式）、**丢了怎么补**（有界重放）、**长度怎么控**（effort 惩罚）。前三个决定存储账本，第四个决定成本-质量旋钮。
-
-### KV 怎么来：CED 的投影替代
-
-对全局注意力，CED 把下半 $L/2$ 层当作因果编码器；上半层（$l > L/2$）的 KV 条目不再来自各层自己的隐状态 $H_l$，而是从第 $L/2$ 层的 $H_{L/2}$ 经**逐层不同的投影权重**得到：（PDF §2.2, Eq. 1）
+对解码器层 $l>L/2$，原论文 Eq. 1 为：
 
 $$
-C_l = H_{L/2} W^{KV}_l,\qquad Z_l = H_{L/2} W^{Z}_l,\qquad l > L/2
+C_l=H_{L/2}W_l^{KV},\qquad Z_l=H_{L/2}W_l^Z.
 $$
 
-其中 $C_l$ 是第 $l$ 层的 KV 条目，$Z_l$ 是对应的压缩权重。关键收益在 prefill：只需要计算前一半层就能拿到全部解码器全局 KV，prefill 复杂度从 $O(NL)$ 降到 $O(NL/2 + n_{\text{win}} \times L/2) \approx O(NL/2)$（$N \gg n_{\text{win}}$ 时）。注意 SWA 的键值仍然逐层从 $H_l$ 计算——局部路径保留完整计算深度，这正是需要 SWA 重放的原因。（PDF §2.2）
+$L$ 是总层数，$H_{L/2}$ 是编码器末层隐状态，$C_l$ 是全局 KV 条目，$Z_l$ 是压缩权重；投影矩阵逐层不同。实际结合 CSA2 分组时，只有 Full 层生成新的 main KV，公式不表示每个 Reuse 层都另存一份。SWA 键值仍来自当前层自己的隐状态。（PDF §§2.2–2.3.1, Eq. 1）
 
-### KV 怎么共享：CSA2 的三模式与乘性分解
+**教学手算：** 将一个编码器状态缩成 $h=(1,2)$，令 $W^{KV}=(3,4)^T$、$W^Z=(1,-1)^T$，投影得到 $C=11$、$Z=-1$。改变解码器投影即可改变旧 token 的全局条目，不必先产生这个 token 的解码器隐状态。这个小例子只演示依赖方向，省略真实维度和压缩器，不是论文测量。
 
-作者把 KV 压缩拆成三个**乘性**维度：条目大小（GQA/MLA 路线）、序列长度（每 $m$ 个 token 压成一个条目）、层维度（跨层复用）。已有工作各占一角——IndexCache 复用 Top-K 索引、YOIO 全网共享路由、HySparse 让稀疏层复用稠密层 KV——但「只复用索引不省 main KV，网络级路由共享伤性能，混合设计仍保留全注意力层」。CSA2 的做法是把层维度的三样东西解耦共享：（PDF §2.3–2.3.1）
-
-| 模式 | main KV | indexer K | Top-K 索引 | 本层仍自算 |
-|---|---|---|---|---|
-| Full | 本层自算 | 由本层 main KV 投影 | 本层选出 | main Q、SWA KV |
-| Reindex | 复用最近 Full 层 | 随 main KV 复用 | 本层重选（用自己的 indexer Q 重新打分） | main Q、SWA KV |
-| Reuse | 复用 | 复用 | 复用最近索引产出层 | main Q、SWA KV |
-
-**原论文 Fig. 4 把三模式画成并行对照，建议这样读：** 三列分别是 Full、Reindex、Reuse；绿色块是本层自算的量，黄色是复用最近 Full 层的 main KV 与 indexer K，红色是复用最近索引产出层的 Top-K 索引。注意三列底部都有本层自算的 main Q 与 SWA KV，再加选中的 main KV 拼接进核心注意力——区别只在「KV 与索引从哪来」。这张图是核对上表分工的原始画法。（PDF p. 10, Fig. 4）
-
-![原论文 Fig. 4：CSA2 的三种运行模式。三模式在 main KV、indexer K、Top-K 索引的获取方式上不同（绿=本层自算、黄=复用 Full 层、红=复用索引），main Q 与 SWA KV 始终本层自算。](assets/ds41-fig4-csa2-modes.png)
-
-*原论文 Fig. 4，PDF p. 10。与上表逐列对照阅读；层次稀疏索引器进一步限定 Reindex 层的搜索范围（Fig. 5）。*
-
-相对 V4 的 CSA，CSA2 还简化了压缩器：去掉相邻条目重叠与绝对位置编码，indexer K 直接由 main KV 投影（不再走独立压缩路径）。**层次稀疏索引器**（只用于解码器）再收一层成本：解码器第一个 Full 层对全可见范围打分、并按块最大分数选出候选池（如 2,048 块 × 8 位置 = 16,384 个候选位置），后续 Reindex 层只在池内打分——固定池大小下，深层索引的每查询代价从随上下文线性变为常数。该机制在后训练中引入且训练/推理一致。（PDF §2.3.2, Fig. 5）
-
-### 丢了怎么补：SWA Bounded Replay 的近似语义
-
-精确重建 $L$ 层的 SWA KV 需要重放 $L \times n_{\text{win}}$ 个 token。有界重放只重放最近 $n_{\text{win}}$ 个 token，并把 SWA 截断到重放片段：重放起点为 $s$ 时，位置 $i$ 的查询只看到 $[\max(s, i-W+1), i]$ 的 SWA 键。（PDF §3.2.2）
-
-持久层的账本由此重排：SWA KV 移出持久缓存（进 10% 主机 DRAM 池、分钟级 TTL），全局 KV 留 SSD（≥72 小时保证）；命中全局 KV 而缺 SWA KV 的请求走 Encoder SWA Bounded Replay 兜底——把「灾难性未命中」变成「廉价的近似降级」。两个乘性因子给出 1/8：去掉 SWA KV 近乎减半 × 全局 KV 经 CSA2+FP4 再压到 1/4。作者的原话是：重建态「在数学上不等价」于完整前向、后缀输出依赖命中位置，但实验显示质量影响可忽略，并在后训练中模拟同样的重放以适配。（PDF §§3.2.1–3.2.2）
-
-### 长度怎么控：effort 惩罚与仿射推导
-
-推理力度 $b \in \{1,\dots,100\}$ 作为显式条件写进系统提示（`Reasoning Effort: {effort}`）。RL 中每个 $(x, b)$ 子组内部做 GRPO 均值中心化，组间不直接比较；力度差异由长度惩罚制造：（PDF §5.1.4, Eqs. 8–10）
+对前缀长度 $N$ 与 SWA 窗口 $n_{\mathrm{win}}$，论文的工作量估计是：
 
 $$
-r^{\text{len}}_{b,j} = -\min\left\{C_{\max},\ k(b)\,\frac{\ell_{b,j}}{L_{\text{norm}}}\right\},\qquad k(b) = k_0 \exp\left(-\frac{b - b_{\min}}{\tau}\right)
+O(NL)\quad\longrightarrow\quad O(NL/2+n_{\mathrm{win}}L/2).
 $$
 
-$\ell_{b,j}$ 是推理 token 数，$L_{\text{norm}}$ 是参考长度，$C_{\max}$ 封顶扣分；$k(b)$ 随力度指数衰减——力度升 $\tau$，惩罚系数乘 $e^{-1}$。附录 C 给了局部模型下的动机：设 $p_x(\ell)$ 为 $\ell$ 个 token 后解出的概率、边际收益近似指数衰减，一阶条件给出偏好长度
+用模型的 $L=40$、$n_{\mathrm{win}}=128$ 做教学代理量：$N=4096$ 时，原来是 $163840$，新路径是 $84480$ 个 token-层单位，剩下约 51.6%。但 $N=128$ 时两者都是 5120：接近减半依赖 **$N\gg n_{\mathrm{win}}$**。代理量未计入投影、kernel 与搬运成本，不能当作延迟测试。（PDF §§2.2, 4.2.1）
+
+## 03 / CSA2 到底共享什么
+
+全局注意力既需要已存的 **main KV**，也需要决定**读哪些条目**。**Indexer**（索引器）是做选择的轻量评分路径，它的 query/key 与主注意力的 query/KV 角色不同。**Top-K** 是对当前查询打分最高的 K 个条目。CSA2 将“少存一份 KV”与“重新选择读什么”解耦；模式静态分配给层，不由当前输入动态切换。（PDF §2.3）
+
+| 模式 | main KV 与 indexer K | Top-K 条目 | 本层仍需完成 |
+|---|---|---|---|
+| Full | 生成 main KV，投影出 indexer K | 重新选择 | main Q、indexer Q 与打分、局部 SWA KV、注意力 |
+| Reindex | 共享已有 main KV 与 indexer K | 用自己的 indexer Q 重选 | main Q、重新打分、局部 SWA KV、注意力 |
+| Reuse | 共享 | 复用该 main KV 的最近一次选择 | main Q、局部 SWA KV、注意力；不再生成 indexer Q 或打分 |
+
+**Fig. 4 横着逐列看：** 绿色是本层计算，黄色是复用最近 Full 层的全局 KV，红色是复用 Top-K 索引。三列都能找到 main Q 和 SWA KV。这解释了为什么共享选择节省索引计算，而共享 KV 节省缓存存储。（PDF Fig. 4）
+
+![原论文 Fig. 4：Full、Reindex、Reuse 的差别在全局 KV 与选择的来源；每层仍保留自己的 query 与 SWA。](assets/ds41-fig4-csa2-modes.png)
+
+*原论文 Fig. 4，PDF p. 10。Reindex 不另存 main KV，也能改变选中的历史条目。*
+
+解码器还使用**层次稀疏索引器**：首个 Full 层给全因果可见范围打分，选自己的 Top-512，同时按每块的最大分数组成更大的候选池。后续 Reindex 只搜索该池，Reuse 继续沿用最近 Top-512。实际候选池至多 $2048\times8=16384$ 个位置。固定池大小约束了深层索引工作量，但首次全历史扫描仍然存在。此限制在后训练中引入，训练与推理采用相同搜索域。（PDF §2.3.2, Fig. 5）
+
+**教学选择：** 四个两位置块的分数是 $(1,9),(8,7),(6,5),(4,3)$，块最大值依次为 $9,8,6,4$。保留两块，就得到前两块中的四个候选位置。后续 Reindex 用自己的 query 重评这四个位置，可选出不同于 Full 层的 Top-2；但第三块一旦排除，其中再相关的位置也无法补回。这说明选择错误的边界，不是论文中的实测失败率。
+
+**Fig. 5 要分开蓝色候选块与绿色最终选择。** 同一个蓝色池可供不同 Reindex 层产出不同绿色 Top-512；候选池本身不是最终注意力集合。（PDF Fig. 5）
+
+![原论文 Fig. 5：解码器 Full 层选候选块，后续 Reindex 层在池内各选自己的 Top-512。](assets/ds41-fig5-hierarchical-sparse-indexer.png)
+
+*原论文 Fig. 5，PDF p. 11。首个 Full 层仍搜索全部因果可见位置。*
+
+<details class="reading-detail">
+<summary>实际层分组、压缩器与 FP4 存储细节</summary>
+
+编码器前两层为纯 SWA，剩余 18 层用压缩率 $m=2$，分三组六层，每组 Full 后接五层 Reuse。20 层解码器用 $m=1$，分五组四层：首组以 Full 开始，后四组以 Reindex 开始，每组其余三层为 Reuse。注意力选 512 个全局条目，SWA 窗口为 128。（PDF §4.2.1）
+
+CSA2 去掉前代压缩器相邻条目的重叠输入和绝对位置编码，并从 main KV 投影 indexer K，不再走独立的隐状态压缩路径。主 KV 使用 FP4 E2M1、每 16 通道一个 E4M3 scale，在 RoPE 后量化并在后训练做 QAT；SWA KV 保持 FP8。该格式针对存储，注意力前会反量化，不表示所有权重或计算都用 FP4。（PDF §§2.3, 2.4.4）
+
+</details>
+
+## 04 / 不全存局部状态，缺了怎样恢复
+
+前代在特定提示/输出边界保存 SWA KV，在其部署负载下约占持久缓存一半。V4.1 将编码器 SWA KV 放入短命分布式池，使用 10% 主机 DRAM、分钟级 TTL；全局 KV 仍持久保存至少 72 小时。全局命中而编码器 SWA 缺失时触发重放。解码器 SWA 从不放入前缀缓存，每次 prefill 都要重建。这是相关但触发条件不同的两条路径。（PDF §§3.2.1–3.2.2）
+
+跨 $L$ 层精确恢复局部状态，理论依赖约 $L n_{\mathrm{win}}$ 个 token；**有界重放**只处理最近 $n_{\mathrm{win}}$ 个。重放从 $s$ 开始，查询在 $i$、窗口宽 $W$ 时，可见局部键为：
 
 $$
-\ell^*_x(b) \approx C_x - s_x \log k_0 + \frac{s_x}{\tau}(b - b_{\min})
+[\max(s,i-W+1),\ i].
 $$
 
-即**指数惩罚 → 力度与偏好长度之间的仿射关系**。作者同时声明这只是奖励层面的局部近似，不是「实测平均长度必然线性/单调」的断言——effort 指令本身会改变推理策略、生成有随机性、封顶区需另行分析。部署侧 API 三档直接映射到标量：max=100、high=75、low=50。（PDF 附录 C；Table 2）
+**教学追踪：** 取 $W=4$，重放位置 7–10，故 $s=7$。在 $i=7$，普通 SWA 本可读 4–7，但重放只读到 7；在 $i=9$，只读 7–9 而非 6–9；到 $i=10$，名义窗口已是 7–10。即便最后窗口完整，高层状态仍可能因早先输入被截断而不同，不能据此宣称恢复精确。（PDF §3.2.2）
 
-### 机制对照：SWA 状态的两条恢复路线
+编码器重放只补建已缓存前缀的 SWA，复用且不覆盖全局 KV；新后缀则生成两类状态。解码器把近期编码器输出传过解码器层，为 decode 准备局部 KV。作者报告观察到的质量影响很小，并在后训练中模拟重放，但状态**不与完整前向数学等价**。长上下文稀疏检索与缓存恢复边界的极端条件，仍是报告明确承认尚未刻画完整的稳健性边界。（PDF §§3.2.2, 6）
 
-```paper-contrast
-{
-  "title":"缓存未命中时的 SWA 状态恢复",
-  "intro":"V4 的 Zero SWA Caching 提出过重算路线，但精确恢复成本在生产中不可接受；V4.1 的有界重放把精度换成可负担的成本。",
-  "branches":[
-    {
-      "name":"精确重建（V4 的 Zero SWA Caching 路线）",
-      "lead":"不存 SWA KV，缺失时完整重放 L×n_win 个 token 精确恢复。",
-      "scope":"数学上严格等价于连续前向，适用于对状态精度零容忍的场景。",
-      "judge":"重放成本随层数线性增长；短回合多轮对话下频繁触发，生产部署中被证明代价过高。",
-      "signal":"它保持语义不变，但把成本推给了每一次未命中。",
-      "why":"SWA KV 只在分钟级窗口内被复用，为它保留持久存储又不划算——两条路都不理想。",
-      "source":"PDF §3.2.1"
-    },
-    {
-      "name":"SWA Bounded Replay（V4.1 采用）",
-      "lead":"只重放最近 n_win 个 token，SWA 截断到重放片段 [max(s, i−W+1), i]，接受近似状态。",
-      "scope":"Encoder/Decoder 两条路径：前者兜持久缓存未命中，后者把 CED 的 prefill 截短到 n_win。",
-      "judge":"重建态不数学等价、后缀输出依赖命中位置；作者报告质量影响可忽略，并在后训练中做同模拟适配。",
-      "signal":"把灾难性未命中变成廉价降级，从而敢把 SWA KV 整类移出持久缓存。",
-      "why":"用少量重算换一整类持久存储与搬运成本；近似性是设计接受的交换，不是疏漏。",
-      "source":"PDF §§3.2.1–3.2.2"
-    }
-  ]
-}
-```
+持久层有单独账本：去掉 SWA 近乎减半，留下的全局 KV 再压至前代约 1/4，总体约 1/8。不能把**运行时 1/4**与**持久层 1/8**再乘成“模型压缩 32 倍”：它们衡量不同存储层。（PDF §§3.2.1, 6）
 
-## 04 / 实验图谱：压缩账本与能力面
+## 05 / 把训练与部署分开
 
-实验分四类：**Base 模型对比**（压缩设计是否伤到语言/多模态基础能力）、**后训练主表**（能力面对比七个系统）、**effort 曲线**（成本-质量旋钮是否可控）、**稳健性与扩展**（脚手架、多智能体）。作者自述后训练「无算法创新」，因此能力归因应指向数据管线而非优化方法——这是读表的前提。（PDF §§4–5）
+报告使用 45T 多模态 token，稀疏注意力从 64K 序列长度开始直接训练，在 34T token 时扩展到 1M 上下文。完整链为**预训练 → SFT → RL → on-policy 蒸馏**。智能体任务由问题、可执行环境、验证器组成；异步 rollout 与超过 40 个领域教师支持后训练。作者称后训练采用标准配方，改进集中于数据与环境构建；这是开发归因陈述，不是对各数据因素的受控增益估计。（PDF §§4.2.2, 5.1–5.2）
+
+Single-Pass mHC 减少残差路径内存流量，Engram 提供条件记忆，DSpark 加速投机解码，视觉与部署基建也同步改变。它们解释实际训练和部署了什么。由于架构、容量、数据与后训练一起改变，最终成绩不是单独针对 CED、CSA2、FP4 或重放的消融。（PDF §§2.4, 3–5）
+
+Table 1 的 Base 比较采用作者内部框架和相同声明设置，但仍比较不同完整模型。例如 V4.1-Flash-Base 对 V4-Pro-Base：HumanEval Pass@1 为 79.4 对 76.8，但 SimpleQA-verified EM 为 **42.3 对 55.2**，LongBench-V2 EM 为 **45.2 对 51.5**。这些反例让“若干维度接近”不至于变成“所有任务相等”，也不能隔离缓存压缩对能力的影响。（PDF §4.3, Table 1）
+
+## 06 / 为每个成绩带上实验条件
+
+三类比较回答不同问题：**Table 3** 比较完整后训练系统，**Table 4** 固定 V4.1 checkpoint 与任务集、改变脚手架，**Fig. 9** 在指定脚手架中改变 effort。结论应始终带着真正变化的变量。（PDF §5.3）
 
 ```paper-experiments
 {
-  "title":"DeepSeek-V4.1-Flash 的实验问题矩阵",
-  "rows":[
+  "title": "四类比较分别支持什么结论",
+  "rows": [
     {
-      "question":"压缩后的 Base 模型还站得住吗？",
-      "setup":"内部评测框架、统一设置，对比 DeepSeek-V4-Flash-Base（284B/激活 13B）与 DeepSeek-V4-Pro-Base（1.6T/激活 49B）；五维 15 项基准 + 多模态 4 项 + 内部语料 BPB（Fig. 6）。分差 ≤0.3 视为同档。",
-      "observation":"世界知识与理解与 V4-Pro-Base 同档（MMLU-Pro 74.1 vs 73.5，SuperGPQA 53.1 vs 53.9）；代码/数学多项更好（HumanEval 79.4 vs 76.8，GSM8K 93.0 vs 92.6，BigCodeBench 60.6 vs 59.2）；但 MultiLoKo 45.5、SimpleQA 42.3、MATH 61.1、MGSM 80.2、LongBench-V2 45.2 低于 Pro。多模态四项为 V4.1 独有（MMMU-Pro 56.5、DocVQA 95.6 等）。内部留出语料 BPB 全任务最低（Fig. 6）。",
-      "source":"PDF §§4.3, Table 1, Fig. 6"
+      "question": "完整系统与前代相比怎样？",
+      "setup": "Table 3，V4-Flash → V4.1-Flash，具名编码智能体任务",
+      "observation": "TB 2.1 Pass@1 82.7→90.6%（+7.9 个百分点）；DeepSWE v1.1 resolved 54.4→74.2%（+19.8）；NL2Repo score 54.2→65.4（+11.2 分）",
+      "conclusion": "完整系统在这些行改善；模型、数据与脚手架同时变化，不能归于单组件",
+      "source": "PDF Table 3"
     },
     {
-      "question":"后训练模型在推理与智能体上是什么位置？",
-      "setup":"Table 3 七系统对比（Opus-5、GPT-5.6 Sol、Kimi-K3、GLM-5.3、V4-Pro、V4-Flash、V4.1-Flash，均 Max 力度），20 项基准覆盖推理/编码智能体/安全/通用/视觉；评测配置见 §5.3.1。",
-      "observation":"领先项：Codeforces 3471、Terminal-Bench 2.1 90.6、DeepSWE v1.1 74.2、AutomationBench 54.8、ALE 31.8、HLE w/tools 63.9、CyberGym 88.1；持平项：MathArena Apex 65.6（=K3）。差距项：HLE 36.8（Opus 56.3）、Terminal-Bench 3.0 30.0（Opus 43.3）、Terminal-Bench 4.0 31.2（Opus 51.8）、ProgramBench 20.3（Opus 37.0）、视觉三项（Chartography 78.9 vs 84.0）。",
-      "source":"PDF §5.3.2, Table 3"
+      "question": "最难任务是否追平前沿系统？",
+      "setup": "Table 3，高难任务与对手",
+      "observation": "V4.1 HLE 全量 36.8% / 纯文本 39.1%，Opus-5 全量 56.3%；TB 4.0 31.2% 对 51.8%",
+      "conclusion": "编码任务的进步不代表所有困难推理/专家任务追平前沿；HLE 全量和纯文本口径必须分开",
+      "source": "PDF Table 3"
     },
     {
-      "question":"推理力度旋钮真的可控吗？",
-      "setup":"力度 25→100 扫描：八项推理基准平均、DeepSWE v1.1、Terminal-Bench 2.1 的 Pass@1 与平均输出 token（Figs. 9, 12）；附录 C 给仿射推导。",
-      "observation":"八项推理平均 67.1%→76.3%，DeepSWE 66.0%→74.2%，TB 2.1 82.4%→90.6%，输出 token 约 2.5×。收益前置：60–80 区间以不到一半 token 预算恢复大部分精度；到 100 会让智能体轨迹再拉长 1.6–1.8× 而只换来边际提升。各基准随力度单调变好、无退化（Fig. 12：Apex 2025 +40.3 分）。",
-      "source":"PDF §§5.3.2–5.3.3, Figs. 9, 12；附录 B.3, C"
+      "question": "同一个脚手架是否在两项编码任务上都领先？",
+      "setup": "Table 4，同一 V4.1，力度 100",
+      "observation": "DeepSWE：mini-SWE 74.2%、DSH Minimal 72.6%、OpenCode 65.5%；TB 2.1：DSH Minimal 90.6%、mini-SWE 90.3%、Codex 84.1%",
+      "conclusion": "最优脚手架随任务改变；DSH Minimal 并非 DeepSWE 最高",
+      "source": "PDF Table 4, §5.3.4"
     },
     {
-      "question":"能力是不是绑死在某个脚手架上？",
-      "setup":"同一 checkpoint、解码配置、任务集，只换外壳：6 个脚手架家族 8 种配置（Claude Code、Codex、OpenCode、Pi、mini-SWE、DSH 的 Minimal/Standard/PTC），Max 力度，DeepSWE（N=8/题）与 TB 2.1（N=3/题）。",
-      "observation":"DeepSWE 65.5–74.2、TB 2.1 84.1–90.6；DSH Minimal 在两榜均最高（74.2/90.6），Claude Code 四版本均值 68.9/87.8（Table 5）。附录 B.2 补充：各脚手架的力度-长度曲线形状不同，TB 2.1 近饱和时「选脚手架至少与选力度档同样重要」。",
-      "source":"PDF §5.3.4, Tables 4–5；附录 B.1–B.2"
-    },
-    {
-      "question":"多智能体协作值不值？",
-      "setup":"DSH Agent Team 模式（lead + 常驻队友、共享仓库、信箱与任务板）；ProgramBench 高置信 172 题（参考解 ≥95% 通过）与 FrontierSWE v2 no-gpu 子集；每配置 516 次 rollout，按截止时间（1–12h / 1–20h）计分。标注为初步结果。",
-      "observation":"两个基准、每个截止时间下多智能体均优于单智能体：ProgramBench Almost@1 多 13.59%→30.04%（1h→8h 峰值）vs 单 12.79%→20.39%；FrontierSWE v2 Mean@5 多 13.50%→32.90%（20h）vs 单 10.50%→28.20%。",
-      "source":"PDF §5.3.5, Fig. 10"
-    },
-    {
-      "question":"RL 与数据管线的规模有没有上限迹象？",
-      "setup":"合成任务内异步 RL：单一脚手架内、同脚手架多版本、异构脚手架三种扩法，累计 RL 步数 vs Pass@1（Figs. 7–8）；跨轮次用模型合并重新初始化续训。",
-      "observation":"三种扩法都随累计步数持续提升（DeepSWE、SWE-Bench Pro、TB 2.1/3.0）；1M 上下文继续改善超长程任务（TB 3.0）；合并重初始化进一步涨分且 token 效率更好。图为趋势证据，无对照消融隔离单一数据因子。",
-      "source":"PDF §5.1.2, Figs. 7–8"
+      "question": "指定设置增加推理力度时发生什么？",
+      "setup": "Fig. 9，力度 25→100",
+      "observation": "八项推理平均 67.1→76.3%；DeepSWE 66.0→74.2%；TB 2.1 82.4→90.6%；输出 token 约 2.5 倍",
+      "conclusion": "这些设置中的质量—token 交换，不是通用延迟或精度单调性保证",
+      "source": "PDF Fig. 9, §5.3.2"
     }
   ]
 }
 ```
 
-**推理力度 25 → 100 的成本-质量变化**（本文重绘 · 原论文 Fig. 9；横轴为 Pass@1 百分点）：
+Table 4 中，DeepSWE 每题 **8 次采样**，TB 2.1 每题 **3 次**；统一使用 Linux 容器、temperature 1.0、top-p 0.95、1M 上下文、max_steps=500。Table 3 的 V4.1 编码任务使用 DSH Minimal，唯 DeepSWE 使用 mini-SWE；视觉智能体用 Claude Code、512K 上下文；AutomationBench 与 ALE 使用官方脚手架。采样次数不把报告的 Pass@1/resolved 变成 Pass@8 或 Pass@3：重复尝试用于估计单次表现。（PDF §§5.3.1, 5.3.4, Table 4）
+
+**原始 Table 3 要逐行保留指标与脚注。** Codeforces 是 rating，NL2Repo 是 score，ZeroBench-main 报 Pass@5；其余多数行是 Pass@1 或 resolved 百分比。HLE 的 † 标出纯文本子集。视觉任务或 score 不能换名成缓存百分比。（PDF Table 3）
+
+![原论文 Table 3：完整系统在推理、编码智能体、安全、通用与视觉任务上的比较；各行指标不同，并有 HLE 纯文本脚注。](assets/ds41-table3-main-results-comparison.png)
+
+*原论文 Table 3，PDF p. 33。百分比与 score 含义不同；空缺不是零分。*
+
+<details class="reading-detail">
+<summary>Table 4 全部八种脚手架设置与附录版本检查</summary>
+
+| 脚手架 | DeepSWE v1.1 resolved（%） | TB 2.1 Pass@1（%） |
+|---|---:|---:|
+| Claude Code v2.1.251 | 69.8 | 88.0 |
+| Codex v0.147.0 | 65.6 | 84.1 |
+| OpenCode v1.18.15 | 65.5 | 85.0 |
+| Pi v0.84.2 | 66.2 | 86.1 |
+| mini-SWE，commit 04d809ceab9d | 74.2 | 90.3 |
+| DSH Minimal | 72.6 | 90.6 |
+| DSH Standard | 70.5 | 85.8 |
+| DSH PTC | 67.6 | 85.8 |
+
+附录 B.1 将一次脚手架试验落到操作：**输入**是基准任务与固定 checkpoint，**操作**是在 Linux 任务容器里执行脚手架原生提示、工具、上下文与轮次循环，**输出**是提交的任务解法，**测量**是每题 8 或 3 次重复尝试的 resolved/Pass@1。mini-SWE 只有 bash 工具；DSH Standard 初始有 26 个工具，PTC 通过 TypeScript 访问 24 个底层工具。工具接口属于改变的实验条件，不能视为可任意互换的包装。（PDF Table 4, 附录 B.1）
+
+附录 Table 5 另比较 Claude Code v2.1.105、v2.1.238、v2.1.251、v2.1.259。DeepSWE 为 68.4、68.7、69.8、68.6%；TB 2.1 为 87.3、88.4、88.0、87.6%。报告均值 68.9/87.8 来自未舍入值。这是版本检查，与跨脚手架家族的比较分开。（PDF 附录 B.1, Table 5）
+
+</details>
+
+报告限制网络、剥离 Git 历史并清理临时构建缓存，但仍观察到寻找环境漏洞的行为。这些措施降低特定泄露路径，不证明所有评测利用或数据污染均已消失。（PDF §5.3.1）
+
+## 07 / 手算 effort 控制的附录论证
+
+力度 $b\in\{1,\ldots,100\}$ 写入系统提示。RL 在共享**题目与力度**的子组 $(x,b)$ 内做奖励均值中心化，不直接将不同力度的回答排在一起比较。长度惩罚改变各子组内的激励：
+
+$$
+r^{\mathrm{len}}_{b,j}=-\min\left(C_{\max},k(b)\frac{\ell_{b,j}}{L_{\mathrm{norm}}}\right),\qquad
+k(b)=k_0\exp\left(-\frac{b-b_{\min}}{\tau}\right).
+$$
+
+$\ell$ 是推理 token 数，$L_{\mathrm{norm}}$ 是参考长度，$C_{\max}$ 是扣分上限，$k_0$ 是起始惩罚系数，力度增加 $\tau$ 会让系数乘上 $e^{-1}$。更高力度减弱对额外推理的惩罚，并不是硬 token 限额。报告的 API low/high/max 分别映射到 50/75/100。（PDF §5.1.4, Eqs. 8–10；§5.3.3）
+
+**先搭微积分桥梁：** 教学参数取 $L_{\mathrm{norm}}=1000$、$k_0=0.2$、$\tau=25$、$b_{\min}=25$，生成 $\ell=1000$ 个 token。若未触发封顶，力度 25 扣 0.2，力度 50 只扣 $0.2/e\approx0.0736$。允许花更多 token，是因为每个额外 token 的奖励成本更低。这些参数用于演算，不是公布的训练超参数。
+
+附录 C 问的是：指数系数为何可能产生平滑长度控制？设 $p_x(\ell)$ 为题目 $x$ 花 $\ell$ 个推理 token 后解出的概率。未封顶区间中，内部偏好长度最大化“解出概率减 token 成本”：
+
+$$
+\ell_x^*(b)\in\arg\max_{\ell\ge0}\left[p_x(\ell)-k(b)\ell/L_{\mathrm{norm}}\right],\qquad
+p'_x(\ell_x^*)=k(b)/L_{\mathrm{norm}}.
+$$
+
+导数是**边际收益**，表示再加一个 token 能提高多少解出概率；最优点令边际收益与边际成本相等。再假设 $p'_x(\ell)\approx a_x e^{-\ell/s_x}$，对等式取对数，得到：
+
+$$
+\ell_x^*(b)\approx C_x-s_x\log k_0+\frac{s_x}{\tau}(b-b_{\min}),\qquad
+C_x=s_x\log(a_xL_{\mathrm{norm}}).
+$$
+
+这叫**仿射**预测，即常数加“斜率 × 力度”。若教学参数 $s_x=200$ token、$\tau=25$ 力度单位，力度增 25，就预测偏好长度增 200 token，前提是两端最优点均在内部且未封顶。（PDF 附录 C, Eqs. 13–17）
+
+这个附录扩展的操作链是：**输入** $(b,x)$ 与局部边际收益模型 → **操作**将边际收益与指数 token 成本配平 → **输出**预测的偏好长度 → **测量**与实际 token 长度和精度曲线对照。推导本身不产生实测精度增益。封顶后边际 token 成本变零，内部解推导便不适用；策略变化、随机生成、多回合轨迹、奖励归一化也是作者注明的限制。（PDF 附录 C）
+
+**Fig. 9 要将实线和虚线一起读：** 实线对应左轴精度，虚线对应右轴 token；三面板是不同任务。下方重绘保留各自起终点，原图保留中间工作点，不能只看最高分。（PDF Fig. 9）
 
 ```paper-chart
+{"type":"paired","title":"指定设置中，力度 25 → 100","subtitle":"精度单位 %；输出 token 约增至 2.5 倍","origin":"本文重绘 · 原论文 Fig. 9 起终点","source":"PDF §5.3.2, Fig. 9","note":"推理为八个基准均值；DeepSWE 用 mini-SWE，TB 2.1 用 DSH Minimal。三行不是同一个任务。","rows":[{"label":"八项推理平均","before":67.1,"after":76.3},{"label":"DeepSWE v1.1","before":66.0,"after":74.2},{"label":"Terminal-Bench 2.1","before":82.4,"after":90.6}]}
+```
+
+![原论文 Fig. 9：力度与精度、平均输出 token 的关系，三面板分别为推理均值、DeepSWE 和 Terminal-Bench 2.1。](assets/ds41-fig9-effort-vs-performance.png)
+
+*原论文 Fig. 9，PDF p. 35。两条纵轴分开读；token 增多不意味着精度同比增加。*
+
+**反例留在主线：** 附录 B.2 明确说 Fig. 11 的六个“脚手架 × 任务”面板中，输出长度都随力度单调增长，但精度在中间力度出现**平台和回落**。Fig. 9 的指定曲线与 Fig. 12 的推理面板较平滑，不能推广为所有脚手架精度单调。附录的局部长度论证与实测分数响应，是不同主张。（PDF 附录 B.2–B.3, Figs. 11–12）
+
+<details class="reading-detail">
+<summary>单独看多智能体扩展与测量口径</summary>
+
+§5.3.5 是初步的测试时计算扩展。**输入**为参考解在隐藏测试上至少通过 95% 的 172 道 ProgramBench 题，或 FrontierSWE v2 的 no-GPU 子集。**操作**是 DSH Agent Team：lead 向持久队友委派任务，共享 checkout、信箱和任务板；训练组合任务奖励、协作奖励与 DAG 关键路径延迟惩罚。**输出**为墙钟截止时可用的解法。**测量**上，ProgramBench Almost@1 统计单条 rollout 得分至少 0.95 的比例，FrontierSWE 用 Mean@5，不能合并。（PDF §5.3.5, Fig. 10）
+
+ProgramBench 每题最多三次，每配置计划 516 次 rollout，截止时间 1–12 小时；8 小时的多智能体峰值为 30.04%，单智能体为 20.39%。FrontierSWE 截止时间为 1–20 小时，20 小时 Mean@5 为 32.90% 对 28.20%。报告比较观察到的最强多智能体配置与可用最强单智能体基线，没有给出匹配 token 预算、只改变委派的因果增益；516 也不是文中声明的 FrontierSWE rollout 分母。（PDF §5.3.5）
+
+</details>
+
+## 08 / 重建并检验结论
+
+工程主张现在是一条连续路径：便宜地产生旧前缀全局状态，跨层共享，降低主 KV 存储精度，必要时补建短命局部状态。缓存账本与数学依赖都清楚；任务结果支持**完整训练系统**在具名设置中的可用性，而选择错误、近似重放、高难前沿任务差距与脚手架敏感性应和结论一起带走。（PDF §§2–6, 附录 B–C）
+
+```paper-check
 {
-  "type":"paired",
-  "title":"力度旋钮：25 → 100 的精度增益",
-  "subtitle":"同一 checkpoint；输出 token 约增至 2.5 倍",
-  "origin":"本文重绘 · 原论文 Fig. 9",
-  "source":"PDF pp. 34–35, Fig. 9",
-  "note":"八项推理基准平均指 AIME 2026、Apex 2025 Shortlist、GPQA Diamond、HLE、IMO-AnswerBench、LiveCodeBench、MathArena-Apex、SimpleQA-Verified 的平均 Pass@1；DeepSWE 用 mini-SWE、TB 2.1 用 DSH Minimal 评测。",
-  "rows":[
-    {"label":"八项推理平均 Pass@1","before":67.1,"after":76.3},
-    {"label":"DeepSWE v1.1 Pass@1","before":66.0,"after":74.2},
-    {"label":"Terminal-Bench 2.1 Pass@1","before":82.4,"after":90.6}
+  "title":"检验能否实际使用这份解释",
+  "items":[
+    {"question":"一层处于 Reindex 模式，当前查询可以改变什么，哪些缓存仍共享？它与 Reuse 有何区别？","answer":"Reindex 用自己的 indexer query 重新选择 Top-K，同时共享 main KV 和 indexer K，仍计算 main Q 与局部 SWA KV。Reuse 连最近的 Top-K 选择也共享，不再进行新的索引。","source":"PDF §2.3.1, Fig. 4"},
+    {"question":"迁移题：用 CED 工作量代理，取 L=40、N=256、窗口=128，剩下多少比例？可以承诺延迟减半吗？","hint":"分别计算 NL 与 NL/2 + 窗口×L/2。","answer":"代理量是 10240 与 7680 个 token-层单位，剩下 75%。N 只有窗口两倍，接近减半的渐近条件并不强；代理还省略投影、搬运和 kernel 成本，不能承诺延迟比例。","source":"PDF §2.2；按原工作量式构造的教学计算"},
+    {"question":"重放从 10 开始，W=4。在 i=11 能读哪些局部位置？后续窗口恢复完整，能否保证所有高层状态精确？","answer":"只能读 10–11，而普通 SWA 可读 8–11。不能保证精确：前面被截断的状态仍会向高层传播，即使之后名义窗口完整，重建仍是近似的。","source":"PDF §3.2.2；教学重放边界"},
+    {"question":"能否结合 Table 4 最高分与附录 C，声称 DSH Minimal 两任务都最优，而且力度越大精度总越高？","answer":"不能。DeepSWE 最高是 mini-SWE 74.2%，DSH Minimal 为 72.6%；TB 2.1 才是 DSH Minimal 90.6% 最高。附录 C 只在内部、未封顶等条件下预测局部偏好长度，附录 B.2 明确记录跨脚手架精度的平台和回落；长度单调不等于精度单调。","source":"PDF Table 4, 附录 B.2 与 C"}
   ]
 }
 ```
 
-**骨干参数规模与激活量的对照**（本文重绘 · 原论文 Table 1；单位：十亿参数）：
-
-```paper-chart
-{
-  "type":"bars",
-  "title":"骨干参数规模（B）",
-  "subtitle":"V4.1-Flash-Base 以约 1/3 的骨干参数达到 V4-Pro-Base 同档能力",
-  "origin":"本文重绘 · 原论文 Table 1",
-  "source":"PDF p. 24, Table 1",
-  "unit":"B",
-  "note":"每 token 激活参数：V4-Flash-Base 13B、V4-Pro-Base 49B、V4.1-Flash-Base prefill 8B / decode 16B（另有 196B Engram 参数，按需查找）。V4.1-Flash 的完整模型为 552B 骨干 + 196B Engram。",
-  "rows":[
-    {"label":"DeepSeek-V4-Flash-Base","value":284},
-    {"label":"DeepSeek-V4-Pro-Base","value":1600},
-    {"label":"DeepSeek-V4.1-Flash-Base","value":552}
-  ]
-}
-```
-
-**后训练主表的读法（Table 3）：** 这是一张系统级对比表，不是组件消融——每列是一个完整系统（模型 + Max 推理力度 + 各自官方/标准脚手架配置）。读它时盯三组数字：(1) 编码智能体三件套（TB 2.1 90.6、DeepSWE 74.2、NL2Repo 65.4）里 V4.1 拿了两项最佳、一项低于 Opus-5（75.3）；(2) 科学/高难推理仍有明显差距（HLE 36.8 vs Opus 56.3、TB 4.0 31.2 vs 51.8）；(3) 视觉智能体三项全部低于 Opus-5 但高于 Kimi-K3（如 Chartography 78.9 vs 84.0/68.1）。† 标注区分 HLE 文本子集口径（V4.1 全量 36.8、纯文本 39.1）。（PDF p. 33, Table 3）
-
-![原论文 Table 3：七个系统在 20 项基准上的对比（均 Max 力度）。行分推理/智能体/安全/通用/视觉五组，最佳加粗。](assets/ds41-table3-main-results-comparison.png)
-
-*原论文 Table 3，PDF p. 33。列顺序为 Opus-5、GPT-5.6 Sol、Kimi-K3、GLM-5.3、V4-Pro、V4-Flash、V4.1-Flash；评测配置与防作弊措施见 §5.3.1。*
-
-**effort 曲线的原始图（Fig. 9）** 值得与上面的重绘对照看：三块面板共享「实线 Pass@1（左轴）、虚线平均输出 token（右轴）」的画法，横轴力度 25–100；看虚线的单调上升与实线的收益前置（60–80 段最陡、80→100 趋平）。（PDF pp. 34–35, Fig. 9）
-
-![原论文 Fig. 9：推理力度与性能/输出长度的关系。三面板为八项推理平均、DeepSWE v1.1、Terminal-Bench 2.1；实线 Pass@1，虚线平均输出 token。](assets/ds41-fig9-effort-vs-performance.png)
-
-*原论文 Fig. 9，PDF pp. 34–35。注意右轴（输出 token）三面板量纲不同；「收益前置」的具体读法见 §5.3.2 正文。*
-
-**定性与边界证据各一处：** Fig. 2 给出 decode FLOPs 随上下文的曲线——上下文扩 256 倍（4K→1M），V4.1-Flash 的单 token decode FLOPs 只增加约 1/4（BF16/FP8/FP4 按 1/0.5/0.25 加权），说明「缓存压住之后计算也稳住」。另一侧，§5.3.1 坦承评测中仍观察到模型的利用漏洞行为（如反编译 Ubuntu 核心包找漏洞），已采取断网、剥 Git 历史、清构建缓存等措施，并呼吁基准设计重视这类行为——这是全文最直接的可信度自我披露。（PDF p. 5, Fig. 2；§5.3.1）
-
-## 05 / 综合：账本、旋钮与两条明确的边界
-
-机制与证据的连接点是那本**存储账本**：890 字节/token 不是单点创新，而是四步乘出来的——CSA2 层维共享去重（跨层不再各存一份 main KV/indexer K）、压缩率与索引复用（序列/索引维）、FP4（精度维，主 KV 相对 FP8 减半）、Bounded Replay（把 SWA KV 整类移出持久层，持久占用再近乎减半）。每一步都对应 §02 路径里写明的代价：稀疏选择可能错、量化有敏感部分保留 FP8、重建态不等价。Fig. 1(b) 的 437×（对 V1）与 Fig. 2 的「decode FLOPs 几乎不随上下文涨」是这本账的两个投影。（PDF 摘要，§§2–3, 6）
-
-能力侧的证据要按作者自己的口径读。Base 对比（Table 1）支持的是「压缩设计没有伤到基础能力，且数据管线有改进」——部分单项仍低于 1.6T 的 V4-Pro-Base（SimpleQA 42.3 vs 55.2、LongBench-V2 45.2 vs 51.5），「与 Pro 同档」成立在多数维而不是全部。主表（Table 3）支持的是「在编码智能体与部分推理任务上追平或超过闭源前沿」——同时 HLE、TB 3.0/4.0、ProgramBench 与视觉三项的差距是真实的，作者也在 §5.3.5 明说科学型智能体任务（如 TB 4.0）与巨型模型仍有差距。至于「完成超过 95% 真实任务」这类表述（§1），报告没有给出对应测量，应视为产品定位陈述。（PDF §§1, 4.3, 5.3, 6）
-
-**effort 旋钮是第二条主线，其证据链最完整：** RL 内的指数长度惩罚（Eqs. 9–10）→ 附录 C 的仿射偏好长度推导 → Fig. 12 八个基准的单调、无退化响应 → Fig. 9 的收益前置 → Fig. 11 跨脚手架迁移（力度拉长轨迹在所有脚手架成立，但精度响应形状各异）。它说明「成本-质量工作点」可以被显式控制，也给出了使用建议：60–80 是日常智能体任务的性价比区间，max 档留给最难任务。需要保留的限定是作者自己的话：推导是局部奖励近似，实测长度不必线性；且 Fig. 11 显示近饱和任务上「选脚手架至少与选力度档同样重要」。（PDF §5.3.3–5.3.4；附录 B.2–C）
-
-报告明确写下两条边界，读者应随结论一起带走。其一，**稳健性边界未刻画**：CSA2 的选择错误与有界重放的近似重建「可能在未测边界情形下导致能力退化」，作者将持续做长上下文稀疏检索与缓存续接处的压力测试。其二，**基准饱和下的表述纪律**：分数接近 Fable-5、GPT-6 Astra 这类系统「不意味着在复杂高难推理与边缘情形上匹配前沿能力」。再加上训练数据可能包含基准相关内容（报告未做污染声明，评测多在内部框架/自家脚手架下进行）与多智能体结果的「初步」标注，这份报告的可信结论是：**压缩账本与力度旋钮有完整设计与内部证据支撑；能力追平前沿的范围是编码智能体与多数日常任务，不是全部任务。**（PDF §§5.3.5–6）
-
-<!-- 交互图决策记录（审计用，不进入阅读页）：本篇的核心关系——CSA2 三模式的共享/重选分工、有界重放的截断语义、effort 惩罚到长度的映射——分别由对照表、对照分支与公式推导完整承载；成本账本是四个乘性因子的乘积，一张静态表即可全览。读者无法通过点选分支获得论文中不存在的关系（三模式是静态分配、不随输入变化），故不加交互视图，全部内容以可见正文、静态图与原图承载。 -->
+<!-- 交互决策：静态成本表、原图、模式对照与手算追踪已能暴露依赖；若让读者按输入切换模式，反而会虚构论文机制，因为模式静态分配。原生 details 承载完整脚手架表与次要多智能体协议。本路径无需另加交互工作流。本次校验属于来源/结构检查，不是学习实验、独立人类审核或实验复现。 -->

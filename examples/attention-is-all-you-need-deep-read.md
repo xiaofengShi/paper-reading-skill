@@ -2,11 +2,13 @@
 <!-- paper-reading-theme: cobalt -->
 # Attention Is All You Need: reading the Transformer from path to evidence
 
-> **Reading orientation.** The 2017 paper asks whether an encoder–decoder model can perform sequence transduction without recurrence or convolution. Its answer is a stack of attention and position-wise feed-forward layers, tested mainly on machine translation. This reading uses [arXiv version 7](https://arxiv.org/abs/1706.03762); the author's original figure is attributed below. <span class="source-ref">Version revised 2 August 2023. Local PDF SHA-256: bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697. PDF abstract, §§1–6; Fig. 1; Tables 1–4.</span>
+> **Reading orientation.** The 2017 paper asks whether an encoder–decoder model can perform sequence transduction without recurrence or convolution. Its answer is a stack of attention and position-wise feed-forward layers, tested mainly on machine translation. This reading uses [arXiv version 7](https://arxiv.org/abs/1706.03762v7); the author's original figure is attributed below. <span class="source-ref">Version revised 2 August 2023. Local PDF SHA-256: bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697. Full 15-page PDF checked: abstract, §§1–7, Tables 1–4, and attention-visualization appendix Figs. 3–5. Source-check date: 27 October 2026.</span>
 
 ```paper-map
 {
   "thesis":"The paper replaces sequence-aligned recurrence with attention, then asks whether translation quality and training efficiency survive that replacement.",
+  "reader":"Readers who know vectors, matrix multiplication, and basic neural-network training, but have not implemented an encoder–decoder Transformer. Softmax, causal masking, and the path-length argument are worked through here.",
+  "goals":["Trace a source sentence and shifted target prefix through all three attention placements","Calculate one attention output and explain what scaling and masking change","Separate a translation result, an architecture ablation, and a parsing transfer result"],
   "outcome":"A parallelizable encoder–decoder path with measurable translation quality; the decoder still emits output tokens autoregressively.",
   "outcomeSource":"PDF §§1, 3, 4, 6",
   "items":[
@@ -17,9 +19,13 @@
 }
 ```
 
+<!-- Visual decision: the static architecture map and the token/mask tables expose the complete data path. No parameter or branch needs a scripted control; native evidence and answer disclosures keep optional detail available offline. -->
+
 ## 01 / The whole argument
 
 The contribution is a **model architecture**, not an attention score alone. Earlier sequence-to-sequence systems could use attention while retaining recurrent encoder and decoder layers. The Transformer replaces those layers with attention plus a position-wise network. That permits all source positions, and all target positions during teacher-forced training, to be processed together. At generation time the decoder remains autoregressive: it must predict the next target token from the prefix already produced. (PDF §§1–3)
+
+**First pass:** follow the [source and target trace](#section-2), work the [attention calculation](#section-3), and then compare the [three kinds of evidence](#section-6). The remaining sections explain why the architecture was worth trying and which conditions make those results interpretable. The argument is continuous: remove the recurrent chain → retain order and source conditioning → prevent target leakage → test whether translation quality survives.
 
 The editorial diagram starts with the paper's question: can sequence transduction work without recurrent layers? Its answer links attention-based token mixing and position information to the encoder–decoder data path. The lower cards connect that design to the attention calculation and the translation tests and ablation used to examine it. The top-row arrows describe data flow. The listed BLEU values are exact reported results, with their settings explained below. (PDF Fig. 1, Eq. 1, Tables 2–3)
 
@@ -49,6 +55,22 @@ The model has a six-layer encoder and a six-layer decoder in its base configurat
 }
 ```
 
+### A three-position trace
+
+Use the **teaching pair**, not a paper training example, source `je suis` and target `I am <eos>`. The encoder may let either French token attend to both French tokens. During teacher-forced training, the decoder receives the shifted sequence shown below. Each row predicts one target; the mask applies to decoder **input positions**, not directly to the spelling of a token. (PDF §§3.1, 3.2.3)
+
+| Decoder position | Input at that position | Target to predict | Visible decoder inputs |
+|---|---|---|---|
+| 1 | `<bos>` | `I` | `<bos>` |
+| 2 | `I` | `am` | `<bos>, I` |
+| 3 | `am` | `<eos>` | `<bos>, I, am` |
+
+The attention-score mask for these positions is lower triangular: row 2 may use columns 1 and 2, while column 3 receives $-\infty$. Thus “including the current position” is safe only because the input is shifted. Without the shift, row 2 would contain `am`, the answer it is supposed to predict; masking future positions would not remove that leak. All three rows can be computed together in training because their correct prefixes are supplied. At inference, after generating `I`, the model must first produce `am` before it can use `am` in the next prefix. (PDF §§3.1, 3.2.3; teaching trace)
+
+For cross-attention at the second position, the decoder's prefix-derived state supplies a query, while **both encoder outputs** supply keys and values. Cross-attention has no target-future mask over the source: the entire source sentence is already available. With target length $m$ and source length $n$, its score matrix is $m\times n$; decoder self-attention instead has an $m\times m$ score matrix. These shapes explain the different arrows in Fig. 1. (PDF §3.2.3; shapes derived from Eq. 1)
+
+The embedding weights are scaled by $\sqrt{d_{\mathrm{model}}}$ at input; the paper also shares the weight matrix between the two embeddings and the pre-softmax linear map. Residual additions require a common width, so the sublayers return 512-dimensional vectors in the base model. These supporting operations preserve a usable signal path around each attention or FFN transformation. (PDF §§3.1, 3.4)
+
 The encoder has two sublayers per layer. The decoder has three because it adds cross-attention between masked self-attention and the feed-forward network. The paper writes each residual sublayer output as $\mathrm{LayerNorm}(x+\mathrm{Sublayer}(x))$; this is the paper's **post-normalization** ordering. (PDF §3.1)
 
 ## 03 / Compute one attention output
@@ -62,7 +84,9 @@ $$
 \end{gathered}
 $$
 
-For a **teaching calculation, not a reported paper experiment**, take one query with dot products $[2,0]$ against two keys and let $d_k=4$. Scaling gives $[1,0]$; softmax gives about $[0.731,0.269]$. The output is therefore approximately $0.731v_1+0.269v_2$. In the decoder's masked self-attention, a future key receives a score of $-\infty$ before softmax and thus weight zero. In encoder self-attention there is no such future-token mask. (PDF §§3.2.1, 3.2.3)
+For a **teaching calculation, not a reported paper experiment**, take one query with dot products $[2,0]$ against two keys and let $d_k=4$. Scaling gives $[1,0]$; softmax gives about $[0.731,0.269]$. If the values are $v_1=[1,0]$ and $v_2=[0,2]$, the output is approximately $[0.731,0.538]$. The weights sum to one, but output coordinates need not: attention averages **vectors**, not token probabilities. For general values this is $0.731v_1+0.269v_2$. In the decoder's masked self-attention, a future key receives a score of $-\infty$ before softmax and thus weight zero. In encoder self-attention there is no such future-token mask. (PDF §§3.2.1, 3.2.3)
+
+Why divide by the square root rather than by $d_k$? Under the paper's illustration, independent query/key components have mean zero and variance one. Each product contributes variance one, so the sum of $d_k$ products has variance $d_k$ and standard deviation $\sqrt{d_k}$. At $d_k=64$, a typical score scale is therefore eight; dividing by eight returns variance to one. Unscaled large scores can make softmax nearly one-hot and its gradients small. This argument motivates a scale; independence and unit variance are illustrative assumptions, not a theorem about every trained layer. (PDF §3.2.1, footnote 4)
 
 **Multi-head attention changes the representations before this calculation.** For each head $i$, learned projections form $Q_i$, $K_i$, and $V_i$; head outputs are concatenated into $H$ and projected once more. The following is the paper's expression written with intermediate names to keep every step legible: (PDF §3.2.2)
 
@@ -80,6 +104,19 @@ The base model uses $h=8$ heads, $d_{\mathrm{model}}=512$, and $d_k=d_v=64$ per 
 
 Each layer also applies the same two-layer network independently at every position, with different parameters across layers: $\operatorname{FFN}(x)=\max(0,xW_1+b_1)W_2+b_2$. The base model expands from 512 to $d_{ff}=2048$ inside that network. Sine and cosine positional encodings are added at the bottoms of both stacks; the authors also test learned positional embeddings in Table 3. (PDF §§3.3, 3.5, Eq. 2)
 
+### How position enters a model with no recurrent clock
+
+If we reorder the input vectors and provide no positional information, self-attention reorders its outputs correspondingly; it has no inherent signal that one token was first. The paper adds an order-dependent vector to each token embedding. For position $p$ and dimension pair $2i,2i+1$:
+
+$$
+\begin{aligned}
+\mathrm{PE}(p,2i)&=\sin(p/10000^{2i/d_{\mathrm{model}}}),\\
+\mathrm{PE}(p,2i+1)&=\cos(p/10000^{2i/d_{\mathrm{model}}}).
+\end{aligned}
+$$
+
+A **four-dimensional teaching example** makes this concrete: position 0 has $[0,1,0,1]$, and position 1 has approximately $[0.841,0.540,0.010,1.000]$. The two dimension pairs vary at different rates. The same word at two positions therefore enters attention as two different vectors after addition. The authors' reason for this choice is that a fixed position offset can be represented by a linear transformation of these sine/cosine pairs; extrapolation beyond training lengths is their motivation, not a demonstrated guarantee in Table 3. (PDF §3.5; teaching numbers rounded)
+
 ## 04 / What parallelism buys, and what it costs
 
 The paper's Table 1 compares **layer types**, rather than end-to-end measured runtime. For a sequence of length $n$ and representation width $d$, unrestricted self-attention has $O(n^2d)$ operations per layer but $O(1)$ sequential depth and an $O(1)$ maximum path between positions. A recurrent layer has $O(nd^2)$ operations and $O(n)$ sequential depth and path. These are asymptotic comparisons under the table's assumptions, not a promise that attention is cheaper at every sequence length. (PDF §4, Table 1)
@@ -91,11 +128,18 @@ The paper's Table 1 compares **layer types**, rather than end-to-end measured ru
 | Convolution, kernel $k$ | $O(knd^2)$ | $O(1)$ | $O(\log_k n)$ |
 | Restricted self-attention, neighborhood $r$ | $O(rnd)$ | $O(1)$ | $O(n/r)$ |
 
+The convolutional logarithmic path in Table 1 corresponds to the dilated case discussed in §4; contiguous kernels require a stack with $O(n/k)$ depth to connect distant positions. None of these sequential-depth statements removes the model’s fixed stack of layers.
+
+For a **teaching scale comparison**, the ratio of the displayed leading terms is $n^2d/(nd^2)=n/d$. At $n=128,d=512$ it is $1/4$; at $n=2048,d=512$ it is $4$. These are not measured speed ratios: projection layers, the FFN, hardware utilization, and constants remain outside this comparison. The short dependency path and the quadratic attention matrix are separate properties. (PDF §4, Table 1; derived example)
+
 The shorter path makes distant positions interact in one attention layer, while the quadratic $n^2$ term makes long unrestricted sequences expensive. The authors explicitly propose restricting attention to a local neighborhood as future work; that would lower per-layer work but lengthen the maximum path. This tension is part of the paper's original argument, not a later long-context result. (PDF §4, Table 1)
 
 ## 05 / Training and measurement conditions
 
 The main tests use WMT 2014 English–German translation (about **4.5 million sentence pairs**) and English–French translation (**36 million**). The base model has 65M parameters, six layers per stack, eight heads, and $d_{\mathrm{model}}=512$; the big model has 213M parameters and width 1024. Training uses eight P100 GPUs. The base run is 100,000 steps, about 12 hours; big runs are 300,000 steps, about 3.5 days. These schedules, model sizes, and data sizes matter when reading the BLEU and cost comparisons. (PDF §§5.1–5.2, Tables 2–3)
+
+<details class="reading-detail">
+<summary>Optimizer, warmup, and regularization</summary>
 
 The authors use Adam with $\beta_1=0.9$, $\beta_2=0.98$, and $\epsilon=10^{-9}$, with 4,000 warmup steps and the learning-rate schedule below. The intermediate terms $a$ and $b$ expose the two branches of the paper's Eq. 3: the expression rises linearly during warmup and falls approximately as inverse square root afterward. Dropout and label smoothing of $0.1$ are part of the base setup. (PDF §§5.3–5.4, Eq. 3)
 
@@ -106,6 +150,10 @@ a&=\operatorname{step}^{-1/2},\\
 b&=\operatorname{step}\cdot\operatorname{warmup}^{-3/2}.
 \end{aligned}
 $$
+
+At step 2,000 the warmup branch gives half the learning rate at step 4,000; at step 16,000 the inverse-square-root branch again gives half the step-4,000 rate. This is a calculation from Eq. 3, not a separate training result.
+
+</details>
 
 Translation results use BLEU on **newstest2014**; architecture variations use English–German BLEU on the **newstest2013 development set without checkpoint averaging**. The two tables therefore answer different questions and their BLEU values should not be compared as if they were measured on the same split. At inference the translation runs use beam size 4 and length penalty 0.6, with checkpoint averaging described in §6.1. (PDF §6.1–6.2, Tables 2–3)
 
@@ -124,18 +172,47 @@ Translation results use BLEU on **newstest2014**; architecture variations use En
 }
 ```
 
-**Keep the main test values in view.** Table 2 reports the following BLEU values; the EN→DE and EN→FR columns are different tasks, and a blank cell means that row has no reported value for that task. The cost column is the paper's estimated training FLOPs, not a measurement of serving latency. (PDF §6.1, Table 2)
+**The decisive test comparison:** on EN→DE, big's 28.4 exceeds the listed ConvS2S ensemble's 26.36 by **2.04 BLEU**, while base reaches 27.3. On EN→FR, big's Table 2 value is 41.8 against that ensemble's 41.29, but base is 38.1, below several prior systems. The result supports a successful architecture in these settings, not a win by every configuration on every translation task. (PDF §6.1, Table 2)
 
-| System | EN→DE test BLEU | EN→FR test BLEU | EN→DE training FLOPs | EN→FR training FLOPs |
-|---|---:|---:|---:|---:|
-| Transformer base | 27.3 | 38.1 | $3.3\times10^{18}$ | — |
-| Transformer big | **28.4** | **41.8** | $2.3\times10^{19}$ | — |
-| ConvS2S ensemble | 26.36 | 41.29 | $7.7\times10^{19}$ | $1.2\times10^{21}$ |
+**Keep the main test values in view.** Table 2 reports the following BLEU values; the EN→DE and EN→FR columns are different tasks, and the costs retain the layout distinction in the original. The cost is the paper's estimated training FLOPs, not a measurement of serving latency. Table 2 prints one spanning training-cost value for each Transformer row; it does not give separate language-pair costs for those rows. (PDF §6.1, Table 2)
+
+| System | EN→DE test BLEU | EN→FR test BLEU | Reported training FLOPs |
+|---|---:|---:|---|
+| Transformer base | 27.3 | 38.1 | $3.3\times10^{18}$, spanning cost cell |
+| Transformer big | **28.4** | **41.8** | $2.3\times10^{19}$, spanning cost cell |
+| ConvS2S ensemble | 26.36 | 41.29 | EN→DE $7.7\times10^{19}$; EN→FR $1.2\times10^{21}$ |
 
 For EN→FR, the abstract and Table 2 say **41.8**, but a sentence in §6.1 says **41.0**. The source itself is inconsistent. This atlas uses 41.8 when reading Table 2 and does not turn either number into a more precise conclusion than the paper supports. The Table 3 head and positional comparisons are development-set ablations; Table 4 parsing uses F1 and a different task. (PDF abstract, §6, Tables 2–4)
 
-## 07 / What the mechanism and evidence establish together
+## 07 / Transfer and the attention appendix
+
+### Parsing changes the output problem
+
+In constituency parsing, the output describes nested phrase structure rather than a translation. A **teaching illustration** for `I run` is a serialized tree such as `(S (NP I) (VP run))`: the generated symbols must form a valid nesting and can outnumber input words. This is an illustrative encoding, not a reproduced WSJ example or the paper's complete tokenization specification. The representative operation is the same encoder–decoder mapping: encode the sentence → autoregressively generate the structural output → compare its constituent structure with the reference using parsing F1. Higher F1 is better; it is not translation BLEU. (PDF §6.3, Table 4)
+
+The actual extension trains a **four-layer**, width-1024 Transformer on about 40K WSJ sentences, then also tests a semi-supervised setting with about 17M sentences. It selects a small set of hyperparameters on WSJ section 22 and evaluates section 23. To accommodate longer structured outputs, inference permits input length +300, beam size 21, and length penalty 0.3, rather than the translation settings. WSJ-only F1 91.3 remains below Dyer et al.'s discriminative 91.7; semi-supervised F1 92.7 exceeds the listed 92.1 semi-supervised systems, while multi-task 93.0 and generative 93.3 belong to different regimes. The extension shows the architecture can learn this structured output task; it does not establish superiority across all parser training regimes. (PDF §6.3, Table 4)
+
+### What the appendix attention plots actually inspect
+
+The appendix is a diagnostic view of the mechanism, not another accuracy benchmark. In Fig. 3, select the encoder token **“making”**, layer 5 of 6, and follow its colored head connections to distant tokens completing **“making … more difficult.”** The input is one sentence and one query position; the operation extracts that position's attention weights from several heads; the output is a set of token-to-token connections. The inspected quantity is the softmax weight from Eq. 1, not a measured causal contribution to the translation. Figs. 4–5 repeat this style of inspection for sharp attention from “its” and patterns the authors associate with sentence structure. (PDF attention-visualization appendix, Figs. 3–5)
+
+The useful inference is bounded: different learned heads can route information differently, and some weights align with recognizable dependencies in these examples. The plots alone do not show that every head has a fixed linguistic role, that a large weight proves an explanation of the final answer, or that the model solves coreference reliably on a separate test set. Reading the appendix this way connects the weighted-sum mechanism to an actual model inspection without converting a visualization into a causal experiment. (PDF §4 and appendix Figs. 3–5; interpretation)
+
+## 08 / What the mechanism and evidence establish together
 
 The architecture path explains how attention can replace sequence-aligned recurrent updates while preserving source–target conditioning: source tokens interact through encoder self-attention, the decoder sees only its target prefix, and cross-attention connects the two stacks. Table 1 gives the computational reason to try it; Table 2 shows strong translation outcomes; Table 3 gives narrower evidence for choices such as multiple heads; Table 4 probes transfer beyond translation. These pieces support the paper's central claim in its tested settings. (PDF §§3–6)
 
 Two qualifications belong with that reading. First, the reported translation comparisons are **whole-system** comparisons with different model families and training costs; they do not isolate every architectural choice. Second, unrestricted self-attention still has quadratic work in sequence length, and autoregressive output remains sequential. The paper establishes an important way to parallelize training and shorten dependency paths; it does not establish constant-cost long-context processing or parallel generation. (PDF §§3–4, 6)
+
+
+```paper-check
+{
+  "title":"Work through the Transformer",
+  "items":[
+    {"question":"At decoder position 2 in the teaching pair, why may the mask allow the current input position but still not leak the target 'am'? What fails if the target is no longer shifted?","hint":"Use the input/target table, not only the word 'causal'.","answer":"Position 2 contains the previous output 'I', while its target is 'am'; the allowed diagonal therefore reads a known prefix token. Without shifting, the same diagonal would expose 'am' itself. A future-position mask alone would not prevent that leak.","source":"PDF §§3.1, 3.2.3; teaching trace in §02"},
+    {"question":"Transfer calculation: with dot products [2,0], d_k=4, v1=[2,0] and v2=[0,4], what is the attention output? If the second key is illegal, what changes?","answer":"The scaled scores stay [1,0] and weights are about [0.731,0.269], so the output is about [1.462,1.076]. Masking the second score to negative infinity makes the weights [1,0] and the output [2,0]. The mask is applied before softmax, which renormalizes the legal positions.","source":"PDF Eq. 1 and §3.2.3; changed-value teaching example"},
+    {"question":"A colleague subtracts the one-head 24.9 from the big-model 28.4 and calls 3.5 BLEU the causal benefit of more heads. Why is this unsupported, and which comparison is relevant?","answer":"24.9 is an EN→DE newstest2013 development ablation without checkpoint averaging; 28.4 is a big-model newstest2014 test result with a different size, schedule, and averaging. Table 3's base eight-head 25.8 versus one-head 24.9 is the relevant controlled head-count comparison, giving 0.9 BLEU in that setup.","source":"PDF §§6.1–6.2, Tables 2–3"},
+    {"question":"Why do parsing F1 92.7 and the appendix's 'making' connections support different claims?","answer":"92.7 is an evaluated structured-output result for a semi-supervised parser on WSJ section 23. The 'making' plot inspects weights from selected encoder heads in an example sentence. It illustrates information routing, but supplies no new parsing score and no causal test of those heads.","source":"PDF §6.3, Table 4; attention-visualization appendix Fig. 3"}
+  ]
+}
+```

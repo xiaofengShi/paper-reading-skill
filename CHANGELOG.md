@@ -2,6 +2,7 @@
 
 ## 0.2.0 — Unreleased
 
+- Rebuild all 11 gallery readings with the updated teaching contract: reader goals, worked mechanisms or operation traces, paper-specific checks, and supporting evidence disclosures. Recheck primary sources and correct source-version, equation, evaluator, and benchmark-scope errors; retain dated reconstruction evidence.
 - Add a first-paper route in English and Chinese, language filters, copyable commands, and generated sitemap metadata.
 - Add an English ResNet v1 reading separating optimization, generalization, evaluation protocols, and later interpretations.
 - Add a LoRA v2 reading with source conflicts preserved, input-to-update and merged-weight exploration, a parameter-budget experiment, and four understanding checks.

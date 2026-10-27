@@ -153,12 +153,13 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 .article ol, .article ul { margin: 0 0 1.5rem; padding-left: 1.4rem; }
 .article li { margin: .35rem 0; }
 .article code { background: color-mix(in srgb, var(--teal) 7%, white); padding: .1em .28em; border-radius: 3px; color: var(--ink); overflow-wrap: anywhere; }
+.article pre { max-width: 100%; overflow-x: auto; }
 .article a:not(.hero-link) { font-weight: 650; }
 .article table { border-collapse: collapse; display: block; overflow-x: auto; contain: paint; max-width: 100%; margin: 1.4rem 0 2rem; font-size: .9rem; }
 .article th, .article td { border-bottom: 1px solid var(--line); padding: .65rem .9rem; text-align: left; min-width: 7rem; }
 .article th { background: color-mix(in srgb, var(--teal) 7%, white); color: var(--ink); }
 .principle-grid { margin: 2.2rem 0; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1px; border: 1px solid var(--line); background: var(--line); }
-.principle { background: color-mix(in srgb, var(--teal) 3%, white); padding: 1.25rem 1.4rem; }
+.principle { min-width: 0; overflow-wrap: anywhere; background: color-mix(in srgb, var(--teal) 3%, white); padding: 1.25rem 1.4rem; }
 .principle-number { color: var(--orange); font: 800 .8rem ui-monospace, monospace; }
 .principle h3 { margin: .55rem 0 .4rem; font-size: 1.1rem; }
 .principle p { font-size: .9rem; margin-bottom: .7rem; }

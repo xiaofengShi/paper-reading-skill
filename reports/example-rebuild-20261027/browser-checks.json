@@ -1,0 +1,262 @@
+{
+  "date": "2026-10-27",
+  "scope": "DOM, layout, asset loading, keyboard and selected existing interactions; no formal visual acceptance",
+  "wide": [
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 2,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/attention-is-all-you-need-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 6,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/deepseek-v4.1-flash-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 6,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/deepseek-v4.1-flash-zh-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 4,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/iar-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 2,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/lora-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 6,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/mechvqa-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 7,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/mimo-v2.6-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 4,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/opensds-world-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 3,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/raft-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 5,
+      "goals": 3,
+      "images": 5,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/resnet-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    },
+    {
+      "checks": 4,
+      "goals": 3,
+      "images": 12,
+      "mathErrors": 0,
+      "missingAnchors": [],
+      "page": "/vista-deep-read.html",
+      "reader": true,
+      "scrollWidth": 1280,
+      "unloadedImages": [],
+      "width": 1280
+    }
+  ],
+  "narrow": [
+    {
+      "defaultScrollWidth": 390,
+      "page": "/attention-is-all-you-need-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 1,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/deepseek-v4.1-flash-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 3,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/deepseek-v4.1-flash-zh-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 3,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/iar-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 3,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/lora-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 2,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/mechvqa-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 4,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/mimo-v2.6-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 2,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/opensds-world-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 3,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/raft-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 4,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/resnet-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 2,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    },
+    {
+      "defaultScrollWidth": 390,
+      "page": "/vista-deep-read.html",
+      "width": 390,
+      "answerExpanded": 1,
+      "evidenceExpanded": 2,
+      "expandedScrollWidth": 390,
+      "mathErrors": 0,
+      "sourceChecked": true
+    }
+  ],
+  "interactionChecks": {
+    "mimoGlobalPointerFocus": "mixed RL pressed and visible detail",
+    "mimoGradingKeyboardFocus": "GRS status and region",
+    "mimoGradingPointerFocus": "GAR aria-pressed true after closing GRS detail"
+  },
+  "limits": [
+    "No actual network-disabled reload",
+    "No JavaScript-disabled reload",
+    "No print preview",
+    "No GLM-5.3-Flash visual acceptance",
+    "No human comprehension study"
+  ]
+}

@@ -45,7 +45,7 @@ Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key
 3. GRS 和 GAR 是前后相接的两个训练阶段吗？它们各自解决什么质量问题？
 4. 哪些报告结果描述整套系统的学习趋势，哪些是对 GAR 或 harness 多样性的较窄检查？
 
-**参考答案。** 增加 rollout 算力扩大探索，但任务与 harness 决定能探索什么，评分器决定哪些轨迹转化为有用的学习信号。序列级优势会广播到生成响应的各个 token；重要性比率处理采样策略与当前策略的差异，训练遮罩排除非模型生成片段，分母是组内轨迹的 token 总数。GRS 和 GAR 分别服务不同的代码任务子集，不是串行阶段：GRS 复用离线构建的任务 rubric；GAR 比较当前通过的解答并重新分配正优势。原论文 Fig. 3 展示整体训练趋势，Fig. 8 在仅代码的设置中检验 GAR，Fig. 10 检查留出 harness 的表现。对应 HTML 第 01–03、06 章。
+**参考答案。** 增加 rollout 算力扩大探索，但任务与 harness 决定能探索什么，评分器决定哪些轨迹转化为有用的学习信号。序列级优势广播到响应 token；重要性比率比较当前训练策略与生成时旧策略的概率。Eq. 1 的 M 依正/负优势各自的比率界限门控更新；轨迹导出与 penalty mask 另外排除工具返回等非模型生成片段。每个 prompt 先用组内全部响应 token 数归一化，再对 prompts 求均值（prompt-mean），不是对整个批次全部 token 一次求均值。GRS 和 GAR 分别服务不同的代码任务子集，不是串行阶段：GRS 复用离线构建的任务 rubric；GAR 比较当前通过的解答并重新分配正优势。原论文 Fig. 3 展示整体训练趋势，Fig. 8 在仅代码的设置中检验 GAR，Fig. 10 检查留出 harness 的表现。对应 HTML 第 01–03、06 章。
 
 ## RAFT · [HTML](../docs/raft-deep-read.html)
 
@@ -54,16 +54,16 @@ Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key
 3. 答案条件教师比学生多看到什么？Top-K 集合由谁选出，EMA 权重又平衡哪两项损失？
 4. Table 1 与 Table 2 各能支持什么结论？为什么不能据此断言 RAFT 对任意模型和领域都最优？
 
-**参考答案。** 两条缺口是监督与原模型输出不兼容、以及固定目标 SFT 没约束模型在自身前缀上的行为。融合答案既是学生 SFT 的目标，也是教师在学生轨迹上给出软目标时可见的参考上下文。改写与原答案的相似度低于阈值时回退原答案，以减少语义漂移。教师额外看到融合答案与参考提示；教师分布选出 Top-K token，学生和教师都在该集合重归一化；EMA 根据 SFT 与 KL 损失的滑动均值调整 KL 权重。Table 1 是三模型、五领域的整系统比较；Table 2 在 SmolLM3 的三个领域依次比较原始数据 SFT、融合数据 SFT 和完整 RAFT，分别检查数据与在线蒸馏的增益。论文未覆盖更大模型与任意领域，Table 1 也并非每个指标都由 RAFT 领先。对应 HTML 第 01–05 章。
+**参考答案。** 两条缺口是监督与原模型输出不兼容、以及固定目标 SFT 没约束模型在自身前缀上的行为。融合答案既是学生 SFT 的目标，也是教师在学生轨迹上给出软目标时可见的参考上下文。改写与原答案的相似度低于阈值时直接保留原答案、跳过融合，以减少语义漂移。教师额外看到融合答案与参考提示；教师分布选出 Top-K token，学生和教师都在该集合重归一化；EMA 根据 SFT 与 KL 损失的滑动均值调整 KL 权重。Table 1 是三模型、五领域的整系统比较；Table 2 在 SmolLM3 的三个领域依次比较原始数据 SFT、融合数据 SFT 和完整 RAFT，分别检查数据与整套自适应在线目标的增益，不能拆出答案条件、Top-K、EMA 各自的净效应。论文未覆盖更大模型与任意领域，Table 1 也并非每个指标都由 RAFT 领先。对应 HTML 第 01–05 章。
 
 ## MechVQA · [HTML](../docs/mechvqa-deep-read.html)
 
-1. What do the three capability axes measure, and why do the ten subtasks make Total and Avg. different summaries?
+1. What do the three capability axes measure, how is Avg. defined, and what remains unconfirmed about Total?
 2. Which gates turn source drawings into verifiable QA pairs, and how is drawing overlap controlled across the split?
 3. What does the MechVL-4B Total score of 84.85 compare with, and which tests can identify narrower contributions from training stages or rewards?
 4. What discrepancy appears between Figure 2c and the main tables, and how should a reader handle it?
 
-**Answer key.** Recognition reads explicit information, Reasoning infers structure or geometry, and Judging applies engineering rules. Total is question-weighted while Avg. is the macro mean of ten subtask scores; uneven subtask counts make them differ. Expert image filtering and metadata verification precede question generation, cross-model question validation, multi-model answering, and majority-voted labels. The split keeps each drawing and clustered near duplicates within one partition. The 84.85 Total is a full-system test-set score above the general MLLM baselines in Table 2; Table 3's stage, RL-algorithm, and reward ablations give narrower checks. Figure 2c prints 83.44 at its final point while Tables 2–3 report 84.85; preserve the discrepancy rather than silently equating them. See HTML §§01–05.
+**Answer key.** Recognition reads explicit information, Reasoning infers structure or geometry, and Judging applies engineering rules. Avg. is the macro mean of ten subtask scores. Total is the reported headline score; a question-weighted interpretation is plausible, but its exact aggregation formula and test subtask counts are not specified, so this reading does not treat that interpretation as a verified definition. Expert image filtering and metadata verification precede question generation, cross-model question validation, multi-model answering, and majority-voted labels. The split keeps each drawing and clustered near duplicates within one partition. The 84.85 Total is a full-system test-set score above the general MLLM baselines in Table 2; Table 3's stage, RL-algorithm, and reward ablations give narrower checks. Figure 2c prints 83.44 at its final point while Tables 2–3 report 84.85; preserve the discrepancy rather than silently equating them. See HTML §§01–05.
 
 ## IAR · [HTML](../docs/iar-deep-read.html)
 
@@ -81,7 +81,7 @@ Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key
 3. SWA Bounded Replay 相对精确重建放弃了什么、换回了什么？为什么作者仍敢把 SWA KV 整类移出持久缓存？
 4. 推理力度旋钮的证据链包含哪些环节？哪些结论是报告明确不主张的？
 
-**参考答案。** 三类成本是 prefill 计算（缓存未命中）、运行时全局 KV 存储（HBM）、持久 KV 存储与搬运（SSD/主机内存与带宽）。CED 对 prefill：解码器全局 KV 从第 $L/2$ 层投影，prefill 复杂度 $O(NL)\to O(NL/2 + n_{win}L/2)$；CSA2 对全局 KV 与索引：跨层共享去重；FP4 对存储精度（主 KV 相对 FP8 减半）；Bounded Replay 对持久 KV（去掉 SWA KV 近乎减半 × 全局 KV 1/4 ≈ 1/8）。Full 自算 main KV、indexer K 与 Top-K；Reindex 复用 main KV 与 indexer K、重选 Top-K；Reuse 全部复用；三模式都自算 main Q 与 SWA KV。层次稀疏索引器让深层索引层的每查询打分代价从随上下文线性变为候选池常数。Bounded Replay 放弃的是 SWA 状态的数学等价性（重建态近似、后缀输出依赖命中位置），换回的是整类持久 SWA 存储与 $L\times n_{win}$ 的精确重放开销；敢移出持久缓存的依据是实验显示质量影响可忽略 + 后训练中做同模拟适配。力度旋钮证据链：RL 长度惩罚（Eqs. 9–10）→ 附录 C 仿射偏好长度推导 → Fig. 12 八基准单调无退化 → Fig. 9 收益前置（60–80 性价比区间）→ Fig. 11 跨脚手架迁移。报告明确不主张：实测长度必然线性/单调（推导是局部奖励近似）；分数接近 Fable-5、GPT-6 Astra 不等于在最难任务上匹配前沿能力；多智能体结果为初步；稳健性边界（CSA2 选择错误、近似重建）未完整刻画。对应 HTML 第 01–05 章。
+**参考答案。** 三类成本是 prefill 计算（缓存未命中）、运行时全局 KV 存储（HBM）、持久 KV 存储与搬运（SSD/主机内存与带宽）。CED 对 prefill：解码器全局 KV 从第 $L/2$ 层投影，prefill 复杂度 $O(NL)\to O(NL/2 + n_{win}L/2)$；CSA2 对全局 KV 与索引：跨层共享去重；FP4 对存储精度（主 KV 相对 FP8 减半）；Bounded Replay 对持久 KV（去掉 SWA KV 近乎减半 × 全局 KV 1/4 ≈ 1/8）。Full 自算 main KV、indexer K 与 Top-K；Reindex 复用 main KV 与 indexer K、重选 Top-K；Reuse 全部复用；三模式都自算 main Q 与 SWA KV。层次稀疏索引器让深层索引层的每查询打分代价从随上下文线性变为候选池常数。Bounded Replay 放弃的是 SWA 状态的数学等价性（重建态近似、后缀输出依赖命中位置），换回的是整类持久 SWA 存储与 $L\times n_{win}$ 的精确重放开销；敢移出持久缓存的依据是实验显示质量影响可忽略 + 后训练中做同模拟适配。力度旋钮证据链：RL 长度惩罚 → 附录 C 在内部、未封顶且边际收益指数衰减等假设下的局部偏好长度推导 → Figs. 9/12 指定设置的 token 与精度曲线 → Fig. 11 与附录 B.2 的跨脚手架检查。B.2 观察到输出长度单调增加，但精度在中间力度有平台和回落；局部长度推导不能推出任意脚手架精度单调，也不是通用延迟保证。报告明确不主张：实测长度必然线性/单调（推导是局部奖励近似）；分数接近 Fable-5、GPT-6 Astra 不等于在最难任务上匹配前沿能力；多智能体结果为初步；稳健性边界（CSA2 选择错误、近似重建）未完整刻画。对应 HTML 第 01–07 章。
 
 ## VISTA · [HTML](../docs/vista-deep-read.html)
 
@@ -95,10 +95,10 @@ Use the linked HTML only. Do not provide the PDF, Markdown source, or answer key
 ## OpenDS-World · [HTML](../docs/opensds-world-deep-read.html)
 
 1. 任务定义把哪三类属性立为“真实网页”的正交刻画？它们分别对应信息的哪个侧面，为什么说 OpenDS 测的是“证据获取过程”而非检索质量？
-2. 构建流水线的三段（锚点→证据扩展→问题反演）各自防住哪种作弊或失效方式？人工验证与人类实测各承担什么角色？
+2. 构建流水线的三段各自降低哪种捷径或失效风险？人工验证与人类实测各承担什么角色，仍不能保证什么？
 3. “GPT-6 Astra 与 GPT-5.6 Sol 总 token 几乎相同但差 11 个百分点、Gemini 耗 5.22 倍 token 反而更低分”支持什么读法？它不能证明什么？
 4. 自然终止率与准确率为什么是两回事？预算触顶的两种形态（调用触顶为主 vs 时间触顶为主）分别说明什么？
 
-**参考答案。** 三类属性：多模态（信息表现形式）、异构格式（组织结构与解析方式）、交互式访问（获取方式：导航、参数、时间索引、图形操作、声明式查询、文件转移等）。静态评测把证据预先放进语料、抹平获取成本，OpenDS 不告知证据位置与获取方式，把搜索-访问-处理-连接的连续过程作为被测能力。锚点必须靠视听内容识别、唯一映射 Wikidata，防止起点退化为文本搜索；证据链每个节点多源独立佐证，防单点失效；问题反演使任何单条线索都不暴露目标、约束组合才能唯一确定答案，防直接检索答案。10 人独立验证保证证据有效性与答案唯一性（测量前提），50 人实测定标难度并给出人类基线（21.10%）。资源脱钩说明瓶颈在信源选择、工具协调与停止决策而非预算绝对值；但它不能证明“资源无用”，也不能隔离单个模型的具体缺陷。自然终止只表示模型自己停了，答对与否由独立裁判判定（Astra 69% 自然终止仍只有 39% 正确）；调用触顶为主（如 Qwen3.8-Flash 80%）指向搜索无法在预算内收敛，时间触顶为主（如 GLM 5.3 41%）指向单步执行过慢或低产轨迹不及时放弃，两者是不同的执行失败形态。对应 HTML 第 01–05 章。
+**参考答案。** 三类属性：多模态（信息表现形式）、异构格式（组织结构与解析方式）、交互式访问（获取方式：导航、参数、时间索引、图形操作、声明式查询、文件转移等）。静态评测把证据预先放进语料、抹平获取成本，OpenDS 不告知证据位置与获取方式，把搜索-访问-处理-连接的连续过程作为被测能力。锚点、节点多源佐证与问题反演分别降低纯文本起点捷径、单源失效与直接暴露目标的风险，但没有形式化排除所有捷径或其他正确证据路径。共有 10 名独立评审参与证据与任务有效性核验，不合格题目被剔除；这提供质量控制，不保证错误率为零。50 人提供 1000 次独立尝试，21.10%=211/1000；115/200 是至少一人成功的题目比例，两者分母不同。跨模型 token/时间消耗与准确率没有简单排序关系；这些观察提示进一步研究信源选择、工具协调和停止决策，却未操纵同一模型预算，不能确定瓶颈归因或证明增大预算无效。自然终止只表示模型自己停了，答对与否由独立裁判判定（Astra 69% 自然终止仍只有 39% 正确）；调用触顶为主（如 Qwen3.8-Flash 80%）指向搜索无法在预算内收敛，时间触顶为主（如 GLM 5.3 41%）指向单步执行过慢或低产轨迹不及时放弃，两者是不同的执行失败形态。对应 HTML 第 01–05 章。
 
 For each paper, the reader should also identify one conclusion that the reported evidence **does not** isolate. Accept a paper-specific boundary explained with the relevant result, not generic skepticism.

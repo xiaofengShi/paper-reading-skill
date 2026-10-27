@@ -27,21 +27,23 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 
 ## 阅读完整样例
 
-选一篇论文，就能在一个页面里沿全局图、机制说明、原论文图、公式和实验证据读完整篇。图示与重要数字均有相邻解释，原文定位按需显示。
+每篇先说明适合谁读、读完能尝试什么，再沿全局图、机制算例或操作追踪、原论文图与实验证据读完整篇。最后用论文特定的理解题尝试计算、迁移与判断；完整协议按需展开，主线与关键限制保持可见。
 
 - **LoRA** · 中文 — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
 - **Deep Residual Learning / ResNet** · English — 先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。依据 [arXiv:1512.03385v1](https://arxiv.org/abs/1512.03385v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html)
 - **Attention Is All You Need** · English — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **DeepSeek-V4.1-Flash** · English — 分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-deep-read.html)
 - **MiMo-V2.6** · 中文 — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
-- **RAFT** · 中文 · Kimi Code — 沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。使用安装后的本 skill 在 Kimi Code 中制作，依据 [arXiv:2606.00147v1](https://arxiv.org/abs/2606.00147v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/raft-deep-read.html)
-- **MechVQA** · English · Kimi Code — 沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。依据 [arXiv:2605.30794v2](https://arxiv.org/abs/2605.30794v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mechvqa-deep-read.html)
-- **IAR** · 中文 · Kimi Code — 沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。依据 [arXiv:2608.20281v1](https://arxiv.org/abs/2608.20281v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/iar-deep-read.html)
-- **VISTA** · 中文 · Kimi Code — 沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。依据 [arXiv:2610.02200v1](https://arxiv.org/abs/2610.02200v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/vista-deep-read.html)
-- **DeepSeek-V4.1-Flash 中文** · 中文 · Kimi Code — KV 缓存压缩报告的中文深读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文深读同一份源 PDF。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-zh-deep-read.html)
-- **OpenDS-World** · 中文 · ZCode — 沿"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。依据 [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/opensds-world-deep-read.html)
+- **RAFT** · 中文 — 沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。依据 [arXiv:2606.00147v1](https://arxiv.org/abs/2606.00147v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/raft-deep-read.html)
+- **MechVQA** · English — 沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。依据 [arXiv:2605.30794v2](https://arxiv.org/abs/2605.30794v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mechvqa-deep-read.html)
+- **IAR** · 中文 — 沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。依据 [arXiv:2608.20281v1](https://arxiv.org/abs/2608.20281v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/iar-deep-read.html)
+- **VISTA** · 中文 — 沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。依据 [arXiv:2610.02200v1](https://arxiv.org/abs/2610.02200v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/vista-deep-read.html)
+- **DeepSeek-V4.1-Flash 中文** · 中文 — KV 缓存压缩报告的中文深读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文深读同一份源 PDF。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/deepseek-v4.1-flash-zh-deep-read.html)
+- **OpenDS-World** · 中文 — 沿"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。依据 [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/opensds-world-deep-read.html)
 
-MiMo 样例基于一份 44 页的本地 PDF 编写，仓库不分发该 PDF。作者后来[更新了在线报告](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/commit/73875d00b30a89ef8cc353a0b60b0e9f9561952d)；样例已采用修正后的 Pro 激活参数数值，其他版本差异尚未逐页核对。
+11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。
+
+MiMo 深读现统一采用[官方修订后的 44 页报告](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/resolve/73875d00b30a89ef8cc353a0b60b0e9f9561952d/MiMo_V2_6_technical_report.pdf)。逐页文本比对发现唯一变化为 Table 1 的 Pro 激活参数由 42T 修正为 42B；保留的七幅图所在页在两版中的文本与渲染像素完全相同，裁图仍保留原始来源记录。仓库不分发 PDF。
 
 ## 你会得到什么
 

@@ -209,19 +209,25 @@ test('an unknown visual theme fails before creating an output', () => {
   }
 });
 
-test('the two English examples embed their diagrams, original figures, and reading context', () => {
-  for (const [file, figure, keyText] of [
-    ['attention-is-all-you-need', 'Figure 1', 'Figure 1 is particularly useful here'],
-    ['deepseek-v4.1-flash', 'Figure 3', 'The original Figure 3'],
+test('the two English examples embed their source figures, reading path, and learning context', () => {
+  for (const [file, figure, keyText, assets] of [
+    ['attention-is-all-you-need', 'Figure 1', 'Figure 1 is particularly useful here', ['attention-figure1.png', 'attention-atlas.svg']],
+    ['deepseek-v4.1-flash', 'Figure 3', 'first follow text or image embeddings', ['deepseek-figure3.png', 'deepseek-figure4.png', 'ds41-fig1-agentic-kv-per-token.png', 'ds41-fig5-hierarchical-sparse-indexer.png', 'ds41-table3-main-results-comparison.png', 'ds41-fig9-effort-vs-performance.png']],
   ]) {
     const html = fs.readFileSync(path.resolve(__dirname, `../docs/${file}-deep-read.html`), 'utf8');
     assert.match(html, /<html lang="en">/);
     assert.match(html, /DEEP READING ATLAS · ENGLISH/);
-    assert.match(html, /data:image\/svg\+xml;base64,/);
-    assert.match(html, /data:image\/png;base64,/);
+    for (const asset of assets) {
+      const bytes = fs.readFileSync(path.resolve(__dirname, '../examples/assets', asset));
+      assert.ok(html.includes(bytes.toString('base64')), `${file} embeds the actual ${asset} bytes`);
+    }
     assert.ok(html.includes(keyText), `${file} introduces its original figure in prose`);
     assert.ok(html.includes(figure), `${file} labels the original figure`);
     assert.match(html, /class="experiment-atlas"/);
+    assert.match(html, /class="reading-path"/);
+    assert.match(html, /class="hero-reader"/);
+    assert.match(html, /class="hero-goals"/);
+    assert.equal((html.match(/<summary>Reveal a grounded answer<\/summary>/g) || []).length, 4);
     assert.match(html, /class="display-math"/);
     assert.doesNotMatch(html, /class="katex-error"/);
   }
@@ -230,7 +236,7 @@ test('the two English examples embed their diagrams, original figures, and readi
 test('the RAFT example keeps its method, equations, evidence, and figures in one Chinese page', () => {
   const html = fs.readFileSync(path.resolve(__dirname, '../docs/raft-deep-read.html'), 'utf8');
   assert.match(html, /<html lang="zh-CN">/);
-  assert.match(html, /id="section-5">05 \/ 综合/);
+  assert.match(html, /id="section-6">06 \/ 综合/);
   assert.match(html, /class="reading-path"/);
   assert.match(html, /class="experiment-atlas"/);
   assert.match(html, /class="display-math"/);
@@ -246,8 +252,8 @@ test('the new readings keep their language, theme, source images, and experiment
   for (const [name, lang, theme, images] of [
     ['mechvqa', 'en', 'cobalt', 6],
     ['iar', 'zh-CN', 'plum', 4],
-    ['vista', 'zh-CN', 'cobalt', 6],
-    ['deepseek-v4.1-flash-zh', 'zh-CN', 'saffron', 5],
+    ['vista', 'zh-CN', 'cobalt', 12],
+    ['deepseek-v4.1-flash-zh', 'zh-CN', 'saffron', 6],
   ]) {
     const html = fs.readFileSync(path.resolve(__dirname, `../docs/${name}-deep-read.html`), 'utf8');
     assert.match(html, new RegExp(`<html lang="${lang}">`));

@@ -62,6 +62,16 @@ test('the published reader audit links its quality resources to GitHub', () => {
   for (const resource of ['reading-quality.md', 'reader-tasks.md']) {
     assert.ok(html.includes(`href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/${resource}"`));
   }
+  for (const file of ['teaching-update-20261027.html', 'examples-rebuild-20261027.html']) {
+    const report = fs.readFileSync(path.join(docs, file), 'utf8');
+    assert.doesNotMatch(report, /href="\.\.\/docs\//, `${file} must use its generated docs location`);
+    const readingLinks = [...report.matchAll(/href="(\.\/[^"/]+-deep-read\.html)"/g)];
+    assert.ok(readingLinks.length > 0, `${file} links to its readings`);
+    for (const [, target] of readingLinks) {
+      assert.ok(fs.existsSync(path.join(docs, target)), `${file} points to missing ${target}`);
+      assert.ok(new URL(target, `https://example.test/paper-reading-skill/${file}`).pathname.startsWith('/paper-reading-skill/'));
+    }
+  }
 });
 
 test('editorial maps explain paper relationships without depicting dead chapter controls', () => {

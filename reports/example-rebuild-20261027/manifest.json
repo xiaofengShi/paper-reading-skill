@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-27",
+  "baselineCommit": "64d9e99259fd39e41d3418c319dcbc1018193310",
+  "scope": "11 readings, 10 distinct papers; content reconstruction using the updated skill, not a controlled model benchmark",
+  "contractSha256": {
+    "SKILL.md": "9c734edde18b834795591d0095b98ed234fe41ddfbdc7e8df5a0b0646be8f2bd",
+    "references/visual-reading.md": "da7cc28156387b583581c0bb8827a16f336303ae21de59cd9d8e99009a2dd433",
+    "references/renderer-format.md": "18764fe926722d6473c9306eebfd077f29506a0864063e64e4ba37f5a188e707",
+    "references/learning-checks.md": "8dd8a124a27abe9566fcdc4407326feb4e69c2215cb244c67934ee600699a854",
+    "evals/reading-quality.md": "55cfd1916d33a5e7af6d255e5d82957533f972e7b8632c55f75464d1f6520771"
+  },
+  "readings": [
+    {
+      "source": "examples/attention-is-all-you-need-deep-read.md",
+      "language": "en",
+      "sections": 8,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "a0d392760d95b43aecf5f52e29e79a03d0e8ba9028d7d6025c1fb01566167603",
+      "sourceSha256": "8b62d9cbd87c343f27dd5f812fcdb5d4fa56b3911e2d04a05ad5f0d93ad58818",
+      "changed": true
+    },
+    {
+      "source": "examples/deepseek-v4.1-flash-deep-read.md",
+      "language": "en",
+      "sections": 8,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "5965b7af502c78b0594e05049065176a6d3fec78b193dff294db23751660da13",
+      "sourceSha256": "b6e85953369889feae266af97750c98b5a27790adedbc469bc66342328956757",
+      "changed": true
+    },
+    {
+      "source": "examples/deepseek-v4.1-flash-zh-deep-read.md",
+      "language": "zh-CN",
+      "sections": 8,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "6e65d45f4f9145936520b036f28dc9da31640bb27da5389815359382b2e2ea17",
+      "sourceSha256": "f58a1ee0880342c682473edde51e7eb44c2253ad0dddb63cc439c3ef69834c3f",
+      "changed": true
+    },
+    {
+      "source": "examples/iar-deep-read.md",
+      "language": "zh-CN",
+      "sections": 7,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "1f67e7187a0b0be1c07068794cc9bfd5e42f79fe458c0eaae29dd3ee54e2ad82",
+      "sourceSha256": "4bc467f7d109403e796b868c64afa5a4ca1ebb2267bbbdb0adc2d57e562a2137",
+      "changed": true
+    },
+    {
+      "source": "examples/lora-deep-read.md",
+      "language": "zh-CN",
+      "sections": 6,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "d083fdc1ba1057cbab8db2dd5e949e25131c49163f970486fb633b9fbb9fe35a",
+      "sourceSha256": "5a63efd81c6f55bd403afb2d4594b8464ca6d74af2694534c40ab94c4f746bef",
+      "changed": true
+    },
+    {
+      "source": "examples/mechvqa-deep-read.md",
+      "language": "en",
+      "sections": 7,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "f76993da878c8af492847500b98c3fe0974fa2b1f2c6ad83f6391306d2a88ba3",
+      "sourceSha256": "7767331ec9f68aa02fa24f792b7afbdf5f55dec33e3565a046d523244ffbb495",
+      "changed": true
+    },
+    {
+      "source": "examples/mimo-v2.6-deep-read.md",
+      "language": "zh-CN",
+      "sections": 7,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "94f37b8b3e005ee21d63e29dbbb8396b011ab0f079e8353880b7124fa3ae57db",
+      "sourceSha256": "abf2bf1fc2a9940276c726e8193314336be70ff44bbfc93a409747ae4ecd2690",
+      "changed": true
+    },
+    {
+      "source": "examples/opensds-world-deep-read.md",
+      "language": "zh-CN",
+      "sections": 6,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "d8c76787324db87b5a619bdc5af760f7d1971e92edf59c3a52f98205d7bb282a",
+      "sourceSha256": "de8773cb30ff3b00defe3272a3fb18e2139945c364abfe12c55d7af01c5e6f90",
+      "changed": true
+    },
+    {
+      "source": "examples/raft-deep-read.md",
+      "language": "zh-CN",
+      "sections": 6,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "c8c8ca0db3c6dde615b7bb657bf3c0ba0c1096bb83c763aba5fcd7319fb1b0fa",
+      "sourceSha256": "488c6273ae72053b5459035fe390d7d3443bad0475ae7c0f1a8e45eba231f202",
+      "changed": true
+    },
+    {
+      "source": "examples/resnet-deep-read.md",
+      "language": "en",
+      "sections": 9,
+      "checks": 5,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "881e6ad9089aa9d1aebb3ed08ca3615069d6ede12750315a94aaa9af75cb09b0",
+      "sourceSha256": "6d6a22059cd1836ca070f2100eced9e22e5b7443ca541f412a45db4abc475168",
+      "changed": true
+    },
+    {
+      "source": "examples/vista-deep-read.md",
+      "language": "zh-CN",
+      "sections": 7,
+      "checks": 4,
+      "goals": 3,
+      "readerDeclared": true,
+      "baselineSha256": "1952b863a38ce74ebf669e9a07e12a62a71892f49ab9c22d2478edf7a53f5dd6",
+      "sourceSha256": "e9dcf171e4bd76553fadfc1bc596fdb7290fb69af2550e3c0c06f3586230fb25",
+      "changed": true
+    }
+  ]
+}
