@@ -142,6 +142,17 @@
       "pinned": false,
       "summaryEn": "Read the 0%-success coupled pilot, then follow the two controlled tracks: fixed environment responses for Agents (10 configurations, 1,088 items) and fixed action interventions for World Models (400 cases), with explicit aggregation rules and a candid limitations section.",
       "summaryZh": "从 150 例耦合试点 0% 成功率出发，读懂双轨受控评测：固定环境响应考 Agent（10 配置 1088 题）、固定动作干预考世界模型（400 例），以及论文对自身评测局限的罕见坦白。"
+    },
+    {
+      "slug": "trustworthy-rsi-survey",
+      "title": "Trustworthy RSI Survey",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.35193v1",
+      "date": "2026-10-28",
+      "pinned": false,
+      "summaryEn": "A survey reading of trustworthy recursive self-improvement: the h/B/U definition, the S1–S4/RI stage lens, four trustworthiness themes under three analytical roles, and the evidence funnel from 26 RSI-labeled claims to 4 matched-budget comparisons.",
+      "summaryZh": "可信递归自我改进综述深读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。"
     }
   ]
 }
