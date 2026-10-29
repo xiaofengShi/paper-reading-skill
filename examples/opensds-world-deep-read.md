@@ -1,9 +1,10 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: cobalt -->
+<!-- paper-reading-mode: brief -->
 
-# OpenDS-World 深读：把深度搜索 Agent 放回真实开放网页
+# OpenDS-World 导读：把深度搜索 Agent 放回真实开放网页
 
-深读对象：*Deep Search in Real-World Web Environments*，即 [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1)（HKUST(GZ) 牵头，14 家机构、25 位作者）。论文首先构建 200 道题和 787 个标注证据条目的任务集合，再用统一环境评测 12 个模型。它要测的是“能否自己找到、取得并连接证据”，而不是只在已给定文本里找答案。<span class="source-ref">arXiv v1 记录日期 2026-10-19，PDF 首页标 2026-10-20；本文固定到同一份 30 页 PDF，SHA-256：55e1f307c37dd53b0cc5ad6deef7bf3caadc4cc3d3c8f868132fe477811d8204。已核对摘要、正文 §§1–5、Figs. 1–16 的相关文字/图注、Tables 1–8 及附录 A–E；既有 Fig. 1/2/3/5 原图另核对图中内容。原文核对日期：2026-10-27。</span>
+阅读对象：*Deep Search in Real-World Web Environments*，即 [arXiv:2610.30181v1](https://arxiv.org/abs/2610.30181v1)（HKUST(GZ) 牵头，14 家机构、25 位作者）。论文首先构建 200 道题和 787 个标注证据条目的任务集合，再用统一环境评测 12 个模型。它要测的是“能否自己找到、取得并连接证据”，而不是只在已给定文本里找答案。<span class="source-ref">arXiv v1 记录日期 2026-10-19，PDF 首页标 2026-10-20；本文固定到同一份 30 页 PDF，SHA-256：55e1f307c37dd53b0cc5ad6deef7bf3caadc4cc3d3c8f868132fe477811d8204。已核对摘要、正文 §§1–5、Figs. 1–16 的相关文字/图注、Tables 1–8 及附录 A–E；既有 Fig. 1/2/3/5 原图另核对图中内容。原文核对日期：2026-10-27。</span>
 
 <!-- 视觉决策：本文为基准论文，核心关系（构建流水线、三类工具、难度分组）用静态卡片图与重绘条形图已能完整表达，未嵌入交互视图。 -->
 

@@ -1,6 +1,7 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: cobalt -->
-# LoRA 深读：少量参数怎样改变大模型
+<!-- paper-reading-mode: brief -->
+# LoRA 导读：少量参数怎样改变大模型
 
 <span class="source-ref">原文：Hu 等，LoRA: Low-Rank Adaptation of Large Language Models，arXiv:2106.09685v2，2021-10-16，26 页。只使用该版本，不把后续 LoRA 实现或论文结果混入本页。原始 PDF SHA-256：e9a0d3128767db616085dc0f4e6e455e672e89af823e8ed1282793682787395a。</span>
 

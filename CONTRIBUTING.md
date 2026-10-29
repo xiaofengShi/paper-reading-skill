@@ -4,7 +4,8 @@ Use this checklist to add a reading to the gallery. [SKILL.md](SKILL.md) defines
 
 ## 1. Read and author the source
 
-- Audit source: `examples/<slug>-deep-read.md`, beginning with `<!-- paper-reading-lang: … -->` (and an optional theme line).
+- Audit source: `examples/<slug>-deep-read.md`, beginning with `<!-- paper-reading-lang: … -->`, an optional theme line, and an explicit `<!-- paper-reading-mode: brief -->` or `<!-- paper-reading-mode: deep -->`. The legacy filename convention remains the same for both modes so published links stay stable.
+- Existing gallery entries are Brief Reading. New Deep entries must complete [references/deep-reading.md](references/deep-reading.md), keep a source-to-explanation coverage record in the audit source, and reach 3 in every applicable quality dimension. A mode marker alone does not establish depth.
 - Record the exact paper title, version or date, source URL, and any missing coverage. Do not mix results from different versions without identifying them.
 - Original figures and redraws: keep inputs in `examples/assets/`, identify their source locations, and distinguish original excerpts from author-created teaching examples. See [references/figure-extraction.md](references/figure-extraction.md).
 - Record the interaction decision (why an interactive view helps, or why a static view suffices) in a Markdown comment in the audit source.
@@ -25,7 +26,7 @@ npm run check:examples
 
 ## 3. Register the reading
 
-- [readings.json](readings.json): append one entry (`slug`, `title`, `lang`, `tool`, `arxiv`, `date`, `pinned`, `summaryEn`, `summaryZh`) at the end of the chronological array. It is the single source of truth for the published readings.
+- [readings.json](readings.json): append one entry (`slug`, `title`, `lang`, `mode`, `tool`, `arxiv`, `date`, `pinned`, `summaryEn`, `summaryZh`) at the end of the chronological array. It is the single source of truth for the published readings. `mode` is `brief` or `deep` and must agree with the audit source's header; `build:readings` checks this.
 - [evals/reader-tasks.md](evals/reader-tasks.md): add paper-specific reader questions and an answer key following the existing entries. These evaluation tasks are separate from the optional checks embedded in the reading.
 - Do not hand-edit the reading lists in the READMEs. `npm run build:readings` regenerates the capped index (pinned entries plus the most recent, six bullets total) between the `readings-index` markers in both READMEs; the homepage gallery renders every entry from the same JSON.
 

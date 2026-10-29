@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: en -->
 <!-- paper-reading-theme: cobalt -->
+<!-- paper-reading-mode: brief -->
 # Attention Is All You Need: reading the Transformer from path to evidence
 
 > **Reading orientation.** The 2017 paper asks whether an encoder–decoder model can perform sequence transduction without recurrence or convolution. Its answer is a stack of attention and position-wise feed-forward layers, tested mainly on machine translation. This reading uses [arXiv version 7](https://arxiv.org/abs/1706.03762v7); the author's original figure is attributed below. <span class="source-ref">Version revised 2 August 2023. Local PDF SHA-256: bdfaa68d8984f0dc02beaca527b76f207d99b666d31d1da728ee0728182df697. Full 15-page PDF checked: abstract, §§1–7, Tables 1–4, and attention-visualization appendix Figs. 3–5. Source-check date: 27 October 2026.</span>

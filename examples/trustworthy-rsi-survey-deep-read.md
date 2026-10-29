@@ -1,9 +1,10 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: forest -->
+<!-- paper-reading-mode: brief -->
 
-# Trustworthy RSI 综述深读：当模型开始修改"如何改进自己"
+# Trustworthy RSI 综述导读：当模型开始修改"如何改进自己"
 
-深读对象：Trustworthy Recursive Self-Improvement in the Era of Large Models: Foundation, Risks, Evaluation and Open Challenges（arXiv 2610.35193v1，牛津/Google/Stanford/Meta 等多机构团队，引用 301 篇文献、跨度 1973–2026）。这是一篇**综述**，不是基准或方法——前三篇深读（OpenDS-World、OmniDR-Bench、Dual Exam）量的是 Agent 的能力边界，这篇回答的是一个更上游的问题：当大模型系统开始用经验和反馈**持久地修改自己**——不仅改模型、提示、记忆、工具、工作流，还改"归纳偏置"和"未来更新的机制本身"——凭什么相信它真的变好了、没变坏、还管得住？今天这期 HF 刊恰好是 RSI 主题井喷（Skill^∞、ParetoRSI-Gym、Continual Learning Exam、ReGE、Build-Don't-Play 至少五篇），这篇综述是理解全刊的地图。
+阅读对象：Trustworthy Recursive Self-Improvement in the Era of Large Models: Foundation, Risks, Evaluation and Open Challenges（arXiv 2610.35193v1，牛津/Google/Stanford/Meta 等多机构团队，引用 301 篇文献、跨度 1973–2026）。这是一篇**综述**，不是基准或方法——前三篇阅读（OpenDS-World、OmniDR-Bench、Dual Exam）量的是 Agent 的能力边界，这篇回答的是一个更上游的问题：当大模型系统开始用经验和反馈**持久地修改自己**——不仅改模型、提示、记忆、工具、工作流，还改"归纳偏置"和"未来更新的机制本身"——凭什么相信它真的变好了、没变坏、还管得住？今天这期 HF 刊恰好是 RSI 主题井喷（Skill^∞、ParetoRSI-Gym、Continual Learning Exam、ReGE、Build-Don't-Play 至少五篇），这篇综述是理解全刊的地图。
 
 <!-- 视觉决策：综述型论文，核心是定义体系（h/B/U 三层）与分类框架（四主题×三角色×五阶段），静态卡片图与一张漏斗图足以承载；不嵌入交互视图。 -->
 

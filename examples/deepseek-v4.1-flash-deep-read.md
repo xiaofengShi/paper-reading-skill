@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: en -->
 <!-- paper-reading-theme: plum -->
+<!-- paper-reading-mode: brief -->
 # DeepSeek-V4.1-Flash: follow a prompt through three memory costs
 
 > **Reading contract.** This is an understanding-first reading of DeepSeek-AI's *DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression*. It follows one agent turn from a long prefix to a short continuation, then asks which measurements support the design. The report's benchmark results are author-reported, without an experimental rerun here. <span class="source-ref">Primary source: [official 51-page PDF, pinned upload 53e70b17d9acb8e0c423f0e4fe5702f25562b63d](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/resolve/53e70b17d9acb8e0c423f0e4fe5702f25562b63d/DeepSeek_V41_Tech_Report.pdf), accessed 2026-10-27; PDF creation 2026-09-10; SHA-256 ba68e2e40408125ae6d2f63a9a241b61c73910691c74ec1a2a7023c851eac08d. This English reading and its Chinese counterpart use this same file. Coverage: §§1–6, figure/table captions, evaluation Appendix B and mathematical Appendix C; Appendix A is the author list. The [arXiv record](https://arxiv.org/abs/2609.19969) identifies the report, but its PDF is not substituted for this pinned source.</span>

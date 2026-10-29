@@ -1,5 +1,24 @@
 // Marked 17 passes token objects to renderers. Keeping extensions at the token
 // boundary leaves fenced/indented code and code spans to Markdown's own lexer.
+function parseReadingHeader(source) {
+  const language = source.match(/^<!-- paper-reading-lang: (en|zh-CN) -->\r?\n/);
+  if (!language) throw new Error('Declare the reading language on the first line: <!-- paper-reading-lang: en --> or <!-- paper-reading-lang: zh-CN -->');
+  const header = { lang: language[1], theme: 'forest', mode: 'brief' };
+  const choices = { theme: ['forest', 'cobalt', 'plum', 'saffron'], mode: ['brief', 'deep'] };
+  const seen = new Set();
+  let body = source.slice(language[0].length);
+  let marker;
+  while ((marker = body.match(/^<!-- paper-reading-(theme|mode): ([^\r\n]*?) -->\r?\n/))) {
+    const [, key, value] = marker;
+    if (seen.has(key)) throw new Error(`Repeated paper-reading ${key} marker`);
+    if (!choices[key].includes(value)) throw new Error(`Unknown paper-reading ${key}: ${value}`);
+    seen.add(key);
+    header[key] = value;
+    body = body.slice(marker[0].length);
+  }
+  return { ...header, body };
+}
+
 // TextRenderer retains Markdown's HTML entities. Escape markup once while
 // preserving those references, so both `A & B` and `A &amp; B` display correctly.
 function escapeMarkdownText(text, esc) {
@@ -119,4 +138,4 @@ function renderReadingMarkdown(Marked, source, { esc, imageData, katex, labels, 
   return { body, heroMap, title, sections, visualCount };
 }
 
-module.exports = { renderReadingMarkdown, escapeMarkdownText };
+module.exports = { parseReadingHeader, renderReadingMarkdown, escapeMarkdownText };

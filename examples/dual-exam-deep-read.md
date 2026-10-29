@@ -1,9 +1,10 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: saffron -->
+<!-- paper-reading-mode: brief -->
 
-# Dual Exam 深读：把多模态 Agent 与世界模型拆开各考各的
+# Dual Exam 导读：把多模态 Agent 与世界模型拆开各考各的
 
-深读对象：Dual Exam: Controlled Evaluation of Multimodal Agents and World Models（arXiv 2610.31066v1，HKUST 与 NUS 牵头、27 家机构 77 位作者）。前两篇深读的 OpenDS-World 量了"真实网页里找答案"（最强 39%），OmniDR-Bench 量了"以视频为锚做研究报告"（最强 63.3%）；这篇问的是更底层的一对组件：**多模态 Agent（MA）与世界模型（WM）互相成就的叙事里，每个组件单拎出来到底几分**。它的出发点是一个惨淡的试点：让 GPT-5.6 Sol 与 Seedance 2.5 耦合跑 150 个任务，任务成功率为 **0.0%**——耦合结局只能告诉你"系统失败了"，说不出是 Agent 的决策错、世界模型的响应错、还是交互环出了问题。Dual Exam 的答案是把两条轨道拆开：**固定环境响应机制考 Agent，固定动作干预考世界模型**。最强 Agent（GPT 6 Astra）指数 31.3，最强世界模型（GPT-Image-2）总分 21.7——两个轨道分数不可互比，但都远未及格。论文对自身评测局限的坦白（§4.3）本身值得一读：这是一篇把"我们知道我们没测什么"写满一节的基准论文。
+阅读对象：Dual Exam: Controlled Evaluation of Multimodal Agents and World Models（arXiv 2610.31066v1，HKUST 与 NUS 牵头、27 家机构 77 位作者）。前两篇阅读的 OpenDS-World 量了"真实网页里找答案"（最强 39%），OmniDR-Bench 量了"以视频为锚做研究报告"（最强 63.3%）；这篇问的是更底层的一对组件：**多模态 Agent（MA）与世界模型（WM）互相成就的叙事里，每个组件单拎出来到底几分**。它的出发点是一个惨淡的试点：让 GPT-5.6 Sol 与 Seedance 2.5 耦合跑 150 个任务，任务成功率为 **0.0%**——耦合结局只能告诉你"系统失败了"，说不出是 Agent 的决策错、世界模型的响应错、还是交互环出了问题。Dual Exam 的答案是把两条轨道拆开：**固定环境响应机制考 Agent，固定动作干预考世界模型**。最强 Agent（GPT 6 Astra）指数 31.3，最强世界模型（GPT-Image-2）总分 21.7——两个轨道分数不可互比，但都远未及格。论文对自身评测局限的坦白（§4.3）本身值得一读：这是一篇把"我们知道我们没测什么"写满一节的基准论文。
 
 <!-- 视觉决策：本文核心是对称的双轨设计与两条聚合规则，静态卡片图与重绘条形图可完整表达；试点 0% 成功率与双轨公式的对照用 contrast 呈现，不需要交互视图。 -->
 

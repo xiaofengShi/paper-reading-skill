@@ -10,8 +10,8 @@ const repo = 'https://github.com/xiaofengShi/paper-reading-skill';
 const sourceBase = `${repo}/blob/main/`;
 const readings = JSON.parse(fs.readFileSync(path.join(root, 'readings.json'), 'utf8')).readings;
 const pages = [
-  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR DEEP PAPER READING', example: 'Open a complete reading →', install: 'Try it with your paper ↓', footer: 'Read deeply. Keep the evidence close.' },
-  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向深度论文阅读的 AGENT SKILL', example: '打开一份完整深读 →', install: '用你自己的论文试试 ↓', footer: '读懂全文，证据就在身边。' },
+  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR BRIEF & DEEP PAPER READING', example: 'Open a reading example →', install: 'Try it with your paper ↓', footer: 'Read deeply. Keep the evidence close.' },
+  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向论文导读与深读的 AGENT SKILL', example: '打开一份阅读样例 →', install: '用你自己的论文试试 ↓', footer: '读懂全文，证据就在身边。' },
 ];
 
 const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -61,8 +61,10 @@ function readingsGallery(page) {
     const tool = r.tool ? ` · ${esc(r.tool)}` : '';
     const arxiv = r.arxiv ? ` <a href="https://arxiv.org/abs/${esc(r.arxiv)}">arXiv:${esc(r.arxiv)}</a>.` : '';
     const summary = page.lang === 'en' ? r.summaryEn : r.summaryZh;
-    const open = page.lang === 'en' ? 'Open the complete reading →' : '打开完整深读 →';
-    return `<li data-reading-lang="${r.lang}"><strong>${esc(r.title)}</strong> · ${langLabel}${tool} — ${esc(summary)}${arxiv} <a href="${esc(r.slug)}-deep-read.html">${open}</a></li>`;
+    const open = page.lang === 'en' ? 'Open the reading →' : '打开阅读文档 →';
+    if (!['brief', 'deep'].includes(r.mode)) throw new Error(`${r.slug}: mode must be brief or deep`);
+    const modeLabel = r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading';
+    return `<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}"><strong>${esc(r.title)}</strong> · ${langLabel} · ${modeLabel}${tool} — ${esc(summary)}${arxiv} <a href="${esc(r.slug)}-deep-read.html">${open}</a></li>`;
   });
   return `<ul>\n${items.join('\n')}\n</ul>`;
 }
@@ -104,7 +106,7 @@ for (const page of pages) {
     let body = copyBlocks(rewriteLinks(marked.parser(tokens)), page);
     if (id === 'readings') {
       body = `${body}\n${readingsGallery(page)}`;
-      const labels = page.lang === 'en' ? ['Reading language', 'All', 'English', '中文'] : ['深读文档语言', '全部', 'English', '中文'];
+      const labels = page.lang === 'en' ? ['Reading language', 'All', 'English', '中文'] : ['阅读文档语言', '全部', 'English', '中文'];
       const filter = `<fieldset class="gallery-filter" hidden><legend>${labels[0]}</legend>${['all', 'en', 'zh-CN'].map((value, index) => `<button type="button" data-filter="${value}" aria-pressed="${index === 0}">${labels[index+1]}</button>`).join('')}<span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>`;
       body = body.replace('</h2>', `</h2>${filter}`);
     }
@@ -129,7 +131,7 @@ for (const page of pages) {
   <meta property="og:locale" content="${page.lang === 'en' ? 'en_US' : 'zh_CN'}">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">${JSON.stringify({"@context":"https://schema.org","@type":"SoftwareSourceCode",name:"Paper Reading Skill",codeRepository:repo,license:`${repo}/blob/main/LICENSE`,programmingLanguage:"JavaScript",description})}</script>
-  <title>Paper Reading Skill — ${page.lang === 'en' ? 'Visual deep reads for research papers' : '把论文读成可视化深读文档'}</title>
+  <title>Paper Reading Skill — ${page.lang === 'en' ? 'Brief &amp; Deep Reading for research papers' : '论文导读与深读'}</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <script src="site.js" defer></script>
@@ -143,7 +145,7 @@ for (const page of pages) {
   <main id="main">
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="${page.lang === 'en' ? 'resnet-deep-read.html' : 'lora-deep-read.html'}">${page.example}</a><a class="button secondary" href="#start">${page.install}</a></div><p class="works-with">Codex · Claude Code · Kimi Code <span> / MIT · ${page.lang === 'en' ? 'Open source' : '开源'}</span></p></div>
-      <figure class="hero-visual">${rewriteLinks(marked.parser([preview]))}<figcaption>${page.lang === 'en' ? 'Editorial preview of the MiMo-V2.6 reading (Chinese); English examples are below.' : 'MiMo-V2.6 中文深读文档的编辑式预览；下方还有英文样例。'}</figcaption></figure>
+      <figure class="hero-visual">${rewriteLinks(marked.parser([preview]))}<figcaption>${page.lang === 'en' ? 'Editorial preview of the MiMo-V2.6 reading (Chinese); English examples are below.' : 'MiMo-V2.6 中文导读文档的编辑式预览；下方还有英文样例。'}</figcaption></figure>
     </section>
     <div class="content-wrap">${content}</div>
   </main>

@@ -4,16 +4,18 @@ This is the complete input contract for [render-reading.cjs](../scripts/render-r
 
 ## File header
 
-The first lines are positional:
+The first line declares the language; optional theme and mode markers follow immediately, in either order:
 
 ```markdown
 <!-- paper-reading-lang: en -->
 <!-- paper-reading-theme: forest -->
+<!-- paper-reading-mode: brief -->
 ```
 
 - Line 1 is required and must be exactly `<!-- paper-reading-lang: en -->` or `<!-- paper-reading-lang: zh-CN -->`. It sets the HTML `lang`, interface labels, and chart wording.
-- Line 2 is optional and must immediately follow line 1. Allowed themes: `forest`, `cobalt`, `plum`, `saffron`. The default is `forest`.
-- No other header markers exist. The page title is the text of the first `# h1`; the hero subtitle is the `thesis` of the first `paper-map` (or a generic line if absent). Put exactly one `# h1` at the top of the body — it is lifted out of the article and used in `<title>` and the hero.
+- The theme marker is optional. Allowed themes: `forest`, `cobalt`, `plum`, `saffron`. The default is `forest`.
+- The mode marker selects `brief` (default) or `deep`. New reading sources must declare it explicitly; older unmarked sources render as Brief. Repeated theme/mode markers and unsupported values fail the build. The mode appears in the HTML title, hero, and `paper-reading-mode` metadata. This is a declaration, not an automated depth assessment; apply the selected mode's [quality gates](../evals/reading-quality.md).
+- The page title is the text of the first `# h1`; the hero subtitle is the `thesis` of the first `paper-map` (or a generic line if absent). Put exactly one `# h1` at the top of the body — it is lifted out of the article and used in `<title>` and the hero.
 
 ## Headings and navigation
 
@@ -175,6 +177,7 @@ Figure identifiers (`Fig. 5`, `Table 1`) must stay visible even when page number
 |---|---|
 | `Declare the reading language on the first line…` | missing/malformed lang marker |
 | `Unknown paper-reading theme: …` | theme outside the four allowed values |
+| `Unknown paper-reading mode: …` / `Repeated paper-reading … marker` | unsupported depth or repeated header metadata |
 | JSON `SyntaxError` | malformed block body |
 | `paper-map needs items` / `paper-path needs stages` / `paper-experiments needs rows` | empty required array |
 | `paper-contrast needs two branches` | branches ≠ 2 |

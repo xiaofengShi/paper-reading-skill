@@ -1,6 +1,6 @@
 # Optional Research Card
 
-A portable summary for a user who asks to compare, reproduce, cite, or build on a paper. It supplements the deep reading atlas; it is not the default or sole final artifact. Include only fields relevant to the request.
+A portable summary for a user who asks to compare, reproduce, cite, or build on a paper. It supplements the selected Brief or Deep reading atlas; it is not the default or sole final artifact. Include only fields relevant to the request.
 
 ```yaml
 paper: {title, authors, source, version}

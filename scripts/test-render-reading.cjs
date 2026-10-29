@@ -216,7 +216,7 @@ test('the two English examples embed their source figures, reading path, and lea
   ]) {
     const html = fs.readFileSync(path.resolve(__dirname, `../docs/${file}-deep-read.html`), 'utf8');
     assert.match(html, /<html lang="en">/);
-    assert.match(html, /DEEP READING ATLAS · ENGLISH/);
+    assert.match(html, /BRIEF READING ATLAS · ENGLISH/);
     for (const asset of assets) {
       const bytes = fs.readFileSync(path.resolve(__dirname, '../examples/assets', asset));
       assert.ok(html.includes(bytes.toString('base64')), `${file} embeds the actual ${asset} bytes`);

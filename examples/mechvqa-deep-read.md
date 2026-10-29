@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: en -->
 <!-- paper-reading-theme: cobalt -->
+<!-- paper-reading-mode: brief -->
 # MechVQA: a mechanical-drawing benchmark, and the 4B model that tops it
 
 > **Reading orientation.** General multimodal LLMs fail on mechanical engineering drawings in ways that go beyond recognition: dense annotations hide decisive cues, projection rules demand cross-view correspondence, and drafting standards require domain knowledge. This paper contributes both a yardstick and a climber: MechVQA, a 20,778-pair benchmark built under multi-stage quality gates, and MechVL, a 4B domain-specialized model whose SFT→DAPO training ladder reaches a Total score of 84.85, above every open- and closed-source baseline tested. Original paper: Qian Kou, Xiaofeng Shi (equal contribution, co-corresponding), Yulin Li, Xiaosong Qiu, Xinyang Wang, Hua Zhou, Cao Dongxing, *MechVQA: Benchmarking and Enhancing Multimodal LLMs on Comprehensive Mechanical Drawing Understanding* (ICML 2026). <span class="source-ref">This reading uses <a href="https://arxiv.org/abs/2605.30794v2">arXiv:2605.30794v2</a> (7 July 2026), <a href="https://arxiv.org/pdf/2605.30794v2">PDF</a> SHA-256 <code>07283abb933491a14f347321d7935188ceafd4b686ba9c088ad72d2cc5d4f129</code>, 28 pages: main text §§1–6 plus appendices A–C; Figs. 1–18; Tables 1–7.</span>

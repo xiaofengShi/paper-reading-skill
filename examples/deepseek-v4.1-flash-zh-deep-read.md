@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: saffron -->
+<!-- paper-reading-mode: brief -->
 # DeepSeek-V4.1-Flash：跟一段提示走过三类缓存成本
 
 > **阅读定位**：这份图谱阅读 DeepSeek-AI 的 *DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression*，沿着一次智能体回合，从长前缀走到短续写，再判断哪些测量支持这套设计。文中基准成绩均为作者报告，本次没有复现实验。<span class="source-ref">主源：[官方 51 页 PDF，固定上传提交 53e70b17d9acb8e0c423f0e4fe5702f25562b63d](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/resolve/53e70b17d9acb8e0c423f0e4fe5702f25562b63d/DeepSeek_V41_Tech_Report.pdf)，访问日期 2026-10-27；PDF 创建日期 2026-09-10；SHA-256 ba68e2e40408125ae6d2f63a9a241b61c73910691c74ec1a2a7023c851eac08d。本篇与英文样例使用完全相同的文件。覆盖 §§1–6、图表图注、评测附录 B 与数学附录 C；附录 A 是作者名单。[arXiv 条目](https://arxiv.org/abs/2609.19969)用于识别论文，本篇不以其 PDF 替换上述固定主源。</span>

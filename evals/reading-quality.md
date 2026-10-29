@@ -1,10 +1,10 @@
-# Deep-read quality checks
+# Brief and Deep Reading quality checks
 
-This is the release check for a **single-paper DEEP READ**. It applies to the source paper, Markdown audit copy, and final HTML. SCAN is a different deliverable. The check is about a reader understanding the paper, not about how polished the page looks. Record `pass`, `fail`, or `unknown` for each gate with a concrete paper or output location. `Unknown` means the evidence needed to judge is unavailable; it is not a softer pass.
+This is the release check for a single-paper **Brief Reading or Deep Reading**. It applies to the source paper, Markdown audit copy, and final HTML. Both modes share the scientific-fidelity and delivery gates; their explanation depth differs. The check is about a reader understanding the paper, not about how polished the page looks. Record the selected mode, then `pass`, `fail`, or `unknown` for each gate with a concrete paper or output location. `Unknown` means the evidence needed to judge is unavailable; it is not a softer pass.
 
 ## Gates before delivery
 
-| Gate | Pass condition | Failure that blocks a complete deep read |
+| Gate | Pass condition | Failure that blocks the selected reading |
 |---|---|---|
 | Source identity and coverage | Title, version, and central sections are known; methods, decisive results or proofs, captions, and relevant appendices were accessible. | Wrong paper, mixed versions without explanation, or only an abstract/partial extraction while claiming a full read. |
 | Scientific fidelity | Central mechanisms, equations, figure identities, denominators, numbers, and conditions agree with the source. Worked examples and redraws are labeled. | An invented step, changed objective, wrong figure, unsupported number, or an unresolved source conflict presented as settled. |
@@ -12,12 +12,18 @@ This is the release check for a **single-paper DEEP READ**. It applies to the so
 | Reader completeness | The HTML itself explains the problem, design reason, main mechanism, important formula or proof, and decisive evidence at usable detail for its stated reader. New mathematical tools have a usable bridge; representative appendix extensions explain the operation. | Essential explanation is replaced by a page number, thumbnail, unexplained technical vocabulary, module list, or decorative diagram that sends the reader back to the PDF. |
 | Visual choice and interaction | The audit source records why an interactive workflow helps or why a static view suffices. If interaction is chosen, its controls reveal a paper-specific relationship, work offline with pointer and keyboard, and leave the central explanation readable without scripts. | A useful branch or state path was skipped only because Archify was unavailable; interaction adds no insight, fails offline or with keyboard, or hides essential facts behind a control. |
 | Delivery integrity | One offline HTML opens with working figures, math, real chapter links, correct language, and readable narrow-screen access; Markdown audit source retains provenance. | Broken image or math, false navigation, missing caption context, wrong output language, or content available only in a separate artifact. |
+| Mode honesty | The audit source and visible HTML mode agree with the requested depth. Gallery metadata agrees with the source. | A requested Deep silently becomes Brief, or existing Brief content is relabeled Deep without reconstruction. |
+| Deep coverage (Deep only) | The audit source maps all substantive main sections and relevant appendices, core mechanisms, central math/proofs, and major experiment families to concrete explanations; secondary omissions are justified. | Missing coverage record, unresolved core omission, or an important ablation, negative result, proof, or appendix contribution reduced to a name and source pointer. |
 
-If source coverage is insufficient, request the missing paper material or produce a clearly labeled SCAN only when that matches the user's request. A gate that fails in the generated document requires repair and another check. Do not replace source checking with a confident-sounding summary.
+If source coverage is insufficient, obtain the missing paper material or report the precise gap. A limited overview may be delivered as Brief only when it matches the user's request; retain the incomplete status of a requested Deep. A gate that fails in the generated document requires repair and another check. Do not replace source checking with a confident-sounding summary.
 
 ## Depth ratings after the gates
 
 Rate each dimension `0` (absent), `1` (named), `2` (explained), or `3` (a reader can reconstruct and use it). Give the passage or figure that earned the rating. The ratings locate revisions; their sum is not a scientific validity score.
+
+- **Brief Reading:** every applicable dimension must reach at least **2** for the selected main argument. A list of modules or scores does not count as explanation.
+- **Deep Reading:** every applicable dimension must reach **3**, and Deep coverage must pass. For dimensions with multiple central components, check each component; one detailed example cannot compensate for unexplained core operations or experiment families. Scores of 0–2 require revision before delivery as a completed Deep.
+- Mark a dimension inapplicable only with a paper-specific reason. Adapt mechanism/proof and evidence to the paper type; do not omit a difficult dimension by calling it inapplicable. A renderer cannot assess these semantic thresholds.
 
 | Dimension | What earns a 3 |
 |---|---|

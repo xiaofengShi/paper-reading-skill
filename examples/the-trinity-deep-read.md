@@ -1,9 +1,10 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: cobalt -->
+<!-- paper-reading-mode: brief -->
 
-# The Trinity 深读：能力驱动的多模态 Agent 递归自我改进
+# The Trinity 导读：能力驱动的多模态 Agent 递归自我改进
 
-深读对象：The Trinity: Capability-Driven Recursive Self-Improvement for Multimodal Agents（arXiv 2610.36077v1，The Trinity Research Team / NUS 系团队，冻结 Claude Opus 5 主干）。昨天的 Trustworthy RSI 综述把「改进机制本身被修订」的层级叫 U，并追问元改进层证据为何几乎空白；今天这篇正是这一层的正面实例：它把 RSI 的对象放在 **Agent Harness**（围绕冻结模型的六协议编排层）上，提出「任务驱动 → 能力驱动」的组织范式转变——不同模态、不同表面形态的任务可能共享同一底层能力需求（ARC-AGI-3 与 Micromouse 都吃「感知+状态跟踪」），按能力而非按任务组织进化，就能用更少的训练环境换来更强的迁移。框架用 Creator / Explorer / Evolver 三个角色耦合「世界生成」与「Harness 进化」，沿能力树做选择性继承，最终产物是一棵可被 Router 按任务能力画像检索的 Harness 树。头条数字：28 个训练基准均值 +34 分、18 个未见基准 +26 分，未见集超过 Codex（47.5）与 DeepSeek（46.2）参照。
+阅读对象：The Trinity: Capability-Driven Recursive Self-Improvement for Multimodal Agents（arXiv 2610.36077v1，The Trinity Research Team / NUS 系团队，冻结 Claude Opus 5 主干）。昨天的 Trustworthy RSI 综述把「改进机制本身被修订」的层级叫 U，并追问元改进层证据为何几乎空白；今天这篇正是这一层的正面实例：它把 RSI 的对象放在 **Agent Harness**（围绕冻结模型的六协议编排层）上，提出「任务驱动 → 能力驱动」的组织范式转变——不同模态、不同表面形态的任务可能共享同一底层能力需求（ARC-AGI-3 与 Micromouse 都吃「感知+状态跟踪」），按能力而非按任务组织进化，就能用更少的训练环境换来更强的迁移。框架用 Creator / Explorer / Evolver 三个角色耦合「世界生成」与「Harness 进化」，沿能力树做选择性继承，最终产物是一棵可被 Router 按任务能力画像检索的 Harness 树。头条数字：28 个训练基准均值 +34 分、18 个未见基准 +26 分，未见集超过 Codex（47.5）与 DeepSeek（46.2）参照。
 
 <!-- 视觉决策：本文是方法+系统论文，核心是三棵树的构建流水线与选择继承的合成算子，静态卡片图与两张重绘条形图可完整承载；不嵌入交互视图。 -->
 

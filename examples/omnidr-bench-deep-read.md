@@ -1,9 +1,10 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: plum -->
+<!-- paper-reading-mode: brief -->
 
-# OmniDR-Bench 深读：以视频为锚点的深度研究报告评测
+# OmniDR-Bench 导读：以视频为锚点的深度研究报告评测
 
-深读对象：Beyond Watching and Searching: Benchmarking Agents for Video-Centered Deep Research Reports（arXiv 2610.31158v1，北大 + 阿里 Qwen 团队）。昨天深读的 OpenDS-World 测的是"Agent 能否在真实网页里找到唯一事实答案"；今天这篇把终点从短答案推进到**完整研究报告**——给定一段源视频和用户请求，Agent 要识别值得研究的论断、检索外部多模态证据、写出带引用和视频时间链接的交互式 HTML 报告。这是一篇"任务 + 参考工作流 + 基准"三位一体的论文：它定义了 Video-Centered Deep Research 任务（§2），给出了七阶段技能化工作流（§2.2），用 Omni 原子评分树（Omni-ART）与审计式构建流程（ARC）建成 50 题、6414 条原子判据的 OmniDR-Bench（§3），再对 18 个 Agent 配置做系统评测（§4）。最强系统 63.3/100：呈现层接近满分区间，内容与引用不及一半——"会写报告，不会做研究"是全部系统的共同短板。
+阅读对象：Beyond Watching and Searching: Benchmarking Agents for Video-Centered Deep Research Reports（arXiv 2610.31158v1，北大 + 阿里 Qwen 团队）。昨天阅读的 OpenDS-World 测的是"Agent 能否在真实网页里找到唯一事实答案"；今天这篇把终点从短答案推进到**完整研究报告**——给定一段源视频和用户请求，Agent 要识别值得研究的论断、检索外部多模态证据、写出带引用和视频时间链接的交互式 HTML 报告。这是一篇"任务 + 参考工作流 + 基准"三位一体的论文：它定义了 Video-Centered Deep Research 任务（§2），给出了七阶段技能化工作流（§2.2），用 Omni 原子评分树（Omni-ART）与审计式构建流程（ARC）建成 50 题、6414 条原子判据的 OmniDR-Bench（§3），再对 18 个 Agent 配置做系统评测（§4）。最强系统 63.3/100：呈现层接近满分区间，内容与引用不及一半——"会写报告，不会做研究"是全部系统的共同短板。
 
 <!-- 视觉决策：本文核心是两条流水线（七阶段工作流、ARC 构建流）与评分公式，静态卡片图与重绘条形图足以完整表达；证据阶梯（L0-L3）用条形图比分层图更直白，不嵌入交互视图。 -->
 

@@ -118,7 +118,11 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
 .works-with span { color: #a8d9c7; }
 .start { background: #f1f7f3; padding: clamp(2rem, 4vw, 4rem); margin: 0 -1.25rem; }
 .start h2 { font-size: clamp(1.8rem, 3vw, 2.8rem); }
-.start > p { max-width: 78ch; }
+.start table { width: 100%; margin: 1rem 0; border-collapse: collapse; }
+.start th, .start td { padding: .8rem .65rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.start th { color: var(--teal); font-size: .88rem; }
+.start td:first-child { width: 26%; }
+.start td:nth-child(2) { width: 44%; }
 .copy-block { position: relative; min-width: 0; }
 .copy-block pre { padding-top: 3rem; }
 .copy-code { position: absolute; top: .6rem; right: .6rem; min-height: 30px; padding: .3rem .65rem; background: #eaf7ee; color: #102f35; border: 1px solid #b7d8cc; border-radius: 4px; font: inherit; font-size: .78rem; font-weight: 700; cursor: pointer; }

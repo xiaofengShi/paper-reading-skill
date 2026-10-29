@@ -17,7 +17,7 @@
   <meta property="og:locale" content="zh_CN">
   <meta name="twitter:card" content="summary_large_image">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"Paper Reading Skill","codeRepository":"https://github.com/xiaofengShi/paper-reading-skill","license":"https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE","programmingLanguage":"JavaScript","description":"读过，还能讲清楚。 把论文交给你的编程 Agent，获得一份离线 HTML：串起问题、机制、公式、原图与实验证据，需要时展开原文定位核查。"}</script>
-  <title>Paper Reading Skill — 把论文读成可视化深读文档</title>
+  <title>Paper Reading Skill — 论文导读与深读</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <script src="site.js" defer></script>
@@ -30,10 +30,10 @@
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy"><p class="eyebrow">面向深度论文阅读的 AGENT SKILL</p><h1 id="page-title">读过，还能讲清楚</h1><p>把论文交给你的编程 Agent，获得一份离线 HTML：串起问题、机制、公式、原图与实验证据，需要时展开原文定位核查。</p>
-<div class="hero-actions"><a class="button primary" href="lora-deep-read.html">打开一份完整深读 →</a><a class="button secondary" href="#start">用你自己的论文试试 ↓</a></div><p class="works-with">Codex · Claude Code · Kimi Code <span> / MIT · 开源</span></p></div>
+      <div class="hero-copy"><p class="eyebrow">面向论文导读与深读的 AGENT SKILL</p><h1 id="page-title">读过，还能讲清楚</h1><p>把论文交给你的编程 Agent，获得一份离线 HTML：串起问题、机制、公式、原图与实验证据，需要时展开原文定位核查。</p>
+<div class="hero-actions"><a class="button primary" href="lora-deep-read.html">打开一份阅读样例 →</a><a class="button secondary" href="#start">用你自己的论文试试 ↓</a></div><p class="works-with">Codex · Claude Code · Kimi Code <span> / MIT · 开源</span></p></div>
       <figure class="hero-visual"><p><img src="assets/atlas-preview.svg" alt="MiMo-V2.6 阅读图谱预览：把论文全局、RL 机制和实验证据连在一起。"></p>
-<figcaption>MiMo-V2.6 中文深读文档的编辑式预览；下方还有英文样例。</figcaption></figure>
+<figcaption>MiMo-V2.6 中文导读文档的编辑式预览；下方还有英文样例。</figcaption></figure>
     </section>
     <div class="content-wrap"><section class="content-section start" id="start">
 <h2>从一篇论文开始</h2>
@@ -42,35 +42,56 @@
 (cd .agents/skills/paper-reading &amp;&amp; npm ci &amp;&amp; npm run doctor)
 </code></pre><span class="copy-status" role="status"></span></div>
 <p>打开新的 Agent 会话，复制这段话：</p>
-<div class="copy-block"><button type="button" class="copy-code" hidden>复制</button><pre><code class="language-text">用 $paper-reading 帮我读懂 https://arxiv.org/abs/2106.09685v2，用中文。
+<div class="copy-block"><button type="button" class="copy-code" hidden>复制</button><pre><code class="language-text">用 $paper-reading 的 Brief Reading 模式帮我读懂 https://arxiv.org/abs/2106.09685v2，用中文。
 我了解基础神经网络，但没用过 LoRA。解释它为什么省可训练参数，
 做一个小算例，并分清论文实测结果与解读。先获取完整论文并核对版本，
 把离线 HTML 和 Markdown 保存到 paper-readings/lora/。
 </code></pre><span class="copy-status" role="status"></span></div>
 <p>Agent 完成阅读后，预期得到 <code>paper-readings/lora/reading.html</code> 及 Markdown 审计源。Agent 负责阅读和撰写解释，渲染器把 Markdown 生成 HTML。Skill 本身免费，不需要额外 API Key，使用你原有 Agent 的模型权限与计费。<a href="#get-started">其他 Agent、安装方式与故障排查</a>。</p>
+<h3>选择 Brief 或 Deep Reading</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>交付内容</th>
+<th>怎么提出请求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Brief Reading 导读</strong>（默认）</td>
+<td>保留现有详细程度：问题、主路径、关键机制与公式、决定性证据及限制</td>
+<td>“读这篇论文”或“用 Brief Reading”</td>
+</tr>
+<tr>
+<td><strong>Deep Reading 深读</strong></td>
+<td>完整技术重建：逐步讲解核心机制，展开关键推导与算例，逐组解读主实验和消融，覆盖重要附录</td>
+<td>“用 Deep Reading”或“深入阅读这篇论文”</td>
+</tr>
+</tbody></table>
+<p>两种模式都交付离线 HTML 和 Markdown 审计源，并在页面显示模式。Deep 的篇幅随论文复杂度增长，必须满足核心内容覆盖与可重建的解释要求；字数本身不能证明深度。详见<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/reading-modes.md">模式对照</a>与<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/deep-reading.md">Deep Reading 协议</a>。</p>
 
 </section>
 <section class="content-section readings" id="readings">
-<h2>阅读完整样例</h2><fieldset class="gallery-filter" hidden><legend>深读文档语言</legend><button type="button" data-filter="all" aria-pressed="true">全部</button><button type="button" data-filter="en" aria-pressed="false">English</button><button type="button" data-filter="zh-CN" aria-pressed="false">中文</button><span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>
-<p>每篇先说明适合谁读、读完能尝试什么，再沿全局图、机制算例或操作追踪、原论文图与实验证据读完整篇。最后用论文特定的理解题尝试计算、迁移与判断；完整协议按需展开，主线与关键限制保持可见。</p>
+<h2>阅读完整样例</h2><fieldset class="gallery-filter" hidden><legend>阅读文档语言</legend><button type="button" data-filter="all" aria-pressed="true">全部</button><button type="button" data-filter="en" aria-pressed="false">English</button><button type="button" data-filter="zh-CN" aria-pressed="false">中文</button><span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>
+<p>现有画廊统一归为 <strong>Brief Reading 导读</strong>，原有 <code>-deep-read</code> 链接保持不变，页面按新标准显示模式。每篇先说明适合谁读、读完能尝试什么，再沿全局图、机制算例或操作追踪、原论文图与实验证据读完整篇。最后用论文特定的理解题尝试计算、迁移与判断；完整协议按需展开，主线与关键限制保持可见。</p>
 <p>重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。<a href="examples-rebuild-20261027.html">重构与验证记录</a>列出来源版本、教学算例、修正的主张和验证边界。</p>
 
 <ul>
-<li data-reading-lang="zh-CN"><strong>The Trinity</strong> · 中文 · ZCode — 能力驱动的多模态 Agent RSI 方法深读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。 <a href="https://arxiv.org/abs/2610.36077v1">arXiv:2610.36077v1</a>. <a href="the-trinity-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>Trustworthy RSI Survey</strong> · 中文 · ZCode — 可信递归自我改进综述深读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。 <a href="https://arxiv.org/abs/2610.35193v1">arXiv:2610.35193v1</a>. <a href="trustworthy-rsi-survey-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>Dual Exam</strong> · 中文 · ZCode — 从 150 例耦合试点 0% 成功率出发，读懂双轨受控评测：固定环境响应考 Agent（10 配置 1088 题）、固定动作干预考世界模型（400 例），以及论文对自身评测局限的罕见坦白。 <a href="https://arxiv.org/abs/2610.31066v1">arXiv:2610.31066v1</a>. <a href="dual-exam-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="en"><strong>Deep Residual Learning / ResNet</strong> · English — 先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。 <a href="https://arxiv.org/abs/1512.03385v1">arXiv:1512.03385v1</a>. <a href="resnet-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>LoRA</strong> · 中文 — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。 <a href="https://arxiv.org/abs/2106.09685v2">arXiv:2106.09685v2</a>. <a href="lora-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>OmniDR-Bench</strong> · 中文 · ZCode — 沿&quot;视频为锚点的研究报告任务 + 七阶段工作流&quot;读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。 <a href="https://arxiv.org/abs/2610.31158v1">arXiv:2610.31158v1</a>. <a href="omnidr-bench-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>OpenDS-World</strong> · 中文 · ZCode — 沿&quot;视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定&quot;读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。 <a href="https://arxiv.org/abs/2610.30181v1">arXiv:2610.30181v1</a>. <a href="opensds-world-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>DeepSeek-V4.1-Flash 中文</strong> · 中文 · Kimi Code — KV 缓存压缩报告的中文深读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文深读同一份源 PDF。 <a href="deepseek-v4.1-flash-zh-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>VISTA</strong> · 中文 · Kimi Code — 沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。 <a href="https://arxiv.org/abs/2610.02200v1">arXiv:2610.02200v1</a>. <a href="vista-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>IAR</strong> · 中文 · Kimi Code — 沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。 <a href="https://arxiv.org/abs/2608.20281v1">arXiv:2608.20281v1</a>. <a href="iar-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="en"><strong>MechVQA</strong> · English · Kimi Code — 沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。 <a href="https://arxiv.org/abs/2605.30794v2">arXiv:2605.30794v2</a>. <a href="mechvqa-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>RAFT</strong> · 中文 · Kimi Code — 沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。 <a href="https://arxiv.org/abs/2606.00147v1">arXiv:2606.00147v1</a>. <a href="raft-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="zh-CN"><strong>MiMo-V2.6</strong> · 中文 — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。 <a href="mimo-v2.6-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="en"><strong>DeepSeek-V4.1-Flash</strong> · English — 分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。 <a href="deepseek-v4.1-flash-deep-read.html">打开完整深读 →</a></li>
-<li data-reading-lang="en"><strong>Attention Is All You Need</strong> · English — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 <a href="https://arxiv.org/abs/1706.03762">arXiv:1706.03762</a>. <a href="attention-is-all-you-need-deep-read.html">打开完整深读 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>The Trinity</strong> · 中文 · Brief Reading · ZCode — 能力驱动的多模态 Agent RSI 方法导读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。 <a href="https://arxiv.org/abs/2610.36077v1">arXiv:2610.36077v1</a>. <a href="the-trinity-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>Trustworthy RSI Survey</strong> · 中文 · Brief Reading · ZCode — 可信递归自我改进综述导读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。 <a href="https://arxiv.org/abs/2610.35193v1">arXiv:2610.35193v1</a>. <a href="trustworthy-rsi-survey-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>Dual Exam</strong> · 中文 · Brief Reading · ZCode — 从 150 例耦合试点 0% 成功率出发，读懂双轨受控评测：固定环境响应考 Agent（10 配置 1088 题）、固定动作干预考世界模型（400 例），以及论文对自身评测局限的罕见坦白。 <a href="https://arxiv.org/abs/2610.31066v1">arXiv:2610.31066v1</a>. <a href="dual-exam-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="en" data-reading-mode="brief"><strong>Deep Residual Learning / ResNet</strong> · English · Brief Reading — 先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。 <a href="https://arxiv.org/abs/1512.03385v1">arXiv:1512.03385v1</a>. <a href="resnet-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>LoRA</strong> · 中文 · Brief Reading — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。 <a href="https://arxiv.org/abs/2106.09685v2">arXiv:2106.09685v2</a>. <a href="lora-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>OmniDR-Bench</strong> · 中文 · Brief Reading · ZCode — 沿&quot;视频为锚点的研究报告任务 + 七阶段工作流&quot;读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。 <a href="https://arxiv.org/abs/2610.31158v1">arXiv:2610.31158v1</a>. <a href="omnidr-bench-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>OpenDS-World</strong> · 中文 · Brief Reading · ZCode — 沿&quot;视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定&quot;读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。 <a href="https://arxiv.org/abs/2610.30181v1">arXiv:2610.30181v1</a>. <a href="opensds-world-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>DeepSeek-V4.1-Flash 中文</strong> · 中文 · Brief Reading · Kimi Code — KV 缓存压缩报告的中文导读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文导读同一份源 PDF。 <a href="deepseek-v4.1-flash-zh-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>VISTA</strong> · 中文 · Brief Reading · Kimi Code — 沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。 <a href="https://arxiv.org/abs/2610.02200v1">arXiv:2610.02200v1</a>. <a href="vista-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>IAR</strong> · 中文 · Brief Reading · Kimi Code — 沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。 <a href="https://arxiv.org/abs/2608.20281v1">arXiv:2608.20281v1</a>. <a href="iar-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="en" data-reading-mode="brief"><strong>MechVQA</strong> · English · Brief Reading · Kimi Code — 沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。 <a href="https://arxiv.org/abs/2605.30794v2">arXiv:2605.30794v2</a>. <a href="mechvqa-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>RAFT</strong> · 中文 · Brief Reading · Kimi Code — 沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。 <a href="https://arxiv.org/abs/2606.00147v1">arXiv:2606.00147v1</a>. <a href="raft-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>MiMo-V2.6</strong> · 中文 · Brief Reading — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。 <a href="mimo-v2.6-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="en" data-reading-mode="brief"><strong>DeepSeek-V4.1-Flash</strong> · English · Brief Reading — 分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。 <a href="deepseek-v4.1-flash-deep-read.html">打开阅读文档 →</a></li>
+<li data-reading-lang="en" data-reading-mode="brief"><strong>Attention Is All You Need</strong> · English · Brief Reading — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 <a href="https://arxiv.org/abs/1706.03762">arXiv:1706.03762</a>. <a href="attention-is-all-you-need-deep-read.html">打开阅读文档 →</a></li>
 </ul>
 </section>
 <section class="content-section deliverables" id="deliverables">
@@ -90,12 +111,12 @@
 <h2>论文阅读方法</h2>
 <p>这套流程把已有的论文阅读和知识组织方法，与针对单篇论文的编辑设计结合起来。三个检查分别回答不同问题：</p>
 <ol>
-<li><strong>能否先重建论文，再向读者解释</strong> <a href="https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf">Keshav 的三遍阅读法</a>从全局认识，逐步走到内容理解和细节重建。本 skill 先画暂定全局图，再追踪方法与结果，最后推演决定性的公式、假设、证明或实验。普通深读请求会完成整条路径；只有用户要求快筛时才停在概览。</li>
+<li><strong>能否先重建论文，再向读者解释</strong> <a href="https://systems.cs.columbia.edu/ds2-class/papers/keshav-paper.pdf">Keshav 的三遍阅读法</a>从全局认识，逐步走到内容理解和细节重建。本 skill 先画暂定全局图，再追踪方法与结果，最后推演决定性的公式、假设、证明或实验。Brief 在核对原文后选择关键内容展开；Deep 对所有实质性部分及相关附录完成技术重建。</li>
 <li><strong>图里的关系是否有明确含义</strong> <a href="https://cmap.ihmc.us/docs/theory-of-concept-maps">Novak 与 Cañas 的概念图方法</a>从焦点问题出发，用带说明的连线和跨区关联组织概念。本项目的每张图都回答一个与论文有关的问题，例如“机制如何影响结果”；箭头须说明是数据流、过程顺序还是证据关系，正文解释这些连接。</li>
 <li><strong>解读能否回到论文核查</strong> <a href="https://aclanthology.org/2024.findings-emnlp.780/">SciDoc2Diagrammer-MAF</a>指出生成的科学图示可能遗漏信息或偏离原文。本项目据此要求核对关键图、公式、数字和箭头，并把每项实验的设置、对照、指标与结果放在一起。本项目并未实现该论文的图示生成算法。</li>
 </ol>
 <p>这三项原则形成五层解释顺序：全局图、主路径、机制、实验图谱和综合理解，并在有帮助时补充<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/learning-checks.md">理解自测</a>。衡量深读是否有用，要看读者能否说清核心机制、指出重要结论由哪些证据支撑，而不必为补全关键解释反复查 PDF。这是本项目的方法设计；现有样例尚未经独立读者研究验证。</p>
-<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reading-quality.md">公开的深读质量检查</a>将来源覆盖、科学事实、主张与证据的对应、独立可读性和离线交付变成交付门槛。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reader-tasks.md">各样例的读者题目与答案</a>可供未参与编写的人测试理解效果。渲染器测试通过或作者自查，都不等于完成了独立读者研究。</p>
+<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reading-quality.md">公开的阅读质量检查</a>为两种模式提供共同的来源、科学事实、证据与交付门槛。Brief 的各适用深度维度至少达到 2（解释清楚）；Deep 必须全部达到 3（能够重建和应用），并保留来源到解释的覆盖记录。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/evals/reader-tasks.md">各样例的读者题目与答案</a>可供未参与编写的人测试理解效果。渲染器测试通过或作者自查，都不等于完成了独立读者研究。</p>
 
 </section>
 <section class="content-section get-started" id="get-started">
@@ -134,17 +155,17 @@ git clone https://github.com/xiaofengShi/paper-reading-skill.git &quot;$paper_re
 (cd &quot;$paper_reading_dir&quot; &amp;&amp; npm ci &amp;&amp; npm run doctor)
 </code></pre><span class="copy-status" role="status"></span></div>
 <p><code>doctor</code> 在临时目录渲染一份明确标为合成材料的小样例，检查语种、导航、内嵌数学字体、SVG 和图表。它不下载或阅读论文，通过检查也不代表科学内容已经核实。</p>
-<p>打开新的 Agent 会话，附上 PDF 或可访问的论文链接，然后说：<strong>“用中文深入阅读这篇论文，给我一份可视化 HTML 文档，讲清主线、重要公式和实验。”</strong> 也可以指定其他语种。没有任何语种线索时使用英文；中文请求会生成中文输出。内置渲染器提供中英文导航。</p>
+<p>打开新的 Agent 会话，附上 PDF 或可访问的论文链接，然后说：<strong>“用中文 Brief Reading 模式读这篇论文。”</strong> 需要完整技术重建时说：<strong>“用中文 Deep Reading 模式深入阅读这篇论文，逐步讲解机制、关键推导、主要实验与消融，并覆盖重要附录。”</strong> 也可以指定其他语种。没有任何语种线索时使用英文；中文请求会生成中文输出。内置渲染器提供中英文导航。</p>
 <p>如果安装目录是 Git clone，先检查本地修改，再运行 <code>git -C &quot;$paper_reading_dir&quot; pull --ff-only</code>，随后在该目录重新运行 <code>npm ci</code> 和 <code>npm run doctor</code>。CLI 安装的副本和轻量包可能没有 Git 历史，替换前先保留本地修改。</p>
 <h3>创建阅读目录</h3>
 <p>可选的初始化命令只负责准备工作目录。按首屏步骤安装后，在项目目录运行：</p>
 <div class="copy-block"><button type="button" class="copy-code" hidden>复制</button><pre><code class="language-bash">node .agents/skills/paper-reading/scripts/init-reading.cjs \
   --out paper-readings/my-paper --title &quot;我的论文&quot; \
-  --paper &quot;https://arxiv.org/abs/2106.09685v2&quot; --lang zh-CN
+  --paper &quot;https://arxiv.org/abs/2106.09685v2&quot; --lang zh-CN --mode brief
 </code></pre><span class="copy-status" role="status"></span></div>
-<p>它创建 <code>reading.md</code>、<code>brief.md</code> 和 <code>assets/</code> 目录。Markdown 会明确标为<strong>未完成草稿</strong>；命令不获取论文、不代写深读，也不生成 HTML。Agent 需要完成草稿并核对来源后再渲染。已有目标目录会被拒绝，避免覆盖文件。英文草稿使用 <code>--lang en</code>；在安装目录运行 <code>npm run init:reading -- --help</code> 查看全部参数。</p>
+<p>它创建 <code>reading.md</code>、<code>brief.md</code> 和 <code>assets/</code> 目录。使用 <code>--mode deep</code> 准备深读任务；两种模式中的 <code>brief.md</code> 都是给 Agent 的任务说明。Markdown 会明确标为<strong>未完成草稿</strong>；命令不获取论文、不撰写解读，也不生成 HTML。Agent 需要完成草稿并核对来源后再渲染。已有目标目录会被拒绝，避免覆盖文件。英文草稿使用 <code>--lang en</code>；在安装目录运行 <code>npm run init:reading -- --help</code> 查看全部参数。</p>
 <h3>本地构建轻量包</h3>
-<p>如果不需要公开样例和网站，可从 <a href="https://github.com/xiaofengShi/paper-reading-skill/releases/tag/v0.2.0">v0.2.0 release</a> 下载 <code>paper-reading.tar.gz</code>，或在仓库 checkout 中构建运行包：</p>
+<p>需要当前两种模式的轻量包时，从仓库最新 checkout 构建。<a href="https://github.com/xiaofengShi/paper-reading-skill/releases/tag/v0.2.0">v0.2.0 release 归档</a>采用区分 Brief/Deep 之前的阅读规则。当前运行包的构建命令：</p>
 <div class="copy-block"><button type="button" class="copy-code" hidden>复制</button><pre><code class="language-bash">npm ci
 npm run pack:skill
 </code></pre><span class="copy-status" role="status"></span></div>
@@ -182,15 +203,15 @@ npm run pack:skill
 <td>补充全文，或将结果明确保留为未完成；摘要不能代替完整深读。</td>
 </tr>
 </tbody></table>
-<p>Agent 完成科学阅读与 Markdown 撰写，渲染器再把 Markdown 生成 HTML。需要快筛时要求概览，需要审稿或与自己的研究比较时再要求额外视角；普通读论文请求以理解为主。</p>
+<p>Agent 完成科学阅读与 Markdown 撰写，渲染器再把 Markdown 生成 HTML。普通读论文默认 Brief，明确要求深读时使用 Deep。快筛对应按请求缩短范围的 Brief；审稿和研究比较作为所选模式上的额外视角。</p>
 
 </section>
 <section class="content-section how-it-works" id="how-it-works">
 <h2>工作方式</h2>
-<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/SKILL.md">Skill 指令</a>引导 agent 依次建立全局认知、重建全文、编写解释并核对来源。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/paper-types.md">论文类型协议</a>为实证、系统、基准、数据集、理论和综述论文选择合适图形；<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/visual-reading.md">可视化阅读规则</a>要求图示与解释、证据对应。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/reading-modes.md">阅读模式</a>定义可选的快筛、审稿和研究视角。</p>
-<p>仓库附带的<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">渲染器</a>把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 <code>&lt;!-- paper-reading-lang: en --&gt;</code> 或 <code>&lt;!-- paper-reading-lang: zh-CN --&gt;</code>，导航和图表标签也据此选择语种。可在第二行选择四种内置视觉主题之一：<code>&lt;!-- paper-reading-theme: forest --&gt;</code>、<code>cobalt</code>、<code>plum</code>、<code>saffron</code>；省略时使用 <code>forest</code>。作者按论文内容选择主题，渲染器不猜测主题。</p>
+<p><a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/SKILL.md">Skill 指令</a>引导 agent 依次建立全局认知、重建全文、编写解释并核对来源。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/paper-types.md">论文类型协议</a>为实证、系统、基准、数据集、理论和综述论文选择合适图形；<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/visual-reading.md">可视化阅读规则</a>要求图示与解释、证据对应。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/reading-modes.md">阅读模式</a>定义 Brief 与 Deep；<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/deep-reading.md">Deep Reading 协议</a>进一步规定覆盖、技术重建、推导和逐组实验解读要求。审稿与研究比较是可选视角。</p>
+<p>仓库附带的<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/scripts/render-reading.cjs">渲染器</a>把 Markdown 审计源与本地图形生成单文件 HTML，内嵌图片、图示、KaTeX 数学排版和字体。每份源文档都必须在首行写明 <code>&lt;!-- paper-reading-lang: en --&gt;</code> 或 <code>&lt;!-- paper-reading-lang: zh-CN --&gt;</code>，导航和图表标签也据此选择语种。可在第二行选择四种内置视觉主题之一：<code>&lt;!-- paper-reading-theme: forest --&gt;</code>、<code>cobalt</code>、<code>plum</code>、<code>saffron</code>；省略时使用 <code>forest</code>。在同一文件头声明 <code>&lt;!-- paper-reading-mode: brief --&gt;</code> 或 <code>&lt;!-- paper-reading-mode: deep --&gt;</code>，HTML 标题和首屏会显示对应模式；旧源文档省略模式时按 Brief 渲染。作者按论文内容选择主题，渲染器不猜测主题。</p>
 <p>Skill 会逐篇判断探索分支、状态变化或反馈环是否能增加理解；若不能，使用静态图。交互图可用 Archify 或自包含的 HTML/SVG 制作，关键解释仍须在无脚本时可读。构建不依赖 Archify 或其他本地 skill。<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/renderer-format.md">渲染器输入格式</a>给出 Markdown 契约，<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/figure-extraction.md">从 PDF 抽取插图</a>说明原图处理方法，<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/learning-checks.md">理解自测</a>说明如何用原生答案展开区辅助理解。</p>
-<p>每篇已发布深读的 Markdown 审计源与图形输入都在 <code>examples/</code> 下，索引见 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/readings.json">readings.json</a>；它们是构建材料，不要求读者分别打开。</p>
+<p>每篇已发布阅读文档的 Markdown 审计源与图形输入都在 <code>examples/</code> 下，索引见 <a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/readings.json">readings.json</a>；它们是构建材料，不要求读者分别打开。</p>
 <p>本地重建所有已发布样例：</p>
 <div class="copy-block"><button type="button" class="copy-code" hidden>复制</button><pre><code class="language-bash">npm ci
 npm run doctor

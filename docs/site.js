@@ -34,7 +34,7 @@
         entry.hidden = button.dataset.filter !== 'all' && entry.dataset.readingLang !== button.dataset.filter;
       }
       const count = entries.filter(entry => !entry.hidden).length;
-      filter.querySelector('.gallery-status').textContent = english ? `${count} readings shown` : `显示 ${count} 份深读文档`;
+      filter.querySelector('.gallery-status').textContent = english ? `${count} readings shown` : `显示 ${count} 份阅读文档`;
     });
   }
 })();

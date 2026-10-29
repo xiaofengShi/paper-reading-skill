@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: forest -->
+<!-- paper-reading-mode: brief -->
 # RAFT：用融合答案连接数据精炼与轨迹保持
 
 > **阅读定位**：领域 SFT 提升领域能力的同时，往往损伤模型的通用能力。这篇论文从两条具体缺口解释损伤，提出两阶段框架 RAFT，并让同一份“融合答案”同时充当兼容的监督信号与教师的答案上下文，把数据端和训练端的补救扣在一起。原文为 Yuduo Li、Xiaofeng Shi（通讯）、Qian Kou、Longbin Yu、Hua Zhou 的 *RAFT: Data Refinement and Adaptive Distillation for Domain Fine-Tuning with Alleviated Forgetting*（BAAI × 北京交通大学）。<span class="source-ref">本图谱依据 <a href="https://arxiv.org/abs/2606.00147v1">arXiv:2606.00147v1</a>（2026-05-29）PDF，共 19 页。已核对正文 §§1–6、Figs. 1–8、Tables 1–4、附录 A–H（正文结论在 p. 9、局限在 p. 10，附录自 p. 12 起）。PDF SHA-256：152118d76720a8083be878871579c7141c862ee7a0833e8e7155f974f47aec6e。原文核对日期：2026-10-27。</span>

@@ -21,6 +21,8 @@ test('initializer help and invalid arguments do not create a reading', () => {
     for (const args of [
       [], ['--out', destination], ['--out', destination, '--title', 'Paper', '--lang', 'fr'],
       ['--out', destination, '--title', 'Paper', '--theme', 'neon'],
+      ['--out', destination, '--title', 'Paper', '--mode', 'scan'],
+      ['--out', destination, '--title', 'Paper', '--mode', 'deep', '--mode', 'brief'],
       ['--out', destination, '--title', 'Paper', '--unknown', 'x'],
       ['--out', destination, '--title', 'Paper', '--title', 'Second'],
       ['--out', destination, '--title', 'Paper\nAnother line'],
@@ -32,28 +34,35 @@ test('initializer help and invalid arguments do not create a reading', () => {
   } finally { fs.rmSync(temporary, { recursive: true, force: true }); }
 });
 
-test('English and Chinese starters render as explicit unfinished drafts without inventing paper evidence', () => {
+test('Brief and Deep starters in both languages preserve their mode through the task brief and HTML without inventing evidence', () => {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-reading-starters-'));
   try {
     for (const lang of ['en', 'zh-CN']) {
-      const destination = path.join(temporary, lang);
-      const result = run(init, ['--out', destination, '--title', 'A paper <script> & a claim', '--paper', 'https://arxiv.org/abs/1706.03762v7', '--lang', lang, '--theme', 'plum']);
-      assert.equal(result.status, 0, result.stderr);
-      const source = fs.readFileSync(path.join(destination, 'reading.md'), 'utf8');
-      const brief = fs.readFileSync(path.join(destination, 'brief.md'), 'utf8');
-      assert.ok(source.startsWith(`<!-- paper-reading-lang: ${lang} -->\n<!-- paper-reading-theme: plum -->`));
-      assert.match(source, /TODO/);
-      assert.doesNotMatch(source, /<script>/);
-      assert.doesNotMatch(source, /```paper-(?:chart|experiments)/);
-      assert.match(brief, /\$paper-reading/);
-      assert.ok(fs.statSync(path.join(destination, 'assets')).isDirectory());
-      const output = path.join(destination, 'reading.html');
-      const render = run(path.join(__dirname, 'render-reading.cjs'), [path.join(destination, 'reading.md'), output]);
-      assert.equal(render.status, 0, render.stderr);
-      const html = fs.readFileSync(output, 'utf8');
-      assert.ok(html.includes(`<html lang="${lang}">`));
-      assert.match(html, lang === 'en' ? /UNFINISHED DRAFT/ : /未完成草稿/);
-      assert.match(html, /href="#section-6"/);
+      for (const mode of ['brief', 'deep']) {
+        const destination = path.join(temporary, `${lang}-${mode}`);
+        const result = run(init, ['--out', destination, '--title', 'A paper <script> & a claim', '--paper', 'https://arxiv.org/abs/1706.03762v7', '--lang', lang, '--theme', 'plum', '--mode', mode]);
+        assert.equal(result.status, 0, result.stderr);
+        const source = fs.readFileSync(path.join(destination, 'reading.md'), 'utf8');
+        const brief = fs.readFileSync(path.join(destination, 'brief.md'), 'utf8');
+        assert.ok(source.startsWith(`<!-- paper-reading-lang: ${lang} -->\n<!-- paper-reading-theme: plum -->`));
+        assert.ok(source.includes(`<!-- paper-reading-mode: ${mode} -->`));
+        assert.ok(brief.includes(mode === 'deep' ? 'Deep Reading' : 'Brief Reading'));
+        if (mode === 'deep') assert.ok(source.includes('references/deep-reading.md'));
+        assert.match(source, /TODO/);
+        assert.doesNotMatch(source, /<script>/);
+        assert.doesNotMatch(source, /```paper-(?:chart|experiments)/);
+        assert.match(brief, /\$paper-reading/);
+        assert.ok(fs.statSync(path.join(destination, 'assets')).isDirectory());
+        const output = path.join(destination, 'reading.html');
+        const render = run(path.join(__dirname, 'render-reading.cjs'), [path.join(destination, 'reading.md'), output]);
+        assert.equal(render.status, 0, render.stderr);
+        const html = fs.readFileSync(output, 'utf8');
+        assert.ok(html.includes(`<html lang="${lang}">`));
+        assert.ok(html.includes(`<meta name="paper-reading-mode" content="${mode}">`));
+        assert.ok(html.includes(lang === 'en' ? `${mode.toUpperCase()} READING ATLAS` : mode === 'brief' ? 'BRIEF READING' : '论文深读图谱'));
+        assert.match(html, lang === 'en' ? /UNFINISHED DRAFT/ : /未完成草稿/);
+        assert.match(html, /href="#section-6"/);
+      }
     }
   } finally { fs.rmSync(temporary, { recursive: true, force: true }); }
 });
@@ -106,6 +115,7 @@ test('the runtime package has a verifiable small manifest and works without gall
     assert.match(doctor.stdout, /synthetic smoke render passed/);
     const starter = run(path.join(runtime, 'scripts/init-reading.cjs'), ['--out', path.join(temporary, 'first-reading'), '--title', 'Fresh paper']);
     assert.equal(starter.status, 0, starter.stderr);
+    assert.match(fs.readFileSync(path.join(temporary, 'first-reading/reading.md'), 'utf8'), /<!-- paper-reading-mode: brief -->/);
     const archive = path.join(temporary, 'paper-reading.tar.gz');
     if (fs.existsSync(archive)) {
       assert.ok(fs.statSync(archive).size > 0);

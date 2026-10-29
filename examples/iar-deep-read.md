@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: plum -->
+<!-- paper-reading-mode: brief -->
 # IAR：把文档“注入”参数，再把通用能力“找回来”
 
 > **阅读定位**：RAG 是文档问答的标准工程答案，但许多部署里检索不可用、不想要（延迟/隐私），或者被故意拿掉，以检验后训练是否改变了模型的参数化知识。这篇论文研究**文档知识内化**（document knowledge internalization）：把一个有界语料库变成可用的参数知识，推理时只看问题、不看原文。作者提出三阶段框架 IAR（Inject → Align → Recover），并用一组刻意分开的对照实验回答：密集文档暴露、QA 对齐、能力恢复各自贡献了什么。原文为 Qian Kou、Xiaofeng Shi（共同一作/共同通讯）、Xiaosong Qiu、Hua Zhou 的 *Inject, Align, Recover: Staged Post-Training for Retrieval-Free Document Knowledge Internalization*（BAAI）。<span class="source-ref">本图谱依据 <a href="https://arxiv.org/abs/2608.20281v1">arXiv:2608.20281v1</a>（2026-08-20）<a href="https://arxiv.org/pdf/2608.20281v1">PDF</a>，SHA-256 <code>a04a9e560b15cbc22942af63e4519fc7640812178e0e4de8f2deaeaac8da3060</code>，共 21 页：正文 §§1–7 + 补充材料 A–G；Figs. 1–4；Tables 1–28。</span>

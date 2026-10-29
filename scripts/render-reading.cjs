@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const katex = require('katex');
 const { auditHtml, auditCss, createAssets, assertDistinctOutput, policyMeta, withOfflinePolicy } = require('./lib/offline-assets.cjs');
-const { renderReadingMarkdown, escapeMarkdownText } = require('./lib/reading-markdown.cjs');
+const { parseReadingHeader, renderReadingMarkdown, escapeMarkdownText } = require('./lib/reading-markdown.cjs');
 
 async function main() {
 // Dynamic import supports Marked's ESM distribution on every supported Node 20.
@@ -20,12 +20,7 @@ const outputPath = path.resolve(outputArg);
 assertDistinctOutput(sourcePath, outputPath);
 const { localFile, imageData } = createAssets(sourcePath);
 const source = fs.readFileSync(sourcePath, 'utf8');
-const languageMarker = source.match(/^<!-- paper-reading-lang: (en|zh-CN) -->\r?\n/);
-if (!languageMarker) throw new Error('Declare the reading language on the first line: <!-- paper-reading-lang: en --> or <!-- paper-reading-lang: zh-CN -->');
-const lang = languageMarker[1];
-const themeMarker = source.slice(languageMarker[0].length).match(/^<!-- paper-reading-theme: ([a-z-]+) -->\r?\n/);
-const theme = themeMarker?.[1] || 'forest';
-if (!['forest', 'cobalt', 'plum', 'saffron'].includes(theme)) throw new Error(`Unknown paper-reading theme: ${theme}`);
+const { lang, theme, mode, body: prepared } = parseReadingHeader(source);
 const labels = {
   'zh-CN': {
     why: '为什么需要', last: '这一阶段留下什么', next: '交给下一阶段',
@@ -52,7 +47,14 @@ const labels = {
     checkKicker: 'CHECK YOUR UNDERSTANDING', checkAnswer: 'Reveal a grounded answer', reader: 'Who this is for', goals: 'After reading, try to',
   },
 };
-const t = labels[lang];
+const t = { ...labels[lang] };
+if (mode === 'brief') Object.assign(t, lang === 'zh-CN' ? {
+  description: '串起问题、主路径、关键机制与决定性证据的论文导读。',
+  titleSuffix: '论文导读 · Brief', topbar: '原文证据驱动的论文导读', heroKicker: '论文导读 · BRIEF READING · 中文',
+} : {
+  description: 'A focused reading of the problem, main path, key mechanisms, and decisive evidence.',
+  titleSuffix: 'Brief reading atlas', topbar: 'A source-grounded reading atlas', heroKicker: 'BRIEF READING ATLAS · ENGLISH',
+});
 const css = fs.readFileSync(path.resolve(__dirname, '../assets/reading.css'), 'utf8');
 const katexCssFile = require.resolve('katex/dist/katex.min.css');
 let katexCss = fs.readFileSync(katexCssFile, 'utf8');
@@ -199,7 +201,6 @@ function renderArchify(relative, title) {
   return `<details class="archify-disclosure"><summary>${t.openDiagram}${escapeMarkdownText(title, esc)} <span>${t.explore}</span></summary><figure class="archify-figure"><iframe title="${escapeMarkdownText(title, esc)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="lazy"></iframe><figcaption>${t.diagramNote}</figcaption></figure></details>`;
 }
 
-const prepared = source.slice(languageMarker[0].length + (themeMarker?.[0].length || 0));
 const reading = renderReadingMarkdown(Marked, prepared, {
   esc, imageData, katex, labels: t, renderArchify,
   blocks: { 'paper-map': renderMap, 'paper-path': renderPath, 'paper-contrast': renderContrast, 'paper-experiments': renderExperiments, 'paper-chart': renderChart, 'paper-check': renderCheck },
@@ -210,7 +211,7 @@ const nav = sections.map(s => `<a href="#${s.id}">${escapeMarkdownText(s.heading
 const heroVisual = heroMap ? `<div class="hero-map"><p class="hero-map-title">${t.wholeMap} <span>01 — ${String(heroMap.items.length).padStart(2, '0')}</span></p><ol>${heroMap.items.map(x => `<li><span class="hero-map-index">${esc(x.number)}</span><div><div class="hero-map-heading"><strong>${esc(x.label)}</strong>${x.signal ? `<b>${esc(x.signal)}</b>` : ''}</div><p>${esc(x.text)}</p>${sourceBadge(x.source)}</div></li>`).join('')}</ol>${heroMap.outcome ? `<div class="hero-map-outcome"><span aria-hidden="true">↳</span><div><strong>${esc(heroMap.outcome)}</strong>${heroMap.outcomeSource ? sourceBadge(heroMap.outcomeSource) : ''}</div></div>` : ''}</div>` : '';
 const readerGuide = `${heroMap?.reader ? `<p class="hero-reader"><strong>${t.reader}</strong> · ${esc(heroMap.reader)}</p>` : ''}${heroMap?.goals ? `<div class="hero-goals"><p>${t.goals}</p><ul>${heroMap.goals.map(goal => `<li>${esc(goal)}</li>`).join('')}</ul></div>` : ''}`;
 const output = `<!doctype html>
-<html lang="${lang}"><head><meta charset="utf-8">${policyMeta}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escapeMarkdownText(title, esc)}${lang === 'zh-CN' ? '：' : ': '}${t.description}"><title>${escapeMarkdownText(title, esc)} · ${t.titleSuffix}</title><style>${katexCss}\n${css}</style></head>
+<html lang="${lang}"><head><meta charset="utf-8">${policyMeta}<meta name="paper-reading-mode" content="${mode}"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="${escapeMarkdownText(title, esc)}${lang === 'zh-CN' ? '：' : ': '}${t.description}"><title>${escapeMarkdownText(title, esc)} · ${t.titleSuffix}</title><style>${katexCss}\n${css}</style></head>
 <body data-theme="${theme}"><a class="skip-link" href="#content">${t.skip}</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>${t.topbar}</span><label class="source-toggle-label" for="show-sources">${t.showSources}</label><a href="#content">${t.startReading} ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">${t.heroKicker}</p><h1>${escapeMarkdownText(title, esc)}</h1><p class="hero-sub">${esc(heroMap?.thesis || t.defaultThesis)}</p>${readerGuide}<a class="hero-link" href="#section-1">${t.enter} <span aria-hidden="true">↘</span></a></div>${heroVisual}</div></div><div class="reading-shell"><nav class="toc" aria-label="${t.nav}"><div class="toc-title">${t.route}</div>${nav}</nav><main id="content" class="article"><div class="article-inner">${body}</div></main></div><footer class="page-footer"><span><a href="https://github.com/xiaofengShi/paper-reading-skill">Paper Reading Skill</a> · ${t.footer}</span><a href="#top">${t.back} ↑</a></footer></body></html>`;
 const cleanOutput = output.replace(/[ \t]+$/gm, '');
 fs.writeFileSync(outputPath, cleanOutput);

@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: cobalt -->
+<!-- paper-reading-mode: brief -->
 # VISTA：用一副视觉外骨架，放出多模态模型的长程推理
 
 > **阅读定位**：这篇论文不训练任何新模型，它回答的是“同样的多模态模型，换一副交互外壳能差多少”。作者把 ARC-AGI-3 从文本网格问题重新框定为视觉问题，提出 VISTA 视觉外骨架（visual harness）：原始视觉观察 + 无损视觉记忆 + 模型主动检视，让模型在长程交互中按需回看证据、重组视觉输入。在 25 个公开 ARC-AGI-3 游戏上，Claude Opus 5.0 拿到满分 RHAE 100.00，总动作数比首次接触的人类参考少 57.4%。原文为 Qiushi Han\*、Keya Hu\*、Linlu Qiu\*（三位共同一作）、Cathy Wu、Kaiming He 的 *VISTA: A Visual Harness for Reasoning in an Interactive World*（MIT）。<span class="source-ref">本图谱依据 <a href="https://arxiv.org/abs/2610.02200v1">arXiv:2610.02200v1</a>（2026-10-01）<a href="https://arxiv.org/pdf/2610.02200v1">PDF</a>，SHA-256 <code>40c95e5ebed5f50fe696462177a2561352027ef85fd28293dbd5e2cc221e838a</code>，共 23 页：正文 10 页 + 参考文献 + 附录 A–B。覆盖 PDF §§1–7、Figs. 1–11、Tables 1–2、附录 A.1–A.6、B.1–B.3（附录轨迹图 Fig. 13 在工作机制示例中引用）。</span>

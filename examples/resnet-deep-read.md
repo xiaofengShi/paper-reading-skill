@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: en -->
 <!-- paper-reading-theme: cobalt -->
+<!-- paper-reading-mode: brief -->
 # Why residual learning makes depth usable
 
 **A complete reading of _Deep Residual Learning for Image Recognition_ — Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun, arXiv:1512.03385v1, 10 December 2015.** You should know a neural network's forward pass, training loss, vectors, and scalar derivatives; the chain rule is refreshed below, and the matrix extension is optional. The main source is all 12 PDF pages, including detection and localization appendices A–C. This is an explanation and author self-check, not an experimental reproduction or a reader study. [Versioned paper](https://arxiv.org/abs/1512.03385v1) · [Original PDF](https://arxiv.org/pdf/1512.03385v1).

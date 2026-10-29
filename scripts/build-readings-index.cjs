@@ -5,6 +5,7 @@
 // which scripts/build-docs.cjs renders from the same JSON.
 const fs = require('node:fs');
 const path = require('node:path');
+const { parseReadingHeader } = require('./lib/reading-markdown.cjs');
 
 const root = path.resolve(__dirname, '..');
 const site = 'https://xiaofengshi.github.io/paper-reading-skill/';
@@ -21,13 +22,15 @@ function load() {
       if (!r[key] || typeof r[key] !== 'string') throw new Error(`reading ${r.slug || '(missing slug)'} lacks ${key}`);
     }
     if (!/^(en|zh-CN)$/.test(r.lang)) throw new Error(`${r.slug}: lang must be en or zh-CN`);
+    if (!['brief', 'deep'].includes(r.mode)) throw new Error(`${r.slug}: mode must be brief or deep`);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date)) throw new Error(`${r.slug}: date must be YYYY-MM-DD`);
     if (seen.has(r.slug)) throw new Error(`${r.slug}: duplicate slug`);
     seen.add(r.slug);
     const source = path.join(root, 'examples', `${r.slug}-deep-read.md`);
     if (!fs.existsSync(source)) throw new Error(`${r.slug}: examples/${r.slug}-deep-read.md is missing`);
-    const marker = fs.readFileSync(source, 'utf8').match(/^<!-- paper-reading-lang: (en|zh-CN) -->/m);
-    if (!marker || marker[1] !== r.lang) throw new Error(`${r.slug}: lang marker in examples/ is ${marker && marker[1]}, readings.json says ${r.lang}`);
+    const header = parseReadingHeader(fs.readFileSync(source, 'utf8'));
+    if (header.lang !== r.lang) throw new Error(`${r.slug}: lang marker in examples/ is ${header.lang}, readings.json says ${r.lang}`);
+    if (header.mode !== r.mode) throw new Error(`${r.slug}: mode marker in examples/ is ${header.mode}, readings.json says ${r.mode}`);
     if (!fs.existsSync(path.join(root, 'docs', `${r.slug}-deep-read.html`))) throw new Error(`${r.slug}: docs/${r.slug}-deep-read.html is missing`);
   }
   return data.readings;
@@ -44,12 +47,12 @@ function selected(readings) {
 function bulletEn(r) {
   const meta = r.tool ? ` · ${r.tool}` : '';
   const arxiv = r.arxiv ? ` Based on [arXiv:${r.arxiv}](https://arxiv.org/abs/${r.arxiv}).` : '';
-  return `- **${r.title}** · ${r.lang === 'en' ? 'English' : '中文'}${meta} — ${r.summaryEn}${arxiv} [Open the complete reading →](${site}${r.slug}-deep-read.html)`;
+  return `- **${r.title}** · ${r.lang === 'en' ? 'English' : '中文'} · ${r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading'}${meta} — ${r.summaryEn}${arxiv} [Open the reading →](${site}${r.slug}-deep-read.html)`;
 }
 function bulletZh(r) {
   const meta = r.tool ? ` · ${r.tool}` : '';
   const arxiv = r.arxiv ? ` 依据 [arXiv:${r.arxiv}](https://arxiv.org/abs/${r.arxiv})。` : '';
-  return `- **${r.title}** · ${r.lang === 'en' ? 'English' : '中文'}${meta} — ${r.summaryZh}${arxiv}[打开完整深读 →](${site}${r.slug}-deep-read.html)`;
+  return `- **${r.title}** · ${r.lang === 'en' ? 'English' : '中文'} · ${r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading'}${meta} — ${r.summaryZh}${arxiv}[打开阅读文档 →](${site}${r.slug}-deep-read.html)`;
 }
 
 function block(readings, lang) {
@@ -57,9 +60,9 @@ function block(readings, lang) {
   const bullets = pick.map(lang === 'en' ? bulletEn : bulletZh).join('\n');
   const total = readings.length;
   if (lang === 'en') {
-    return [START, bullets, '', `There are **${total}** complete readings so far — [browse the full gallery →](${site}#readings)`, END].join('\n');
+    return [START, bullets, '', `There are **${total}** published readings so far — [browse the full gallery →](${site}#readings)`, END].join('\n');
   }
-  return [START, bullets, '', `目前已发布 **${total}** 篇完整深读——[浏览完整画廊 →](${site}zh.html#readings)`, END].join('\n');
+  return [START, bullets, '', `目前已发布 **${total}** 篇阅读文档——[浏览完整画廊 →](${site}zh.html#readings)`, END].join('\n');
 }
 
 function rewrite(file, blockText) {

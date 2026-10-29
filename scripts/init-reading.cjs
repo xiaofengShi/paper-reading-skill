@@ -14,6 +14,7 @@ Options:
   --paper <input>     Paper URL, arXiv ID, or local PDF path (not downloaded).
   --lang <language>   en (default) or zh-CN.
   --theme <theme>     forest (default), cobalt, plum, or saffron.
+  --mode <mode>       brief (default) or deep. Selects the reading depth.
   --help             Show this help.
 
 Example:
@@ -28,7 +29,7 @@ function main() {
     return;
   }
   const options = {};
-  const accepted = new Set(['--out', '--title', '--paper', '--lang', '--theme']);
+  const accepted = new Set(['--out', '--title', '--paper', '--lang', '--theme', '--mode']);
   for (let i = 0; i < args.length; i += 2) {
     const key = args[i];
     if (!accepted.has(key)) throw new Error(`Unknown option: ${key}. Run with --help.`);
@@ -43,8 +44,10 @@ function main() {
   }
   const lang = options['--lang'] || 'en';
   const theme = options['--theme'] || 'forest';
+  const mode = options['--mode'] || 'brief';
   if (!['en', 'zh-CN'].includes(lang)) throw new Error('Supported languages: en, zh-CN.');
   if (!['forest', 'cobalt', 'plum', 'saffron'].includes(theme)) throw new Error('Supported themes: forest, cobalt, plum, saffron.');
+  if (!['brief', 'deep'].includes(mode)) throw new Error('Supported modes: brief, deep.');
   const destination = path.resolve(options['--out']);
   if (fs.existsSync(destination)) throw new Error(`Destination already exists; nothing was changed: ${destination}`);
 
@@ -61,24 +64,28 @@ function main() {
     ['主路径与设计理由', '重建输入、转换、分支、输出及必要假设；按论文类型选择方法路径、证明依赖或数据构建路径。'],
     ['关键机制与推演', '解释关键变量和完整公式、证明或协议。只在帮助理解时加入明确标注的教学例子，并核对原图。'],
     ['决定性证据', '把主要问题与设置、对照、指标、分母、观察和有边界的解释连接起来；没有实验的论文使用实际证据类型。'],
-    ['综合与限制', '说明机制与证据共同支持什么，以及哪些结论仍未确定。完成质量门槛后再把草稿标记为深读成品。'],
+    ['综合与限制', '说明机制与证据共同支持什么，以及哪些结论仍未确定。完成所选模式的质量门槛后再移除草稿标记。'],
   ] : [
     ['Source identity and coverage', 'Verify the title, authors, version, source URL or local path. Record sections and appendices actually read, and missing material. Keep unverified states unknown.'],
     ['Question and contribution', 'Explain the problem, setting, central idea, and contribution from paper evidence. The reading has not been completed yet.'],
     ['Main path and design reasoning', 'Reconstruct inputs, transformations, branches, outputs, and assumptions. Choose a method path, proof dependency, or data construction route that fits the paper.'],
     ['Mechanism and worked explanation', 'Define variables and explain the full relevant equation, proof, or protocol. Label teaching examples and verify original figures where useful.'],
     ['Decisive evidence', 'Connect each major question to its setup, comparator, metric, denominator, observation, and bounded interpretation. Use the paper’s actual evidence type.'],
-    ['Synthesis and limits', 'Explain what the mechanism and evidence establish together, and what remains uncertain. Complete the quality gates before marking the draft as a finished deep read.'],
+    ['Synthesis and limits', 'Explain what the mechanism and evidence establish together, and what remains uncertain. Complete the selected mode’s quality gates before removing the draft warning.'],
   ];
-  const draft = lang === 'zh-CN' ? '未完成草稿 — 尚未深读' : 'UNFINISHED DRAFT — NOT A DEEP READ';
+  const modeName = mode === 'deep' ? 'Deep Reading' : 'Brief Reading';
+  const depthInstruction = lang === 'zh-CN'
+    ? (mode === 'deep' ? '按 Deep Reading 模式完成：在审计注释中逐项记录正文与重要附录的覆盖；逐步重建每个核心机制，展开关键公式的推导、假设和算例，逐组解读主实验、消融与负结果。遵循 references/deep-reading.md，所有适用深度维度须达到 3。' : '按 Brief Reading 模式完成：保留全局图、主路径、关键机制与公式、决定性实验证据及限制，延续现有样例的详细程度；允许选择性展开次要细节。')
+    : (mode === 'deep' ? 'Complete Deep Reading: record coverage of main sections and important appendices in audit comments; reconstruct each core mechanism step by step, develop key derivations with assumptions and worked examples, and interpret each main experiment, ablation, and negative result. Follow references/deep-reading.md; every applicable depth dimension must reach 3.' : 'Complete Brief Reading: retain the global map, main path, key mechanisms and equations, decisive evidence, and limits at the existing examples’ level of detail; secondary detail may be selective.');
+  const draft = lang === 'zh-CN' ? '未完成草稿 — 尚未阅读' : 'UNFINISHED DRAFT — NOT A COMPLETED READING';
   const warning = lang === 'zh-CN'
     ? '本文件由初始化命令创建。它只包含待办内容，尚未访问或核验论文，不能作为论文解读交付。'
     : 'Created by the initializer. This file contains only TODOs. No paper has been accessed or verified; do not deliver it as a completed reading.';
-  const source = `<!-- paper-reading-lang: ${lang} -->\n<!-- paper-reading-theme: ${theme} -->\n# ${draft}: ${title}\n\n> **${draft}.** ${warning}\n\n${lang === 'zh-CN' ? '论文输入' : 'Paper input'}: ${paper}\n\n<!-- Interaction decision: TODO after reconstructing the paper; choose a static or interactive view for a specific reading need. -->\n\n${headings.map(([heading, instruction], i) => `## ${String(i + 1).padStart(2, '0')} / ${heading}\n\nTODO: ${instruction}\n`).join('\n')}`;
+  const source = `<!-- paper-reading-lang: ${lang} -->\n<!-- paper-reading-theme: ${theme} -->\n<!-- paper-reading-mode: ${mode} -->\n# ${draft}: ${title}\n\n> **${draft}.** ${warning}\n\n${lang === 'zh-CN' ? '论文输入' : 'Paper input'}: ${paper}\n\nTODO: ${depthInstruction}\n\n<!-- Interaction decision: TODO after reconstructing the paper; choose a static or interactive view for a specific reading need. -->\n\n${headings.map(([heading, instruction], i) => `## ${String(i + 1).padStart(2, '0')} / ${heading}\n\nTODO: ${instruction}\n`).join('\n')}`;
   const renderer = path.join(__dirname, 'render-reading.cjs');
   const quote = value => `'${value.replace(/'/g, `'\\''`)}'`;
   const renderCommand = `node ${quote(renderer)} ${quote(path.join(destination, 'reading.md'))} ${quote(path.join(destination, 'reading.html'))}`;
-  const brief = lang === 'zh-CN' ? `# 阅读任务说明\n\n状态：**未开始**。初始化仅创建输入文件；它没有下载论文、生成科学结论或完成 HTML。\n\n- 论文：${title}\n- 输入：${paper}\n- 语言：中文\n- 主题：${theme}\n- 审计源：[reading.md](reading.md)\n- 素材目录：assets/\n\n## 发给 Agent 的请求\n\n使用 $paper-reading 深读上述论文。先核验身份、版本和完整材料，按论文类型重建机制与证据，再补全 reading.md。保留原文定位，明确区分论文陈述、观察与读者推断。需要的图片放入 assets/。完成质量门槛与实际 HTML 检查后，再移除草稿标记。材料不足时明确说明缺口。\n\n## 渲染命令\n\n在 skill 目录运行 npm ci 后，可用以下命令预览；占位内容能成功渲染并不代表已完成阅读。\n\n\`\`\`bash\n${renderCommand}\n\`\`\`\n\n质量门槛见安装目录中的 evals/reading-quality.md；输入契约见 references/renderer-format.md。\n` : `# Reading brief\n\nStatus: **not started**. Initialization only creates editable inputs; it does not download a paper, produce scientific conclusions, or complete an HTML atlas.\n\n- Paper: ${title}\n- Input: ${paper}\n- Language: English\n- Theme: ${theme}\n- Audit source: [reading.md](reading.md)\n- Asset directory: assets/\n\n## Request for your agent\n\nUse $paper-reading to read this paper deeply. Verify identity, version, and full source access first. Reconstruct its mechanism and evidence using the appropriate paper-type route, then complete reading.md. Preserve source locations and distinguish paper statements, observations, and reader inferences. Save necessary figures in assets/. Remove the draft warning only after applying the quality gates and inspecting the actual HTML. If source material is missing, report the gap.\n\n## Render command\n\nAfter running npm ci in the installed skill directory, preview with this command. A renderable placeholder is not a completed reading.\n\n\`\`\`bash\n${renderCommand}\n\`\`\`\n\nFind the quality gates at evals/reading-quality.md and the input contract at references/renderer-format.md in the installed skill.\n`;
+  const brief = lang === 'zh-CN' ? `# 阅读任务说明\n\n状态：**未开始**。初始化仅创建输入文件；它没有下载论文、生成科学结论或完成 HTML。\n\n- 论文：${title}\n- 输入：${paper}\n- 语言：中文\n- 主题：${theme}\n- 模式：${modeName}\n- 审计源：[reading.md](reading.md)\n- 素材目录：assets/\n\n## 发给 Agent 的请求\n\n使用 $paper-reading 按 ${modeName} 模式阅读上述论文。${depthInstruction}先核验身份、版本和完整材料，按论文类型重建机制与证据，再补全 reading.md。保留原文定位，明确区分论文陈述、观察与读者推断。需要的图片放入 assets/。完成质量门槛与实际 HTML 检查后，再移除草稿标记。材料不足时明确说明缺口。\n\n## 渲染命令\n\n在 skill 目录运行 npm ci 后，可用以下命令预览；占位内容能成功渲染并不代表已完成阅读。\n\n\`\`\`bash\n${renderCommand}\n\`\`\`\n\n质量门槛见安装目录中的 evals/reading-quality.md；输入契约见 references/renderer-format.md。\n` : `# Reading brief\n\nStatus: **not started**. Initialization only creates editable inputs; it does not download a paper, produce scientific conclusions, or complete an HTML atlas.\n\n- Paper: ${title}\n- Input: ${paper}\n- Language: English\n- Theme: ${theme}\n- Mode: ${modeName}\n- Audit source: [reading.md](reading.md)\n- Asset directory: assets/\n\n## Request for your agent\n\nUse $paper-reading in ${modeName} mode. ${depthInstruction} Verify identity, version, and full source access first. Reconstruct its mechanism and evidence using the appropriate paper-type route, then complete reading.md. Preserve source locations and distinguish paper statements, observations, and reader inferences. Save necessary figures in assets/. Remove the draft warning only after applying the quality gates and inspecting the actual HTML. If source material is missing, report the gap.\n\n## Render command\n\nAfter running npm ci in the installed skill directory, preview with this command. A renderable placeholder is not a completed reading.\n\n\`\`\`bash\n${renderCommand}\n\`\`\`\n\nFind the quality gates at evals/reading-quality.md and the input contract at references/renderer-format.md in the installed skill.\n`;
 
   fs.mkdirSync(path.dirname(destination), { recursive: true });
   fs.mkdirSync(destination); // Fail safely if another process created the target after the preflight.

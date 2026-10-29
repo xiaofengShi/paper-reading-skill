@@ -1,5 +1,6 @@
 <!-- paper-reading-lang: zh-CN -->
 <!-- paper-reading-theme: saffron -->
+<!-- paper-reading-mode: brief -->
 # MiMo-V2.6：Agent 强化学习的规模化路径
 
 > **阅读定位**：沿“可探索任务 → 轨迹 → 评分 → 更新 → 能力整合”理解 LLM-Core Xiaomi 的 *MiMo-V2.6: Scaling Reinforcement Learning Towards Self-Improvement*，再区分完整模型、针对性对照和开放小模型实验。文中数字为作者报告，本次没有复现实验。<span class="source-ref">统一主源：[官方 44 页 PDF，固定修订 73875d00b30a89ef8cc353a0b60b0e9f9561952d](https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL/resolve/73875d00b30a89ef8cc353a0b60b0e9f9561952d/MiMo_V2_6_technical_report.pdf)，访问 2026-10-27；PDF 创建 2026-09-22；SHA-256 fb81e6e083801b3358f084ed6be953dc23b0d2e434690f4541d5eae03e01e7af。正文、公式、数值与图注按此版核对。旧快照是官方初次上传 7b08b5a503deef319e6b371fd5b701526cd05a03，SHA-256 7fe42601dc952cd2b74996e5a24f8e85eab6fcbf471f73ba95aafd559d4ef39b；保留的七幅裁图来自旧快照，逐图所在页 p8/17/19/23/24/25/28 与新版的文本及 72dpi RGB 栅格字节完全一致，未替换像素。覆盖 §§1–8、Figs. 1–17、Tables 1–7 和附录 A；附录 A 仅为贡献与致谢，没有另藏技术算法。逐页文本差异仅在 p6 Table 1：旧版将 Pro 激活参数误排为 42T，新版改为 42B；总参数 1.02T 未变。以下统一采用修订版 1.02T/42B。</span>

@@ -32,7 +32,7 @@ npm run pack:skill -- --help
 
 ## Reading integrity
 
-- Declare `<!-- paper-reading-lang: en -->` or `<!-- paper-reading-lang: zh-CN -->` on the first source line; use the documented optional theme marker.
+- Declare `<!-- paper-reading-lang: en -->` or `<!-- paper-reading-lang: zh-CN -->` on the first source line; use the documented optional theme marker and declare `<!-- paper-reading-mode: brief -->` or `<!-- paper-reading-mode: deep -->` in the header. Brief is the default; Deep requires the reconstruction protocol and all applicable depth dimensions at 3. Keep `readings.json` mode metadata aligned with gallery sources.
 - Identify the paper and exact version. Keep reported results, author interpretation, redraws, and teaching examples distinguishable; attach source locations to consequential claims.
 - Read the available full source and record missing sections or version conflicts. Do not describe abstract-only or incomplete work as a complete deep read.
 - Use understanding checks when they help reconstruct, apply, or assess evidence. Native answer disclosures are learning aids, not comprehension scores.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — 2026-10-29
+
+- Split reading depth into Brief Reading (default, preserving the existing examples' format) and Deep Reading (full technical reconstruction on request).
+- Add a Deep Reading protocol for source coverage, core mechanisms, key derivations, experiment families, and important appendices; require 3 in every applicable depth dimension before delivering a completed Deep.
+- Add `--mode brief|deep` to unfinished-reading initialization and a `paper-reading-mode` Markdown header. HTML titles and heroes identify the selected mode; older unmarked sources render as Brief.
+- Mark existing gallery entries Brief without changing their paper content, source versions, or URLs, and keep gallery metadata aligned with audit headers.
+
 ## 0.2.0 — 2026-10-27
 
 - Rebuild the 11 readings covered by the reconstruction record with the updated teaching contract: reader goals, worked mechanisms or operation traces, paper-specific checks, and supporting evidence disclosures. Recheck primary sources and correct source-version, equation, evaluator, and benchmark-scope errors; retain dated reconstruction evidence.
