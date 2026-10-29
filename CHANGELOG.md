@@ -6,6 +6,7 @@
 - Add a Deep Reading protocol for source coverage, core mechanisms, key derivations, experiment families, and important appendices; require 3 in every applicable depth dimension before delivering a completed Deep.
 - Add `--mode brief|deep` to unfinished-reading initialization and a `paper-reading-mode` Markdown header. HTML titles and heroes identify the selected mode; older unmarked sources render as Brief.
 - Mark existing gallery entries Brief without changing their paper content, source versions, or URLs, and keep gallery metadata aligned with audit headers.
+- Fit wide tables, figures, and equations to printed pages, with page margins and table rows kept together.
 
 ## 0.2.0 — 2026-10-27
 

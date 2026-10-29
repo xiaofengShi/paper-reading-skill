@@ -299,6 +299,7 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
   .pair-delta { margin-left: 0; width: 100%; }
 }
 @media print {
+  @page { margin: 14mm; }
   body { background: #fff; font-size: 11pt; }
   .topbar, .toc, .hero-link, .page-footer { display: none; }
   .hero { color: var(--ink); background: #fff; }
@@ -310,7 +311,14 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
   .hero-map li p, .hero-map-title { color: var(--ink-soft); }
   .hero-map-heading b { color: var(--orange); }
   .hero-map .source-badge { color: var(--teal); border-color: var(--line); }
+  .reading-shell { display: block; }
   .article-inner { max-width: none; padding: 0; }
+  .article table { display: table; width: 100%; table-layout: auto; overflow: visible; contain: none; font-size: 8pt; }
+  .article th, .article td { min-width: 0; padding: .3rem .25rem; }
+  .article tr { break-inside: avoid; }
+  .figure-viewport { overflow: visible; }
+  .paper-figure img { width: 100%; max-width: 100%; }
+  .display-math { font-size: 1rem; padding: .6rem; }
   .archify-figure, .paper-figure, .data-figure { break-inside: avoid; box-shadow: none; }
   .archify-figure iframe { height: 320px; }
   .article h2 { break-after: avoid; }
