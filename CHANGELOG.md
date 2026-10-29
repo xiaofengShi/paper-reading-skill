@@ -7,6 +7,7 @@
 - Add `--mode brief|deep` to unfinished-reading initialization and a `paper-reading-mode` Markdown header. HTML titles and heroes identify the selected mode; older unmarked sources render as Brief.
 - Mark existing gallery entries Brief without changing their paper content, source versions, or URLs, and keep gallery metadata aligned with audit headers.
 - Fit wide tables, figures, and equations to printed pages, with page margins and table rows kept together.
+- Publish Rollback as the first Deep Reading example, with 16 chapters covering the mechanisms, equations, real-robot evidence, and appendices A–G. Add reader tasks and source provenance, and give both homepages direct Brief/Deep examples and copyable requests.
 
 ## 0.2.0 — 2026-10-27
 

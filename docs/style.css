@@ -120,6 +120,10 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
 .start h2 { font-size: clamp(1.8rem, 3vw, 2.8rem); }
 .start table { width: 100%; margin: 1rem 0; border-collapse: collapse; }
 .start th, .start td { padding: .8rem .65rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.mode-comparison { overflow-x: auto; }
+.mode-comparison:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.mode-comparison table { min-width: 42rem; }
+.mode-comparison th, .mode-comparison td { overflow-wrap: normal; }
 .start th { color: var(--teal); font-size: .88rem; }
 .start td:first-child { width: 26%; }
 .start td:nth-child(2) { width: 44%; }
@@ -136,3 +140,4 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
 .gallery-status { color: var(--muted); font-size: .85rem; }
 @media(max-width:620px) { .start { margin: 0 -1rem; padding: 2.5rem 1rem; } }
 @media print { .copy-code, .copy-status, .gallery-filter { display: none !important; } .start { margin: 0; padding: 1rem 0; background: none; } .copy-block pre { padding-top: 1rem; } .readings li[hidden] { display: flex !important; } }
+@media print { .mode-comparison { overflow: visible; } .mode-comparison table { min-width: 0; } }

@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/assets/logo.svg" alt="" width="64" height="64"></p>
 <h1 align="center">Paper Reading Skill</h1>
-<p align="center"><strong>读过，还能讲清楚。</strong> 把论文交给你的编程 Agent，获得一份离线 HTML：串起问题、机制、公式、原图与实验证据，需要时展开原文定位核查。</p>
-<p align="center"><a href="https://xiaofengshi.github.io/paper-reading-skill/zh.html">项目主页 ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html">阅读完整样例 ↗</a> · <a href="#开始使用">开始使用</a> · <a href="README.md">English</a></p>
+<p align="center"><strong>读过，还能讲清楚。</strong> 用 Brief Reading 把握论文主线，用 Deep Reading 完整重建技术细节。两种模式都交付离线 HTML，串起问题、机制、公式、原图与实验证据，并保留可核查的来源。</p>
+<p align="center"><a href="https://xiaofengshi.github.io/paper-reading-skill/zh.html">项目主页 ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html">Brief 导读样例 ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/rollback-deep-read.html">Deep 深读样例 ↗</a> · <a href="#开始使用">开始使用</a> · <a href="README.md">English</a></p>
 
 ![MiMo-V2.6 阅读图谱预览：把论文全局、RL 机制和实验证据连在一起。](docs/assets/atlas-preview.svg)
 
@@ -27,26 +27,35 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 
 ### 选择 Brief 或 Deep Reading
 
-| 模式 | 交付内容 | 怎么提出请求 |
-|---|---|---|
-| **Brief Reading 导读**（默认） | 保留现有详细程度：问题、主路径、关键机制与公式、决定性证据及限制 | “读这篇论文”或“用 Brief Reading” |
-| **Deep Reading 深读** | 完整技术重建：逐步讲解核心机制，展开关键推导与算例，逐组解读主实验和消融，覆盖重要附录 | “用 Deep Reading”或“深入阅读这篇论文” |
+| 模式 | 交付内容 | 怎么提出请求 | 样例 |
+|---|---|---|---|
+| **Brief Reading 导读**（默认） | 聚焦问题、主路径、关键机制与公式、决定性证据及限制 | “读这篇论文”或“用 Brief Reading” | [LoRA · 中文](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html) |
+| **Deep Reading 深读** | 逐步重建正文与重要附录的技术内容，展开关键推导与算例，逐组解读主实验和消融 | “用 Deep Reading”或“深入阅读这篇论文” | [Rollback · 中文](https://xiaofengshi.github.io/paper-reading-skill/rollback-deep-read.html) |
 
 两种模式都交付离线 HTML 和 Markdown 审计源，并在页面显示模式。Deep 的篇幅随论文复杂度增长，必须满足核心内容覆盖与可重建的解释要求；字数本身不能证明深度。详见[模式对照](references/reading-modes.md)与[Deep Reading 协议](references/deep-reading.md)。
 
+要生成 Rollback 样例所展示的深度，可复制：
+
+```text
+用 $paper-reading 的 Deep Reading 模式阅读 https://arxiv.org/abs/2610.36068v1，用中文。
+重建搜索、相对价值标签、策略损失和世界模型更新，展开公式与具体算例，
+逐组解读主实验、消融与重要附录。
+把离线 HTML 和 Markdown 保存到 paper-readings/rollback/。
+```
+
 ## 阅读完整样例
 
-现有画廊统一归为 **Brief Reading 导读**，原有 `-deep-read` 链接保持不变，页面按新标准显示模式。每篇先说明适合谁读、读完能尝试什么，再沿全局图、机制算例或操作追踪、原论文图与实验证据读完整篇。最后用论文特定的理解题尝试计算、迁移与判断；完整协议按需展开，主线与关键限制保持可见。
+画廊同时提供 **Brief Reading 导读**与 **Deep Reading 深读**，每篇标明模式和语言。Brief 可从 LoRA 或 ResNet 开始；Deep 可读 Rollback：16 个连贯章节展开搜索、公式、训练系统、实验及附录 A–G。每篇将原图和证据放在解释旁，并提供论文特定的理解题。原有 `-deep-read` 链接保持不变，深度以页面显示的模式为准。
 
 <!-- readings-index:start -->
 - **Attention Is All You Need** · English · Brief Reading — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 依据 [arXiv:1706.03762](https://arxiv.org/abs/1706.03762)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 · Brief Reading — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
 - **LoRA** · 中文 · Brief Reading — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。 依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **Rollback** · 中文 · Deep Reading · Codex — 16 章 Deep Reading：逐步重建回退搜索、PUCT、相对价值分档、flow matching、模型适配与异步训练，再逐组核对真机实验、消融及附录 A–G。 依据 [arXiv:2610.36068v1](https://arxiv.org/abs/2610.36068v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/rollback-deep-read.html)
 - **The Trinity** · 中文 · Brief Reading · ZCode — 能力驱动的多模态 Agent RSI 方法导读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。 依据 [arXiv:2610.36077v1](https://arxiv.org/abs/2610.36077v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/the-trinity-deep-read.html)
 - **Trustworthy RSI Survey** · 中文 · Brief Reading · ZCode — 可信递归自我改进综述导读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。 依据 [arXiv:2610.35193v1](https://arxiv.org/abs/2610.35193v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/trustworthy-rsi-survey-deep-read.html)
-- **Dual Exam** · 中文 · Brief Reading · ZCode — 从 150 例耦合试点 0% 成功率出发，读懂双轨受控评测：固定环境响应考 Agent（10 配置 1088 题）、固定动作干预考世界模型（400 例），以及论文对自身评测局限的罕见坦白。 依据 [arXiv:2610.31066v1](https://arxiv.org/abs/2610.31066v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/dual-exam-deep-read.html)
 
-目前已发布 **15** 篇阅读文档——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
+目前已发布 **16** 篇阅读文档——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
 <!-- readings-index:end -->
 
 重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。

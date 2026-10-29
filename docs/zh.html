@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="读过，还能讲清楚。 把论文交给你的编程 Agent，获得一份离线 HTML：串起问题、机制、公式、原图与实验证据，需要时展开原文定位核查。">
+  <meta name="description" content="读过，还能讲清楚。 用 Brief Reading 把握论文主线，用 Deep Reading 完整重建技术细节。两种模式都交付离线 HTML，串起问题、机制、公式、原图与实验证据，并保留可核查的来源。">
   <link rel="canonical" href="https://xiaofengshi.github.io/paper-reading-skill/zh.html">
   <link rel="alternate" hreflang="en" href="https://xiaofengshi.github.io/paper-reading-skill/">
   <link rel="alternate" hreflang="zh-CN" href="https://xiaofengshi.github.io/paper-reading-skill/zh.html">
@@ -11,12 +11,12 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Paper Reading Skill">
   <meta property="og:title" content="Paper Reading Skill">
-  <meta property="og:description" content="读过，还能讲清楚。 把论文交给你的编程 Agent，获得一份离线 HTML：串起问题、机制、公式、原图与实验证据，需要时展开原文定位核查。">
+  <meta property="og:description" content="读过，还能讲清楚。 用 Brief Reading 把握论文主线，用 Deep Reading 完整重建技术细节。两种模式都交付离线 HTML，串起问题、机制、公式、原图与实验证据，并保留可核查的来源。">
   <meta property="og:url" content="https://xiaofengshi.github.io/paper-reading-skill/zh.html">
   <meta property="og:image" content="https://xiaofengshi.github.io/paper-reading-skill/assets/atlas-preview.png">
   <meta property="og:locale" content="zh_CN">
   <meta name="twitter:card" content="summary_large_image">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"Paper Reading Skill","codeRepository":"https://github.com/xiaofengShi/paper-reading-skill","license":"https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE","programmingLanguage":"JavaScript","description":"读过，还能讲清楚。 把论文交给你的编程 Agent，获得一份离线 HTML：串起问题、机制、公式、原图与实验证据，需要时展开原文定位核查。"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"Paper Reading Skill","codeRepository":"https://github.com/xiaofengShi/paper-reading-skill","license":"https://github.com/xiaofengShi/paper-reading-skill/blob/main/LICENSE","programmingLanguage":"JavaScript","description":"读过，还能讲清楚。 用 Brief Reading 把握论文主线，用 Deep Reading 完整重建技术细节。两种模式都交付离线 HTML，串起问题、机制、公式、原图与实验证据，并保留可核查的来源。"}</script>
   <title>Paper Reading Skill — 论文导读与深读</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
@@ -30,8 +30,8 @@
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy"><p class="eyebrow">面向论文导读与深读的 AGENT SKILL</p><h1 id="page-title">读过，还能讲清楚</h1><p>把论文交给你的编程 Agent，获得一份离线 HTML：串起问题、机制、公式、原图与实验证据，需要时展开原文定位核查。</p>
-<div class="hero-actions"><a class="button primary" href="lora-deep-read.html">打开一份阅读样例 →</a><a class="button secondary" href="#start">用你自己的论文试试 ↓</a></div><p class="works-with">Codex · Claude Code · Kimi Code <span> / MIT · 开源</span></p></div>
+      <div class="hero-copy"><p class="eyebrow">面向论文导读与深读的 AGENT SKILL</p><h1 id="page-title">读过，还能讲清楚</h1><p>用 Brief Reading 把握论文主线，用 Deep Reading 完整重建技术细节。两种模式都交付离线 HTML，串起问题、机制、公式、原图与实验证据，并保留可核查的来源。</p>
+<div class="hero-actions"><a class="button primary" href="lora-deep-read.html">Brief 导读样例 →</a><a class="button secondary" href="rollback-deep-read.html">Deep 深读样例 →</a><a class="button secondary" href="#start">用你自己的论文试试 ↓</a></div><p class="works-with">Codex · Claude Code · Kimi Code <span> / MIT · 开源</span></p></div>
       <figure class="hero-visual"><p><img src="assets/atlas-preview.svg" alt="MiMo-V2.6 阅读图谱预览：把论文全局、RL 机制和实验证据连在一起。"></p>
 <figcaption>MiMo-V2.6 中文导读文档的编辑式预览；下方还有英文样例。</figcaption></figure>
     </section>
@@ -49,34 +49,44 @@
 </code></pre><span class="copy-status" role="status"></span></div>
 <p>Agent 完成阅读后，预期得到 <code>paper-readings/lora/reading.html</code> 及 Markdown 审计源。Agent 负责阅读和撰写解释，渲染器把 Markdown 生成 HTML。Skill 本身免费，不需要额外 API Key，使用你原有 Agent 的模型权限与计费。<a href="#get-started">其他 Agent、安装方式与故障排查</a>。</p>
 <h3>选择 Brief 或 Deep Reading</h3>
-<table>
+<div class="mode-comparison" role="region" aria-label="Brief 与 Deep Reading 模式对照" tabindex="0"><table>
 <thead>
 <tr>
 <th>模式</th>
 <th>交付内容</th>
 <th>怎么提出请求</th>
+<th>样例</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><strong>Brief Reading 导读</strong>（默认）</td>
-<td>保留现有详细程度：问题、主路径、关键机制与公式、决定性证据及限制</td>
+<td>聚焦问题、主路径、关键机制与公式、决定性证据及限制</td>
 <td>“读这篇论文”或“用 Brief Reading”</td>
+<td><a href="lora-deep-read.html">LoRA · 中文</a></td>
 </tr>
 <tr>
 <td><strong>Deep Reading 深读</strong></td>
-<td>完整技术重建：逐步讲解核心机制，展开关键推导与算例，逐组解读主实验和消融，覆盖重要附录</td>
+<td>逐步重建正文与重要附录的技术内容，展开关键推导与算例，逐组解读主实验和消融</td>
 <td>“用 Deep Reading”或“深入阅读这篇论文”</td>
+<td><a href="rollback-deep-read.html">Rollback · 中文</a></td>
 </tr>
-</tbody></table>
+</tbody></table></div>
 <p>两种模式都交付离线 HTML 和 Markdown 审计源，并在页面显示模式。Deep 的篇幅随论文复杂度增长，必须满足核心内容覆盖与可重建的解释要求；字数本身不能证明深度。详见<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/reading-modes.md">模式对照</a>与<a href="https://github.com/xiaofengShi/paper-reading-skill/blob/main/references/deep-reading.md">Deep Reading 协议</a>。</p>
+<p>要生成 Rollback 样例所展示的深度，可复制：</p>
+<div class="copy-block"><button type="button" class="copy-code" hidden>复制</button><pre><code class="language-text">用 $paper-reading 的 Deep Reading 模式阅读 https://arxiv.org/abs/2610.36068v1，用中文。
+重建搜索、相对价值标签、策略损失和世界模型更新，展开公式与具体算例，
+逐组解读主实验、消融与重要附录。
+把离线 HTML 和 Markdown 保存到 paper-readings/rollback/。
+</code></pre><span class="copy-status" role="status"></span></div>
 
 </section>
 <section class="content-section readings" id="readings">
 <h2>阅读完整样例</h2><fieldset class="gallery-filter" hidden><legend>阅读文档语言</legend><button type="button" data-filter="all" aria-pressed="true">全部</button><button type="button" data-filter="en" aria-pressed="false">English</button><button type="button" data-filter="zh-CN" aria-pressed="false">中文</button><span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>
-<p>现有画廊统一归为 <strong>Brief Reading 导读</strong>，原有 <code>-deep-read</code> 链接保持不变，页面按新标准显示模式。每篇先说明适合谁读、读完能尝试什么，再沿全局图、机制算例或操作追踪、原论文图与实验证据读完整篇。最后用论文特定的理解题尝试计算、迁移与判断；完整协议按需展开，主线与关键限制保持可见。</p>
+<p>画廊同时提供 <strong>Brief Reading 导读</strong>与 <strong>Deep Reading 深读</strong>，每篇标明模式和语言。Brief 可从 LoRA 或 ResNet 开始；Deep 可读 Rollback：16 个连贯章节展开搜索、公式、训练系统、实验及附录 A–G。每篇将原图和证据放在解释旁，并提供论文特定的理解题。原有 <code>-deep-read</code> 链接保持不变，深度以页面显示的模式为准。</p>
 <p>重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。<a href="examples-rebuild-20261027.html">重构与验证记录</a>列出来源版本、教学算例、修正的主张和验证边界。</p>
 
 <ul>
+<li data-reading-lang="zh-CN" data-reading-mode="deep"><strong>Rollback</strong> · 中文 · Deep Reading · Codex — 16 章 Deep Reading：逐步重建回退搜索、PUCT、相对价值分档、flow matching、模型适配与异步训练，再逐组核对真机实验、消融及附录 A–G。 <a href="https://arxiv.org/abs/2610.36068v1">arXiv:2610.36068v1</a>. <a href="rollback-deep-read.html">打开阅读文档 →</a></li>
 <li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>The Trinity</strong> · 中文 · Brief Reading · ZCode — 能力驱动的多模态 Agent RSI 方法导读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。 <a href="https://arxiv.org/abs/2610.36077v1">arXiv:2610.36077v1</a>. <a href="the-trinity-deep-read.html">打开阅读文档 →</a></li>
 <li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>Trustworthy RSI Survey</strong> · 中文 · Brief Reading · ZCode — 可信递归自我改进综述导读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。 <a href="https://arxiv.org/abs/2610.35193v1">arXiv:2610.35193v1</a>. <a href="trustworthy-rsi-survey-deep-read.html">打开阅读文档 →</a></li>
 <li data-reading-lang="zh-CN" data-reading-mode="brief"><strong>Dual Exam</strong> · 中文 · Brief Reading · ZCode — 从 150 例耦合试点 0% 成功率出发，读懂双轨受控评测：固定环境响应考 Agent（10 配置 1088 题）、固定动作干预考世界模型（400 例），以及论文对自身评测局限的罕见坦白。 <a href="https://arxiv.org/abs/2610.31066v1">arXiv:2610.31066v1</a>. <a href="dual-exam-deep-read.html">打开阅读文档 →</a></li>

@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/assets/logo.svg" alt="" width="64" height="64"></p>
 <h1 align="center">Paper Reading Skill</h1>
-<p align="center"><strong>Read it. Trace it. Explain it.</strong> Give your coding agent a paper. Get one offline HTML that connects the problem, mechanism, equations, figures, and evidence — with source locations you can check.</p>
-<p align="center"><a href="https://xiaofengshi.github.io/paper-reading-skill/">Project website ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html">Read a complete example ↗</a> · <a href="#get-started">Get started</a> · <a href="README.zh-CN.md">中文</a></p>
+<p align="center"><strong>Read it. Trace it. Explain it.</strong> Choose Brief Reading for a focused explanation or Deep Reading for full technical reconstruction. Get one offline HTML connecting the problem, mechanisms, equations, figures, and evidence, with sources you can check.</p>
+<p align="center"><a href="https://xiaofengshi.github.io/paper-reading-skill/">Project website ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html">Brief example ↗</a> · <a href="https://xiaofengshi.github.io/paper-reading-skill/rollback-deep-read.html">Deep example (中文) ↗</a> · <a href="#get-started">Get started</a> · <a href="README.zh-CN.md">中文</a></p>
 
 ![A preview of the MiMo-V2.6 reading atlas, connecting the paper's global map, RL mechanism, and experiment evidence.](docs/assets/atlas-preview.svg)
 
@@ -28,26 +28,36 @@ Expect `paper-readings/lora/reading.html` and its Markdown audit source after th
 
 ### Choose Brief or Deep Reading
 
-| Mode | What you get | How to request it |
-|---|---|---|
-| **Brief Reading** (default) | The existing focused format: problem, main path, key mechanisms and equations, decisive evidence, and limits | “Read this paper” or “Use Brief Reading” |
-| **Deep Reading** | Full technical reconstruction: core mechanisms step by step, key derivations and worked examples, each major experiment and ablation, and relevant appendices | “Use Deep Reading” or “Read this paper deeply” |
+| Mode | What you get | How to request it | Example |
+|---|---|---|---|
+| **Brief Reading** (default) | A focused explanation of the problem, main path, key mechanisms and equations, decisive evidence, and limits | “Read this paper” or “Use Brief Reading” | [ResNet · English](https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html) |
+| **Deep Reading** | Step-by-step technical reconstruction across substantive sections and relevant appendices, with key derivations, worked examples, and each major experiment and ablation | “Use Deep Reading” or “Read this paper deeply” | [Rollback · 中文](https://xiaofengshi.github.io/paper-reading-skill/rollback-deep-read.html) |
 
 Both deliver one offline HTML and its Markdown audit source, with a visible mode label. Deep grows with the paper's complexity and requires complete core coverage and reconstructable explanations; word count alone cannot qualify it. See the [mode comparison](references/reading-modes.md) and [Deep Reading protocol](references/deep-reading.md).
 
+To request the depth demonstrated by Rollback, paste:
+
+```text
+Use $paper-reading in Deep Reading mode for https://arxiv.org/abs/2610.36068v1.
+Write in English. Reconstruct the search, relative value labels, policy loss,
+and world-model updates. Work through the equations and examples, interpret
+each major experiment and ablation, and cover the relevant appendices.
+Save the offline HTML and Markdown in paper-readings/rollback/.
+```
+
 ## Explore complete readings
 
-The existing gallery entries are **Brief Reading** examples. Their original `-deep-read` links remain stable; their displayed mode follows the new distinction. Each reading names its intended reader and learning goals, provides a worked mechanism or operation trace, and ends with paper-specific understanding checks. Original figures, equations, and experiment conditions stay beside their explanations; supporting protocols can be expanded without losing the main argument or its limits.
+The gallery includes **Brief Reading** and **Deep Reading**, with the mode and language shown on every entry. Start with ResNet or LoRA for Brief, or Rollback for Deep: its 16 connected chapters reconstruct the search, equations, training system, experiments, and appendices A–G. Each reading keeps figures and evidence beside the explanation and includes paper-specific understanding checks. The existing `-deep-read` URLs remain stable; the displayed mode identifies the depth.
 
 <!-- readings-index:start -->
 - **Attention Is All You Need** · English · Brief Reading — Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer. Based on [arXiv:1706.03762](https://arxiv.org/abs/1706.03762). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 · Brief Reading — Follow the training path through the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments. [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
 - **LoRA** · 中文 · Brief Reading — Change an input and trace the low-rank correction through both branches and merged weights. Work from initialization gradients to a two-dimensional subspace example, then inspect the evidence. Four understanding checks, including a new-budget transfer task. Based on [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **Rollback** · 中文 · Deep Reading · Codex — A 16-chapter Deep Reading of experience-backtracking search: reconstruct PUCT, relative value bins, flow matching, model adaptation, and asynchronous training, then examine real-robot experiments and appendices A–G. Based on [arXiv:2610.36068v1](https://arxiv.org/abs/2610.36068v1). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/rollback-deep-read.html)
 - **The Trinity** · 中文 · Brief Reading · ZCode — A method reading of capability-driven recursive self-improvement for multimodal agents: task→capability→harness trees, selective inheritance, Real2Sim2Real with a screening band, and a router reaching ~96% of Oracle. Based on [arXiv:2610.36077v1](https://arxiv.org/abs/2610.36077v1). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/the-trinity-deep-read.html)
 - **Trustworthy RSI Survey** · 中文 · Brief Reading · ZCode — A survey reading of trustworthy recursive self-improvement: the h/B/U definition, the S1–S4/RI stage lens, four trustworthiness themes under three analytical roles, and the evidence funnel from 26 RSI-labeled claims to 4 matched-budget comparisons. Based on [arXiv:2610.35193v1](https://arxiv.org/abs/2610.35193v1). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/trustworthy-rsi-survey-deep-read.html)
-- **Dual Exam** · 中文 · Brief Reading · ZCode — Read the 0%-success coupled pilot, then follow the two controlled tracks: fixed environment responses for Agents (10 configurations, 1,088 items) and fixed action interventions for World Models (400 cases), with explicit aggregation rules and a candid limitations section. Based on [arXiv:2610.31066v1](https://arxiv.org/abs/2610.31066v1). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/dual-exam-deep-read.html)
 
-There are **15** published readings so far — [browse the full gallery →](https://xiaofengshi.github.io/paper-reading-skill/#readings)
+There are **16** published readings so far — [browse the full gallery →](https://xiaofengshi.github.io/paper-reading-skill/#readings)
 <!-- readings-index:end -->
 
 The 11 readings covered by the reconstruction record, including LoRA and ResNet, were rebuilt against the updated skill on 2026-10-27. See the [reconstruction and verification record](docs/examples-rebuild-20261027.html) for source versions, worked examples, corrected claims, and validation limits.

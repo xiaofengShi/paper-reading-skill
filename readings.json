@@ -179,6 +179,18 @@
       "pinned": false,
       "summaryEn": "A method reading of capability-driven recursive self-improvement for multimodal agents: task→capability→harness trees, selective inheritance, Real2Sim2Real with a screening band, and a router reaching ~96% of Oracle.",
       "summaryZh": "能力驱动的多模态 Agent RSI 方法导读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。"
+    },
+    {
+      "slug": "rollback",
+      "title": "Rollback",
+      "lang": "zh-CN",
+      "mode": "deep",
+      "tool": "Codex",
+      "arxiv": "2610.36068v1",
+      "date": "2026-10-30",
+      "pinned": false,
+      "summaryEn": "A 16-chapter Deep Reading of experience-backtracking search: reconstruct PUCT, relative value bins, flow matching, model adaptation, and asynchronous training, then examine real-robot experiments and appendices A–G.",
+      "summaryZh": "16 章 Deep Reading：逐步重建回退搜索、PUCT、相对价值分档、flow matching、模型适配与异步训练，再逐组核对真机实验、消融及附录 A–G。"
     }
   ]
 }

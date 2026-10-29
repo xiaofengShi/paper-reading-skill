@@ -10,8 +10,8 @@ const repo = 'https://github.com/xiaofengShi/paper-reading-skill';
 const sourceBase = `${repo}/blob/main/`;
 const readings = JSON.parse(fs.readFileSync(path.join(root, 'readings.json'), 'utf8')).readings;
 const pages = [
-  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR BRIEF & DEEP PAPER READING', example: 'Open a reading example →', install: 'Try it with your paper ↓', footer: 'Read deeply. Keep the evidence close.' },
-  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向论文导读与深读的 AGENT SKILL', example: '打开一份阅读样例 →', install: '用你自己的论文试试 ↓', footer: '读懂全文，证据就在身边。' },
+  { source: 'README.md', output: 'index.html', lang: 'en', other: 'zh.html', otherLabel: '中文', nav: 'Navigation', skip: 'Skip to content', eyebrow: 'AN AGENT SKILL FOR BRIEF & DEEP PAPER READING', example: 'Brief example (English) →', deepExample: 'Deep example (中文) →', install: 'Try it with your paper ↓', footer: 'Read deeply. Keep the evidence close.' },
+  { source: 'README.zh-CN.md', output: 'zh.html', lang: 'zh-CN', other: './', otherLabel: 'English', nav: '主导航', skip: '跳到正文', eyebrow: '面向论文导读与深读的 AGENT SKILL', example: 'Brief 导读样例 →', deepExample: 'Deep 深读样例 →', install: '用你自己的论文试试 ↓', footer: '读懂全文，证据就在身边。' },
 ];
 
 const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
@@ -104,6 +104,10 @@ for (const page of pages) {
   const content = sectionList.map(({section, id}) => {
     const tokens = id === 'readings' ? readingsSectionTokens(section) : section;
     let body = copyBlocks(rewriteLinks(marked.parser(tokens)), page);
+    if (id === 'start') {
+      const label = page.lang === 'en' ? 'Brief and Deep Reading comparison' : 'Brief 与 Deep Reading 模式对照';
+      body = body.replace(/<table>[\s\S]*?<\/table>/g, table => `<div class="mode-comparison" role="region" aria-label="${label}" tabindex="0">${table}</div>`);
+    }
     if (id === 'readings') {
       body = `${body}\n${readingsGallery(page)}`;
       const labels = page.lang === 'en' ? ['Reading language', 'All', 'English', '中文'] : ['阅读文档语言', '全部', 'English', '中文'];
@@ -144,7 +148,7 @@ for (const page of pages) {
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="page-title">
-      <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="${page.lang === 'en' ? 'resnet-deep-read.html' : 'lora-deep-read.html'}">${page.example}</a><a class="button secondary" href="#start">${page.install}</a></div><p class="works-with">Codex · Claude Code · Kimi Code <span> / MIT · ${page.lang === 'en' ? 'Open source' : '开源'}</span></p></div>
+      <div class="hero-copy"><p class="eyebrow">${page.eyebrow}</p><h1 id="page-title">${esc(headline)}</h1>${marked.parse(lead)}<div class="hero-actions"><a class="button primary" href="${page.lang === 'en' ? 'resnet-deep-read.html' : 'lora-deep-read.html'}">${page.example}</a><a class="button secondary" href="rollback-deep-read.html">${page.deepExample}</a><a class="button secondary" href="#start">${page.install}</a></div><p class="works-with">Codex · Claude Code · Kimi Code <span> / MIT · ${page.lang === 'en' ? 'Open source' : '开源'}</span></p></div>
       <figure class="hero-visual">${rewriteLinks(marked.parser([preview]))}<figcaption>${page.lang === 'en' ? 'Editorial preview of the MiMo-V2.6 reading (Chinese); English examples are below.' : 'MiMo-V2.6 中文导读文档的编辑式预览；下方还有英文样例。'}</figcaption></figure>
     </section>
     <div class="content-wrap">${content}</div>
