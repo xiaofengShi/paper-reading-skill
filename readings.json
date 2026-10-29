@@ -153,6 +153,17 @@
       "pinned": false,
       "summaryEn": "A survey reading of trustworthy recursive self-improvement: the h/B/U definition, the S1–S4/RI stage lens, four trustworthiness themes under three analytical roles, and the evidence funnel from 26 RSI-labeled claims to 4 matched-budget comparisons.",
       "summaryZh": "可信递归自我改进综述深读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。"
+    },
+    {
+      "slug": "the-trinity",
+      "title": "The Trinity",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.36077v1",
+      "date": "2026-10-29",
+      "pinned": false,
+      "summaryEn": "A method reading of capability-driven recursive self-improvement for multimodal agents: task→capability→harness trees, selective inheritance, Real2Sim2Real with a screening band, and a router reaching ~96% of Oracle.",
+      "summaryZh": "能力驱动的多模态 Agent RSI 方法深读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。"
     }
   ]
 }

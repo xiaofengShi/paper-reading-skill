@@ -33,11 +33,11 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 - **Attention Is All You Need** · English — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 依据 [arXiv:1706.03762](https://arxiv.org/abs/1706.03762)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
 - **LoRA** · 中文 — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。 依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **The Trinity** · 中文 · ZCode — 能力驱动的多模态 Agent RSI 方法深读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。 依据 [arXiv:2610.36077v1](https://arxiv.org/abs/2610.36077v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/the-trinity-deep-read.html)
 - **Trustworthy RSI Survey** · 中文 · ZCode — 可信递归自我改进综述深读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。 依据 [arXiv:2610.35193v1](https://arxiv.org/abs/2610.35193v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/trustworthy-rsi-survey-deep-read.html)
 - **Dual Exam** · 中文 · ZCode — 从 150 例耦合试点 0% 成功率出发，读懂双轨受控评测：固定环境响应考 Agent（10 配置 1088 题）、固定动作干预考世界模型（400 例），以及论文对自身评测局限的罕见坦白。 依据 [arXiv:2610.31066v1](https://arxiv.org/abs/2610.31066v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/dual-exam-deep-read.html)
-- **Deep Residual Learning / ResNet** · English — 先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。 依据 [arXiv:1512.03385v1](https://arxiv.org/abs/1512.03385v1)。[打开完整深读 →](https://xiaofengshi.github.io/paper-reading-skill/resnet-deep-read.html)
 
-目前已发布 **14** 篇完整深读——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
+目前已发布 **15** 篇完整深读——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
 <!-- readings-index:end -->
 
 重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。
