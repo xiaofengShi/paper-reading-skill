@@ -1,0 +1,558 @@
+{
+  "paper": "arXiv:2610.36068v1",
+  "mode": "deep",
+  "language": "zh-CN",
+  "date": "2026-10-29",
+  "review_method": "AI-authored source-grounded reading with explicit numerical and browser checks. Depth ratings are author self-review under the installed Deep Reading rubric, not independent human comprehension measurements.",
+  "source_coverage": {
+    "pdf_pages": 25,
+    "main_sections": "1-7",
+    "appendices": "A-G",
+    "equations": "1-6 reconstructed; Eq.6 kept at the abstraction level provided by the paper",
+    "tables": "1-8 retained",
+    "algorithms": "1-3 explained",
+    "unavailable_core_material": [],
+    "record": "reading.md opening audit comment"
+  },
+  "quality_gates": [
+    {
+      "gate": "source_identity_and_coverage",
+      "status": "pass",
+      "evidence": "provenance.json; reading.md coverage comment and opening source paragraph"
+    },
+    {
+      "gate": "scientific_fidelity",
+      "status": "pass",
+      "evidence": "Chapters 02-06 reconstruct equations; numeric checks below; Tables1,2,4,6-8 checked against extracted source tables; Table3 and all captions checked against PDF"
+    },
+    {
+      "gate": "claim_to_evidence",
+      "status": "pass",
+      "evidence": "Chapters 09-12 distinguish real outcomes, ablations, three-person comparison and reused-adaptation-data diagnostics; Chapter14 retains negative positions"
+    },
+    {
+      "gate": "reader_completeness",
+      "status": "pass",
+      "evidence": "Chapters 02-07 reconstruct cache, tree, bins, flow loss, model adaptation and async versioning; teaching calculations and actual Fig.9/Fig.11 examples"
+    },
+    {
+      "gate": "visual_choice_and_interaction",
+      "status": "pass",
+      "evidence": "Audit comment justifies static comparisons; every original figure has a reading cue; native source/answer/table controls checked offline by keyboard"
+    },
+    {
+      "gate": "delivery_integrity",
+      "status": "pass",
+      "evidence": "Offline no-script browser checks at 390/1440px; no global overflow; all images/math/navigation work; printed Table8 retains P1-P9, Overall, Score after print CSS repair"
+    },
+    {
+      "gate": "mode_honesty",
+      "status": "pass",
+      "evidence": "Source deep header, HTML mode metadata and visible Chinese deep-reading title agree"
+    },
+    {
+      "gate": "deep_coverage",
+      "status": "pass",
+      "evidence": "All substantive main sections and relevant appendices mapped in source audit comment, with justified secondary image omissions and no unresolved core omission"
+    }
+  ],
+  "depth_self_review": [
+    {
+      "dimension": "whole_paper_orientation",
+      "rating": 3,
+      "evidence": "Hero goals; Chapter01 training vs deployment and full dataflow; Chapter16 mechanism-to-evidence synthesis"
+    },
+    {
+      "dimension": "author_design_reasoning",
+      "rating": 3,
+      "evidence": "Chapters02-07 connect each choice to repeated prefixes, high-dimensional proposals, noisy labels, distribution shift and model-version consistency, with assumptions and costs"
+    },
+    {
+      "dimension": "mechanism",
+      "rating": 3,
+      "evidence": "Chapter03 PUCT arithmetic and search trace; Chapter04 2/3 vs1/3 to bins5/3; Chapter05 interpolation derivative/loss; Chapter06 real-only adaptation; Chapter07 inputs/outputs per process"
+    },
+    {
+      "dimension": "evidence_interpretation",
+      "rating": 3,
+      "evidence": "Chapters08-14 reconstruct protocols/denominators, all main experiment families, frozen/direct-reward interventions, reused-data condition and negative positions"
+    },
+    {
+      "dimension": "independent_readability",
+      "rating": 3,
+      "evidence": "Visible figure cues and equations, complete tables, six paper-specific checks; actual 390/1440px offline/no-script checks. No independent reader study conducted."
+    }
+  ],
+  "numerical_checks": {
+    "table_checks": [
+      {
+        "source": "S6.T1",
+        "numeric_rows": 5,
+        "html_table_match": true
+      },
+      {
+        "source": "S6.T2",
+        "numeric_rows": 3,
+        "html_table_match": true
+      },
+      {
+        "source": "S6.T4",
+        "numeric_rows": 2,
+        "html_table_match": true
+      },
+      {
+        "source": "A4.T6",
+        "numeric_rows": 6,
+        "html_table_match": true
+      },
+      {
+        "source": "A4.T7",
+        "numeric_rows": 5,
+        "html_table_match": true
+      },
+      {
+        "source": "A4.T8",
+        "numeric_rows": 5,
+        "html_table_match": true
+      }
+    ],
+    "reconstructed_counts": [
+      {
+        "task": "A4.T6",
+        "denominator": 150,
+        "rollback": 104,
+        "rise": 88,
+        "delta_pp": 10.666666666666668
+      },
+      {
+        "task": "A4.T7",
+        "denominator": 90,
+        "rollback": 36,
+        "rise": 26,
+        "delta_pp": 11.11111111111111
+      },
+      {
+        "task": "A4.T8",
+        "denominator": 135,
+        "rollback": 87,
+        "rise": 71,
+        "delta_pp": 11.851851851851853
+      }
+    ],
+    "macro_percent": 57.925925925925924,
+    "pooled_percent": 60.53333333333333,
+    "teaching_calculations": {
+      "bin_examples_checked": 5,
+      "flow_input": [
+        0.30000000000000004,
+        -0.275
+      ],
+      "flow_target": [
+        0.39999999999999997,
+        0.5
+      ],
+      "flow_squared_loss": 0.020000000000000004,
+      "puct_scores": [
+        1.0263853991962832,
+        1.32915619758885
+      ],
+      "prefix_calls": [
+        50,
+        26
+      ]
+    },
+    "offline_assets": 11,
+    "source_cjk_characters": 11575
+  },
+  "browser_checks": [
+    {
+      "width": 390,
+      "title": "Rollback：从经验回退到策略改进 · 深读图谱",
+      "lang": "zh-CN",
+      "mode": "deep",
+      "sections": 16,
+      "images": [
+        {
+          "alt": "真实交互需要复位；独立想象从头展开；Rollback 从中间决策点分支并接收真实反馈",
+          "ok": true
+        },
+        {
+          "alt": "方法总图：恢复缓存做树搜索，汇总后续叶子结果，使用真实轨迹适配世界模型",
+          "ok": true
+        },
+        {
+          "alt": "冰壶树上方子树三个叶子两次成功，下方三个叶子一次成功；蓝色虚线为真实路径，紫色另标回退分支",
+          "ok": true
+        },
+        {
+          "alt": "云端搜索池、策略及模型训练器通过共享经验池交换数据，边缘执行端保存策略权重与轨迹缓冲",
+          "ok": true
+        },
+        {
+          "alt": "左侧两图比较八小时内 Rollback 与 RISE 的投球和冰壶成功率；右侧两图比较 Rollback 曲线与人类手工及遥操作均值",
+          "ok": true
+        },
+        {
+          "alt": "同一组记录动作下，真实视频与模型预测逐列比较，包含头部及左右腕部三视角，步数到 300",
+          "ok": true
+        },
+        {
+          "alt": "冰壶真实记录、冻结模型和适配模型的开环画面对照；右侧曲线比较 64 条 episode 上的 RGB L1 误差及置信区间",
+          "ok": true
+        },
+        {
+          "alt": "冰壶树中既有真实轨迹中间节点也有想象节点；下方逐帧比较不同第二次推石速度导致进入或停在得分区前",
+          "ok": true
+        },
+        {
+          "alt": "积木树中第 300 步的三个子树分别为 0/3、2/2、1/1；下方 A 成功抽出目标块，B 到终点仍留在塔中",
+          "ok": true
+        },
+        {
+          "alt": "最终策略真实机器人执行：连续五次取块、成功投球，以及两次桌面冰壶出手",
+          "ok": true
+        },
+        {
+          "alt": "四种投球失败的轨迹叠图：投短、投过头、桶沿反弹以及夹爪松手失败",
+          "ok": true
+        }
+      ],
+      "math": 118,
+      "mathErrors": 0,
+      "viewport": 390,
+      "scrollWidth": 390,
+      "buttons": [
+        {
+          "tag": "INPUT",
+          "type": "checkbox",
+          "text": "",
+          "id": "show-sources",
+          "aria": null
+        }
+      ],
+      "navLinks": [
+        {
+          "text": "01 / 先分清它改进了哪一个环节",
+          "valid": true
+        },
+        {
+          "text": "02 / 回退恢复的究竟是什么",
+          "valid": true
+        },
+        {
+          "text": "03 / 搜索怎样把预算花在分歧上",
+          "valid": true
+        },
+        {
+          "text": "04 / 从一棵树算出五档标签",
+          "valid": true
+        },
+        {
+          "text": "05 / 策略具体优化什么",
+          "valid": true
+        },
+        {
+          "text": "06 / 真实反馈怎样校正世界模型",
+          "valid": true
+        },
+        {
+          "text": "07 / 异步系统怎样保持比较一致",
+          "valid": true
+        },
+        {
+          "text": "08 / 先看实验究竟在测什么",
+          "valid": true
+        },
+        {
+          "text": "09 / 真机主结果如何重算",
+          "valid": true
+        },
+        {
+          "text": "10 / 消融分别拆出了什么",
+          "valid": true
+        },
+        {
+          "text": "11 / 八小时曲线与人类对照",
+          "valid": true
+        },
+        {
+          "text": "12 / 世界模型的画面更准意味着什么",
+          "valid": true
+        },
+        {
+          "text": "13 / 追踪具体分支与真实失败",
+          "valid": true
+        },
+        {
+          "text": "14 / 平均领先掩盖了哪些位置退步",
+          "valid": true
+        },
+        {
+          "text": "15 / 按实现层次整理复现条件",
+          "valid": true
+        },
+        {
+          "text": "16 / 把机制和证据接回同一条论证",
+          "valid": true
+        }
+      ],
+      "externalAssets": [],
+      "detailOpened": true,
+      "print": {
+        "width": 390,
+        "scrollWidth": 503,
+        "bodyText": 22757
+      },
+      "errors": []
+    },
+    {
+      "width": 1440,
+      "title": "Rollback：从经验回退到策略改进 · 深读图谱",
+      "lang": "zh-CN",
+      "mode": "deep",
+      "sections": 16,
+      "images": [
+        {
+          "alt": "真实交互需要复位；独立想象从头展开；Rollback 从中间决策点分支并接收真实反馈",
+          "ok": true
+        },
+        {
+          "alt": "方法总图：恢复缓存做树搜索，汇总后续叶子结果，使用真实轨迹适配世界模型",
+          "ok": true
+        },
+        {
+          "alt": "冰壶树上方子树三个叶子两次成功，下方三个叶子一次成功；蓝色虚线为真实路径，紫色另标回退分支",
+          "ok": true
+        },
+        {
+          "alt": "云端搜索池、策略及模型训练器通过共享经验池交换数据，边缘执行端保存策略权重与轨迹缓冲",
+          "ok": true
+        },
+        {
+          "alt": "左侧两图比较八小时内 Rollback 与 RISE 的投球和冰壶成功率；右侧两图比较 Rollback 曲线与人类手工及遥操作均值",
+          "ok": true
+        },
+        {
+          "alt": "同一组记录动作下，真实视频与模型预测逐列比较，包含头部及左右腕部三视角，步数到 300",
+          "ok": true
+        },
+        {
+          "alt": "冰壶真实记录、冻结模型和适配模型的开环画面对照；右侧曲线比较 64 条 episode 上的 RGB L1 误差及置信区间",
+          "ok": true
+        },
+        {
+          "alt": "冰壶树中既有真实轨迹中间节点也有想象节点；下方逐帧比较不同第二次推石速度导致进入或停在得分区前",
+          "ok": true
+        },
+        {
+          "alt": "积木树中第 300 步的三个子树分别为 0/3、2/2、1/1；下方 A 成功抽出目标块，B 到终点仍留在塔中",
+          "ok": true
+        },
+        {
+          "alt": "最终策略真实机器人执行：连续五次取块、成功投球，以及两次桌面冰壶出手",
+          "ok": true
+        },
+        {
+          "alt": "四种投球失败的轨迹叠图：投短、投过头、桶沿反弹以及夹爪松手失败",
+          "ok": true
+        }
+      ],
+      "math": 118,
+      "mathErrors": 0,
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "buttons": [
+        {
+          "tag": "INPUT",
+          "type": "checkbox",
+          "text": "",
+          "id": "show-sources",
+          "aria": null
+        }
+      ],
+      "navLinks": [
+        {
+          "text": "01 / 先分清它改进了哪一个环节",
+          "valid": true
+        },
+        {
+          "text": "02 / 回退恢复的究竟是什么",
+          "valid": true
+        },
+        {
+          "text": "03 / 搜索怎样把预算花在分歧上",
+          "valid": true
+        },
+        {
+          "text": "04 / 从一棵树算出五档标签",
+          "valid": true
+        },
+        {
+          "text": "05 / 策略具体优化什么",
+          "valid": true
+        },
+        {
+          "text": "06 / 真实反馈怎样校正世界模型",
+          "valid": true
+        },
+        {
+          "text": "07 / 异步系统怎样保持比较一致",
+          "valid": true
+        },
+        {
+          "text": "08 / 先看实验究竟在测什么",
+          "valid": true
+        },
+        {
+          "text": "09 / 真机主结果如何重算",
+          "valid": true
+        },
+        {
+          "text": "10 / 消融分别拆出了什么",
+          "valid": true
+        },
+        {
+          "text": "11 / 八小时曲线与人类对照",
+          "valid": true
+        },
+        {
+          "text": "12 / 世界模型的画面更准意味着什么",
+          "valid": true
+        },
+        {
+          "text": "13 / 追踪具体分支与真实失败",
+          "valid": true
+        },
+        {
+          "text": "14 / 平均领先掩盖了哪些位置退步",
+          "valid": true
+        },
+        {
+          "text": "15 / 按实现层次整理复现条件",
+          "valid": true
+        },
+        {
+          "text": "16 / 把机制和证据接回同一条论证",
+          "valid": true
+        }
+      ],
+      "externalAssets": [],
+      "detailOpened": true,
+      "print": {
+        "width": 1440,
+        "scrollWidth": 1440,
+        "bodyText": 22614
+      },
+      "errors": []
+    }
+  ],
+  "keyboard_and_sources": [
+    {
+      "width": 390,
+      "hidden": true,
+      "revealed": true,
+      "keyboardSourceToggle": true,
+      "widthSources": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "keyboardDetails": true,
+      "keyboardAnswer": true,
+      "navigation": true,
+      "longParagraphs": [
+        {
+          "width": 356,
+          "parent": 390,
+          "maxWidth": "none",
+          "whiteSpace": "normal"
+        },
+        {
+          "width": 356,
+          "parent": 390,
+          "maxWidth": "none",
+          "whiteSpace": "normal"
+        },
+        {
+          "width": 356,
+          "parent": 390,
+          "maxWidth": "none",
+          "whiteSpace": "normal"
+        },
+        {
+          "width": 356,
+          "parent": 390,
+          "maxWidth": "none",
+          "whiteSpace": "normal"
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "hidden": true,
+      "revealed": true,
+      "keyboardSourceToggle": true,
+      "widthSources": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "keyboardDetails": true,
+      "keyboardAnswer": true,
+      "navigation": true,
+      "longParagraphs": [
+        {
+          "width": 896,
+          "parent": 1040,
+          "maxWidth": "none",
+          "whiteSpace": "normal"
+        },
+        {
+          "width": 896,
+          "parent": 1040,
+          "maxWidth": "none",
+          "whiteSpace": "normal"
+        },
+        {
+          "width": 896,
+          "parent": 1040,
+          "maxWidth": "none",
+          "whiteSpace": "normal"
+        },
+        {
+          "width": 896,
+          "parent": 1040,
+          "maxWidth": "none",
+          "whiteSpace": "normal"
+        }
+      ]
+    }
+  ],
+  "print_inspection": {
+    "preview_pages": 26,
+    "format": "A4, CSS 14mm margins",
+    "inspected": [
+      "flow-matching equation",
+      "full Table8 including P7-P9, Overall and Score",
+      "full Fig.7 and caption"
+    ],
+    "issue_found_and_repaired": "Screen table min-width and paint containment clipped printed columns; print CSS now fits tables and figures to the page. Source tests:45 passed;15 gallery outputs regenerated and checked."
+  },
+  "runtime_checks": {
+    "unit_tests_passed": 45,
+    "unit_tests_failed": 0,
+    "doctor": "pass",
+    "example_freshness": "15 pass",
+    "docs_freshness": "pass",
+    "reading_index_freshness": "pass",
+    "audit_freshness": "pass",
+    "skill_commit": "8717a45a5cfda7d5e538c9dd28a5f4755cdd9f09"
+  },
+  "not_performed": [
+    "robot training or experimental reproduction",
+    "independent human reader study"
+  ],
+  "output_sha256": {
+    "reading.md": "ec96791f8997fa039d7d1b79d79c20c32e64d4517c61e86565226081e711f167",
+    "reading.html": "e704b562658024ab20a81422441855cc8260403c7af28f8d9e97007ddcafd3db",
+    "provenance.json": "fffe6c25b244ef6af609c82cd3b885a524dbeca90d967bb5b34c2b0533a09221"
+  }
+}

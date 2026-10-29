@@ -1,0 +1,161 @@
+{
+  "title": "Rollback: Experience Backtracking in World Models for Policy Improvement",
+  "arxiv": "2610.36068v1",
+  "source_pdf": "https://arxiv.org/pdf/2610.36068v1",
+  "source_html": "https://arxiv.org/html/2610.36068v1",
+  "discovery": "https://huggingface.co/papers/2610.36068",
+  "pages": 25,
+  "pdf_sha256": "d9d2906181805b3a6ac188d8ca557569ea35adf7fee894d3a07eaa0707620085",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "reading_language": "zh-CN",
+  "mode": "deep",
+  "skill_commit": "8717a45a5cfda7d5e538c9dd28a5f4755cdd9f09",
+  "read_date": "2026-10-29",
+  "figures": [
+    {
+      "file": "assets/fig1-problem.png",
+      "page": 2,
+      "crop_pt": [
+        70,
+        71,
+        526,
+        295
+      ],
+      "scale": 2.7,
+      "sha256": "8c52e6f4fff6f35ac96d2184e80b35054f117d714826bb8c7937c8995a466bad",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig2-method.png",
+      "page": 5,
+      "crop_pt": [
+        70,
+        71,
+        526,
+        306
+      ],
+      "scale": 2.7,
+      "sha256": "b29c4df80b1efc518233b542a2163dc91c297969246b53ed8bd03e018ac28764",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig3-system.png",
+      "page": 8,
+      "crop_pt": [
+        70,
+        71,
+        526,
+        323
+      ],
+      "scale": 2.7,
+      "sha256": "4f4000b733ad6bbc57a5b1a0f2351178de15390921fe4804330d4afca8aa3b91",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig5-6-training-human.png",
+      "page": 12,
+      "crop_pt": [
+        70,
+        71,
+        526,
+        204
+      ],
+      "scale": 2.7,
+      "sha256": "6e00015b4f27fc6d2da4e1764b736316b83a7d426b0c0014cb96410bf6812e5f",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig7-counterfactuals.png",
+      "page": 13,
+      "crop_pt": [
+        70,
+        75,
+        526,
+        665
+      ],
+      "scale": 2.7,
+      "sha256": "476f7a991ca78e3cb1790ecef7a6a31fa6e07746ec548031992ca89b221fbea1",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig8-fidelity.png",
+      "page": 14,
+      "crop_pt": [
+        70,
+        274,
+        526,
+        460
+      ],
+      "scale": 2.7,
+      "sha256": "65f5830429258642618b20e4f968378d03754e60f4c88d442ed8408c1856d44c",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig9-value-example.png",
+      "page": 21,
+      "crop_pt": [
+        70,
+        509,
+        526,
+        715
+      ],
+      "scale": 2.7,
+      "sha256": "875774f3c7f4670903862c40ece679b39ff4ffc233ed9e0c71acb26515a726bd",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig11-block-tree.png",
+      "page": 22,
+      "crop_pt": [
+        70,
+        387,
+        526,
+        640
+      ],
+      "scale": 2.7,
+      "sha256": "97c8b47adbb16c1602454fadb03846387c02c80f0c3dce1dbb96d00880409fcc",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig12-three-view-prediction.png",
+      "page": 23,
+      "crop_pt": [
+        70,
+        137,
+        526,
+        305
+      ],
+      "scale": 2.7,
+      "sha256": "98ef03de3fbfe06a4938a9388ebc6685859e36c5589ec48f2ab5e6469c515139",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig14-real-executions.png",
+      "page": 24,
+      "crop_pt": [
+        70,
+        105,
+        526,
+        382
+      ],
+      "scale": 2.7,
+      "sha256": "e7e46ef56c433d1d8d6070f29d6b82aa8b46b6fa6e6d25f514d00a74dbdbafa7",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    },
+    {
+      "file": "assets/fig15-failures.png",
+      "page": 24,
+      "crop_pt": [
+        70,
+        508,
+        526,
+        609
+      ],
+      "scale": 2.7,
+      "sha256": "b0d842d274c6fd626a1e240fc674f9e276a80e36ab5165c08f2ef405d4a182ce",
+      "attribution": "Luo et al., Rollback, arXiv:2610.36068v1, CC BY 4.0"
+    }
+  ],
+  "source_note": "Canonical PDF used for figure numbering. HTML section 6.4 refers to Figure 6 where PDF refers to Figure 5. No source access gaps in substantive main sections and Appendices A-G."
+}
