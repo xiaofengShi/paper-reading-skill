@@ -203,6 +203,18 @@
       "summaryEn": "A Deep Reading of zero-data long-context RL: the policy writes a compact question-evidence-answer specification before expanding it into long documents, filters to the unstable band, and trains with GRPO, beating external-corpus and 397B-teacher synthetic data on five benchmarks.",
       "summaryZh": "零数据长上下文 RL 深读：策略先写紧凑的问题-证据-答案规格再展开成长文档，不稳定带过滤后 GRPO 训练，五基准胜过外部语料与 397B 教师合成数据。",
       "mode": "deep"
+    },
+    {
+      "slug": "harnesspro",
+      "title": "HarnessPro",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.26770v2",
+      "date": "2026-10-30",
+      "pinned": false,
+      "mode": "deep",
+      "summaryEn": "A Deep Reading of Pareto-aware recursive harness self-improvement: fixed LLM-generated tests replace judge preferences (failure recall 41.7%→83.3%), three priority planners evolve candidates, and normalized weighted-distance selection yields lite/medium/heavy harnesses that beat RHO at 26.1% lower cost.",
+      "summaryZh": "帕累托感知的 Harness 递归自我改进深读：固定 LLM 生成测试替代判官偏好（失败检出 41.7%→83.3%）、三优先级并行规划、加权距离选出 lite/medium/heavy 三档，全面超 RHO 且成本降 26.1%。"
     }
   ]
 }
