@@ -213,8 +213,8 @@
       "date": "2026-10-30",
       "pinned": false,
       "mode": "deep",
-      "summaryEn": "A Deep Reading of Pareto-aware recursive harness self-improvement: fixed LLM-generated tests replace judge preferences (failure recall 41.7%→83.3%), three priority planners evolve candidates, and normalized weighted-distance selection yields lite/medium/heavy harnesses that beat RHO at 26.1% lower cost.",
-      "summaryZh": "帕累托感知的 Harness 递归自我改进深读：固定 LLM 生成测试替代判官偏好（失败检出 41.7%→83.3%）、三优先级并行规划、加权距离选出 lite/medium/heavy 三档，全面超 RHO 且成本降 26.1%。"
+      "summaryEn": "A fine-grained Deep Reading of Pareto-aware recursive harness self-improvement: fixed LLM-generated tests, DPP coreset, three-priority planning, and weighted-distance tier selection, beating RHO at 26.1% lower cost, with denominator recomputation and worked examples.",
+      "summaryZh": "帕累托感知的 Harness 递归自我改进深读（细章版）：固定 LLM 生成测试替代判官（失败检出 41.7%→83.3%）、DPP coreset、三优先级规划、加权平方距离选三档代表，全面超 RHO 且成本降 26.1%；含分母重算与手算教学例。"
     }
   ]
 }
