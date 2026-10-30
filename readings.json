@@ -191,6 +191,18 @@
       "pinned": false,
       "summaryEn": "A 16-chapter Deep Reading of experience-backtracking search: reconstruct PUCT, relative value bins, flow matching, model adaptation, and asynchronous training, then examine real-robot experiments and appendices A–G.",
       "summaryZh": "16 章 Deep Reading：逐步重建回退搜索、PUCT、相对价值分档、flow matching、模型适配与异步训练，再逐组核对真机实验、消融及附录 A–G。"
+    },
+    {
+      "slug": "longzero",
+      "title": "LongZero",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.30132v1",
+      "date": "2026-10-30",
+      "pinned": false,
+      "summaryEn": "A Deep Reading of zero-data long-context RL: the policy writes a compact question-evidence-answer specification before expanding it into long documents, filters to the unstable band, and trains with GRPO, beating external-corpus and 397B-teacher synthetic data on five benchmarks.",
+      "summaryZh": "零数据长上下文 RL 深读：策略先写紧凑的问题-证据-答案规格再展开成长文档，不稳定带过滤后 GRPO 训练，五基准胜过外部语料与 397B 教师合成数据。",
+      "mode": "deep"
     }
   ]
 }
