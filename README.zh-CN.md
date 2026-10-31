@@ -51,11 +51,11 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 - **Attention Is All You Need** · English · Brief Reading — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 依据 [arXiv:1706.03762](https://arxiv.org/abs/1706.03762)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 · Brief Reading — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
 - **LoRA** · 中文 · Brief Reading — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。 依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **A-RSI** · 中文 · Deep Reading · ZCode — 零数据多模态自我改进的自适应任务刷新深读（量化深度版 9000+字）：训练日志触发的池饱和检测、共享配置契约程序化出题、五臂对照逐格重算、奖励压力测试与输出分解（完成 vs 改正）。 依据 [arXiv:2610.38568v1](https://arxiv.org/abs/2610.38568v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/a-rsi-deep-read.html)
 - **HarnessPro** · 中文 · Deep Reading · ZCode — 帕累托感知的 Harness 递归自我改进深读（量化深度版，9000+字/17章/26小节/13公式/7手算）：固定 LLM 生成测试（检出 41.7%→83.3%）、DPP coreset、三优先级计划、加权平方距离选三档；附录 B/C/D 全量整合；全面超 RHO 且成本降 26.1%。 依据 [arXiv:2610.26770v2](https://arxiv.org/abs/2610.26770v2)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/harnesspro-deep-read.html)
 - **LongZero** · 中文 · Deep Reading · ZCode — 零数据长上下文 RL 深读：策略先写紧凑的问题-证据-答案规格再展开成长文档，不稳定带过滤后 GRPO 训练，五基准胜过外部语料与 397B 教师合成数据。 依据 [arXiv:2610.30132v1](https://arxiv.org/abs/2610.30132v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/longzero-deep-read.html)
-- **Rollback** · 中文 · Deep Reading · Codex — 16 章 Deep Reading：逐步重建回退搜索、PUCT、相对价值分档、flow matching、模型适配与异步训练，再逐组核对真机实验、消融及附录 A–G。 依据 [arXiv:2610.36068v1](https://arxiv.org/abs/2610.36068v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/rollback-deep-read.html)
 
-目前已发布 **18** 篇阅读文档——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
+目前已发布 **19** 篇阅读文档——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
 <!-- readings-index:end -->
 
 重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。

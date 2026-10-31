@@ -215,6 +215,18 @@
       "mode": "deep",
       "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 17 chapters) of Pareto-aware recursive harness self-improvement: fixed LLM-generated tests, DPP coreset, three-priority planning, tiered selection; appendices B-D fully integrated; beating RHO at 26.1% lower cost with denominator recomputation.",
       "summaryZh": "帕累托感知的 Harness 递归自我改进深读（量化深度版，9000+字/17章/26小节/13公式/7手算）：固定 LLM 生成测试（检出 41.7%→83.3%）、DPP coreset、三优先级计划、加权平方距离选三档；附录 B/C/D 全量整合；全面超 RHO 且成本降 26.1%。"
+    },
+    {
+      "slug": "a-rsi",
+      "title": "A-RSI",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.38568v1",
+      "date": "2026-10-31",
+      "pinned": false,
+      "mode": "deep",
+      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 12 chapters, 20 subsections, 11 display equations, 11 worked calcs) of adaptive task refresh for zero-data multimodal self-improvement: training-log pool saturation detection, shared-configuration programmatic tasks, five-arm matched-update comparison, reward stress tests, and output decomposition.",
+      "summaryZh": "零数据多模态自我改进的自适应任务刷新深读（量化深度版 9000+字）：训练日志触发的池饱和检测、共享配置契约程序化出题、五臂对照逐格重算、奖励压力测试与输出分解（完成 vs 改正）。"
     }
   ]
 }
