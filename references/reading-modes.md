@@ -2,6 +2,8 @@
 
 There are two reading-depth modes. Both explain the paper on its own terms, preserve source discipline, and default to one offline HTML with a Markdown audit source. REVIEW and RESEARCH are optional lenses applied to the chosen depth.
 
+Both modes use the [learner experience contract](learner-experience.md). Newcomers can request Deep without being made to read an expert-facing audit first. Illustrations, concrete examples, meaningful experiments, and progressive detail apply at either depth.
+
 ## Select a mode
 
 | Request | Mode | Reader-facing result |
@@ -24,7 +26,7 @@ Follow an explicit mode even when another part of the request adds a lens. Witho
 | Math or proof | Full key equation and variable meanings; useful example | Motivation, assumptions, intermediate steps, worked calculation or proof trace, and boundary behavior for each central mathematical component |
 | Evidence | Main comparisons with setup, controls, metrics, results, and limits | Interpret every major experiment family, ablation, sensitivity analysis, and consequential negative result; explain comparable rows and decisive conditions |
 | Appendices | Bring in details necessary for the selected explanation | Integrate definitions, proofs, protocols, and extensions that affect the central argument; justify omitted secondary material in the audit source |
-| Presentation | The existing compact visual atlas | Expanded connected chapters, with diagrams and tables supporting the technical prose |
+| Presentation | A focused illustrated learning path | An illustrated learning path with complete, reachable reconstruction and supporting evidence |
 | Depth threshold | At least 2 in every applicable quality dimension | 3 in every applicable dimension, plus complete core coverage |
 
 These are semantic requirements, not word-count or chapter-count targets. Let length grow with the paper's complexity. More diagrams, a longer abstract, repeated conclusions, or a mode label cannot establish depth.

@@ -17,6 +17,10 @@ This is the release check for a single-paper **Brief Reading or Deep Reading**. 
 
 If source coverage is insufficient, obtain the missing paper material or report the precise gap. A limited overview may be delivered as Brief only when it matches the user's request; retain the incomplete status of a requested Deep. A gate that fails in the generated document requires repair and another check. Do not replace source checking with a confident-sounding summary.
 
+## Learner experience gate
+
+Check separately from depth and source fidelity. Identify the intended reader and inspect the first difficult mechanism in the actual output. A central unfamiliar operation must have a concrete instance, a useful explanatory view when visual structure matters, terms defined where used, and a plain-language interpretation before advanced notation. Text-heavy cards alone do not satisfy an illustration need. If an interaction is justified, it is discoverable beside the lesson, specifies an action and observable relationship, has a worked default/reset, supports keyboard and narrow screens, and retains a static explanation without scripts. Otherwise record why the static view is sufficient. A requested beginner tutorial fails when it merely adds a glossary to an expert-first research audit. These are author/interface checks, not evidence of human learning.
+
 ## Depth ratings after the gates
 
 Rate each dimension `0` (absent), `1` (named), `2` (explained), or `3` (a reader can reconstruct and use it). Give the passage or figure that earned the rating. The ratings locate revisions; their sum is not a scientific validity score.

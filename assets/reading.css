@@ -320,3 +320,14 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
   .archify-figure iframe { height: 320px; }
   .article h2 { break-after: avoid; }
 }
+
+/* Visible experiments keep the task and static lesson outside the sandbox. */
+.learning-lab { margin: 2rem 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.learning-lab figcaption, .lab-takeaway { padding: 1rem 1.2rem; }
+.learning-lab figcaption h3 { margin: .35rem 0 .75rem; }
+.learning-lab figcaption p { margin: .45rem 0; }
+.learning-lab iframe { display: block; width: 100%; border: 0; border-block: 1px solid var(--line); background: #f5f8fb; }
+.lab-takeaway { background: color-mix(in srgb, var(--teal) 5%, white); font-size: .95rem; }
+.lab-takeaway .source-badge { display: none; }
+#show-sources:checked ~ .reading-shell .lab-takeaway .source-badge { display: inline-block; }
+@media print { .learning-lab iframe { display: none; } .learning-lab { break-inside: avoid; } }

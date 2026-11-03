@@ -323,6 +323,17 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
   .archify-figure iframe { height: 320px; }
   .article h2 { break-after: avoid; }
 }
+
+/* Visible experiments keep the task and static lesson outside the sandbox. */
+.learning-lab { margin: 2rem 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.learning-lab figcaption, .lab-takeaway { padding: 1rem 1.2rem; }
+.learning-lab figcaption h3 { margin: .35rem 0 .75rem; }
+.learning-lab figcaption p { margin: .45rem 0; }
+.learning-lab iframe { display: block; width: 100%; border: 0; border-block: 1px solid var(--line); background: #f5f8fb; }
+.lab-takeaway { background: color-mix(in srgb, var(--teal) 5%, white); font-size: .95rem; }
+.lab-takeaway .source-badge { display: none; }
+#show-sources:checked ~ .reading-shell .lab-takeaway .source-badge { display: inline-block; }
+@media print { .learning-lab iframe { display: none; } .learning-lab { break-inside: avoid; } }
 </style><link rel="canonical" href="https://xiaofengshi.github.io/paper-reading-skill/harnesspro-deep-read.html"><meta property="og:type" content="article"><meta property="og:title" content="HarnessPro：当自我改进开始计费 · 深读图谱"><meta property="og:url" content="https://xiaofengshi.github.io/paper-reading-skill/harnesspro-deep-read.html"></head>
 <body data-theme="saffron"><a class="skip-link" href="#content">跳到正文</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>原文证据驱动的深读图谱</span><label class="source-toggle-label" for="show-sources">显示原文定位</label><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">论文深读图谱 · 中文</p><h1>HarnessPro：当自我改进开始计费</h1><p class="hero-sub">从全局路径到关键机制与实验证据。</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div></div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div><a href="#section-1">01 / 问题：RSI 的账单从来没有进过目标函数</a><a href="#section-2">02 / 三个指标各怎么算</a><a href="#section-3">03 / 地板约束：为什么&quot;不伤性能&quot;必须是硬约束</a><a href="#section-4">04 / 无标签评估：把判官换成一把固定的尺子</a><a href="#section-5">05 / 训练集怎么挑：难度加权的 DPP coreset</a><a href="#section-6">06 / epoch 循环总览：Algorithm 1 逐段走查</a><a href="#section-7">07 / 诊断：三条轨迹联合看，成本问题与失败问题并列</a><a href="#section-8">08 / 计划：三条指令的原文哲学与真实产物</a><a href="#section-9">09 / 编辑与评估：Git 兜底的可回滚进化</a><a href="#section-10">10 / 过滤：地板之上、支配之外</a><a href="#section-11">11 / 代表选择：归一化加权平方距离的算术</a><a href="#section-12">12 / 主结果：把每个百分比验算回去</a><a href="#section-13">13 / 演化动态：双改善常要等到第二轮之后</a><a href="#section-14">14 / 消融：尺子与药方各值多少</a><a href="#section-15">15 / 进化解剖：钱省在哪（附录 D 全量）</a><a href="#section-16">16 / 证据的边界</a><a href="#section-17">17 / 接回论证</a></nav><main id="content" class="article"><div class="article-inner"><p>深读对象：HarnessPro: Recursive Harness Self-Improvement with Pareto Optimization for Performance-Cost Trade-offs（arXiv 2610.26770v2，PDF 41 页，清华、Z.AI、上海交大、Warwick、Kling AI 合作）。Harness 递归自我改进（RSI）这一线的方法都在回答&quot;怎么让 Agent 的编排层自己变好&quot;；这篇论文换了一个部署视角的问法：<strong>变好的每一步都在花钱，钱进不进目标函数？</strong> 此前的无标签方法 RHO 在 SWE-Bench Pro 上把通过率从 59.0 提到 80.0，代价是单任务成本涨 42.6%。HarnessPro 把目标改成带性能地板的双目标 min(−PR, C)，用多智能体管线做递归进化，输出 lite/medium/heavy 三档 harness 而非单一产物：GPT-5.5×Codex 上 heavy 档三基准全部超过 RHO 且平均成本低 26.1%，medium 档在 SWE-Bench Pro 上用一半价格保住 RHO 级性能。本篇按细章深读规范逐段重构：机制逐一展开、公式逐步推导、主表逐列验算、附录 B/C/D（进化指令、智能体产物、进化后 harness 的完整配置）全部整合进正文。</p>
 <!-- Deep Reading coverage

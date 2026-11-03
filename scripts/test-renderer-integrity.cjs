@@ -189,3 +189,22 @@ test('invalid real math still fails and teaching examples do not execute custom 
   assert.match(html, /archify:missing\.html/);
   assert.doesNotMatch(html, /class="archify-disclosure"/);
 }));
+
+test('visible labs retain a static lesson, sandbox local HTML, and reject missing or unsafe inputs', () => fixture(({ dir, render }) => {
+  fs.writeFileSync(path.join(dir, 'demo.html'), '<!doctype html><html lang="en"><title>Demo</title><label for="x">Input</label><input id="x" type="range"><button type="button">Reset</button><noscript>Controls unavailable; see the static example.</noscript><script>document.getElementById("x").value=2;</script></html>');
+  const block = data => '```paper-lab\n' + JSON.stringify(data) + '\n```\n';
+  const data = { file: 'demo.html', title: 'Change <one> input', task: 'Move the input', observation: 'Watch the output', takeaway: 'This is a teaching example & has a static answer.', source: 'PDF §4; teaching data', height: 520 };
+  const html = succeeds(render(block(data)));
+  assert.match(html, /<figure class="learning-lab">/);
+  assert.match(html, /Change &lt;one&gt; input/);
+  assert.match(html, /sandbox="allow-scripts" loading="lazy" style="height:520px"/);
+  assert.match(html, /<\/iframe><div class="lab-takeaway"><strong>Takeaway · <\/strong>This is a teaching example &amp; has a static answer/);
+  assert.doesNotMatch(html, /<details class="archify-disclosure">/);
+  for (const field of ['file', 'title', 'task', 'observation', 'takeaway', 'source']) {
+    fails(render(block({ ...data, [field]: '' })), /paper-lab is missing/);
+  }
+  for (const height of [319, 901, 560.5, '560']) fails(render(block({ ...data, height })), /paper-lab height/);
+  fails(render(block({ ...data, file: '../demo.html' })), /Visual must stay beside source/);
+  fs.writeFileSync(path.join(dir, 'demo.html'), '<img src="https://example.com/tracker.png">');
+  fails(render(block(data)), /Offline asset/);
+}));

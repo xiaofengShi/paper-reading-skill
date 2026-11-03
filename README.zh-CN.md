@@ -43,6 +43,8 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 把离线 HTML 和 Markdown 保存到 paper-readings/rollback/。
 ```
 
+两种深度都默认面向学习者：先用具体问题与图示建立直觉，再跟算或动手改变一个输入，最后展开机制、公式与证据。深入阅读不要求先有研究背景；长推导和完整审计按需展开。可用 `paper-lab` 将离线交互实验直接放在解释旁，保留无脚本可读的结论。详见[学习体验约定](references/learner-experience.md)。
+
 ## 阅读完整样例
 
 画廊同时提供 **Brief Reading 导读**与 **Deep Reading 深读**，每篇标明模式和语言。Brief 可从 LoRA 或 ResNet 开始；Deep 可读 Rollback：16 个连贯章节展开搜索、公式、训练系统、实验及附录 A–G。每篇将原图和证据放在解释旁，并提供论文特定的理解题。原有 `-deep-read` 链接保持不变，深度以页面显示的模式为准。

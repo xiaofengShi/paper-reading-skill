@@ -128,6 +128,18 @@ Shared fields: `type` (required), `title`, `subtitle`, `origin` (kicker above th
 
 Charts carry a visible `origin`/`source` pair and a `<details>` data table so the numbers survive without the graphic.
 
+### `paper-lab` — visible learning experiment
+
+Use this top-level JSON fence for a hands-on mechanism placed beside its first explanation. Unlike `archify`, the experiment is visible immediately; its task, observation cue, and static takeaway remain outside the iframe for no-script and print reading.
+
+````markdown
+```paper-lab
+{"file":"assets/demo.html","title":"Try one update","task":"Change the learning rate, then reset.","observation":"Compare the old and new prediction.","takeaway":"A larger step need not reduce error. The worked default remains in the adjacent text.","source":"Teaching example based on PDF §4, not measured results","height":560}
+```
+````
+
+All six text fields are required and non-empty; `height` is optional (default 560, integer 320–900 CSS px). The file follows exactly the same path containment, offline-resource validation, CSP, and `sandbox="allow-scripts"` rules as `archify`. Include labeled native controls, a worked default, reset, and a no-script notice in the authored HTML. Longer mobile content may scroll inside the iframe; test both its viewport and its parent. The renderer embeds and validates the resource, but does not create a simulation or verify its mathematics. Keep the default example, important limits, and conclusion in adjacent Markdown. Do not present simulated output as a paper measurement.
+
 ### `<!-- archify:file.html|title -->` — embedded interactive view
 
 An HTML comment at the top level, not a fence. The file path is relative to the audit source and must stay inside its directory subtree after symlinks are resolved. The page is inlined as an iframe `srcdoc` inside a disclosure; its inline scripts remain available under `sandbox="allow-scripts"`. Optional Google Fonts `<link>` tags are removed so the page uses its system-font fallback. Any other unresolved resource (including remote or relative scripts, images, stylesheets, and CSS `url()` requests) aborts the build. SVG namespaces, fragment references such as `url(#arrowhead)`, embedded data URLs, and ordinary external hyperlinks remain valid.

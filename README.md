@@ -49,6 +49,8 @@ Save the offline HTML and Markdown in paper-readings/rollback/.
 
 The gallery includes **Brief Reading** and **Deep Reading**, with the mode and language shown on every entry. Start with ResNet or LoRA for Brief, or Rollback for Deep: its 16 connected chapters reconstruct the search, equations, training system, experiments, and appendices A–G. Each reading keeps figures and evidence beside the explanation and includes paper-specific understanding checks. The existing `-deep-read` URLs remain stable; the displayed mode identifies the depth.
 
+Both depths default to a learner-friendly path: start with a concrete question and explanatory illustration, work a small example or change an input, then develop the mechanism, formal detail, and evidence. Deep does not assume research expertise. Extended derivations and audits remain reachable in disclosures. The `paper-lab` block places an offline experiment beside its explanation with a static takeaway. See [the learner experience contract](references/learner-experience.md).
+
 <!-- readings-index:start -->
 - **Attention Is All You Need** · English · Brief Reading — Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer. Based on [arXiv:1706.03762](https://arxiv.org/abs/1706.03762). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 · Brief Reading — Follow the training path through the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments. [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)

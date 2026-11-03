@@ -194,6 +194,15 @@ function renderChart(data) {
   }
   throw new Error(`Unknown paper-chart type: ${data.type}`);
 }
+function renderLab(data) {
+  for (const field of ['file', 'title', 'task', 'observation', 'takeaway', 'source']) requireText(data[field], `paper-lab is missing "${field}"`);
+  const height = data.height === undefined ? 560 : data.height;
+  if (!Number.isInteger(height) || height < 320 || height > 900) throw new Error('paper-lab height must be an integer from 320 to 900');
+  const html = withOfflinePolicy(auditHtml(fs.readFileSync(localFile(data.file), 'utf8'), { context: data.file, stripGoogleFonts: true }));
+  const zh = lang === 'zh-CN';
+  return `<figure class="learning-lab"><figcaption><span class="figure-kicker">${zh ? '动手试一试' : 'TRY THE MECHANISM'}</span><h3>${esc(data.title)}</h3><p><strong>${zh ? '试着做' : 'Try'} · </strong>${esc(data.task)}</p><p><strong>${zh ? '留意变化' : 'Watch'} · </strong>${esc(data.observation)}</p></figcaption><iframe title="${esc(data.title)}" srcdoc="${esc(html)}" sandbox="allow-scripts" loading="lazy" style="height:${height}px"></iframe><div class="lab-takeaway"><strong>${zh ? '带走这个直觉' : 'Takeaway'} · </strong>${esc(data.takeaway)}${sourceBadge(data.source)}</div></figure>`;
+}
+
 function renderArchify(relative, title) {
   // Archify's optional Google Fonts can fall back to system fonts. Other
   // unresolved resources are build errors; scripts keep working inside srcdoc.
@@ -203,7 +212,7 @@ function renderArchify(relative, title) {
 
 const reading = renderReadingMarkdown(Marked, prepared, {
   esc, imageData, katex, labels: t, renderArchify,
-  blocks: { 'paper-map': renderMap, 'paper-path': renderPath, 'paper-contrast': renderContrast, 'paper-experiments': renderExperiments, 'paper-chart': renderChart, 'paper-check': renderCheck },
+  blocks: { 'paper-map': renderMap, 'paper-path': renderPath, 'paper-contrast': renderContrast, 'paper-experiments': renderExperiments, 'paper-chart': renderChart, 'paper-check': renderCheck, 'paper-lab': renderLab },
 });
 const { heroMap, sections, title, visualCount } = reading;
 const body = auditHtml(reading.body, { context: 'reading', imageData });
