@@ -1,6 +1,6 @@
 # Paper-type routes for a reading atlas
 
-Choose the paper's dominant contribution before selecting views. Mixed papers can combine routes. The global map and experiment/argument map should expose the paper's actual structure, not fit every paper into the same model-training pipeline.
+Choose the paper's dominant contribution before selecting views. Mixed papers can combine routes. Any global or evidence view should expose the paper's actual structure rather than impose a model-training pipeline.
 
 | Type | Global view | Detail views and reading emphasis |
 |---|---|---|
@@ -11,4 +11,4 @@ Choose the paper's dominant contribution before selecting views. Mixed papers ca
 | Theory | Definitions/assumptions → lemmas → theorem | Proof dependency graph, worked example, boundary cases; experimental evidence categories do not replace proof validity |
 | Survey | Central question → taxonomy branches → representative work | Comparison axes, cross-links and uncovered regions; avoid a fake single-method flow |
 
-For an empirical technical report such as MiMo-V2.6, make a compact global training map, then separate mechanism maps for distinctive steps, and an experiment atlas that keeps full-model results distinct from controlled component studies.
+For a large technical report, distinguish whole-system results from controlled component studies; use separate views only where the global explanation becomes too dense.

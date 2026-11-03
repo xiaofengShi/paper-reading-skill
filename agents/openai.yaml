@@ -1,4 +1,4 @@
 interface:
   display_name: "Paper Reading"
   short_description: "Illustrated readings with worked examples and interaction"
-  default_prompt: "Use $paper-reading in Brief Reading mode unless I request Deep Reading. Deliver standalone illustrated HTML and its Markdown audit source in my preferred language, with sources at the end. Assume a researcher with relevant foundations unless I specify another audience; explain paper-specific mechanisms and reasoning, add only needed prerequisite bridges, and keep optional refreshers separate. Before delivering a tutorial, check the whole document and recommended route for both missing explanations and redundant background. Preserve decisive evidence, limits and requested depth."
+  default_prompt: "Use $paper-reading to explain this paper in my preferred language. Use Brief unless I request Deep; default to a researcher new to the paper and adapt explanations to my background. Deliver a standalone illustrated HTML and Markdown source, with sources at the end, after checking explanation gaps, redundancy and evidence limits."

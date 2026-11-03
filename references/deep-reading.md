@@ -34,7 +34,7 @@ Do not stop at a module list, flow-chart caption, or “this improves performanc
 
 For each central objective, equation, or theorem, explain the question it answers before presenting its formal expression. Define variables with their roles, dimensions or units, and state assumptions and conditioning. Show the consequential intermediate steps and why each follows; preserve denominators, constraints, masks, and loss support.
 
-Then work a small calculation or proof dependency through to its output. Explain what changing a key parameter does and which boundary case breaks or changes the interpretation. For an optimization objective, distinguish the quantity being optimized from how it is estimated and updated. For a proof, connect assumptions and lemmas to the conclusion and its scope.
+Use a worked calculation or proof trace where it resolves a consequential step; do not repeat routine algebra already familiar to the intended reader. Explain parameter effects and boundary cases when they change the interpretation. For an optimization objective, distinguish the quantity being optimized from how it is estimated and updated. For a proof, connect assumptions and lemmas to the conclusion and its scope.
 
 Do not invent a derivation the source does not provide. Label an explanatory derivation or teaching calculation as yours and verify its algebra. When the paper supplies only an empirical design or withholds implementation detail, explain that level of evidence. Papers without mathematical contributions use their actual operations and protocols; do not manufacture equations to satisfy a template.
 
@@ -48,7 +48,7 @@ Integrate relevant appendix protocols, additional controls, proofs, or extension
 
 ## 5. Verify reconstruction before delivery
 
-Use as many connected chapters as the argument needs. The five atlas layers are an organizing sequence, not five short cards or a length ceiling. Do not pad with repeated summaries, generic background, or speculative future work. Both modes keep the same scientific fidelity and offline delivery requirements.
+Use as many connected chapters as the argument needs. The atlas layers are organizing aids, not fixed chapters or a length ceiling. Do not pad with repeated summaries, generic background, or speculative future work. Both modes keep the same scientific fidelity and offline delivery requirements.
 
 Apply [reading quality checks](../evals/reading-quality.md). Every applicable depth dimension must score **3**, with concrete passages as evidence, and the coverage record must have no unresolved core omission. Repair a dimension scored 0–2 before calling the output a completed Deep Reading. Word count, a successful render, or a declared `deep` marker cannot substitute for this review.
 

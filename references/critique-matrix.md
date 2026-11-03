@@ -1,103 +1,29 @@
-# Critique Matrix
+# Optional critique matrix
 
-Reviewer-mode checklist. For each dimension, record `status: ok | concern |
-weak | not assessable` plus the evidence. Every criticism must be stated as:
+Use for a requested credibility or weakness assessment after explaining the paper. Select relevant dimensions; theory, surveys and empirical work require different evidence. Record `ok | concern | weak | not assessable` with a concrete source location. Missing reporting limits assessment; it is not evidence that an unreported procedure failed.
 
-```
-Observation → Why it matters → Experiment that could resolve it
-```
+For a substantive concern state **observation → consequence for the claim → evidence that could resolve it**. Resolution may be a proof repair, protocol clarification, code check or experiment; do not demand experiments for every criticism.
 
-Generic comments ("more experiments are needed", "limited to one domain")
-without a concrete missing control are forbidden.
+| Dimension | Questions to assess |
+| --- | --- |
+| Problem and novelty | Is the problem well posed? What changes relative to the closest relevant work? A complex contribution need not fit one sentence to be novel. |
+| Design necessity | Which evidence isolates the claimed role of a component? What alternative explanation remains? |
+| Comparison fairness | Are data, model class, prompts, training/compute and evaluation budgets comparable where needed? Explain consequential differences. |
+| Controls and evidence | Does the test or proof support the strength of the claim? Whole-system gains alone do not isolate component causality. |
+| Ablations and sensitivity | Do controls address central contribution claims and consequential parameters? Do not require one experiment per module mechanically. |
+| Reliability | Are uncertainty, run variation and statistical tests reported where appropriate? A small incremental gain alone cannot establish necessity or irrelevance. |
+| Generalization | Which tasks, domains, scales or assumptions were tested, and where does support end? |
+| Cost and trade-offs | Are gains associated with extra compute, data, context or tool calls? Are relevant costs visible? |
+| Reproducibility | Are the source, code, data and consequential settings accessible and version-matched? Mark missing items as not reported. |
+| Hidden assumptions | Which assumptions are explicit, inherited or tested? For theory, check proof dependencies and scope directly. |
 
-## 1. Problem validity
-
-- Is the problem real and well-posed, or a strawman?
-- Is the failure of prior work demonstrated or merely asserted?
-- Would solving it change anything downstream?
-
-## 2. Novelty
-
-- Compress the delta: "Compared with X, they add Y." If Y cannot be stated in
-  one sentence, novelty is unclear.
-- Check the closest 2–3 prior methods specifically, not the field in general.
-- Distinguish new mechanism vs new combination of known mechanisms vs new
-  packaging.
-
-## 3. Necessity of components
-
-- For each proposed module: what breaks when it is removed?
-- Ablation slope tells the truth: if `Base 60 → +A 63 → +B 64 → +C 64.2`,
-  module A is the contribution; B and C may be complexity.
-- Are there modules no ablation isolates at all?
-
-## 4. Baseline fairness
-
-- Same backbone / model class?
-- Same training data volume and quality?
-- Same retrieval budget, inference-token budget, tool-call budget?
-- Same prompts or equally-tuned prompts?
-- Same training compute? Same evaluation protocol?
-- Are baselines reproduced or copied from papers with different setups?
-
-## 5. Experimental controls
-
-- For each claim, is there a comparison that isolates exactly that variable?
-- End-to-end wins with multiple simultaneous changes are INDIRECT evidence.
-
-## 6. Evidence sufficiency
-
-- Does the strongest claim rest on the strongest experiment, or on a
-  correlational one?
-- Correlation vs causation: does the paper show the mechanism causes the gain,
-  or only that the system containing it wins?
-
-## 7. Ablation completeness
-
-- One ablation per claimed contribution, minimally.
-- Are hyperparameters of the proposed module swept (update frequency, budget,
-  threshold) or only present/absent?
-- Are negative results reported?
-
-## 8. Statistical reliability
-
-- Multiple seeds / variance reported?
-- Are gains larger than run-to-run noise?
-- Significance testing where appropriate?
-
-## 9. Generalization
-
-- Single benchmark or family? Single domain? Single backbone?
-- Held-out / out-of-distribution evaluation?
-- Does the method scale, or only work at the tested size?
-
-## 10. Compute/data fairness
-
-- Does the proposed system secretly use more FLOPs, more data, more context
-  tokens, or more retrieval calls than baselines?
-- Is improvement bought with budget rather than mechanism?
-
-## 11. Reproducibility
-
-- Code, data, prompts, hyperparameters, seeds available?
-- Appendix sufficient to re-implement without contacting the authors?
-- Mark each missing item `NOT REPORTED` — never guess.
-
-## 12. Hidden assumptions
-
-- What must be true of the world/data/model for the method to work?
-- Which assumptions are validated, which are silently inherited?
-- Many research contributions are precisely *challenging* a hidden assumption
-  of prior work — identify the assumption this paper itself makes; it is the
-  attack surface for the next paper.
-
-## Output format
+Avoid generic “more experiments” comments without a claim-specific gap. Do not infer that the largest increment is the only contribution: importance depends on uncertainty, cost, interactions and the research question.
 
 ```yaml
 critique:
-  - dimension: baseline_fairness
+  - dimension: comparison_fairness
     status: concern
-    observation: "Ours uses a retrieval budget of 10 docs vs 5 for baselines"
-    why_it_matters: "gain may come from budget, not the verification module"
-    resolving_experiment: "rerun strongest baseline at equal budget"
+    observation: "Method uses 10 retrieved documents; baseline uses 5"
+    consequence: "The gain may reflect retrieval budget rather than the new module"
+    resolving_evidence: "A matched-budget comparison"
 ```

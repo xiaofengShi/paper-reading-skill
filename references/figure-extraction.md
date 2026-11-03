@@ -1,6 +1,6 @@
 # Getting figures out of a PDF
 
-A deep read embeds readable excerpts of the paper's own figures. This is the working recipe for turning PDF figure regions into PNG/WebP files beside the audit source, plus the verification method for labels the text layer mangles. The renderer accepts `.png`, `.svg`, `.webp`, `.jpg`, and `.jpeg` (case-insensitive); see [renderer-format](renderer-format.md).
+Use readable excerpts of the paper's figures when they clarify the mechanism or evidence; a figure-free theory paper needs no manufactured excerpt. This is the working recipe for turning PDF figure regions into PNG/WebP files beside the audit source, plus the verification method for labels the text layer mangles. The renderer accepts `.png`, `.svg`, `.webp`, `.jpg`, and `.jpeg` (case-insensitive); see [renderer-format](renderer-format.md).
 
 ## Naming and placement
 
@@ -48,11 +48,9 @@ PDF extraction returns bar labels and values as unordered words. A chart's value
 
 1. Pull every word in the chart region with `page.get_text("words")` and print `(text, x0, y0)`.
 2. Order the value labels left-to-right (or bottom-to-top for vertical charts) and match them to the legend/category order — a horizontal dashed “reference line” label is often printed at the panel edge and is **not** a bar.
-3. Cross-check at least two independent anchors in the paper text (captions, body text, appendix run tables) before committing. In the VISTA reading, for example, the body fixed three of four BabyVision bars (41.0 official / 63.2 VISTA / 92.3 human) and the appendix fixed the VISTA run values, leaving the dashed-line value by elimination.
+3. Cross-check the mapping against available captions, body text or appendix tables. Seek additional independent anchors when the first is ambiguous. In the VISTA reading, for example, the body fixed three of four BabyVision bars (41.0 official / 63.2 VISTA / 92.3 human) and the appendix fixed the VISTA run values, leaving the dashed-line value by elimination.
 4. If the mapping remains ambiguous after coordinates and cross-checks, state both readings and mark the conflict — never silently pick one.
 
-## Figure discipline in the reading document
+## Use in the reading
 
-- Every embedded original figure gets a visible prose cue before it: what question the figure answers, which panel/axis/arrow to inspect, and what the reader should learn.
-- Label redrawn charts (`本文重绘 · 原论文 Fig. N`, via `paper-chart`'s `origin`) and keep the original nearby when the redraw omits information the original carries.
-- Check for orphaned images after rendering — every image should sit under its cue and caption, including ones referenced only inside hidden PDF citations.
+Follow [visual reading](visual-reading.md) for explanatory cues, redraw labels and accessible counterparts. After rendering, check that each excerpt is legible and remains beside its intended explanation; an image referenced only in a hidden citation is not a visible figure.

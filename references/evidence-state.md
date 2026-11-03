@@ -1,6 +1,6 @@
 # Paper Evidence State
 
-A Paper Evidence State records how the reading atlas changes as new evidence arrives —
+Use this optional record when tracking how a reading changes as new evidence arrives —
 appendices, released code, author responses, reproduction attempts, follow-up
 papers.
 
@@ -45,15 +45,4 @@ released code can *lower* confidence as easily as raise it.
 
 ## Paper ↔ Code cross-reading
 
-When code is available, claims become checkable. For each mechanistic claim,
-find the implementing function and verify what "dynamic", "learned", or
-"adaptive" concretely means. Code is often more honest than the paper: record
-discrepancies between the paper's language and the implementation in the
-evidence log.
-
-## Why it matters
-
-A folder of per-paper summaries becomes a write-only pile. A set of evidence
-states keyed by *research question* becomes a living map of what is known,
-what is merely claimed, and what is still open — which is exactly where new
-research hypotheses come from.
+When implementation checking serves the request or resolves an important ambiguity, inspect the relevant function and configuration. Confirm repository, commit and checkpoint identity before comparing them with the paper. Determine what terms such as "dynamic", "learned" or "adaptive" mean operationally, and record version-specific discrepancies. Code can also be incomplete or inconsistent; do not automatically treat it as more authoritative than the paper. Unavailable code is not by itself a failure of an ordinary reading.

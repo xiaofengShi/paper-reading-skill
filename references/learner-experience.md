@@ -1,44 +1,30 @@
-# Teach the reader before asking them to audit
+# Reader calibration and explanation
 
-Brief and Deep control coverage, not assumed expertise. Default to a researcher with the relevant field's usual foundations who has not read this particular paper. Use a stated background without asking a routine questionnaire; this is not a default beginner course.
+Brief and Deep control technical coverage, not assumed expertise. Default to a researcher with the relevant field's usual foundations who is new to this paper. Use background cues from the request without a routine questionnaire.
 
 <span id="mandatory-beginner-walkthrough-for-tutorials"></span>
 
 ## Reader calibration and walkthrough
 
-Set the assumed background separately from Brief/Deep depth. For a researcher in the field, spend explanation on this paper's distinctive mechanism, notation, assumptions and evidence rather than reteaching common foundations. For a cross-field reader, add bridges only where their existing expertise stops being sufficient. For an explicitly requested beginner tutorial, introduce necessary basic concepts and intermediate steps. These are audience choices, not additional reading modes. Use the request's cues; do not require the user to choose a preset on every invocation.
+Choose the smallest explanation that lets the intended reader reconstruct and assess the argument:
 
-Use the smallest explanation that lets this reader follow and assess the argument:
-
-| Kind of information | Treatment |
+| Information | Treatment |
 | --- | --- |
-| Paper-specific information needed to reconstruct or judge a claim | Explain in the main path for every audience: object roles, introduced notation, shapes or units where consequential, assumptions, key transformations, decisive comparators and protocol limits. Familiar terminology does not make a novel use self-explanatory. |
-| A prerequisite this reader lacks and needs now | Give a brief bridge at first use, extending to one concrete calculation or example when a definition alone does not resolve the gap. Reuse that example rather than restarting it in every chapter. |
-| Common foundations already covered by the assumed background | Omit the introductory lesson. If useful to some readers, put a short refresher in a labeled disclosure; a researcher need not reread what training, a gradient or a matrix is unless the paper uses it unusually. |
-| Repeated definitions or secondary detail | Merge, remove or link within the document. Retain optional detail only when it answers a distinct question; do not hide essential qualifications or requested Deep reconstruction. |
+| Paper-specific mechanism, notation, assumption or evidence condition | Explain in the main path. Familiar terminology does not make a novel use self-explanatory. Include shapes, units or intermediate steps when they affect interpretation. |
+| A necessary prerequisite this reader lacks | Bridge it at first use; add a calculation or concrete example if a definition is insufficient. Reuse the example rather than restarting it. |
+| Foundations already covered by the assumed background | Omit introductory teaching. A short optional refresher may serve a distinct secondary audience. |
+| Repetition or secondary detail | Merge, remove or link within the document. Keep optional detail only when it answers a distinct question; preserve requested Deep reconstruction and decisive qualifications. |
 
-For example, an ML researcher usually does not need an explanation of backpropagation, but still needs to know why this paper stops a gradient through one branch, which objective remains connected and how that changes the update. A data engineer without ML foundations may also need the input → prediction → loss → update bridge. Neither audience can skip the paper-specific mechanism.
+An ML researcher usually needs no backpropagation lesson, but still needs to know why this paper stops a gradient through a particular branch and how that changes the update. A data engineer without ML foundations may also need the input → prediction → loss → update bridge. A cross-field researcher needs bridges at the boundary of their expertise; full beginner scaffolding belongs to a requested or clearly indicated beginner audience.
 
-Before drafting, identify which prerequisites this reader can be assumed to know and which missing ones block the central path. After rendering a tutorial, read the whole document and separately follow its recommended route as that reader, including disclosures, figures, code and answers. Check both directions: repair explanation gaps and remove unnecessary instruction. For each addition ask, **would deleting it prevent this reader from reconstructing the mechanism, using the example or judging the evidence and its limits?** If not, shorten, merge or omit it; a distinct secondary purpose may justify a disclosure. Do not explain a term merely because it appears, or impose a fixed word quota that crowds out essential reasoning.
+Before drafting, identify the assumed knowledge and prerequisites that block the central argument. Before delivery, inspect the rendered explanation as that reader. For tutorials, read every chapter and follow the recommended route, including relevant figures, disclosures, code and answers. Check both missing reasoning and redundancy. Ask of each background paragraph: **would deleting it prevent this reader from reconstructing the mechanism, using the example or judging the evidence?** Otherwise shorten, merge, omit or move it to a purposeful refresher. No fixed explanation length or per-term dictionary is required.
 
-Check consequential ambiguities, calculation steps, dimensions, denominators and code-to-operation links in context. For runnable exercises, include the working directory, necessary files, edit points and expected checks. Recalculate changed examples, confirm Markdown/HTML agreement and exercise affected interactions or code. Keep a compact audit record of assumed background, substantive gaps or redundancies, repairs and verification locations; no per-term ledger is required. Essential gaps for the intended reader block a completed tutorial; absent explanations of already-assumed foundations do not. Keep this process outside the lesson and label author/AI-assisted checking honestly, not as a human study.
+Check consequential notation, dimensions, denominators and calculation steps in context. Recalculate changed examples and exercise affected controls or code. Record assumed background, substantive repairs and remaining gaps compactly in the audit source; no per-term ledger or separate report is needed. Missing familiar foundations are not failures; essential paper-specific reasoning gaps are. This is an author/AI walkthrough, not an independent human study.
 
-## Build a learning path
+## Shape the reading path
 
-Start with one recognizable situation and a question the reader can answer after reading. Show the actual object: a sequence of tokens, a vehicle and trajectory, a changing matrix, or a small geometric/proof construction. Explain where to look and what changes. For an unfamiliar central operation, work through a small instance before general notation. Reuse it as the explanation grows; mark invented values as teaching data.
+Orient the reader to the question, setting and contribution. Choose the order that makes the argument clearest: a worked instance can introduce an unfamiliar operation; a familiar formalism can come first for researchers. A theorem may need definitions before an example. Do not force every idea through a situation → picture → example → equation template.
 
-For each difficult idea, connect **situation → picture → concrete operation → technical name → formal detail → evidence**. Adapt this order to the subject rather than manufacturing a simulation for a theorem or decorative art for a survey. A box containing a paragraph is a text card, not a mechanism illustration. Choose spatial arrangement, aligned values, arrows with verbs, or a state change that does explanatory work. Put a prose or table counterpart nearby.
+Use examples, figures or experiments where they explain a difficult relationship, not as mandatory decoration. Label teaching values. Keep the core argument visible; secondary protocols, long tables and refreshers may use disclosures. Required Deep derivations remain reachable, and decisive assumptions and counterexamples stay beside the claims they qualify. For a long reading, offer a concise route through real section links.
 
-Keep the first reading path short enough to hold in mind. Offer real anchor links to the essential sections; label the remaining material by its purpose. Put extended derivations, full protocols, and audit tables in native disclosures, retaining decisive qualifications and negative results visibly beside their claims. Deep content remains complete and reachable; do not hide the core transformation or evidence needed to understand a claim. Collect source identity and bibliographic URLs at the end. Keep coverage and production history in the audit source; do not make them the opening lesson. Follow [standalone delivery](standalone-delivery.md).
-
-## Make a useful experiment visible
-
-When changing an input exposes the mechanism, place the experiment where that input is first explained. State what to change, what to watch, and why the result changes. Start with a worked default and offer a reset. Show numerical output alongside visual movement; do not rely only on color, animation, hover, or a hidden tooltip. A slider that changes a decorative number is not sufficient. Avoid auto-play and respect reduced motion.
-
-Use the renderer’s `paper-lab` block for a visible, self-contained sandboxed HTML experiment; `archify` remains available for optional supplementary views. Use native controls with labels, keyboard access, visible focus, and comfortable touch targets. Keep the default example and conclusion in static Markdown so offline/no-script/print readers still get the lesson. State when controls are unavailable without JavaScript. A simulated teaching example must never impersonate a paper’s empirical result.
-
-End a local explanation with a small prediction, transfer, or diagnosis question, then reveal a grounded answer. A click or a completed control sequence is not a comprehension measurement.
-
-## Check the experience separately from correctness
-
-Check the first unfamiliar concept in the actual HTML: can the intended reader see its object, follow one operation, understand its terms, and say what the result means before seeing the general formula? Exercise the actual interaction offline, by pointer and keyboard, at narrow and wide widths. Check reset, boundary inputs, static fallback, and print/no-script content. Record these as interface checks. Only an actual reader session can establish where a person struggles; author judgment and passing automation do not establish learning efficacy.
+Visual choice and interaction behavior live in [visual reading](visual-reading.md); bibliographic placement and sharing live in [independent delivery](standalone-delivery.md); final acceptance lives in [quality checks](../evals/reading-quality.md).

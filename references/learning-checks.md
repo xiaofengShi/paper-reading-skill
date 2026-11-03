@@ -8,7 +8,7 @@ Choose questions from the actual paper, not a reusable generic quiz:
 - **Apply:** work a small, explicitly labeled teaching example, or change one assumption and predict the consequence. Preserve the paper's actual equation or protocol.
 - **Interpret evidence:** name the task, comparator, metric, observed result, and the boundary of the conclusion. Ask whether two reported numbers really share a protocol, or whether an ablation isolates the stated effect.
 
-Use two to four questions if that covers the key learning risks; choose fewer for a narrow request. Write a concise answer that can be checked against a source location and the explanation in the same document. Do not invent unreported results to fill a question. Keep author statements, observations, and editorial reasoning distinguishable.
+Use only enough questions to cover the important learning risks; no fixed count is required. Write a concise answer that can be checked against a source location and the explanation in the same document. Do not invent unreported results to fill a question. Keep author statements, observations, and editorial reasoning distinguishable.
 
 Include a transfer question when it exposes a real learning risk: change the dimensions, input, assumption, or evaluation protocol so the reader must use the mechanism rather than retrieve a sentence. Supply enough information to solve it from the reading. A new context is a teaching example, not an unreported paper result.
 
