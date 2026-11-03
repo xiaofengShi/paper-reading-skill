@@ -27,7 +27,7 @@ The first line declares the language; optional theme and mode markers follow imm
 
 Place each block at the top level of the Markdown with blank lines around it. The info string must be exactly the keyword; the body is one JSON object. **All string fields are escaped plain text** — no Markdown, HTML, or math inside them. Custom blocks inside a list or blockquote fail with `Custom visual blocks and display math must be at the top level`. Ordinary fenced or indented code and inline code spans are preserved; showing the block syntax inside a Markdown code example does not execute it.
 
-Every block requires a non-empty `source` field on each fact-bearing item; a missing source throws `A visual fact is missing its source`. The source renders as a hidden badge revealed by the “显示原文定位 / Show source locations” toggle.
+Every block requires a non-empty `source` field on each fact-bearing item; a missing source throws `A visual fact is missing its source`. The source renders as a hidden badge revealed by the “显示资料标注 / Show source locations” toggle.
 
 Required non-empty text fields (empty strings and missing keys are rejected, never rendered as `undefined`): `paper-map` items need `number`, `label`, `text`; `paper-path` needs `title` and stage `title`, `role`, `action`, `why`, `output`; `paper-contrast` needs `title`, `intro` and branch `name`, `lead`, `scope`, `judge`, `signal`, `why`; `paper-experiments` needs `title` and row `question`, `setup`, `observation`; `paper-chart` needs `title` and row `label`. Everything else stays optional: `paper-path.cost`, `paper-experiments.conclusion`, `paper-map.thesis` / `outcome` / `outcomeSource` / `signal`, and chart `subtitle` / `origin` / `note` / `unit` / `domainMax` / `approx`. Note that `signal` is optional on a `paper-map` item but **required** on a `paper-contrast` branch (it is one of the branch fields listed above). The `signal` field on a contrast branch renders under the label “作用机制 / How it works” — describe the mechanism, not a learning effect.
 
@@ -168,6 +168,8 @@ The renderer checks browser asset requests in HTML attributes, inline styles, `<
 These are delivery checks, not an HTML sanitization service or a scientific-fidelity check. Use trusted source files. The generated CSP blocks network assets and connections, while allowing the inline styles and scripts needed by self-contained interactive diagrams. It does not prove the meaning or correctness of arbitrary scripts; browser interaction checks remain necessary.
 
 ## Source citations
+
+New readings collect full bibliographic entries and source URLs in a final Sources section. Use optional same-document links such as `[1](#ref-1)` with `<span id="ref-1">[1]</span>` beside the final entry. Keep the actual explanation in the body, including settings and caveats; the badges below are supplementary audit pointers. See [standalone delivery](standalone-delivery.md).
 
 Two mechanisms hide citations until the reader enables the source toggle:
 

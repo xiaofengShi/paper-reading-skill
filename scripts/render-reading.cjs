@@ -29,7 +29,7 @@ const labels = {
     start: '起点', end: '终点', change: '变化', points: '个百分点', chartData: '查看图表数据', item: '项目',
     openDiagram: '展开辅助交互图：', explore: '可选交互', diagramNote: '按图中提示调整控件；本页的机制解释、算例与实验证据不依赖交互。',
     wholeMap: '论文全局图', description: '从全局路径到机制与实验的一体化论文深读。', titleSuffix: '深读图谱',
-    skip: '跳到正文', topbar: '原文证据驱动的深读图谱', showSources: '显示原文定位', startReading: '开始阅读', inspectFigure: '↔ 横向滚动查看图内细节',
+    skip: '跳到正文', topbar: '图解阅读 · 机制与证据', showSources: '显示资料标注', startReading: '开始阅读', inspectFigure: '↔ 横向滚动查看图内细节',
     defaultThesis: '从全局路径到关键机制与实验证据。', enter: '进入论文图谱', nav: '本文目录', route: '阅读路径',
     footer: '单文件阅读版', back: '返回顶部', pathKicker: '方法路径', contrastKicker: '机制对照', experimentKicker: '实验图谱', heroKicker: '论文深读图谱 · 中文',
     checkKicker: '理解自测', checkAnswer: '展开参考答案', reader: '适合谁读', goals: '读完可以尝试',
@@ -41,7 +41,7 @@ const labels = {
     start: 'Start', end: 'End', change: 'Change', points: 'percentage points', chartData: 'View chart data', item: 'Item',
     openDiagram: 'Explore interactive diagram: ', explore: 'Optional interaction', diagramNote: 'Follow the controls in the view. The mechanism, worked example, and evidence remain readable without interaction.',
     wholeMap: 'Whole-paper map', description: 'A visual deep read from the global path to mechanisms and experiments.', titleSuffix: 'Deep reading atlas',
-    skip: 'Skip to content', topbar: 'A source-grounded reading atlas', showSources: 'Show source locations', startReading: 'Start reading', inspectFigure: '↔ Scroll sideways to read the figure',
+    skip: 'Skip to content', topbar: 'An illustrated, standalone reading', showSources: 'Show source locations', startReading: 'Start reading', inspectFigure: '↔ Scroll sideways to read the figure',
     defaultThesis: 'From the global path to mechanisms and experimental evidence.', enter: 'Enter the reading atlas', nav: 'Contents', route: 'Reading path',
     footer: 'Single-file reading page', back: 'Back to top', pathKicker: 'METHOD PATH', contrastKicker: 'MECHANISM COMPARISON', experimentKicker: 'EXPERIMENT ATLAS', heroKicker: 'DEEP READING ATLAS · ENGLISH',
     checkKicker: 'CHECK YOUR UNDERSTANDING', checkAnswer: 'Reveal a grounded answer', reader: 'Who this is for', goals: 'After reading, try to',
@@ -50,10 +50,10 @@ const labels = {
 const t = { ...labels[lang] };
 if (mode === 'brief') Object.assign(t, lang === 'zh-CN' ? {
   description: '串起问题、主路径、关键机制与决定性证据的论文导读。',
-  titleSuffix: '论文导读 · Brief', topbar: '原文证据驱动的论文导读', heroKicker: '论文导读 · BRIEF READING · 中文',
+  titleSuffix: '论文导读 · Brief', topbar: '图解导读 · 机制与证据', heroKicker: '论文导读 · BRIEF READING · 中文',
 } : {
   description: 'A focused reading of the problem, main path, key mechanisms, and decisive evidence.',
-  titleSuffix: 'Brief reading atlas', topbar: 'A source-grounded reading atlas', heroKicker: 'BRIEF READING ATLAS · ENGLISH',
+  titleSuffix: 'Brief reading atlas', topbar: 'An illustrated, standalone reading', heroKicker: 'BRIEF READING ATLAS · ENGLISH',
 });
 const css = fs.readFileSync(path.resolve(__dirname, '../assets/reading.css'), 'utf8');
 const katexCssFile = require.resolve('katex/dist/katex.min.css');

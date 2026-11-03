@@ -21,6 +21,12 @@ If source coverage is insufficient, obtain the missing paper material or report 
 
 Check separately from depth and source fidelity. Identify the intended reader and inspect the first difficult mechanism in the actual output. A central unfamiliar operation must have a concrete instance, a useful explanatory view when visual structure matters, terms defined where used, and a plain-language interpretation before advanced notation. Text-heavy cards alone do not satisfy an illustration need. If an interaction is justified, it is discoverable beside the lesson, specifies an action and observable relationship, has a worked default/reset, supports keyboard and narrow screens, and retains a static explanation without scripts. Otherwise record why the static view is sufficient. A requested beginner tutorial fails when it merely adds a glossary to an expert-first research audit. These are author/interface checks, not evidence of human learning.
 
+## Independent reading and shareability gates
+
+- The core explanation remains complete when the source PDF and previous chat are unavailable. No essential step is replaced by “see the original,” a table number alone, or a source link. Avoid repeated original-versus-editor commentary; preserve concise study attribution and teaching-data labels.
+- Bibliographic URLs are collected in a final Sources section. Body citations, when used, link to that section in the same document. Audit location badges supplement this list. Verify all anchors and preserve versions/protocols beside consequential claims.
+- When sharing is requested, the hosted page is reachable at its intended revision and its controls work. Commands referring to local tutorial files have a downloadable bundle and clear extraction/working-directory instructions. A public bundle contains only intended public files and no private paths, archives or local caches. Distinguish a verified live reading from a prepared package or repository blob.
+
 ## Depth ratings after the gates
 
 Rate each dimension `0` (absent), `1` (named), `2` (explained), or `3` (a reader can reconstruct and use it). Give the passage or figure that earned the rating. The ratings locate revisions; their sum is not a scientific validity score.

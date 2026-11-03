@@ -1,0 +1,7 @@
+{
+  "python": "3.13.14",
+  "torch": "2.15.0",
+  "numpy": "2.5.4",
+  "device": "cpu",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O"
+}

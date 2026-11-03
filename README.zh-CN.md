@@ -45,6 +45,12 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 
 两种深度都默认面向学习者：先用具体问题与图示建立直觉，再跟算或动手改变一个输入，最后展开机制、公式与证据。深入阅读不要求先有研究背景；长推导和完整审计按需展开。可用 `paper-lab` 将离线交互实验直接放在解释旁，保留无脚本可读的结论。详见[学习体验约定](references/learner-experience.md)。
 
+默认交付可独立阅读的文档：概念、算例、实验设置与结论在正文讲完整，不要求读者另开论文补齐解释。出处集中在末尾，正文编号只作页内跳转；制作过程保留在审计文件。需要分享时，核验真实网页链接并提供运行所需的实验包。详见[独立阅读与分享约定](references/standalone-delivery.md)。
+
+## 独立教程
+
+[智能驾驶：数据交付之后，模型怎样真正学会](https://xiaofengshi.github.io/paper-reading-skill/driving-data-learning.html)面向数据工程初学者，用施工绕行图、三个交互实验与可下载代码讲清采样、有效监督、参数更新及效果验收。正文可独立阅读，出处集中在末尾。[下载实验包](https://xiaofengshi.github.io/paper-reading-skill/downloads/driving-data-learning-labs.zip) · [教程源码](guides/driving-data-learning/) · [内容与分享复审](docs/driving-data-learning-review-20261103.html)。
+
 ## 阅读完整样例
 
 画廊同时提供 **Brief Reading 导读**与 **Deep Reading 深读**，每篇标明模式和语言。Brief 可从 LoRA 或 ResNet 开始；Deep 可读 Rollback：16 个连贯章节展开搜索、公式、训练系统、实验及附录 A–G。每篇将原图和证据放在解释旁，并提供论文特定的理解题。原有 `-deep-read` 链接保持不变，深度以页面显示的模式为准。

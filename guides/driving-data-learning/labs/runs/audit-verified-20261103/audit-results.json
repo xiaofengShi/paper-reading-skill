@@ -1,0 +1,56 @@
+{
+  "provenance": "synthetic teaching fixture; not a real model run",
+  "manifest_sha256": "f5142e36c5b8f22b789e902c1047d0e6ba584758b5c755fca46944edb9bd3141",
+  "delivered_count": 5,
+  "in_manifest_count": 4,
+  "accepted_count": 3,
+  "sampled_unique_count": 2,
+  "valid_supervision_unique_count": 1,
+  "samples": [
+    {
+      "sample_id": "new-001",
+      "in_manifest": false,
+      "accepted": false,
+      "draw_count": 0,
+      "valid_target_steps": 0,
+      "eligible_update_count": 0,
+      "diagnosis": "未进入训练清单"
+    },
+    {
+      "sample_id": "new-002",
+      "in_manifest": true,
+      "accepted": false,
+      "draw_count": 0,
+      "valid_target_steps": 0,
+      "eligible_update_count": 0,
+      "diagnosis": "被质量过滤拒绝"
+    },
+    {
+      "sample_id": "new-003",
+      "in_manifest": true,
+      "accepted": true,
+      "draw_count": 3,
+      "valid_target_steps": 0,
+      "eligible_update_count": 0,
+      "diagnosis": "被采到但监督全部被 mask"
+    },
+    {
+      "sample_id": "new-004",
+      "in_manifest": true,
+      "accepted": true,
+      "draw_count": 0,
+      "valid_target_steps": 0,
+      "eligible_update_count": 0,
+      "diagnosis": "本次预算内未采到"
+    },
+    {
+      "sample_id": "new-005",
+      "in_manifest": true,
+      "accepted": true,
+      "draw_count": 4,
+      "valid_target_steps": 24,
+      "eligible_update_count": 4,
+      "diagnosis": "有有效监督且所属 batch 已更新；收益仍需消融与独立评测"
+    }
+  ]
+}

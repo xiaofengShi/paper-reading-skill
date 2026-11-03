@@ -1,0 +1,60 @@
+{
+  "one_step": {
+    "x": 2.0,
+    "y": 1.0,
+    "weight_before": 0.2,
+    "prediction_before": 0.4,
+    "loss_before": 0.36,
+    "analytic_gradient": -2.4,
+    "finite_difference_gradient": -2.3999999999302357,
+    "learning_rate": 0.1,
+    "weight_after": 0.44,
+    "prediction_after": 0.88,
+    "loss_after": 0.0144
+  },
+  "sampling": {
+    "tail_fraction": 0.001,
+    "draws": 32000,
+    "expected_tail_draws": 32.0,
+    "expected_draws_per_tail_item": 0.032,
+    "probability_specific_item_unseen": 0.9685065665821908,
+    "probability_batch_contains_tail": 0.031508924240473246,
+    "weight_multiplier_for_20pct_tail": 249.75,
+    "expected_tail_draws_after_weighting": 6400.0
+  },
+  "masking": {
+    "global_valid_step_mean": 4.666666666666667,
+    "equal_sample_mean": 5.75,
+    "incorrect_fixed_padding_denominator": 2.3333333333333335
+  },
+  "objectives": {
+    "population_tail_fraction": 0.001,
+    "population_risk": 1.008,
+    "oversampled_risk": 2.6,
+    "tail_mass_if_also_weighted_10x": 0.7142857142857143
+  },
+  "evaluation": {
+    "zero_failures_in_100_upper_95pct": 0.029513049607039932,
+    "zero_failures_in_1000_upper_95pct": 0.0029912495450953314
+  },
+  "split": {
+    "train_drives": [
+      1,
+      3,
+      4,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "validation_drives": [
+      0,
+      6
+    ],
+    "test_drives": [
+      2,
+      5
+    ]
+  }
+}

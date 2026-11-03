@@ -51,6 +51,12 @@ The gallery includes **Brief Reading** and **Deep Reading**, with the mode and l
 
 Both depths default to a learner-friendly path: start with a concrete question and explanatory illustration, work a small example or change an input, then develop the mechanism, formal detail, and evidence. Deep does not assume research expertise. Extended derivations and audits remain reachable in disclosures. The `paper-lab` block places an offline experiment beside its explanation with a static takeaway. See [the learner experience contract](references/learner-experience.md).
 
+Readings stand on their own: definitions, worked examples, experiment settings and conclusions are explained in the document, without requiring the reader to reopen the paper. Sources are collected at the end; optional body citations stay within the page. Production records stay in audit files. When sharing is requested, verify the hosted URL and provide runnable downloads. See [independent reading and sharing](references/standalone-delivery.md).
+
+### Standalone tutorial
+
+[How delivered driving data becomes model learning](https://xiaofengshi.github.io/paper-reading-skill/driving-data-learning.html) is a Chinese introduction for data engineers, with three interactive experiments and runnable code. It explains the subject independently and collects sources at the end. [Download the offline lab bundle](https://xiaofengshi.github.io/paper-reading-skill/downloads/driving-data-learning-labs.zip) · [Tutorial source](guides/driving-data-learning/) · [Content and sharing review](docs/driving-data-learning-review-20261103.html).
+
 <!-- readings-index:start -->
 - **Attention Is All You Need** · English · Brief Reading — Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer. Based on [arXiv:1706.03762](https://arxiv.org/abs/1706.03762). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 · Brief Reading — Follow the training path through the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments. [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)

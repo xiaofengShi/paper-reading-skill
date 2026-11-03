@@ -1,0 +1,117 @@
+{
+  "environment": {
+    "python": "3.13.14",
+    "torch": "2.15.0",
+    "device": "cpu",
+    "seed": 7
+  },
+  "data": "independent synthetic draws from a known linear rule; no real driving data",
+  "training_n": 1024,
+  "training_tail_n": 16,
+  "validation_n": 400,
+  "test_n": 400,
+  "runs": [
+    {
+      "mode": "uniform",
+      "updates": 120,
+      "sample_draws": 3840,
+      "unique_training_items": 1006,
+      "tail_draws": 78,
+      "normal_draws": 3762,
+      "selected_update": 120,
+      "test": {
+        "normal_mse": 0.0005274529103189707,
+        "tail_mse": 1.3354343175888062,
+        "overall_mse": 0.6679809093475342,
+        "n_normal": 200,
+        "n_tail": 200
+      },
+      "validation_history": [
+        {
+          "update": 20,
+          "validation_balanced_mse": 1.034539614804089
+        },
+        {
+          "update": 40,
+          "validation_balanced_mse": 0.9452852550894022
+        },
+        {
+          "update": 60,
+          "validation_balanced_mse": 0.8286554511869326
+        },
+        {
+          "update": 80,
+          "validation_balanced_mse": 0.7864114611875266
+        },
+        {
+          "update": 100,
+          "validation_balanced_mse": 0.7373673842812423
+        },
+        {
+          "update": 120,
+          "validation_balanced_mse": 0.669040223758202
+        }
+      ],
+      "learned_weight": [
+        [
+          -0.488860160112381,
+          0.32172414660453796
+        ]
+      ],
+      "learned_bias": [
+        0.021651243790984154
+      ]
+    },
+    {
+      "mode": "weighted",
+      "updates": 120,
+      "sample_draws": 3840,
+      "unique_training_items": 978,
+      "tail_draws": 978,
+      "normal_draws": 2862,
+      "selected_update": 120,
+      "test": {
+        "normal_mse": 0.003187296912074089,
+        "tail_mse": 0.01199211087077856,
+        "overall_mse": 0.0075897048227488995,
+        "n_normal": 200,
+        "n_tail": 200
+      },
+      "validation_history": [
+        {
+          "update": 20,
+          "validation_balanced_mse": 0.39382434263825417
+        },
+        {
+          "update": 40,
+          "validation_balanced_mse": 0.16674125380814075
+        },
+        {
+          "update": 60,
+          "validation_balanced_mse": 0.07086211536079645
+        },
+        {
+          "update": 80,
+          "validation_balanced_mse": 0.035042860079556704
+        },
+        {
+          "update": 100,
+          "validation_balanced_mse": 0.0166024265345186
+        },
+        {
+          "update": 120,
+          "validation_balanced_mse": 0.007735601742751896
+        }
+      ],
+      "learned_weight": [
+        [
+          -0.48542219400405884,
+          1.3342056274414062
+        ]
+      ],
+      "learned_bias": [
+        0.055222950875759125
+      ]
+    }
+  ]
+}

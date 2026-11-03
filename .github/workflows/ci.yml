@@ -29,6 +29,7 @@ jobs:
       - run: npm run check:docs
       - run: npm run check:audit
       - run: npm run check:examples
+      - run: npm run check:guides
       - name: Check the lightweight installation
         run: |
           node scripts/pack-skill.cjs --out "$RUNNER_TEMP/paper-reading-runtime"

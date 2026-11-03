@@ -59,3 +59,7 @@ npm run pack:skill
 The local build produces `dist/paper-reading/` with a SHA-256 `manifest.json` and, when system `tar` is available, `dist/paper-reading.tar.gz`. It includes runtime scripts, their helpers, references, assets, the small doctor fixture, `package.json`, and `package-lock.json`. It excludes the gallery, website, tests, and installed dependencies. Existing outputs are refused; use `npm run pack:skill -- --out <new-output-parent>` to keep earlier builds.
 
 Copy the whole generated runtime tree to a new, temporary location, run `npm ci` and `npm run doctor` there, and test a starter with `npm run init:reading -- --help`. Do not copy only `SKILL.md`, omit the lockfile, or modify an active personal skill directory as part of a package test. A local archive is not a published release, and a local website build is not a deployment.
+
+## Standalone tutorials
+
+The independently readable driving tutorial is maintained in `guides/driving-data-learning/`, separate from the paper gallery count. `npm run build:guides` generates its public HTML, source download, sharing preview and explicit experiment ZIP; `npm run check:guides` checks byte-for-byte freshness. This build requires Python 3 for standard-library ZIP creation; installed Skill runtime does not. Keep the public bundle allowlist narrow, pin tested dependencies, and do not add private audit archives or downloaded papers. Verify downloads by extracting and running the teaching labs before publication.

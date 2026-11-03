@@ -59,19 +59,21 @@ function main() {
     (/(?:^|[\\/])[^\\/]+\.pdf$/i.test(paperInput) || fs.existsSync(paperInput));
   const paper = paperInput ? text(localInput ? path.resolve(paperInput) : paperInput) : (lang === 'zh-CN' ? '待填写：论文链接或本地 PDF' : 'TODO: paper URL or local PDF');
   const headings = lang === 'zh-CN' ? [
-    ['从一个具体问题开始', '先说明适合谁读，用一个具体场景和图示建立直觉。用简短来源行标明身份，把完整版本、覆盖与缺口写入审计注释；未核验状态保持 unknown。'],
+    ['从一个具体问题开始', '先说明适合谁读，用一个具体场景和图示建立直觉。资料出处集中在末尾，把核验身份、版本、覆盖与缺口写入审计注释；未核验状态保持 unknown。'],
     ['全局问题与贡献', '用原论文证据说明问题、研究场景、核心想法和主要贡献。此处尚未完成阅读。'],
     ['主路径与设计理由', '重建输入、转换、分支、输出及必要假设；按论文类型选择方法路径、证明依赖或数据构建路径。'],
     ['关键机制与推演', '解释关键变量和完整公式、证明或协议。只在帮助理解时加入明确标注的教学例子，并核对原图。'],
     ['决定性证据', '把主要问题与设置、对照、指标、分母、观察和有边界的解释连接起来；没有实验的论文使用实际证据类型。'],
     ['综合与限制', '说明机制与证据共同支持什么，以及哪些结论仍未确定。完成所选模式的质量门槛后再移除草稿标记。'],
+    ['资料出处', '集中列出资料标题、作者或机构、版本、日期和链接。正文直接解释，不依赖翻查资料；可用页内编号跳转。'],
   ] : [
-    ['Start with a concrete question', 'Identify the reader and build intuition with a concrete situation and explanatory illustration. Keep a short source line visible; record verified identity, version, coverage, and gaps in audit comments. Keep unverified states unknown.'],
+    ['Start with a concrete question', 'Identify the reader and build intuition with a concrete situation and explanatory illustration. Collect sources at the end; record verified identity, version, coverage, and gaps in audit comments. Keep unverified states unknown.'],
     ['Question and contribution', 'Explain the problem, setting, central idea, and contribution from paper evidence. The reading has not been completed yet.'],
     ['Main path and design reasoning', 'Reconstruct inputs, transformations, branches, outputs, and assumptions. Choose a method path, proof dependency, or data construction route that fits the paper.'],
     ['Mechanism and worked explanation', 'Define variables and explain the full relevant equation, proof, or protocol. Label teaching examples and verify original figures where useful.'],
     ['Decisive evidence', 'Connect each major question to its setup, comparator, metric, denominator, observation, and bounded interpretation. Use the paper’s actual evidence type.'],
     ['Synthesis and limits', 'Explain what the mechanism and evidence establish together, and what remains uncertain. Complete the selected mode’s quality gates before removing the draft warning.'],
+    ['Sources', 'Collect titles, authors or organizations, versions, dates, and URLs here. Explain the subject fully in the body; optional numbered citations link within this document.'],
   ];
   const modeName = mode === 'deep' ? 'Deep Reading' : 'Brief Reading';
   const depthInstruction = lang === 'zh-CN'
@@ -81,7 +83,7 @@ function main() {
   const warning = lang === 'zh-CN'
     ? '本文件由初始化命令创建。它只包含待办内容，尚未访问或核验论文，不能作为论文解读交付。'
     : 'Created by the initializer. This file contains only TODOs. No paper has been accessed or verified; do not deliver it as a completed reading.';
-  const source = `<!-- paper-reading-lang: ${lang} -->\n<!-- paper-reading-theme: ${theme} -->\n<!-- paper-reading-mode: ${mode} -->\n# ${draft}: ${title}\n\n> **${draft}.** ${warning}\n\n${lang === 'zh-CN' ? '论文输入' : 'Paper input'}: ${paper}\n\nTODO: ${depthInstruction}\n\n<!-- Learner experience: TODO concrete situation, explanatory illustration, worked example before notation, essential reading path and optional detail. -->\n\n<!-- Source identity and coverage: TODO verify title, authors, version, URL/hash, sections read and gaps. -->\n\n<!-- Interaction decision: TODO reader action, observable relationship, worked default/reset and static fallback; use paper-lab for a useful visible experiment, or explain why a static view suffices. -->\n\n${headings.map(([heading, instruction], i) => `## ${String(i + 1).padStart(2, '0')} / ${heading}\n\nTODO: ${instruction}\n`).join('\n')}`;
+  const source = `<!-- paper-reading-lang: ${lang} -->\n<!-- paper-reading-theme: ${theme} -->\n<!-- paper-reading-mode: ${mode} -->\n# ${draft}: ${title}\n\n> **${draft}.** ${warning}\n\n${lang === 'zh-CN' ? '论文输入' : 'Paper input'}: ${paper}\n\nTODO: ${depthInstruction}\n\n<!-- Learner experience: TODO concrete situation, explanatory illustration, worked example before notation, essential reading path and optional detail. Standalone explanation; collect source URLs in the final Sources section, keep production history in audit comments. -->\n\n<!-- Source identity and coverage: TODO verify title, authors, version, URL/hash, sections read and gaps. -->\n\n<!-- Interaction decision: TODO reader action, observable relationship, worked default/reset and static fallback; use paper-lab for a useful visible experiment, or explain why a static view suffices. -->\n\n${headings.map(([heading, instruction], i) => `## ${String(i + 1).padStart(2, '0')} / ${heading}\n\nTODO: ${instruction}\n`).join('\n')}`;
   const renderer = path.join(__dirname, 'render-reading.cjs');
   const quote = value => `'${value.replace(/'/g, `'\\''`)}'`;
   const renderCommand = `node ${quote(renderer)} ${quote(path.join(destination, 'reading.md'))} ${quote(path.join(destination, 'reading.html'))}`;

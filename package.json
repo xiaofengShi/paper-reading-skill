@@ -15,7 +15,9 @@
     "init:reading": "node scripts/init-reading.cjs",
     "pack:skill": "node scripts/pack-skill.cjs",
     "render": "node scripts/render-reading.cjs",
-    "check:examples": "node scripts/build-examples.cjs --check"
+    "check:examples": "node scripts/build-examples.cjs --check",
+    "build:guides": "node scripts/build-guides.cjs",
+    "check:guides": "node scripts/build-guides.cjs --check"
   },
   "dependencies": {
     "katex": "0.18.2",
