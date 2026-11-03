@@ -49,7 +49,7 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 
 ## 独立教程
 
-[智能驾驶：数据交付之后，模型怎样真正学会](https://xiaofengshi.github.io/paper-reading-skill/driving-data-learning.html)面向数据工程初学者，用施工绕行图、三个交互实验与可下载代码讲清采样、有效监督、参数更新及效果验收。正文可独立阅读，出处集中在末尾。[下载实验包](https://xiaofengshi.github.io/paper-reading-skill/downloads/driving-data-learning-labs.zip) · [教程源码](guides/driving-data-learning/) · [内容与分享复审](docs/driving-data-learning-review-20261103.html)。
+[智能驾驶：数据交付之后，模型怎样真正学会](https://xiaofengshi.github.io/paper-reading-skill/driving-data-learning.html)面向数据工程初学者，用九张原创图解、三个交互实验与可下载代码讲清采样、有效监督、参数更新及效果验收。正文可独立阅读，出处集中在末尾。[下载实验包](https://xiaofengshi.github.io/paper-reading-skill/downloads/driving-data-learning-labs.zip) · [教程源码](guides/driving-data-learning/) · [内容与分享复审](docs/driving-data-learning-review-20261103.html)。
 
 ## 阅读完整样例
 

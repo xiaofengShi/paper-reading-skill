@@ -55,7 +55,7 @@ Readings stand on their own: definitions, worked examples, experiment settings a
 
 ### Standalone tutorial
 
-[How delivered driving data becomes model learning](https://xiaofengshi.github.io/paper-reading-skill/driving-data-learning.html) is a Chinese introduction for data engineers, with three interactive experiments and runnable code. It explains the subject independently and collects sources at the end. [Download the offline lab bundle](https://xiaofengshi.github.io/paper-reading-skill/downloads/driving-data-learning-labs.zip) · [Tutorial source](guides/driving-data-learning/) · [Content and sharing review](docs/driving-data-learning-review-20261103.html).
+[How delivered driving data becomes model learning](https://xiaofengshi.github.io/paper-reading-skill/driving-data-learning.html) is a Chinese introduction for data engineers, with nine original explanatory graphics, three interactive experiments and runnable code. It explains the subject independently and collects sources at the end. [Download the offline lab bundle](https://xiaofengshi.github.io/paper-reading-skill/downloads/driving-data-learning-labs.zip) · [Tutorial source](guides/driving-data-learning/) · [Content and sharing review](docs/driving-data-learning-review-20261103.html).
 
 <!-- readings-index:start -->
 - **Attention Is All You Need** · English · Brief Reading — Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer. Based on [arXiv:1706.03762](https://arxiv.org/abs/1706.03762). [Open the reading →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)

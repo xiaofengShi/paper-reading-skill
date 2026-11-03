@@ -13,10 +13,13 @@ const check = process.argv.includes('--check');
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'driving-guide-'));
 const esc = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const files = ['README.md','LICENSE','reading.md','assets/construction-scene.svg','assets/sample-trace.html',
-  'assets/sampling-explorer.html','assets/update-explorer.html','labs/audit_lab.py','labs/math_lab.py',
+  'assets/sampling-explorer.html','assets/update-explorer.html',
+  'assets/scene-split.svg','assets/time-alignment.svg','assets/forward-graph.svg','assets/mask-denominator.svg',
+  'assets/loss-landscape.svg','assets/update-rhythm.svg','assets/evaluation-loops.svg','assets/controlled-trial.svg','labs/audit_lab.py','labs/math_lab.py',
   'labs/torch_lab.py','labs/requirements.txt','labs/environment.json','labs/math-results.json',
   'labs/runs/audit-verified-20261103/audit-results.json','labs/runs/torch-verified-20261103/torch-results.json'];
 try {
+  execFileSync('python3',[path.join(guide,'build-visuals.py'),...(check?['--check']:[])],{stdio:'pipe'});
   const rendered = path.join(temporary, 'reading.html');
   execFileSync(process.execPath, [path.join(__dirname,'render-reading.cjs'),path.join(guide,'reading.md'),rendered],{stdio:'pipe'});
   let html = present(fs.readFileSync(rendered,'utf8'));

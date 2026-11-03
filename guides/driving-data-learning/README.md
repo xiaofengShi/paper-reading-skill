@@ -4,7 +4,7 @@
 
 - 在线阅读：https://xiaofengshi.github.io/paper-reading-skill/driving-data-learning.html
 - 打开实验包中的 `reading.html` 可离线阅读并操作三个实验台。
-- `reading.md` 是正文源；`assets/` 是原创图示和交互素材。
+- `reading.md` 是正文源；`assets/` 包含 9 张原创图示和 3 个交互实验台。图示覆盖场景切分、时序、计算图、有效监督、参数更新、累积节奏、反馈与实验对照。
 - `labs/` 包含三个教学程序、固定依赖和已运行的参考结果。全部使用人工构造数据，不是实车或生产训练。
 
 ## 解压与运行
@@ -34,3 +34,5 @@ uv run --no-project --python 3.13 --with torch==2.15.0 --with numpy==2.5.4 \
 ## 仓库中重新生成
 
 在 paper-reading-skill 仓库根目录执行 `npm ci` 和 `npm run build:guides`。生成过程需要 Node.js 20+ 与 Python 3；阅读导出的HTML不需要它们。
+
+图示由 `build-visuals.py` 以 Python 标准库生成；`python3 build-visuals.py --check` 可核对 9 张 SVG（8 张新增与 1 张重绘） 的新鲜度。构建教程时会自动生成或检查它们。所有数值均为正文中已有的教学例子，不是新报告的驾驶实验结果。
