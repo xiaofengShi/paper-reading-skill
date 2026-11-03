@@ -227,6 +227,18 @@
       "mode": "deep",
       "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 12 chapters, 20 subsections, 11 display equations, 11 worked calcs) of adaptive task refresh for zero-data multimodal self-improvement: training-log pool saturation detection, shared-configuration programmatic tasks, five-arm matched-update comparison, reward stress tests, and output decomposition.",
       "summaryZh": "零数据多模态自我改进的自适应任务刷新深读（量化深度版 9000+字）：训练日志触发的池饱和检测、共享配置契约程序化出题、五臂对照逐格重算、奖励压力测试与输出分解（完成 vs 改正）。"
+    },
+    {
+      "slug": "causalwam",
+      "title": "CausalWAM: Learning the Causes of Actions in World Action Models",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.42096v1",
+      "date": "2026-11-03",
+      "pinned": false,
+      "mode": "deep",
+      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 27 subsections, 23 display equations, 17 worked calcs) of causal action identification in world action models: over-coverage lower bound (Prop 1), support-sparsity identifiability (Thm 1-2 with full proof chains), sparse token routing on Cosmos 3 Nano, block-recovery synthetic audit, and 17-task macro recomputation (0.24 to 0.43).",
+      "summaryZh": "世界动作模型的因果动作辨识深读（量化深度版 9000+字/16章/23公式/17手算）：过覆盖下界（Prop 1）、支撑稀疏可识别性（Thm 1-2 证明链全展开）、Cosmos 3 Nano 上的稀疏 token 路由、合成块恢复审计与 17 任务宏平均重算（0.24→0.43）。"
     }
   ]
 }
