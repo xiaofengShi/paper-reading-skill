@@ -51,6 +51,8 @@ The gallery includes **Brief Reading** and **Deep Reading**, with the mode and l
 
 Both depths default to a learner-friendly path: start with a concrete question and explanatory illustration, work a small example or change an input, then develop the mechanism, formal detail, and evidence. Deep does not assume research expertise. Extended derivations and audits remain reachable in disclosures. The `paper-lab` block places an offline experiment beside its explanation with a static takeaway. See [the learner experience contract](references/learner-experience.md).
 
+Tutorials also require a beginner walkthrough before delivery: identify needed prerequisites, reread every chapter and the recommended route, and repair missing definitions, intermediate calculations, object distinctions and exercise instructions in place. This is the default even without a separate review request; explicit reader expertise and requested depth still govern. Record checks separately from the lesson and do not describe an AI-assisted pass as a human learning study.
+
 Readings stand on their own: definitions, worked examples, experiment settings and conclusions are explained in the document, without requiring the reader to reopen the paper. Sources are collected at the end; optional body citations stay within the page. Production records stay in audit files. When sharing is requested, verify the hosted URL and provide runnable downloads. See [independent reading and sharing](references/standalone-delivery.md).
 
 ### Standalone tutorial
