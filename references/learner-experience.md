@@ -1,29 +1,31 @@
 # Teach the reader before asking them to audit
 
-Brief and Deep control coverage, not assumed expertise. Default to an interested practitioner who has not studied this particular mechanism. Use a stated background without asking a routine questionnaire.
+Brief and Deep control coverage, not assumed expertise. Default to a researcher with the relevant field's usual foundations who has not read this particular paper. Use a stated background without asking a routine questionnaire; this is not a default beginner course.
 
-## Mandatory beginner walkthrough for tutorials
+<span id="mandatory-beginner-walkthrough-for-tutorials"></span>
 
-Apply this by default when producing a tutorial, including a Deep tutorial. Assume limited background in this topic, not inability to read code or use the reader's existing professional knowledge. Respect explicit expertise or scope; do not impose machine-learning prerequisites on unrelated subjects. Infer a reasonable starting point from the request and state it briefly, without a routine questionnaire.
+## Reader calibration and walkthrough
 
-Before drafting, identify the prerequisites needed to understand the central path. After rendering, read the actual document from beginning to end as that intended reader, including disclosures, figures, code and answers. Separately follow the recommended first-reading route in its stated order: a route can fail even when the full chapter order works. Locate and repair gaps rather than merely listing them in a review.
+Set the assumed background separately from Brief/Deep depth. For a researcher in the field, spend explanation on this paper's distinctive mechanism, notation, assumptions and evidence rather than reteaching common foundations. For a cross-field reader, add bridges only where their existing expertise stops being sufficient. For an explicitly requested beginner tutorial, introduce necessary basic concepts and intermediate steps. These are audience choices, not additional reading modes. Use the request's cues; do not require the user to choose a preset on every invocation.
 
-| Check at each relevant passage | Required repair when the reader would get stuck |
+Use the smallest explanation that lets this reader follow and assess the argument:
+
+| Kind of information | Treatment |
 | --- | --- |
-| What is this object, and what changes? | Distinguish inputs, targets, internal representations, configurable quantities and produced artifacts before relying on their names. In an ML tutorial, distinguish data, features, labels, parameters, training, inference and evaluation where needed. |
-| What does this term or symbol mean here? | Explain unfamiliar terms and acronyms where first used; disambiguate reused words such as model/sampling/loss weight or regression task/regression test. A distant glossary is insufficient. |
-| Can I follow one operation without the prerequisite course? | Reuse a small concrete example across adjacent stages; show intermediate values, dimensions, units and denominators, then connect them to the general form. Defining symbols or giving a final number alone is insufficient. |
-| Why does this result justify the next step? | Explain the local reason and limits in plain language. For example, compare nearby parameter values before introducing a gradient; do not imply every training update improves unseen data. |
-| Can I understand this comparison? | Explain the metric direction, baseline, population, protocol and uncertainty as needed. Distinguish expected counts from guarantees, repeated exposure from unique coverage, and fitting from generalization. |
-| Can I perform the suggested action? | Connect code to the explained operation; specify inputs, working directory, concrete edit points, expected output and how to inspect it. Separate optional tooling from the core reading. |
+| Paper-specific information needed to reconstruct or judge a claim | Explain in the main path for every audience: object roles, introduced notation, shapes or units where consequential, assumptions, key transformations, decisive comparators and protocol limits. Familiar terminology does not make a novel use self-explanatory. |
+| A prerequisite this reader lacks and needs now | Give a brief bridge at first use, extending to one concrete calculation or example when a definition alone does not resolve the gap. Reuse that example rather than restarting it in every chapter. |
+| Common foundations already covered by the assumed background | Omit the introductory lesson. If useful to some readers, put a short refresher in a labeled disclosure; a researcher need not reread what training, a gradient or a matrix is unless the paper uses it unusually. |
+| Repeated definitions or secondary detail | Merge, remove or link within the document. Retain optional detail only when it answers a distinct question; do not hide essential qualifications or requested Deep reconstruction. |
 
-Place necessary bridges in the main path. Put advanced derivations or secondary checks in labeled disclosures, preserving decisive assumptions and requested depth. Avoid expanding every term into a detached encyclopedia: add the explanation needed for this argument, reuse it, and remove redundant restatements. An attractive layout or a larger glossary does not repair a missing conceptual step.
+For example, an ML researcher usually does not need an explanation of backpropagation, but still needs to know why this paper stops a gradient through one branch, which objective remains connected and how that changes the update. A data engineer without ML foundations may also need the input → prediction → loss → update bridge. Neither audience can skip the paper-specific mechanism.
 
-Recheck the repaired passages in context, recalculate changed examples, confirm Markdown/HTML agreement and exercise affected interactions or code. Keep a short audit comment or companion record with reader assumptions and `chapter/passage → gap → repair → verification or unresolved limit`. Essential gaps must be repaired before claiming the tutorial is complete. Do not expose this production ledger throughout the lesson. This is an author/AI-assisted walkthrough, not a real beginner session or evidence of learning gains.
+Before drafting, identify which prerequisites this reader can be assumed to know and which missing ones block the central path. After rendering a tutorial, read the whole document and separately follow its recommended route as that reader, including disclosures, figures, code and answers. Check both directions: repair explanation gaps and remove unnecessary instruction. For each addition ask, **would deleting it prevent this reader from reconstructing the mechanism, using the example or judging the evidence and its limits?** If not, shorten, merge or omit it; a distinct secondary purpose may justify a disclosure. Do not explain a term merely because it appears, or impose a fixed word quota that crowds out essential reasoning.
+
+Check consequential ambiguities, calculation steps, dimensions, denominators and code-to-operation links in context. For runnable exercises, include the working directory, necessary files, edit points and expected checks. Recalculate changed examples, confirm Markdown/HTML agreement and exercise affected interactions or code. Keep a compact audit record of assumed background, substantive gaps or redundancies, repairs and verification locations; no per-term ledger is required. Essential gaps for the intended reader block a completed tutorial; absent explanations of already-assumed foundations do not. Keep this process outside the lesson and label author/AI-assisted checking honestly, not as a human study.
 
 ## Build a learning path
 
-Start with one recognizable situation and a question the reader can answer after reading. Show the actual object: a sequence of tokens, a vehicle and trajectory, a changing matrix, or a small geometric/proof construction. Explain where to look and what changes. Then work through a small instance before general notation. Reuse that instance as the explanation grows; mark invented values as teaching data.
+Start with one recognizable situation and a question the reader can answer after reading. Show the actual object: a sequence of tokens, a vehicle and trajectory, a changing matrix, or a small geometric/proof construction. Explain where to look and what changes. For an unfamiliar central operation, work through a small instance before general notation. Reuse it as the explanation grows; mark invented values as teaching data.
 
 For each difficult idea, connect **situation → picture → concrete operation → technical name → formal detail → evidence**. Adapt this order to the subject rather than manufacturing a simulation for a theorem or decorative art for a survey. A box containing a paragraph is a text card, not a mechanism illustration. Choose spatial arrangement, aligned values, arrows with verbs, or a state change that does explanatory work. Put a prose or table counterpart nearby.
 
