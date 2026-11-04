@@ -239,6 +239,18 @@
       "mode": "deep",
       "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 27 subsections, 23 display equations, 17 worked calcs) of causal action identification in world action models: over-coverage lower bound (Prop 1), support-sparsity identifiability (Thm 1-2 with full proof chains), sparse token routing on Cosmos 3 Nano, block-recovery synthetic audit, and 17-task macro recomputation (0.24 to 0.43).",
       "summaryZh": "世界动作模型的因果动作辨识深读（量化深度版 9000+字/16章/23公式/17手算）：过覆盖下界（Prop 1）、支撑稀疏可识别性（Thm 1-2 证明链全展开）、Cosmos 3 Nano 上的稀疏 token 路由、合成块恢复审计与 17 任务宏平均重算（0.24→0.43）。"
+    },
+    {
+      "slug": "cua-master",
+      "title": "CUA-Master: Scaling Computer-use Agents through Open-World Recursive Improvements",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2611.03126v1",
+      "date": "2026-11-04",
+      "pinned": false,
+      "mode": "deep",
+      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 17 subsections, 11 display equations, 14 worked calcs) of nested double-loop recursive improvement for computer-use agents: open-world video seeding with visual-semantic dual-path reconstruction, primitive-based K/N composable task synthesis, snapshot-rollback retry, plus full recomputation of Table 1 efficiency claims and domain-table denominator audits (two tables fail to reconstruct).",
+      "summaryZh": "计算机使用 Agent 的开放世界递归自我改进深读（量化深度版 9000+字/16章/11公式/14手算）：双环飞轮（世界-数据-模型外环+播种/自催化内环）、视觉-语义双路轨迹重建、K/N 预算的原语组合合成、快照回滚重试，Table 1 效率声明逐条复算与域表分母审计（两张表重构不上）。"
     }
   ]
 }
