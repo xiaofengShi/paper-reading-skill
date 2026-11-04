@@ -59,11 +59,11 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 - **Attention Is All You Need** · English · Brief Reading — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 依据 [arXiv:1706.03762](https://arxiv.org/abs/1706.03762)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 · Brief Reading — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
 - **LoRA** · 中文 · Brief Reading — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。 依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **Axion 1.0: Open Agent Foundation Models, Simplified** · 中文 · Deep Reading · ZCode — 开源 Agent 基座极简配方深读（量化深度版 9000+字/16章/10公式/26手算）：两段 SFT+RL 三段式（无中途训练/DPO/OPD）、模型感知四难化算子、确定性 filter-select-compute-verbalize 造题、前缀链部分奖励、TITO/R3 训推一致性，Table 1-3 与 R3 诊断逐格复算。 依据 [arXiv:2611.03233v2](https://arxiv.org/abs/2611.03233v2)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/axion-deep-read.html)
 - **CUA-Master: Scaling Computer-use Agents through Open-World Recursive Improvements** · 中文 · Deep Reading · ZCode — 计算机使用 Agent 的开放世界递归自我改进深读（量化深度版 9000+字/16章/11公式/14手算）：双环飞轮（世界-数据-模型外环+播种/自催化内环）、视觉-语义双路轨迹重建、K/N 预算的原语组合合成、快照回滚重试，Table 1 效率声明逐条复算与域表分母审计（两张表重构不上）。 依据 [arXiv:2611.03126v1](https://arxiv.org/abs/2611.03126v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/cua-master-deep-read.html)
 - **CausalWAM: Learning the Causes of Actions in World Action Models** · 中文 · Deep Reading · ZCode — 世界动作模型的因果动作辨识深读（量化深度版 9000+字/16章/23公式/17手算）：过覆盖下界（Prop 1）、支撑稀疏可识别性（Thm 1-2 证明链全展开）、Cosmos 3 Nano 上的稀疏 token 路由、合成块恢复审计与 17 任务宏平均重算（0.24→0.43）。 依据 [arXiv:2610.42096v1](https://arxiv.org/abs/2610.42096v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/causalwam-deep-read.html)
-- **A-RSI** · 中文 · Deep Reading · ZCode — 零数据多模态自我改进的自适应任务刷新深读（量化深度版 9000+字）：训练日志触发的池饱和检测、共享配置契约程序化出题、五臂对照逐格重算、奖励压力测试与输出分解（完成 vs 改正）。 依据 [arXiv:2610.38568v1](https://arxiv.org/abs/2610.38568v1)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/a-rsi-deep-read.html)
 
-目前已发布 **21** 篇阅读文档——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
+目前已发布 **22** 篇阅读文档——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
 <!-- readings-index:end -->
 
 重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。

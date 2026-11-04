@@ -251,6 +251,18 @@
       "mode": "deep",
       "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 17 subsections, 11 display equations, 14 worked calcs) of nested double-loop recursive improvement for computer-use agents: open-world video seeding with visual-semantic dual-path reconstruction, primitive-based K/N composable task synthesis, snapshot-rollback retry, plus full recomputation of Table 1 efficiency claims and domain-table denominator audits (two tables fail to reconstruct).",
       "summaryZh": "计算机使用 Agent 的开放世界递归自我改进深读（量化深度版 9000+字/16章/11公式/14手算）：双环飞轮（世界-数据-模型外环+播种/自催化内环）、视觉-语义双路轨迹重建、K/N 预算的原语组合合成、快照回滚重试，Table 1 效率声明逐条复算与域表分母审计（两张表重构不上）。"
+    },
+    {
+      "slug": "axion",
+      "title": "Axion 1.0: Open Agent Foundation Models, Simplified",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2611.03233v2",
+      "date": "2026-11-05",
+      "pinned": false,
+      "mode": "deep",
+      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 20 subsections, 10 display equations, 26 worked calcs) of the deliberately simple three-stage recipe (2xSFT + RL, no mid-training/DPO/OPD) for open agent foundation models: model-aware four-operator difficulty enhancement, deterministic filter-select-compute-verbalize task construction, prefix-chain partial rewards, TITO/R3 training-inference consistency, plus full recomputation of Tables 1-3 and R3 diagnostics.",
+      "summaryZh": "开源 Agent 基座极简配方深读（量化深度版 9000+字/16章/10公式/26手算）：两段 SFT+RL 三段式（无中途训练/DPO/OPD）、模型感知四难化算子、确定性 filter-select-compute-verbalize 造题、前缀链部分奖励、TITO/R3 训推一致性，Table 1-3 与 R3 诊断逐格复算。"
     }
   ]
 }
