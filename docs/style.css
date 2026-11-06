@@ -131,12 +131,15 @@ a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
 .copy-block pre { padding-top: 3rem; }
 .copy-code { position: absolute; top: .6rem; right: .6rem; min-height: 30px; padding: .3rem .65rem; background: #eaf7ee; color: #102f35; border: 1px solid #b7d8cc; border-radius: 4px; font: inherit; font-size: .78rem; font-weight: 700; cursor: pointer; }
 .copy-code:hover { background: white; }
-.copy-code:focus-visible, .gallery-group { list-style: none; margin: 1.6rem 0 .4rem; padding: .45rem .8rem; background: #f0f7f4; border-left: 4px solid #2f8f7a; border-radius: 4px; display: flex; align-items: baseline; gap: .7rem; }
-.gallery-group h3 { margin: 0; font-size: 1.02rem; letter-spacing: .02em; }
-.gallery-group > span { color: #6b7f78; font-size: .8rem; font-variant-numeric: tabular-nums; }
+.copy-code:focus-visible, /* 分组头：横跨网格整行并覆盖 .readings li 的卡片样式（选择器必须带 .readings li 以保证优先级） */
+.readings ul li.gallery-group { grid-column: 1 / -1; display: flex; align-items: baseline; gap: .7rem; margin: 1.8rem 0 .2rem; padding: .5rem .95rem; border: 0; border-left: 4px solid var(--teal, #2f8f7a); border-radius: 4px; background: #f0f7f4; }
+.readings ul li.gallery-group:first-child { margin-top: .4rem; }
+.readings ul li.gallery-group h3 { margin: 0; font-size: 1.05rem; letter-spacing: .02em; color: var(--ink, #233); }
+.readings ul li.gallery-group > span { color: #6b7f78; font-size: .8rem; font-variant-numeric: tabular-nums; }
 .gallery-filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; margin: .3rem 0; }
 .gallery-filter-label { font-size: .78rem; font-weight: 700; color: #4b5f58; margin-right: .25rem; }
-#readings li code { background: #e7f2ee; color: #1f6f5e; border-radius: 3px; padding: .08rem .4rem; font-size: .74em; }
+.gallery-filter legend.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.readings li code { background: #e7f2ee; color: #1f6f5e; border-radius: 3px; padding: .08rem .4rem; font-size: .74em; }
 .gallery-filter button:focus-visible { outline: 3px solid #a64d27; outline-offset: 3px; }
 .copy-status { display: block; color: #155f59; font-size: .85rem; min-height: 0; }
 .gallery-filter { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; padding: 0; margin: 1.5rem 0; border: 0; }
