@@ -64,7 +64,8 @@ function readingsGallery(page) {
     const open = page.lang === 'en' ? 'Open the reading →' : '打开阅读文档 →';
     if (!['brief', 'deep'].includes(r.mode)) throw new Error(`${r.slug}: mode must be brief or deep`);
     const modeLabel = r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading';
-    return `<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}"><strong>${esc(r.title)}</strong> · ${langLabel} · ${modeLabel}${tool} — ${esc(summary)}${arxiv} <a href="${esc(r.slug)}-deep-read.html">${open}</a></li>`;
+    const tags = (Array.isArray(r.tags) ? r.tags : []).map(tag => `<code>${esc(tag)}</code>`).join(' ');
+    return `<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}"><strong>${esc(r.title)}</strong> · ${langLabel} · ${modeLabel}${tool}${tags ? ` · ${tags}` : ''} — ${esc(summary)}${arxiv} <a href="${esc(r.slug)}-deep-read.html">${open}</a></li>`;
   });
   return `<ul>\n${items.join('\n')}\n</ul>`;
 }

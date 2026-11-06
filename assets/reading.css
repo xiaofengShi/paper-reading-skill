@@ -96,6 +96,10 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 #show-sources:checked + .topbar .source-toggle-label { color: var(--teal); background: var(--teal-pale); border-color: color-mix(in srgb, var(--teal) 35%, white); }
 #show-sources:checked + .topbar .source-toggle-label::before { content: '☑'; }
 #show-sources:focus-visible + .topbar .source-toggle-label { outline: 3px solid var(--orange); outline-offset: 3px; }
+.topbar .gallery-link { display: inline-flex; align-items: center; gap: .35rem; font-size: .78rem; font-weight: 800; text-decoration: none; color: var(--teal-dark); border: 1px solid color-mix(in srgb, var(--teal) 35%, white); background: color-mix(in srgb, var(--teal) 7%, white); padding: .3rem .68rem; border-radius: 3px; white-space: nowrap; }
+.topbar .gallery-link:hover { background: var(--teal); border-color: var(--teal); color: #fff; }
+.topbar .gallery-link:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+.page-footer a { text-decoration: none; font-weight: 700; }
 #show-sources:not(:checked) ~ * .source-ref, #show-sources:not(:checked) ~ * .source-badge { display: none; }
 .source-ref { color: var(--subtle); font-size: .82em; }
 .source-ref, .source-badge, .article a { overflow-wrap: anywhere; }
