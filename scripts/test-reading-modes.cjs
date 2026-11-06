@@ -61,7 +61,7 @@ test('each gallery entry declares the same mode in its audit source, HTML, and b
   const { readings } = JSON.parse(fs.readFileSync(path.join(root, 'readings.json'), 'utf8'));
   const galleries = ['index.html', 'zh.html'].map(name => {
     const html = fs.readFileSync(path.join(root, 'docs', name), 'utf8');
-    const items = html.match(/<li data-reading-lang="[^"]+" data-reading-mode="[^"]+">[\s\S]*?<\/li>/g) || [];
+    const items = html.match(/<li[^>]*data-reading-lang="[^"]+"[^>]*data-reading-mode="[^"]+"[^>]*>[\s\S]*?<\/li>/g) || [];
     assert.equal(items.length, readings.length, name);
     return items;
   });

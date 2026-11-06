@@ -46,13 +46,13 @@ function selected(readings) {
 
 function bulletEn(r) {
   const meta = r.tool ? ` · ${r.tool}` : '';
-  const arxiv = r.arxiv ? ` Based on [arXiv:${r.arxiv}](https://arxiv.org/abs/${r.arxiv}).` : '';
+  const arxiv = r.arxiv ? ` Based on [arXiv:${r.arxiv}](https://arxiv.org/abs/${r.arxiv}).` : (r.url ? ` Source: [article](${r.url}).` : '');
   const tags = (Array.isArray(r.tags) ? r.tags : []).map(tag => `\`${tag}\``).join(' ');
   return `- **${r.title}** · ${r.lang === 'en' ? 'English' : '中文'} · ${r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading'}${meta}${tags ? ` · ${tags}` : ''} — ${r.summaryEn}${arxiv} [Open the reading →](${site}${r.slug}-deep-read.html)`;
 }
 function bulletZh(r) {
   const meta = r.tool ? ` · ${r.tool}` : '';
-  const arxiv = r.arxiv ? ` 依据 [arXiv:${r.arxiv}](https://arxiv.org/abs/${r.arxiv})。` : '';
+  const arxiv = r.arxiv ? ` 依据 [arXiv:${r.arxiv}](https://arxiv.org/abs/${r.arxiv})。` : (r.url ? ` 来源：[原文](${r.url})。` : '');
   const tags = (Array.isArray(r.tags) ? r.tags : []).map(tag => `\`${tag}\``).join(' ');
   return `- **${r.title}** · ${r.lang === 'en' ? 'English' : '中文'} · ${r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading'}${meta}${tags ? ` · ${tags}` : ''} — ${r.summaryZh}${arxiv}[打开阅读文档 →](${site}${r.slug}-deep-read.html)`;
 }

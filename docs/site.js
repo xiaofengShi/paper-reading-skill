@@ -25,16 +25,43 @@
   const entries = [...document.querySelectorAll('[data-reading-lang]')];
   if (!entries.length) return;
   filter.hidden = false;
+  const groups = [...document.querySelectorAll('.gallery-group')];
+  const list = document.querySelector('#readings ul');
+  const state = { lang: 'all', tag: 'all' };
+  const apply = () => {
+    for (const entry of entries) {
+      const langOk = state.lang === 'all' || entry.dataset.readingLang === state.lang;
+      const tags = (entry.dataset.tags || '').split(' ').filter(Boolean);
+      const tagOk = state.tag === 'all' || tags.includes(state.tag);
+      entry.hidden = !(langOk && tagOk);
+    }
+    const flat = state.tag !== 'all';
+    if (list) {
+      let current = null;
+      const counts = new Map();
+      for (const li of list.children) {
+        if (li.classList.contains('gallery-group')) {
+          current = flat ? null : li;
+          li.hidden = flat;
+          if (current) counts.set(current, 0);
+        } else if (current && !li.hidden) {
+          counts.set(current, counts.get(current) + 1);
+        }
+      }
+      for (const [group, count] of counts) group.hidden = count === 0;
+    }
+    const count = entries.filter(entry => !entry.hidden).length;
+    filter.querySelector('.gallery-status').textContent = english ? `${count} readings shown` : `显示 ${count} 份阅读文档`;
+  };
   for (const button of filter.querySelectorAll('[data-filter]')) {
     button.addEventListener('click', () => {
-      for (const peer of filter.querySelectorAll('[data-filter]')) {
+      const row = button.closest('[data-filter-scope]');
+      if (!row) return;
+      for (const peer of row.querySelectorAll('[data-filter]')) {
         peer.setAttribute('aria-pressed', String(peer === button));
       }
-      for (const entry of entries) {
-        entry.hidden = button.dataset.filter !== 'all' && entry.dataset.readingLang !== button.dataset.filter;
-      }
-      const count = entries.filter(entry => !entry.hidden).length;
-      filter.querySelector('.gallery-status').textContent = english ? `${count} readings shown` : `显示 ${count} 份阅读文档`;
+      state[button.dataset.filterKind] = button.dataset.filter;
+      apply();
     });
   }
 })();

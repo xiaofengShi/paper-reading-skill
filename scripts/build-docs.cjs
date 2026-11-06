@@ -55,18 +55,35 @@ function readingsSectionTokens(section) {
   }
   return kept;
 }
+const TAG_ORDER = ['Agent', 'RL', 'Post-training', 'World-Model', 'Multimodal', 'RAG', 'Eval', 'Architecture', 'Survey', 'Claude'];
 function readingsGallery(page) {
-  const items = readings.slice().reverse().map(r => {
-    const langLabel = r.lang === 'en' ? 'English' : '中文';
-    const tool = r.tool ? ` · ${esc(r.tool)}` : '';
-    const arxiv = r.arxiv ? ` <a href="https://arxiv.org/abs/${esc(r.arxiv)}">arXiv:${esc(r.arxiv)}</a>.` : '';
-    const summary = page.lang === 'en' ? r.summaryEn : r.summaryZh;
-    const open = page.lang === 'en' ? 'Open the reading →' : '打开阅读文档 →';
-    if (!['brief', 'deep'].includes(r.mode)) throw new Error(`${r.slug}: mode must be brief or deep`);
-    const modeLabel = r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading';
-    const tags = (Array.isArray(r.tags) ? r.tags : []).map(tag => `<code>${esc(tag)}</code>`).join(' ');
-    return `<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}"><strong>${esc(r.title)}</strong> · ${langLabel} · ${modeLabel}${tool}${tags ? ` · ${tags}` : ''} — ${esc(summary)}${arxiv} <a href="${esc(r.slug)}-deep-read.html">${open}</a></li>`;
-  });
+  const zh = page.lang === 'zh-CN';
+  const enriched = readings.slice().reverse().map(r => ({ ...r, tags: Array.isArray(r.tags) ? r.tags : [] }));
+  const groups = new Map();
+  for (const r of enriched) {
+    const key = r.tags[0] || 'Other';
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(r);
+  }
+  const order = [...TAG_ORDER.filter(t => groups.has(t)), ...[...groups.keys()].filter(t => !TAG_ORDER.includes(t) && t !== 'Other').sort()];
+  if (groups.has('Other')) order.push('Other');
+  const items = [];
+  for (const key of order) {
+    const members = groups.get(key);
+    items.push(`<li class="gallery-group" data-group="${esc(key)}"><h3>${esc(key)}</h3><span>${members.length}</span></li>`);
+    for (const r of members) {
+      const langLabel = r.lang === 'en' ? 'English' : '中文';
+      const tool = r.tool ? ` · ${esc(r.tool)}` : '';
+      const arxiv = r.arxiv ? ` <a href="https://arxiv.org/abs/${esc(r.arxiv)}">arXiv:${esc(r.arxiv)}</a>.` : '';
+      const source = !r.arxiv && r.url ? ` <a href="${esc(r.url)}">${zh ? '原文' : 'Source'}</a>.` : '';
+      const summary = zh ? r.summaryZh : r.summaryEn;
+      const open = zh ? '打开阅读文档 →' : 'Open the reading →';
+      if (!['brief', 'deep'].includes(r.mode)) throw new Error(`${r.slug}: mode must be brief or deep`);
+      const modeLabel = r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading';
+      const badges = r.tags.map(tag => `<code>${esc(tag)}</code>`).join(' ');
+      items.push(`<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}" data-tags="${esc(r.tags.join(' '))}"><strong>${esc(r.title)}</strong> · ${langLabel} · ${modeLabel}${tool}${badges ? ` · ${badges}` : ''} — ${esc(summary)}${arxiv}${source} <a href="${esc(r.slug)}-deep-read.html">${open}</a></li>`);
+    }
+  }
   return `<ul>\n${items.join('\n')}\n</ul>`;
 }
 for (const page of pages) {
@@ -112,7 +129,11 @@ for (const page of pages) {
     if (id === 'readings') {
       body = `${body}\n${readingsGallery(page)}`;
       const labels = page.lang === 'en' ? ['Reading language', 'All', 'English', '中文'] : ['阅读文档语言', '全部', 'English', '中文'];
-      const filter = `<fieldset class="gallery-filter" hidden><legend>${labels[0]}</legend>${['all', 'en', 'zh-CN'].map((value, index) => `<button type="button" data-filter="${value}" aria-pressed="${index === 0}">${labels[index+1]}</button>`).join('')}<span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>`;
+      const tagLabels = page.lang === 'en' ? ['Topic', 'All'] : ['主题', '全部'];
+      const tagPool = TAG_ORDER.filter(t => readings.some(r => Array.isArray(r.tags) && r.tags.includes(t)));
+      const langRow = `<div class="gallery-filter-row" data-filter-scope="lang"><span class="gallery-filter-label">${labels[0]}</span>${['all', 'en', 'zh-CN'].map((value, index) => `<button type="button" data-filter-kind="lang" data-filter="${value}" aria-pressed="${index === 0}">${labels[index+1]}</button>`).join('')}</div>`;
+      const tagRow = `<div class="gallery-filter-row" data-filter-scope="tag"><span class="gallery-filter-label">${tagLabels[0]}</span><button type="button" data-filter-kind="tag" data-filter="all" aria-pressed="true">${tagLabels[1]}</button>${tagPool.map(t => `<button type="button" data-filter-kind="tag" data-filter="${esc(t)}" aria-pressed="false">${esc(t)}</button>`).join('')}</div>`;
+      const filter = `<fieldset class="gallery-filter" hidden><legend class="visually-hidden">${labels[0]}</legend>${langRow}${tagRow}<span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>`;
       body = body.replace('</h2>', `</h2>${filter}`);
     }
     return `<section class="content-section ${id}" id="${id}">\n${body}\n</section>`;
