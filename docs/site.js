@@ -24,44 +24,71 @@
   if (!filter) return;
   const entries = [...document.querySelectorAll('[data-reading-lang]')];
   if (!entries.length) return;
-  filter.hidden = false;
-  const groups = [...document.querySelectorAll('.gallery-group')];
-  const list = document.querySelector('#readings ul');
-  const state = { lang: 'all', tag: 'all' };
-  const apply = () => {
+  const controls = document.querySelector('.gallery-controls');
+  const search = controls.querySelector('input');
+  const pagination = document.querySelector('.gallery-pagination');
+  const previous = pagination.querySelector('[data-page="previous"]');
+  const next = pagination.querySelector('[data-page="next"]');
+  const pageSize = 6;
+  const searchable = entries.map(entry => entry.textContent.toLowerCase());
+  let language = 'all';
+  let tag = 'all';
+  let page = 0;
+  function render() {
+    const words = search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const matching = entries.filter((entry, index) =>
+      (language === 'all' || entry.dataset.readingLang === language) &&
+      (tag === 'all' || entry.dataset.tags.split(' ').includes(tag)) &&
+      words.every(word => searchable[index].includes(word)));
+    const pages = Math.max(1, Math.ceil(matching.length / pageSize));
+    page = Math.min(page, pages - 1);
+    const visible = new Set(matching.slice(page * pageSize, (page + 1) * pageSize));
     for (const entry of entries) {
-      const langOk = state.lang === 'all' || entry.dataset.readingLang === state.lang;
-      const tags = (entry.dataset.tags || '').split(' ').filter(Boolean);
-      const tagOk = state.tag === 'all' || tags.includes(state.tag);
-      entry.hidden = !(langOk && tagOk);
+      entry.hidden = !visible.has(entry);
+      if (entry.hidden) entry.querySelector('details').open = false;
     }
-    const flat = state.tag !== 'all';
-    if (list) {
-      let current = null;
-      const counts = new Map();
-      for (const li of list.children) {
-        if (li.classList.contains('gallery-group')) {
-          current = flat ? null : li;
-          li.hidden = flat;
-          if (current) counts.set(current, 0);
-        } else if (current && !li.hidden) {
-          counts.set(current, counts.get(current) + 1);
-        }
+    let group = null;
+    for (const item of document.querySelector('#reading-list').children) {
+      if (item.classList.contains('gallery-group')) {
+        group = item;
+        group.hidden = true;
+      } else if (group && !item.hidden && tag === 'all') {
+        group.hidden = false;
       }
-      for (const [group, count] of counts) group.hidden = count === 0;
     }
-    const count = entries.filter(entry => !entry.hidden).length;
-    filter.querySelector('.gallery-status').textContent = english ? `${count} readings shown` : `显示 ${count} 份阅读文档`;
-  };
+    const start = matching.length ? page * pageSize + 1 : 0;
+    const end = Math.min((page + 1) * pageSize, matching.length);
+    controls.querySelector('.gallery-status').textContent = english
+      ? `${start}–${end} of ${matching.length} readings`
+      : `显示 ${start}–${end} 篇，共 ${matching.length} 篇`;
+    document.querySelector('.gallery-empty').hidden = matching.length !== 0;
+    pagination.hidden = pages <= 1;
+    previous.disabled = page === 0;
+    next.disabled = page === pages - 1;
+    pagination.querySelector('.gallery-page').textContent = english
+      ? `Page ${page + 1} of ${pages}` : `第 ${page + 1} / ${pages} 页`;
+  }
+  controls.hidden = false;
+  search.addEventListener('input', () => { page = 0; render(); });
   for (const button of filter.querySelectorAll('[data-filter]')) {
     button.addEventListener('click', () => {
-      const row = button.closest('[data-filter-scope]');
-      if (!row) return;
-      for (const peer of row.querySelectorAll('[data-filter]')) {
+      if (button.dataset.filterKind === 'tag') tag = button.dataset.filter;
+      else language = button.dataset.filter;
+      page = 0;
+      for (const peer of button.closest('[data-filter-scope]').querySelectorAll('[data-filter]')) {
         peer.setAttribute('aria-pressed', String(peer === button));
       }
-      state[button.dataset.filterKind] = button.dataset.filter;
-      apply();
+      render();
     });
   }
+  for (const button of [previous, next]) {
+    button.addEventListener('click', () => {
+      page += button === next ? 1 : -1;
+      render();
+      const firstLink = entries.find(entry => !entry.hidden).querySelector('strong a');
+      firstLink.focus({ preventScroll: true });
+      controls.scrollIntoView({ block: 'start', behavior: 'instant' });
+    });
+  }
+  render();
 })();

@@ -81,10 +81,11 @@ function readingsGallery(page) {
       if (!['brief', 'deep'].includes(r.mode)) throw new Error(`${r.slug}: mode must be brief or deep`);
       const modeLabel = r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading';
       const badges = r.tags.map(tag => `<code>${esc(tag)}</code>`).join(' ');
-      items.push(`<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}" data-tags="${esc(r.tags.join(' '))}"><strong>${esc(r.title)}</strong> · ${langLabel} · ${modeLabel}${tool}${badges ? ` · ${badges}` : ''} — ${esc(summary)}${arxiv}${source} <a href="${esc(r.slug)}-deep-read.html">${open}</a></li>`);
+    const details = page.lang === 'en' ? 'About this reading' : '查看阅读简介';
+      items.push(`<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}" data-tags="${esc(r.tags.join(' '))}"><div class="reading-meta"><span>${langLabel}</span><span>${modeLabel}</span>${badges ? ` · ${badges}` : ''}</div><strong><a href="${esc(r.slug)}-deep-read.html">${esc(r.title)}</a></strong><details><summary>${details}</summary><p>${esc(summary)}${arxiv}${source}${tool}</p></details><a class="reading-open" href="${esc(r.slug)}-deep-read.html">${open}</a></li>`);
     }
   }
-  return `<ul>\n${items.join('\n')}\n</ul>`;
+  return `<ul id="reading-list">\n${items.join('\n')}\n</ul>`;
 }
 for (const page of pages) {
   const tokens = marked.lexer(fs.readFileSync(path.join(root, page.source), 'utf8'));
@@ -133,8 +134,10 @@ for (const page of pages) {
       const tagPool = TAG_ORDER.filter(t => readings.some(r => Array.isArray(r.tags) && r.tags.includes(t)));
       const langRow = `<div class="gallery-filter-row" data-filter-scope="lang"><span class="gallery-filter-label">${labels[0]}</span>${['all', 'en', 'zh-CN'].map((value, index) => `<button type="button" data-filter-kind="lang" data-filter="${value}" aria-pressed="${index === 0}">${labels[index+1]}</button>`).join('')}</div>`;
       const tagRow = `<div class="gallery-filter-row" data-filter-scope="tag"><span class="gallery-filter-label">${tagLabels[0]}</span><button type="button" data-filter-kind="tag" data-filter="all" aria-pressed="true">${tagLabels[1]}</button>${tagPool.map(t => `<button type="button" data-filter-kind="tag" data-filter="${esc(t)}" aria-pressed="false">${esc(t)}</button>`).join('')}</div>`;
-      const filter = `<fieldset class="gallery-filter" hidden><legend class="visually-hidden">${labels[0]}</legend>${langRow}${tagRow}<span class="gallery-status" role="status" aria-atomic="true"></span></fieldset>`;
-      body = body.replace('</h2>', `</h2>${filter}`);
+      const en = page.lang === 'en';
+      const controls = `<div class="gallery-controls" hidden><label class="gallery-search">${en ? 'Find a reading' : '查找阅读文档'}<input type="search" aria-controls="reading-list" placeholder="${en ? 'Search title, topic, or arXiv ID' : '搜索标题、主题或 arXiv 编号'}"></label><fieldset class="gallery-filter"><legend class="visually-hidden">${en ? 'Filter readings' : '筛选阅读文档'}</legend>${langRow}${tagRow}</fieldset><span class="gallery-status" role="status" aria-atomic="true"></span></div>`;
+      body = body.replace('<ul id="reading-list">', `${controls}<ul id="reading-list">`);
+      body += `<p class="gallery-empty" hidden>${en ? 'No readings found. Try another search or language.' : '没有找到匹配的阅读文档，请更换关键词或语言。'}</p><nav class="gallery-pagination" aria-label="${en ? 'Reading pages' : '阅读列表分页'}" hidden><button type="button" data-page="previous" aria-controls="reading-list">${en ? '← Previous' : '← 上一页'}</button><span class="gallery-page"></span><button type="button" data-page="next" aria-controls="reading-list">${en ? 'Next →' : '下一页 →'}</button></nav>`;
     }
     return `<section class="content-section ${id}" id="${id}">\n${body}\n</section>`;
   }).join('\n');
