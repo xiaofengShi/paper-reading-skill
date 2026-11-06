@@ -33,12 +33,14 @@
   const searchable = entries.map(entry => entry.textContent.toLowerCase());
   let language = 'all';
   let tag = 'all';
+  let mode = 'all';
   let page = 0;
   function render() {
     const words = search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
     const matching = entries.filter((entry, index) =>
       (language === 'all' || entry.dataset.readingLang === language) &&
       (tag === 'all' || entry.dataset.tags.split(' ').includes(tag)) &&
+      (mode === 'all' || entry.dataset.readingMode === mode) &&
       words.every(word => searchable[index].includes(word)));
     const pages = Math.max(1, Math.ceil(matching.length / pageSize));
     page = Math.min(page, pages - 1);
@@ -52,6 +54,7 @@
       if (item.classList.contains('gallery-group')) {
         group = item;
         group.hidden = true;
+        group.querySelector('span').textContent = String(matching.filter(entry => entry.dataset.primaryTag === group.dataset.group).length);
       } else if (group && !item.hidden && tag === 'all') {
         group.hidden = false;
       }
@@ -69,10 +72,22 @@
       ? `Page ${page + 1} of ${pages}` : `第 ${page + 1} / ${pages} 页`;
   }
   controls.hidden = false;
+  const reset = controls.querySelector('.gallery-reset');
+  reset.addEventListener('click', () => {
+    language = tag = mode = 'all';
+    page = 0;
+    search.value = '';
+    for (const button of filter.querySelectorAll('[data-filter]')) {
+      button.setAttribute('aria-pressed', String(button.dataset.filter === 'all'));
+    }
+    render();
+    search.focus({ preventScroll: true });
+  });
   search.addEventListener('input', () => { page = 0; render(); });
   for (const button of filter.querySelectorAll('[data-filter]')) {
     button.addEventListener('click', () => {
       if (button.dataset.filterKind === 'tag') tag = button.dataset.filter;
+      else if (button.dataset.filterKind === 'mode') mode = button.dataset.filter;
       else language = button.dataset.filter;
       page = 0;
       for (const peer of button.closest('[data-filter-scope]').querySelectorAll('[data-filter]')) {
@@ -87,7 +102,7 @@
       render();
       const firstLink = entries.find(entry => !entry.hidden).querySelector('strong a');
       firstLink.focus({ preventScroll: true });
-      controls.scrollIntoView({ block: 'start', behavior: 'instant' });
+      firstLink.scrollIntoView({ block: 'center', behavior: 'instant' });
     });
   }
   render();

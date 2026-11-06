@@ -133,6 +133,14 @@ function main() {
     contents.set(relative, relative.endsWith('.md') ? Buffer.from(upstreamLinks(raw.toString('utf8'), sourceFile)) : raw);
   }
   const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+  // Website-only BoardUI tooling must not grow the installable reader runtime.
+  delete pkg.devDependencies;
+  const lock = JSON.parse(contents.get('package-lock.json').toString('utf8'));
+  delete lock.packages[''].devDependencies;
+  for (const [name, dependency] of Object.entries(lock.packages)) {
+    if (dependency.dev) delete lock.packages[name];
+  }
+  contents.set('package-lock.json', Buffer.from(JSON.stringify(lock, null, 2) + '\n'));
   pkg.scripts = {
     doctor: 'node scripts/doctor.cjs',
     'init:reading': 'node scripts/init-reading.cjs',

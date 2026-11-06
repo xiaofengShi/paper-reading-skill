@@ -28,6 +28,7 @@ npm run pack:skill -- --help
 - `examples/*-deep-read.md` and their local visual inputs generate `docs/*-deep-read.html` through `npm run build:examples`. Register new readings in both READMEs and add reader tasks in `evals/reader-tasks.md`.
 - `reports/*.md` generate matching `docs/*.html` through `npm run build:audit`; retain historical reports as dated snapshots. `check:audit` checks their freshness.
 - Change the source, rebuild, and include generated outputs together. Do not hand-edit generated HTML. A local build does not confirm a live GitHub Pages deployment.
+- Homepage controls use BoardUI source in `components/` and `utils/`; `styles/site.css` compiles to `docs/style.css` as part of `build:docs`. Keep semantic colors, composite typography, and upstream attribution in `styles/BOARDUI.md`. React and Tailwind are build-only development dependencies, excluded from the installable reading runtime.
 - Runtime scripts can depend on `scripts/lib/` and `scripts/fixtures/`; keep those helpers in lightweight packages. Keep `package-lock.json` consistent with `package.json`.
 
 ## Reading integrity

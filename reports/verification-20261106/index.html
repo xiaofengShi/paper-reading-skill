@@ -1,0 +1,82 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BoardUI 首页优化核验 · 2026-11-06</title><style>body{max-width:1000px;margin:auto;padding:32px 20px;font:16px/1.8 system-ui,sans-serif;color:#182e33;background:#fafcfb}h1,h2{line-height:1.3}h2{margin-top:40px}a{color:#08675c;text-underline-offset:3px}code{overflow-wrap:anywhere;background:#edf2ef;padding:2px 4px}table{width:100%;border-collapse:collapse;background:white}th,td{border:1px solid #d4e0db;padding:12px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#e9f0ec}@media(max-width:600px){body{padding:20px 12px}th,td{padding:8px;font-size:14px}h1{font-size:28px}}@media print{body{padding:0;background:white}a{color:inherit}}</style><main><h1>BoardUI 首页优化核验</h1>
+<p>日期：2026-11-06（Asia/Shanghai）。范围：中英文项目首页、主页构建与轻量包边界。状态：本地实现与功能核验完成，尚未推送或发布。基线提交：<code>50fdb7beb6115ed76f6125d6bfa97a405ae6e590</code>。</p>
+<h2>交付变化</h2>
+<ul>
+<li>使用官方 BoardUI Button/ButtonLink、语义颜色 token 与复合字号，在构建时生成静态 HTML；浏览器不加载 React。</li>
+<li>简化首屏行动入口，统一导航、样例卡片、代码复制与筛选控件；手机端保留全部主导航。</li>
+<li>在原有搜索、语言/主题筛选与六篇分页之上，增加 Brief/Deep 筛选和一键重置；分组数量随筛选更新。</li>
+<li>保留现有阅读地址与正文，修复分页焦点出视口、320px 质量表格溢出与打印遗漏隐藏条目。</li>
+<li>同步中英文内容源与贡献文档；开发依赖不进入轻量 skill 包，生成 CSS 附带完整 BoardUI MIT 声明。</li>
+</ul>
+<h2>已验证</h2>
+<table>
+<thead>
+<tr>
+<th>检查</th>
+<th>结果与边界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>官方 skill 安装</td>
+<td><code>~/.agents/skills/boardui</code>，版本 <code>2026.11.5</code>；五个官方文件逐字节核验，官方 CLI 复核版本</td>
+</tr>
+<tr>
+<td><code>npm ci</code></td>
+<td>在现有 macOS / Node.js 26.12.0 环境完成；npm 提示两个安装脚本未获 allowScripts 覆盖，实际构建使用已安装的平台二进制并成功</td>
+</tr>
+<tr>
+<td><code>npm test</code></td>
+<td>46 项通过；包括生成页面、阅读器、语言/模式合同与轻量包</td>
+</tr>
+<tr>
+<td><code>doctor</code> 与生成检查</td>
+<td><code>check:docs</code>、<code>check:examples</code>（24 篇）、<code>check:audit</code>、<code>check:guides</code>、<code>check:readings</code> 均通过</td>
+</tr>
+<tr>
+<td>浏览器</td>
+<td>Google Chrome + Playwright：131 项功能检查；中英文各 320、375、768、1024、1440px</td>
+</tr>
+<tr>
+<td>筛选与导航</td>
+<td>深度/语言组合、主题、全目录 arXiv 搜索、空结果、重置、分页与可见焦点</td>
+</tr>
+<tr>
+<td>复制</td>
+<td>正常 clipboard 写入、权限拒绝时选中完整命令供手动复制</td>
+</tr>
+<tr>
+<td>离线与无脚本</td>
+<td>本地 file URL、断网、禁用 JavaScript，仍显示全部 24 篇并可键盘展开简介；预览图可加载</td>
+</tr>
+<tr>
+<td>打印与动画</td>
+<td>打印包含全部 24 篇，隐藏交互控件；减少动态效果设置关闭平滑滚动</td>
+</tr>
+<tr>
+<td>页面请求</td>
+<td>受测首页无外部网络请求、无 JavaScript pageerror、无文档级横向溢出</td>
+</tr>
+<tr>
+<td>轻量包实际安装</td>
+<td>临时位置打包后 <code>npm ci</code> 仅安装 3 个运行依赖，再运行 doctor 通过；未替换个人活动安装</td>
+</tr>
+<tr>
+<td>独立代码核验</td>
+<td>代理检查发现的许可与焦点问题已修复；320px 表格问题也已修复。代理核验不代表真人评审</td>
+</tr>
+</tbody></table>
+<p><a href="browser-checks.json">逐项浏览器结果</a> · <a href="check-homepage.py">浏览器复现脚本</a> · <a href="../../styles/BOARDUI.md">BoardUI 来源与校验和</a></p>
+<h2>待完成与边界</h2>
+<ul>
+<li><code>pending</code>：GLM-5.3-Flash 正式视觉复核，当前会话无法调用指定模型；截图与几何检查不能替代该验收。</li>
+<li><code>pending</code>：远端推送、GitHub CI 与 Pages 发布/线上验收；本记录不表示线上已更新。</li>
+<li><code>unverified</code>：本次未在 Node.js 20/22/24 或 Safari/Firefox 实机重跑，未做 VoiceOver 或真人可用性研究。</li>
+<li><code>out-of-scope</code>：论文内容正确性、学习效果和个别阅读页面的视觉改造。</li>
+<li>规则已同步主页源码与构建约定；机器生成记忆只读。未清理历史材料或其他项目。</li>
+</ul>
+<h2>截图</h2>
+<p><a href="index-1440-hero.png">英文桌面首屏</a> · <a href="index-1440-gallery.png">英文桌面目录</a> · <a href="index-375-hero.png">英文手机首屏</a> · <a href="index-375-gallery.png">英文手机目录</a></p>
+<p><a href="zh-1440-hero.png">中文桌面首屏</a> · <a href="zh-1440-gallery.png">中文桌面目录</a> · <a href="zh-375-hero.png">中文手机首屏</a> · <a href="zh-375-gallery.png">中文手机目录</a></p>
+<h2>复现浏览器检查</h2>
+<p>需要安装 Google Chrome，以及含 <code>playwright==1.64.1</code> 的 Python 环境。在仓库根目录的第一个终端运行 <code>python3 -m http.server 8796 --bind 127.0.0.1 --directory docs</code>，然后在第二个终端运行 <code>python3 reports/verification-20261106/check-homepage.py</code>。脚本使用本机 Chrome，无需另下浏览器；结果和截图写回本目录。</p>
+</main></html>

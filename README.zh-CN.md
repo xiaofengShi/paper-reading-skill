@@ -194,4 +194,4 @@ npm test
 
 ## 维护说明
 
-本文是[中文主页](https://xiaofengshi.github.io/paper-reading-skill/zh.html)的内容源；[README.md](README.md)是默认[英文主页](https://xiaofengshi.github.io/paper-reading-skill/)的内容源。修改任一语言后运行 `npm run build:docs`，将生成的 HTML 与 Markdown 一同提交。主页生成器见 [scripts/build-docs.cjs](scripts/build-docs.cjs)。
+本文是[中文主页](https://xiaofengshi.github.io/paper-reading-skill/zh.html)的内容源；[README.md](README.md)是默认[英文主页](https://xiaofengshi.github.io/paper-reading-skill/)的内容源。修改任一语言后运行 `npm ci` 和 `npm run build:docs`，将生成的 HTML、CSS 与源文件一同提交。主页生成器见 [scripts/build-docs.cjs](scripts/build-docs.cjs)；首页使用在构建时渲染的 BoardUI 组件，布局源为 [styles/site.css](styles/site.css)。构建与运行时边界见[维护说明](CONTRIBUTING.md#3-register-the-reading)。

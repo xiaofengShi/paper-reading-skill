@@ -1,0 +1,621 @@
+{
+  "browser": "Google Chrome / Playwright",
+  "checks": [
+    {
+      "check": "index.html 320px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "check": "index.html 320px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "index.html 320px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "index.html 320px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 320px combined filters",
+      "passed": true
+    },
+    {
+      "check": "index.html 320px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "index.html 320px empty state",
+      "passed": true
+    },
+    {
+      "check": "index.html 320px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "index.html 320px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "index.html 320px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "index.html 320px topic filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 375,
+        "viewport": 375
+      }
+    },
+    {
+      "check": "index.html 375px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px combined filters",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px empty state",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "index.html 375px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "index.html 375px topic filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 768,
+        "viewport": 768
+      }
+    },
+    {
+      "check": "index.html 768px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px combined filters",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px empty state",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "index.html 768px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "index.html 768px topic filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 1024,
+        "viewport": 1024
+      }
+    },
+    {
+      "check": "index.html 1024px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px combined filters",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px empty state",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "index.html 1024px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "index.html 1024px topic filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "check": "index.html 1440px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px combined filters",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px empty state",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "index.html 1440px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "index.html 1440px topic filter",
+      "passed": true
+    },
+    {
+      "check": "index.html clipboard matches command",
+      "passed": true
+    },
+    {
+      "check": "index.html keyboard focus is visible",
+      "passed": true
+    },
+    {
+      "check": "index.html print includes all readings",
+      "passed": true
+    },
+    {
+      "check": "index.html print hides interactive controls",
+      "passed": true
+    },
+    {
+      "check": "index.html reduced motion disables smooth scrolling",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 320,
+        "viewport": 320
+      }
+    },
+    {
+      "check": "zh.html 320px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px combined filters",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px empty state",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "zh.html 320px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "zh.html 320px topic filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 375,
+        "viewport": 375
+      }
+    },
+    {
+      "check": "zh.html 375px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px combined filters",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px empty state",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "zh.html 375px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "zh.html 375px topic filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 768,
+        "viewport": 768
+      }
+    },
+    {
+      "check": "zh.html 768px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px combined filters",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px empty state",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "zh.html 768px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "zh.html 768px topic filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 1024,
+        "viewport": 1024
+      }
+    },
+    {
+      "check": "zh.html 1024px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px combined filters",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px empty state",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1024px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "zh.html 1024px topic filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px no horizontal page overflow",
+      "passed": true,
+      "details": {
+        "scroll": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "check": "zh.html 1440px all header routes visible",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px initial six readings",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px Deep filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px combined filters",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px reset restores filters and focus",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px empty state",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px full-catalog arXiv search",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px pagination changes entries",
+      "passed": true
+    },
+    {
+      "check": "zh.html 1440px pagination focus stays in viewport",
+      "passed": true,
+      "details": {
+        "visible": true,
+        "tag": "A",
+        "reading": true
+      }
+    },
+    {
+      "check": "zh.html 1440px topic filter",
+      "passed": true
+    },
+    {
+      "check": "zh.html clipboard matches command",
+      "passed": true
+    },
+    {
+      "check": "zh.html keyboard focus is visible",
+      "passed": true
+    },
+    {
+      "check": "zh.html print includes all readings",
+      "passed": true
+    },
+    {
+      "check": "zh.html print hides interactive controls",
+      "passed": true
+    },
+    {
+      "check": "zh.html reduced motion disables smooth scrolling",
+      "passed": true
+    },
+    {
+      "check": "no page JavaScript errors",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "homepage makes no external network requests",
+      "passed": true,
+      "details": []
+    },
+    {
+      "check": "clipboard denial selects the command for manual copy",
+      "passed": true
+    },
+    {
+      "check": "index.html offline without JavaScript exposes all readings",
+      "passed": true
+    },
+    {
+      "check": "index.html no-script controls stay hidden",
+      "passed": true
+    },
+    {
+      "check": "index.html no-script summaries work with keyboard",
+      "passed": true
+    },
+    {
+      "check": "index.html offline preview image loads",
+      "passed": true
+    },
+    {
+      "check": "zh.html offline without JavaScript exposes all readings",
+      "passed": true
+    },
+    {
+      "check": "zh.html no-script controls stay hidden",
+      "passed": true
+    },
+    {
+      "check": "zh.html no-script summaries work with keyboard",
+      "passed": true
+    },
+    {
+      "check": "zh.html offline preview image loads",
+      "passed": true
+    }
+  ]
+}

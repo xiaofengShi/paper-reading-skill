@@ -30,7 +30,9 @@ npm run check:examples
 - [evals/reader-tasks.md](evals/reader-tasks.md): add paper-specific reader questions and an answer key following the existing entries. These evaluation tasks are separate from the optional checks embedded in the reading.
 - Do not hand-edit the reading lists in the READMEs. `npm run build:readings` regenerates the capped index (pinned entries plus the most recent, six bullets total) between the `readings-index` markers in both READMEs; the homepage gallery renders every entry from the same JSON.
 
-The homepage groups readings by topic, newest first within each group, six per page, with full-catalog search, language filters, and topic filters. Titles open the reading directly; native disclosures reveal the summaries. Without JavaScript, every entry remains accessible and summaries still expand. New entries in `readings.json` automatically join search and pagination after rebuilding; do not maintain a separate featured list.
+The homepage groups readings by topic, newest first within each group, six per page, with full-catalog search and language, Brief/Deep, and topic filters. Reset clears all filters together. Titles open the reading directly; native disclosures reveal the summaries. Without JavaScript, every entry remains accessible and summaries still expand. New entries in `readings.json` automatically join search and pagination after rebuilding; do not maintain a separate featured list.
+
+The static homepage uses the official [BoardUI](https://github.com/BoardUI/boardui) Button/ButtonLink source in `components/`, its semantic tokens and composite typography in `styles/`, and `utils/cx.ts`. `scripts/build-site-ui.tsx` renders these controls during the docs build; no React runtime ships to visitors. Edit `styles/site.css` for the homepage layout, branding tokens, responsive rules, and print behavior. `build:docs` compiles it to `docs/style.css`; `check:docs` checks CSS and HTML freshness. Website tooling is pinned as development dependencies and omitted from the lightweight skill package. Upstream source attribution and checksums are in `styles/BOARDUI.md`.
 
 Rebuild the generated files:
 

@@ -23,7 +23,7 @@ test('the homepages offer a first-paper path, every published reading, and worki
     assert.ok(html.includes('2106.09685v2'));
     assert.ok(html.includes('paper-readings/lora/reading.html'));
     assert.ok(html.includes('data-filter="zh-CN"'));
-    assert.ok(html.includes('class="copy-code" hidden'));
+    assert.match(html, /<button[^>]*class="[^"]*\bcopy-code\b[^"]*"[^>]*hidden/);
     assert.ok(html.includes('src="site.js"'));
     assert.ok(html.includes(`href="${switchTarget}"`));
     assert.ok(html.includes('href="#readings"'));

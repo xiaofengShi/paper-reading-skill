@@ -102,6 +102,11 @@ test('the runtime package has a verifiable small manifest and works without gall
     const runtimePackage = JSON.parse(fs.readFileSync(path.join(runtime, 'package.json'), 'utf8'));
     assert.deepEqual(Object.keys(runtimePackage.scripts).sort(), ['doctor', 'init:reading', 'render']);
     assert.deepEqual(runtimePackage.dependencies, JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).dependencies);
+    assert.equal(runtimePackage.devDependencies, undefined);
+    const runtimeLock = JSON.parse(fs.readFileSync(path.join(runtime, 'package-lock.json'), 'utf8'));
+    assert.deepEqual(runtimeLock.packages[''].dependencies, runtimePackage.dependencies);
+    assert.equal(runtimeLock.packages[''].devDependencies, undefined);
+    assert.ok(Object.values(runtimeLock.packages).every(dependency => !dependency.dev));
     assert.equal(fs.existsSync(path.join(runtime, 'examples')), false);
     assert.equal(fs.existsSync(path.join(runtime, 'docs')), false);
     const readerTasks = fs.readFileSync(path.join(runtime, 'evals/reader-tasks.md'), 'utf8');
