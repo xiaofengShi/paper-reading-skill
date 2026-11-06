@@ -380,6 +380,22 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 14 subsections, 10 display formulas, 17 worked calcs) of Anthropic's official guidance on folding subagents into the main agent loop: five enterprise failure modes with interface-count squaring, three keep-conditions as a decision rule, telephone-game fidelity and nested-loop latency models reproducing the 2x claim, progressive-disclosure budget matching the 80% prompt cut, and the eval-first migration path with task-flip analysis.",
       "summaryZh": "Anthropic 官方「子代理折叠」指南深读（量化深度版 9000+字/16章/10公式/17手算）：五大企业失败模式（接口数平方律）、三保留条件决策规则、电话游戏保真度与嵌套延迟模型（复算 2 倍声明）、渐进披露预算（对上 80% 缩减）、评测先行迁移路径与 task-flip 分析。"
+    },
+    {
+      "slug": "drex",
+      "title": "Towards Foundation Decision Models: Drex",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2611.07854v1",
+      "date": "2026-11-07",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Agent",
+        "Post-training"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 19 subsections, 9 display equations, 14 worked calcs) of the Drex family of four open decision models: choice/noul/score interface, pointer vs readout heads, RLAF training (verified outcome + same-backbone judge under KL anchor, closed-form optimum), Decision Index 0.4.1 SOTA 67.52 with 183ms latency, calibration and flip-rate analyses, and deployment engineering.",
+      "summaryZh": "决策模型家族 Drex 深读（量化深度版 9000+字/16章/9公式/14手算）：choice/noul/score 接口、指针/读出双头、RLAF 训练（验证结果+同基座裁判+KL 锚定）、DI 0.4.1 SOTA 67.52 与 183ms 延迟、校准与翻转率全量分析、部署工程账。"
     }
   ]
 }
