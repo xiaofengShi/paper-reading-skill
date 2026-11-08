@@ -59,7 +59,8 @@ function readingsSectionTokens(section) {
 const TAG_ORDER = ['Agent', 'RL', 'Post-training', 'World-Model', 'Multimodal', 'RAG', 'Eval', 'Architecture', 'Survey', 'Claude'];
 function readingsGallery(page) {
   const zh = page.lang === 'zh-CN';
-  const enriched = readings.slice().reverse().map(r => ({ ...r, tags: Array.isArray(r.tags) ? r.tags : [] }));
+  const enriched = readings.map((r, index) => ({ ...r, index, tags: Array.isArray(r.tags) ? r.tags : [] }))
+    .sort((a, b) => b.date.localeCompare(a.date) || b.index - a.index);
   const groups = new Map();
   for (const r of enriched) {
     const key = r.tags[0] || 'Other';
@@ -68,10 +69,11 @@ function readingsGallery(page) {
   }
   const order = [...TAG_ORDER.filter(t => groups.has(t)), ...[...groups.keys()].filter(t => !TAG_ORDER.includes(t) && t !== 'Other').sort()];
   if (groups.has('Other')) order.push('Other');
-  const items = [];
+  const items = new Map();
+  const headers = [];
   for (const key of order) {
     const members = groups.get(key);
-    items.push(`<li class="gallery-group" data-group="${esc(key)}"><h3>${esc(key)}</h3><span>${members.length}</span></li>`);
+    headers.push(`<li class="gallery-group" data-group="${esc(key)}" hidden><h3>${esc(key)}</h3><span>${members.length}</span></li>`);
     for (const r of members) {
       const langLabel = r.lang === 'en' ? 'English' : '中文';
       const tool = r.tool ? ` · ${esc(r.tool)}` : '';
@@ -83,10 +85,10 @@ function readingsGallery(page) {
       const modeLabel = r.mode === 'deep' ? 'Deep Reading' : 'Brief Reading';
       const badges = r.tags.map(tag => `<code>${esc(tag)}</code>`).join(' ');
     const details = page.lang === 'en' ? 'About this reading' : '查看阅读简介';
-      items.push(`<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}" data-primary-tag="${esc(key)}" data-tags="${esc(r.tags.join(' '))}"><div class="reading-meta"><span>${langLabel}</span><span class="mode-${r.mode}">${modeLabel}</span>${badges}</div><strong><a href="${esc(r.slug)}-deep-read.html">${esc(r.title)}</a></strong><details><summary>${details}</summary><p>${esc(summary)}${arxiv}${source}${tool}</p></details><a class="reading-open" href="${esc(r.slug)}-deep-read.html">${open}</a></li>`);
+      items.set(r.slug, `<li data-reading-lang="${r.lang}" data-reading-mode="${r.mode}" data-primary-tag="${esc(key)}" data-tags="${esc(r.tags.join(' '))}"><div class="reading-meta"><span>${langLabel}</span><span class="mode-${r.mode}">${modeLabel}</span>${badges}</div><strong><a href="${esc(r.slug)}-deep-read.html">${esc(r.title)}</a></strong><details><summary>${details}</summary><p>${esc(summary)}${arxiv}${source}${tool}</p></details><a class="reading-open" href="${esc(r.slug)}-deep-read.html">${open}</a></li>`);
     }
   }
-  return `<ul id="reading-list">\n${items.join('\n')}\n</ul>`;
+  return `<ul id="reading-list">\n${[...enriched.map(r => items.get(r.slug)), ...headers].join('\n')}\n</ul>`;
 }
 for (const page of pages) {
   const tokens = marked.lexer(fs.readFileSync(path.join(root, page.source), 'utf8'));

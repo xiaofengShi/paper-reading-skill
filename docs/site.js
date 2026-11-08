@@ -24,6 +24,9 @@
   if (!filter) return;
   const entries = [...document.querySelectorAll('[data-reading-lang]')];
   if (!entries.length) return;
+  const list = document.querySelector('#reading-list');
+  const groups = [...list.querySelectorAll('.gallery-group')];
+  const groupOrder = new Map(groups.map((group, index) => [group.dataset.group, index]));
   const controls = document.querySelector('.gallery-controls');
   const search = controls.querySelector('input');
   const pagination = document.querySelector('.gallery-pagination');
@@ -42,6 +45,11 @@
       (tag === 'all' || entry.dataset.tags.split(' ').includes(tag)) &&
       (mode === 'all' || entry.dataset.readingMode === mode) &&
       words.every(word => searchable[index].includes(word)));
+    const grouped = language !== 'all' || tag !== 'all' || mode !== 'all' || words.length > 0;
+    if (grouped) {
+      // Stable sorting preserves newest-first order within each topic.
+      matching.sort((a, b) => groupOrder.get(a.dataset.primaryTag) - groupOrder.get(b.dataset.primaryTag));
+    }
     const pages = Math.max(1, Math.ceil(matching.length / pageSize));
     page = Math.min(page, pages - 1);
     const visible = new Set(matching.slice(page * pageSize, (page + 1) * pageSize));
@@ -49,15 +57,12 @@
       entry.hidden = !visible.has(entry);
       if (entry.hidden) entry.querySelector('details').open = false;
     }
-    let group = null;
-    for (const item of document.querySelector('#reading-list').children) {
-      if (item.classList.contains('gallery-group')) {
-        group = item;
-        group.hidden = true;
-        group.querySelector('span').textContent = String(matching.filter(entry => entry.dataset.primaryTag === group.dataset.group).length);
-      } else if (group && !item.hidden && tag === 'all') {
-        group.hidden = false;
-      }
+    if (!grouped) list.append(...entries, ...groups);
+    for (const group of groups) {
+      const members = entries.filter(entry => entry.dataset.primaryTag === group.dataset.group);
+      if (grouped) list.append(group, ...members);
+      group.hidden = !grouped || !members.some(entry => visible.has(entry));
+      group.querySelector('span').textContent = String(matching.filter(entry => entry.dataset.primaryTag === group.dataset.group).length);
     }
     const start = matching.length ? page * pageSize + 1 : 0;
     const end = Math.min((page + 1) * pageSize, matching.length);
@@ -100,7 +105,7 @@
     button.addEventListener('click', () => {
       page += button === next ? 1 : -1;
       render();
-      const firstLink = entries.find(entry => !entry.hidden).querySelector('strong a');
+      const firstLink = list.querySelector('[data-reading-lang]:not([hidden]) strong a');
       firstLink.focus({ preventScroll: true });
       firstLink.scrollIntoView({ block: 'center', behavior: 'instant' });
     });

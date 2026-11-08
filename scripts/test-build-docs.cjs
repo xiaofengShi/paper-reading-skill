@@ -5,6 +5,21 @@ const test = require('node:test');
 
 const docs = path.resolve(__dirname, '../docs');
 
+test('both homepages default to newest-first readings without topic headings', () => {
+  const readings = JSON.parse(fs.readFileSync(path.resolve(docs, '../readings.json'), 'utf8')).readings;
+  const expected = readings.map((reading, index) => ({ ...reading, index }))
+    .sort((a, b) => b.date.localeCompare(a.date) || b.index - a.index)
+    .map(reading => `${reading.slug}-deep-read.html`);
+  for (const file of ['index.html', 'zh.html']) {
+    const html = fs.readFileSync(path.join(docs, file), 'utf8');
+    const links = [...html.matchAll(/<li data-reading-lang="[^"]+"[^>]*>[\s\S]*?<strong><a href="([^"]+)"/g)].map(match => match[1]);
+    assert.deepEqual(links, expected, `${file} must use dates across all topics, including without JavaScript`);
+    const headers = [...html.matchAll(/<li class="gallery-group"[^>]*>/g)];
+    assert.ok(headers.length > 0);
+    assert.ok(headers.every(([header]) => /\bhidden(?:\s|>)/.test(header)), 'topic headings start hidden');
+  }
+});
+
 test('the homepages offer a first-paper path, every published reading, and working local links', () => {
   for (const [file, lang, switchTarget, phrase, method, install] of [
     ['index.html', 'en', 'zh.html', 'Explore complete readings', 'The reading method', 'Get started'],

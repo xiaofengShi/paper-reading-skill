@@ -186,7 +186,6 @@
   .site-facts { margin: 0; }
   .content-section { padding: 24px 0; }
   .readings #reading-list { display: block; }
-  .readings #reading-list > li[hidden] { display: flex !important; }
   .readings #reading-list > li { margin-bottom: 12px; break-inside: avoid; }
   .copy-block pre { padding-top: 16px; }
   .mode-comparison { overflow: visible; }
@@ -198,6 +197,6 @@
    requires this print exception in the same layer, rather than outside it. */
 @layer base {
   @media print {
-    #reading-list > li[hidden] { display: flex !important; }
+    #reading-list > li[data-reading-lang][hidden] { display: flex !important; }
   }
 }
