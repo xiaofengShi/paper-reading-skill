@@ -396,6 +396,22 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 19 subsections, 9 display equations, 14 worked calcs) of the Drex family of four open decision models: choice/noul/score interface, pointer vs readout heads, RLAF training (verified outcome + same-backbone judge under KL anchor, closed-form optimum), Decision Index 0.4.1 SOTA 67.52 with 183ms latency, calibration and flip-rate analyses, and deployment engineering.",
       "summaryZh": "决策模型家族 Drex 深读（量化深度版 9000+字/16章/9公式/14手算）：choice/noul/score 接口、指针/读出双头、RLAF 训练（验证结果+同基座裁判+KL 锚定）、DI 0.4.1 SOTA 67.52 与 183ms 延迟、校准与翻转率全量分析、部署工程账。"
+    },
+    {
+      "slug": "agentbaton",
+      "title": "AgentBaton: Efficient Model Collaboration in Agentic Tasks",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.35959v1",
+      "date": "2026-11-10",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Agent",
+        "Post-training"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 18 subsections, 19 worked calcs) of NVIDIA's AgentBaton: direction asymmetry in model handoffs (capable-to-efficient wins), three readiness signals, a 2B learned detector (338ms median), saving 65.9% API cost across 11 model pairs while extending the Pareto frontier.",
+      "summaryZh": "模型交接的效率深读（量化深度版 9000+字/16章/19手算）：方向不对称（强→轻才划算）、三就绪信号（工件+反馈+剩余局部化）、2B 检测器（338ms）、65.9% API 省钱、帕累托前沿推扫。"
     }
   ]
 }
