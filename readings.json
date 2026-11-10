@@ -1,432 +1,448 @@
 {
-  "readings": [
-    {
-      "slug": "attention-is-all-you-need",
-      "title": "Attention Is All You Need",
-      "lang": "en",
-      "mode": "brief",
-      "tool": null,
-      "arxiv": "1706.03762",
-      "date": "2026-09-23",
-      "pinned": true,
-      "summaryEn": "Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer.",
-      "summaryZh": "沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。",
-      "tags": [
-        "Architecture"
-      ]
-    },
-    {
-      "slug": "deepseek-v4.1-flash",
-      "title": "DeepSeek-V4.1-Flash",
-      "lang": "en",
-      "mode": "brief",
-      "tool": null,
-      "arxiv": null,
-      "date": "2026-09-23",
-      "pinned": false,
-      "summaryEn": "Separate prefill computation, runtime global KV, and persistent KV; inspect CED and CSA2 with original figures, then read agent benchmarks with their harness conditions.",
-      "summaryZh": "分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。",
-      "tags": [
-        "Architecture",
-        "Eval"
-      ]
-    },
-    {
-      "slug": "mimo-v2.6",
-      "title": "MiMo-V2.6",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": null,
-      "arxiv": null,
-      "date": "2026-09-23",
-      "pinned": true,
-      "summaryEn": "Follow the training path through the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments.",
-      "summaryZh": "从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。",
-      "tags": [
-        "Post-training",
-        "RL"
-      ]
-    },
-    {
-      "slug": "raft",
-      "title": "RAFT",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "Kimi Code",
-      "arxiv": "2606.00147v1",
-      "date": "2026-09-24",
-      "pinned": false,
-      "summaryEn": "See how data refinement and answer-conditioned on-policy distillation work together, then inspect the domain-versus-general-capability evidence.",
-      "summaryZh": "沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。",
-      "tags": [
-        "Post-training",
-        "RAG"
-      ]
-    },
-    {
-      "slug": "mechvqa",
-      "title": "MechVQA",
-      "lang": "en",
-      "mode": "brief",
-      "tool": "Kimi Code",
-      "arxiv": "2605.30794v2",
-      "date": "2026-09-24",
-      "pinned": false,
-      "summaryEn": "Trace how expert-verified mechanical drawings become a ten-task benchmark, then follow MechVL's SFT and RL training ladder and read its ablations.",
-      "summaryZh": "沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。",
-      "tags": [
-        "Eval",
-        "Multimodal"
-      ]
-    },
-    {
-      "slug": "iar",
-      "title": "IAR",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "Kimi Code",
-      "arxiv": "2608.20281v1",
-      "date": "2026-09-24",
-      "pinned": false,
-      "summaryEn": "Follow Inject → Align → Recover from document exposure to retrieval-free QA, and compare domain gains with general-ability recovery across eight settings.",
-      "summaryZh": "沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。",
-      "tags": [
-        "Post-training"
-      ]
-    },
-    {
-      "slug": "vista",
-      "title": "VISTA",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "Kimi Code",
-      "arxiv": "2610.02200v1",
-      "date": "2026-10-15",
-      "pinned": false,
-      "summaryEn": "Follow the visual harness from lossless visual memory and model-directed inspection to a perfect ARC-AGI-3 score, then read the harness ablation ladder and cross-benchmark evidence.",
-      "summaryZh": "沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。",
-      "tags": [
-        "Agent",
-        "Eval"
-      ]
-    },
-    {
-      "slug": "deepseek-v4.1-flash-zh",
-      "title": "DeepSeek-V4.1-Flash 中文",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "Kimi Code",
-      "arxiv": null,
-      "date": "2026-10-21",
-      "pinned": false,
-      "summaryEn": "A Chinese reading of the KV-cache compression report: three deployment costs, the CED/CSA2/FP4/SWA-Bounded-Replay trade-offs, and the reasoning-effort knob with its evidence chain. Same source PDF as the English reading above.",
-      "summaryZh": "KV 缓存压缩报告的中文导读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文导读同一份源 PDF。",
-      "tags": [
-        "Architecture",
-        "Eval"
-      ]
-    },
-    {
-      "slug": "opensds-world",
-      "title": "OpenDS-World",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "ZCode",
-      "arxiv": "2610.30181v1",
-      "date": "2026-10-27",
-      "pinned": false,
-      "summaryEn": "Trace the benchmark pipeline from audiovisual anchors through open-web evidence expansion and question inversion to human calibration, then read the 12-model evaluation and the cost/termination/failure analyses.",
-      "summaryZh": "沿\"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定\"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。",
-      "tags": [
-        "Eval",
-        "Agent",
-        "RAG"
-      ]
-    },
-    {
-      "slug": "omnidr-bench",
-      "title": "OmniDR-Bench",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "ZCode",
-      "arxiv": "2610.31158v1",
-      "date": "2026-10-27",
-      "pinned": false,
-      "summaryEn": "Follow the video-centered research task and seven-stage workflow, then read how ARC builds audited rubric trees and what 18 agent configurations fail on: presentation near 82 while content and citation stay under 48.",
-      "summaryZh": "沿\"视频为锚点的研究报告任务 + 七阶段工作流\"读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。",
-      "tags": [
-        "Eval",
-        "Multimodal"
-      ]
-    },
-    {
-      "slug": "lora",
-      "title": "LoRA",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": null,
-      "arxiv": "2106.09685v2",
-      "date": "2026-10-27",
-      "pinned": true,
-      "summaryEn": "Change an input and trace the low-rank correction through both branches and merged weights. Work from initialization gradients to a two-dimensional subspace example, then inspect the evidence. Four understanding checks, including a new-budget transfer task.",
-      "summaryZh": "改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。",
-      "tags": [
-        "Post-training"
-      ]
-    },
-    {
-      "slug": "resnet",
-      "title": "Deep Residual Learning / ResNet",
-      "lang": "en",
-      "mode": "brief",
-      "tool": null,
-      "arxiv": "1512.03385v1",
-      "date": "2026-10-27",
-      "pinned": false,
-      "summaryEn": "Calculate the original block's forward and backward passes, separate training degradation from generalization, and trace an appendix detection improvement. Five understanding checks, including an altered-shortcut transfer task.",
-      "summaryZh": "先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。",
-      "tags": [
-        "Architecture"
-      ]
-    },
-    {
-      "slug": "dual-exam",
-      "title": "Dual Exam",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "ZCode",
-      "arxiv": "2610.31066v1",
-      "date": "2026-10-27",
-      "pinned": false,
-      "summaryEn": "Read the 0%-success coupled pilot, then follow the two controlled tracks: fixed environment responses for Agents (10 configurations, 1,088 items) and fixed action interventions for World Models (400 cases), with explicit aggregation rules and a candid limitations section.",
-      "summaryZh": "从 150 例耦合试点 0% 成功率出发，读懂双轨受控评测：固定环境响应考 Agent（10 配置 1088 题）、固定动作干预考世界模型（400 例），以及论文对自身评测局限的罕见坦白。",
-      "tags": [
-        "Eval",
-        "Agent",
-        "World-Model"
-      ]
-    },
-    {
-      "slug": "trustworthy-rsi-survey",
-      "title": "Trustworthy RSI Survey",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "ZCode",
-      "arxiv": "2610.35193v1",
-      "date": "2026-10-28",
-      "pinned": false,
-      "summaryEn": "A survey reading of trustworthy recursive self-improvement: the h/B/U definition, the S1–S4/RI stage lens, four trustworthiness themes under three analytical roles, and the evidence funnel from 26 RSI-labeled claims to 4 matched-budget comparisons.",
-      "summaryZh": "可信递归自我改进综述导读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。",
-      "tags": [
-        "Survey",
-        "Agent"
-      ]
-    },
-    {
-      "slug": "the-trinity",
-      "title": "The Trinity",
-      "lang": "zh-CN",
-      "mode": "brief",
-      "tool": "ZCode",
-      "arxiv": "2610.36077v1",
-      "date": "2026-10-29",
-      "pinned": false,
-      "summaryEn": "A method reading of capability-driven recursive self-improvement for multimodal agents: task→capability→harness trees, selective inheritance, Real2Sim2Real with a screening band, and a router reaching ~96% of Oracle.",
-      "summaryZh": "能力驱动的多模态 Agent RSI 方法导读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。",
-      "tags": [
-        "Agent",
-        "Post-training"
-      ]
-    },
-    {
-      "slug": "rollback",
-      "title": "Rollback",
-      "lang": "zh-CN",
-      "mode": "deep",
-      "tool": "Codex",
-      "arxiv": "2610.36068v1",
-      "date": "2026-10-30",
-      "pinned": false,
-      "summaryEn": "A 16-chapter Deep Reading of experience-backtracking search: reconstruct PUCT, relative value bins, flow matching, model adaptation, and asynchronous training, then examine real-robot experiments and appendices A–G.",
-      "summaryZh": "16 章 Deep Reading：逐步重建回退搜索、PUCT、相对价值分档、flow matching、模型适配与异步训练，再逐组核对真机实验、消融及附录 A–G。",
-      "tags": [
-        "RL",
-        "Agent"
-      ]
-    },
-    {
-      "slug": "longzero",
-      "title": "LongZero",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2610.30132v1",
-      "date": "2026-10-30",
-      "pinned": false,
-      "summaryEn": "A Deep Reading of zero-data long-context RL: the policy writes a compact question-evidence-answer specification before expanding it into long documents, filters to the unstable band, and trains with GRPO, beating external-corpus and 397B-teacher synthetic data on five benchmarks.",
-      "summaryZh": "零数据长上下文 RL 深读：策略先写紧凑的问题-证据-答案规格再展开成长文档，不稳定带过滤后 GRPO 训练，五基准胜过外部语料与 397B 教师合成数据。",
-      "mode": "deep",
-      "tags": [
-        "Post-training",
-        "RL"
-      ]
-    },
-    {
-      "slug": "harnesspro",
-      "title": "HarnessPro",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2610.26770v2",
-      "date": "2026-10-30",
-      "pinned": false,
-      "mode": "deep",
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 17 chapters) of Pareto-aware recursive harness self-improvement: fixed LLM-generated tests, DPP coreset, three-priority planning, tiered selection; appendices B-D fully integrated; beating RHO at 26.1% lower cost with denominator recomputation.",
-      "summaryZh": "帕累托感知的 Harness 递归自我改进深读（量化深度版，9000+字/17章/26小节/13公式/7手算）：固定 LLM 生成测试（检出 41.7%→83.3%）、DPP coreset、三优先级计划、加权平方距离选三档；附录 B/C/D 全量整合；全面超 RHO 且成本降 26.1%。",
-      "tags": [
-        "Agent",
-        "RL"
-      ]
-    },
-    {
-      "slug": "a-rsi",
-      "title": "A-RSI",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2610.38568v1",
-      "date": "2026-10-31",
-      "pinned": false,
-      "mode": "deep",
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 12 chapters, 20 subsections, 11 display equations, 11 worked calcs) of adaptive task refresh for zero-data multimodal self-improvement: training-log pool saturation detection, shared-configuration programmatic tasks, five-arm matched-update comparison, reward stress tests, and output decomposition.",
-      "summaryZh": "零数据多模态自我改进的自适应任务刷新深读（量化深度版 9000+字）：训练日志触发的池饱和检测、共享配置契约程序化出题、五臂对照逐格重算、奖励压力测试与输出分解（完成 vs 改正）。",
-      "tags": [
-        "Post-training",
-        "Agent"
-      ]
-    },
-    {
-      "slug": "causalwam",
-      "title": "CausalWAM: Learning the Causes of Actions in World Action Models",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2610.42096v1",
-      "date": "2026-11-03",
-      "pinned": false,
-      "mode": "deep",
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 27 subsections, 23 display equations, 17 worked calcs) of causal action identification in world action models: over-coverage lower bound (Prop 1), support-sparsity identifiability (Thm 1-2 with full proof chains), sparse token routing on Cosmos 3 Nano, block-recovery synthetic audit, and 17-task macro recomputation (0.24 to 0.43).",
-      "summaryZh": "世界动作模型的因果动作辨识深读（量化深度版 9000+字/16章/23公式/17手算）：过覆盖下界（Prop 1）、支撑稀疏可识别性（Thm 1-2 证明链全展开）、Cosmos 3 Nano 上的稀疏 token 路由、合成块恢复审计与 17 任务宏平均重算（0.24→0.43）。",
-      "tags": [
-        "World-Model"
-      ]
-    },
-    {
-      "slug": "cua-master",
-      "title": "CUA-Master: Scaling Computer-use Agents through Open-World Recursive Improvements",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2611.03126v1",
-      "date": "2026-11-04",
-      "pinned": false,
-      "mode": "deep",
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 17 subsections, 11 display equations, 14 worked calcs) of nested double-loop recursive improvement for computer-use agents: open-world video seeding with visual-semantic dual-path reconstruction, primitive-based K/N composable task synthesis, snapshot-rollback retry, plus full recomputation of Table 1 efficiency claims and domain-table denominator audits (two tables fail to reconstruct).",
-      "summaryZh": "计算机使用 Agent 的开放世界递归自我改进深读（量化深度版 9000+字/16章/11公式/14手算）：双环飞轮（世界-数据-模型外环+播种/自催化内环）、视觉-语义双路轨迹重建、K/N 预算的原语组合合成、快照回滚重试，Table 1 效率声明逐条复算与域表分母审计（两张表重构不上）。",
-      "tags": [
-        "Agent",
-        "RL"
-      ]
-    },
-    {
-      "slug": "axion",
-      "title": "Axion 1.0: Open Agent Foundation Models, Simplified",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2611.03233v2",
-      "date": "2026-11-05",
-      "pinned": false,
-      "mode": "deep",
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 20 subsections, 10 display equations, 26 worked calcs) of the deliberately simple three-stage recipe (2xSFT + RL, no mid-training/DPO/OPD) for open agent foundation models: model-aware four-operator difficulty enhancement, deterministic filter-select-compute-verbalize task construction, prefix-chain partial rewards, TITO/R3 training-inference consistency, plus full recomputation of Tables 1-3 and R3 diagnostics.",
-      "summaryZh": "开源 Agent 基座极简配方深读（量化深度版 9000+字/16章/10公式/26手算）：两段 SFT+RL 三段式（无中途训练/DPO/OPD）、模型感知四难化算子、确定性 filter-select-compute-verbalize 造题、前缀链部分奖励、TITO/R3 训推一致性，Table 1-3 与 R3 诊断逐格复算。",
-      "tags": [
-        "Agent",
-        "Post-training"
-      ]
-    },
-    {
-      "slug": "rethinking-agentic-rl",
-      "title": "What Does Multi-Turn Reinforcement Learning Really Improve in LLM Agents?",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2611.06483v1",
-      "date": "2026-11-06",
-      "pinned": false,
-      "mode": "deep",
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 22 subsections, 10 display equations, 12 worked calcs) of what multi-turn agentic RL actually improves: Pass@K boundary expansion vs Pass@T budget dependence (reversal -11.3 at 25% budget), step-level quality slightly declining on matched states while error-state recovery reverses (65.7-67.3%), likelihood mechanism (NLL overlap, trajectory LLR 228 vs 26), and BudgetMix RL repair (+7.9/+5.2/+3.8/+1.1 across budget tiers) with step-quality erosion eliminated.",
-      "summaryZh": "多轮 Agent RL 归因分析深读（量化深度版 9000+字/16章/10公式/12手算）：Pass@K 扩边界 vs Pass@T 预算依赖（25% 预算反转 -11.3）、匹配态步级质量不升反微降而错误态反转（65.7-67.3%）、似然机制（NLL 重叠、轨迹 LLR 228 对 26）、BudgetMix 修复（紧档 +7.9 到满档 +1.1，步级侵蚀归零）。",
-      "tags": [
-        "RL",
-        "Eval"
-      ]
-    },
-    {
-      "slug": "claude-fold-subagents",
-      "title": "Claude｜Building agents：何时把子代理折进主循环",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "url": "https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop",
-      "date": "2026-11-06",
-      "pinned": false,
-      "mode": "deep",
-      "tags": [
-        "Claude",
-        "Agent"
-      ],
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 14 subsections, 10 display formulas, 17 worked calcs) of Anthropic's official guidance on folding subagents into the main agent loop: five enterprise failure modes with interface-count squaring, three keep-conditions as a decision rule, telephone-game fidelity and nested-loop latency models reproducing the 2x claim, progressive-disclosure budget matching the 80% prompt cut, and the eval-first migration path with task-flip analysis.",
-      "summaryZh": "Anthropic 官方「子代理折叠」指南深读（量化深度版 9000+字/16章/10公式/17手算）：五大企业失败模式（接口数平方律）、三保留条件决策规则、电话游戏保真度与嵌套延迟模型（复算 2 倍声明）、渐进披露预算（对上 80% 缩减）、评测先行迁移路径与 task-flip 分析。"
-    },
-    {
-      "slug": "drex",
-      "title": "Towards Foundation Decision Models: Drex",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2611.07854v1",
-      "date": "2026-11-07",
-      "pinned": false,
-      "mode": "deep",
-      "tags": [
-        "Agent",
-        "Post-training"
-      ],
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 19 subsections, 9 display equations, 14 worked calcs) of the Drex family of four open decision models: choice/noul/score interface, pointer vs readout heads, RLAF training (verified outcome + same-backbone judge under KL anchor, closed-form optimum), Decision Index 0.4.1 SOTA 67.52 with 183ms latency, calibration and flip-rate analyses, and deployment engineering.",
-      "summaryZh": "决策模型家族 Drex 深读（量化深度版 9000+字/16章/9公式/14手算）：choice/noul/score 接口、指针/读出双头、RLAF 训练（验证结果+同基座裁判+KL 锚定）、DI 0.4.1 SOTA 67.52 与 183ms 延迟、校准与翻转率全量分析、部署工程账。"
-    },
-    {
-      "slug": "agentbaton",
-      "title": "AgentBaton: Efficient Model Collaboration in Agentic Tasks",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2610.35959v1",
-      "date": "2026-11-10",
-      "pinned": false,
-      "mode": "deep",
-      "tags": [
-        "Agent",
-        "Post-training"
-      ],
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 18 subsections, 19 worked calcs) of NVIDIA's AgentBaton: direction asymmetry in model handoffs (capable-to-efficient wins), three readiness signals, a 2B learned detector (338ms median), saving 65.9% API cost across 11 model pairs while extending the Pareto frontier.",
-      "summaryZh": "模型交接的效率深读（量化深度版 9000+字/16章/19手算）：方向不对称（强→轻才划算）、三就绪信号（工件+反馈+剩余局部化）、2B 检测器（338ms）、65.9% API 省钱、帕累托前沿推扫。"
-    },
-    {
-      "slug": "gemini-mc",
-      "title": "A team of Gemini 4 Argon agents beats Minecraft",
-      "lang": "zh-CN",
-      "tool": "ZCode",
-      "arxiv": "2610.22319v1",
-      "date": "2026-11-10",
-      "pinned": false,
-      "mode": "deep",
-      "tags": [
-        "Agent"
-      ],
-      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 18 subsections, 10 display equations, 24 worked calcs) of Google DeepMind's four Gemini 4 Argon agents beating Minecraft end-to-end: program-generation interface (2,783 programs, 63K lines JS), emergent coordination (roles in 10 min, Ghast loss-to-rule in 2 min), stronghold triangulation at 43m accuracy (independently recomputed), despawn-timer rescue with 2.5-min margin, dragon state-machine reverse engineering, and $520 cost breakdown with 91% cache economics.",
-      "summaryZh": "四个 Gemini 4 Argon agent 通关 Minecraft 深读（量化深度版 9000+字/16章/10公式/24手算）：程序生成接口（2783 程序/63K 行 JS）、涌现协作（10 分钟分工、Ghast 损失→规则 2 分钟闭环）、三角定位 43m 精度独立复算、despawn 极限救援 2.5 分钟余量、龙的状态机逆向、$520 成本分解与 91% 缓存经济学。"
-    }
-  ]
+ "readings": [
+  {
+   "slug": "attention-is-all-you-need",
+   "title": "Attention Is All You Need",
+   "lang": "en",
+   "mode": "brief",
+   "tool": null,
+   "arxiv": "1706.03762",
+   "date": "2026-09-23",
+   "pinned": true,
+   "summaryEn": "Follow encoder and decoder tokens through attention, compute the key equation, then read translation tests, ablations, and parsing transfer.",
+   "summaryZh": "沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。",
+   "tags": [
+    "Architecture"
+   ]
+  },
+  {
+   "slug": "deepseek-v4.1-flash",
+   "title": "DeepSeek-V4.1-Flash",
+   "lang": "en",
+   "mode": "brief",
+   "tool": null,
+   "arxiv": null,
+   "date": "2026-09-23",
+   "pinned": false,
+   "summaryEn": "Separate prefill computation, runtime global KV, and persistent KV; inspect CED and CSA2 with original figures, then read agent benchmarks with their harness conditions.",
+   "summaryZh": "分清预填充计算、运行时全局 KV 和持久化 KV，结合原论文图读 CED、CSA2 和 Agent 评测。",
+   "tags": [
+    "Architecture",
+    "Eval"
+   ]
+  },
+  {
+   "slug": "mimo-v2.6",
+   "title": "MiMo-V2.6",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": null,
+   "arxiv": null,
+   "date": "2026-09-23",
+   "pinned": true,
+   "summaryEn": "Follow the training path through the RL objective, GRS/GAR grading, runtime system, MOPD2, and experiments.",
+   "summaryZh": "从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。",
+   "tags": [
+    "Post-training",
+    "RL"
+   ]
+  },
+  {
+   "slug": "raft",
+   "title": "RAFT",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "Kimi Code",
+   "arxiv": "2606.00147v1",
+   "date": "2026-09-24",
+   "pinned": false,
+   "summaryEn": "See how data refinement and answer-conditioned on-policy distillation work together, then inspect the domain-versus-general-capability evidence.",
+   "summaryZh": "沿数据精炼与答案条件在线蒸馏的耦合路径，读懂领域能力和通用能力的实验权衡。",
+   "tags": [
+    "Post-training",
+    "RAG"
+   ]
+  },
+  {
+   "slug": "mechvqa",
+   "title": "MechVQA",
+   "lang": "en",
+   "mode": "brief",
+   "tool": "Kimi Code",
+   "arxiv": "2605.30794v2",
+   "date": "2026-09-24",
+   "pinned": false,
+   "summaryEn": "Trace how expert-verified mechanical drawings become a ten-task benchmark, then follow MechVL's SFT and RL training ladder and read its ablations.",
+   "summaryZh": "沿专家核验的机械图纸到十类任务的基准构建流程，理解 MechVL 的 SFT 与 RL 训练阶梯及消融。",
+   "tags": [
+    "Eval",
+    "Multimodal"
+   ]
+  },
+  {
+   "slug": "iar",
+   "title": "IAR",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "Kimi Code",
+   "arxiv": "2608.20281v1",
+   "date": "2026-09-24",
+   "pinned": false,
+   "summaryEn": "Follow Inject → Align → Recover from document exposure to retrieval-free QA, and compare domain gains with general-ability recovery across eight settings.",
+   "summaryZh": "沿 Inject → Align → Recover 读懂文档知识注入、无检索问答与通用能力恢复，再对照八种设置下的证据。",
+   "tags": [
+    "Post-training"
+   ]
+  },
+  {
+   "slug": "vista",
+   "title": "VISTA",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "Kimi Code",
+   "arxiv": "2610.02200v1",
+   "date": "2026-10-15",
+   "pinned": false,
+   "summaryEn": "Follow the visual harness from lossless visual memory and model-directed inspection to a perfect ARC-AGI-3 score, then read the harness ablation ladder and cross-benchmark evidence.",
+   "summaryZh": "沿无损视觉记忆与主动检视读懂视觉外骨架，再读 ARC-AGI-3 满分、harness 消融阶梯与跨基准证据。",
+   "tags": [
+    "Agent",
+    "Eval"
+   ]
+  },
+  {
+   "slug": "deepseek-v4.1-flash-zh",
+   "title": "DeepSeek-V4.1-Flash 中文",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "Kimi Code",
+   "arxiv": null,
+   "date": "2026-10-21",
+   "pinned": false,
+   "summaryEn": "A Chinese reading of the KV-cache compression report: three deployment costs, the CED/CSA2/FP4/SWA-Bounded-Replay trade-offs, and the reasoning-effort knob with its evidence chain. Same source PDF as the English reading above.",
+   "summaryZh": "KV 缓存压缩报告的中文导读：三类部署成本、CED/CSA2/FP4/有界重放的取舍，以及带完整证据链的推理力度旋钮。与上方英文导读同一份源 PDF。",
+   "tags": [
+    "Architecture",
+    "Eval"
+   ]
+  },
+  {
+   "slug": "opensds-world",
+   "title": "OpenDS-World",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "ZCode",
+   "arxiv": "2610.30181v1",
+   "date": "2026-10-27",
+   "pinned": false,
+   "summaryEn": "Trace the benchmark pipeline from audiovisual anchors through open-web evidence expansion and question inversion to human calibration, then read the 12-model evaluation and the cost/termination/failure analyses.",
+   "summaryZh": "沿\"视频锚点→开放网页证据扩展→问题反演→人工验证与实测标定\"读懂基准构建，再读 12 模型统一评测与成本、终止、失败恢复分析。",
+   "tags": [
+    "Eval",
+    "Agent",
+    "RAG"
+   ]
+  },
+  {
+   "slug": "omnidr-bench",
+   "title": "OmniDR-Bench",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "ZCode",
+   "arxiv": "2610.31158v1",
+   "date": "2026-10-27",
+   "pinned": false,
+   "summaryEn": "Follow the video-centered research task and seven-stage workflow, then read how ARC builds audited rubric trees and what 18 agent configurations fail on: presentation near 82 while content and citation stay under 48.",
+   "summaryZh": "沿\"视频为锚点的研究报告任务 + 七阶段工作流\"读懂基准，再看 ARC 审计式判据构建与 18 个配置的评测：呈现近 82 分而内容与引用不足 48 分。",
+   "tags": [
+    "Eval",
+    "Multimodal"
+   ]
+  },
+  {
+   "slug": "lora",
+   "title": "LoRA",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": null,
+   "arxiv": "2106.09685v2",
+   "date": "2026-10-27",
+   "pinned": true,
+   "summaryEn": "Change an input and trace the low-rank correction through both branches and merged weights. Work from initialization gradients to a two-dimensional subspace example, then inspect the evidence. Four understanding checks, including a new-budget transfer task.",
+   "summaryZh": "改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。",
+   "tags": [
+    "Post-training"
+   ]
+  },
+  {
+   "slug": "resnet",
+   "title": "Deep Residual Learning / ResNet",
+   "lang": "en",
+   "mode": "brief",
+   "tool": null,
+   "arxiv": "1512.03385v1",
+   "date": "2026-10-27",
+   "pinned": false,
+   "summaryEn": "Calculate the original block's forward and backward passes, separate training degradation from generalization, and trace an appendix detection improvement. Five understanding checks, including an altered-shortcut transfer task.",
+   "summaryZh": "先算原始残差块的前向和反传，区分训练退化与泛化，再追踪附录检测框修正的完整操作；附五道自测，包含改变 shortcut 的迁移题。",
+   "tags": [
+    "Architecture"
+   ]
+  },
+  {
+   "slug": "dual-exam",
+   "title": "Dual Exam",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "ZCode",
+   "arxiv": "2610.31066v1",
+   "date": "2026-10-27",
+   "pinned": false,
+   "summaryEn": "Read the 0%-success coupled pilot, then follow the two controlled tracks: fixed environment responses for Agents (10 configurations, 1,088 items) and fixed action interventions for World Models (400 cases), with explicit aggregation rules and a candid limitations section.",
+   "summaryZh": "从 150 例耦合试点 0% 成功率出发，读懂双轨受控评测：固定环境响应考 Agent（10 配置 1088 题）、固定动作干预考世界模型（400 例），以及论文对自身评测局限的罕见坦白。",
+   "tags": [
+    "Eval",
+    "Agent",
+    "World-Model"
+   ]
+  },
+  {
+   "slug": "trustworthy-rsi-survey",
+   "title": "Trustworthy RSI Survey",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "ZCode",
+   "arxiv": "2610.35193v1",
+   "date": "2026-10-28",
+   "pinned": false,
+   "summaryEn": "A survey reading of trustworthy recursive self-improvement: the h/B/U definition, the S1–S4/RI stage lens, four trustworthiness themes under three analytical roles, and the evidence funnel from 26 RSI-labeled claims to 4 matched-budget comparisons.",
+   "summaryZh": "可信递归自我改进综述导读：h/B/U 三层操作化定义、S1–S4/RI 五阶段透镜、四主题×三角色框架，以及 26 项 RSI 声称只剩 4 项等预算对照的证据漏斗。",
+   "tags": [
+    "Survey",
+    "Agent"
+   ]
+  },
+  {
+   "slug": "the-trinity",
+   "title": "The Trinity",
+   "lang": "zh-CN",
+   "mode": "brief",
+   "tool": "ZCode",
+   "arxiv": "2610.36077v1",
+   "date": "2026-10-29",
+   "pinned": false,
+   "summaryEn": "A method reading of capability-driven recursive self-improvement for multimodal agents: task→capability→harness trees, selective inheritance, Real2Sim2Real with a screening band, and a router reaching ~96% of Oracle.",
+   "summaryZh": "能力驱动的多模态 Agent RSI 方法导读：任务→能力→Harness 三棵树、选择性继承⊕、带表现带筛选的 Real2Sim2Real、逼近 Oracle 的能力感知路由。",
+   "tags": [
+    "Agent",
+    "Post-training"
+   ]
+  },
+  {
+   "slug": "rollback",
+   "title": "Rollback",
+   "lang": "zh-CN",
+   "mode": "deep",
+   "tool": "Codex",
+   "arxiv": "2610.36068v1",
+   "date": "2026-10-30",
+   "pinned": false,
+   "summaryEn": "A 16-chapter Deep Reading of experience-backtracking search: reconstruct PUCT, relative value bins, flow matching, model adaptation, and asynchronous training, then examine real-robot experiments and appendices A–G.",
+   "summaryZh": "16 章 Deep Reading：逐步重建回退搜索、PUCT、相对价值分档、flow matching、模型适配与异步训练，再逐组核对真机实验、消融及附录 A–G。",
+   "tags": [
+    "RL",
+    "Agent"
+   ]
+  },
+  {
+   "slug": "longzero",
+   "title": "LongZero",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2610.30132v1",
+   "date": "2026-10-30",
+   "pinned": false,
+   "summaryEn": "A Deep Reading of zero-data long-context RL: the policy writes a compact question-evidence-answer specification before expanding it into long documents, filters to the unstable band, and trains with GRPO, beating external-corpus and 397B-teacher synthetic data on five benchmarks.",
+   "summaryZh": "零数据长上下文 RL 深读：策略先写紧凑的问题-证据-答案规格再展开成长文档，不稳定带过滤后 GRPO 训练，五基准胜过外部语料与 397B 教师合成数据。",
+   "mode": "deep",
+   "tags": [
+    "Post-training",
+    "RL"
+   ]
+  },
+  {
+   "slug": "harnesspro",
+   "title": "HarnessPro",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2610.26770v2",
+   "date": "2026-10-30",
+   "pinned": false,
+   "mode": "deep",
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 17 chapters) of Pareto-aware recursive harness self-improvement: fixed LLM-generated tests, DPP coreset, three-priority planning, tiered selection; appendices B-D fully integrated; beating RHO at 26.1% lower cost with denominator recomputation.",
+   "summaryZh": "帕累托感知的 Harness 递归自我改进深读（量化深度版，9000+字/17章/26小节/13公式/7手算）：固定 LLM 生成测试（检出 41.7%→83.3%）、DPP coreset、三优先级计划、加权平方距离选三档；附录 B/C/D 全量整合；全面超 RHO 且成本降 26.1%。",
+   "tags": [
+    "Agent",
+    "RL"
+   ]
+  },
+  {
+   "slug": "a-rsi",
+   "title": "A-RSI",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2610.38568v1",
+   "date": "2026-10-31",
+   "pinned": false,
+   "mode": "deep",
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 12 chapters, 20 subsections, 11 display equations, 11 worked calcs) of adaptive task refresh for zero-data multimodal self-improvement: training-log pool saturation detection, shared-configuration programmatic tasks, five-arm matched-update comparison, reward stress tests, and output decomposition.",
+   "summaryZh": "零数据多模态自我改进的自适应任务刷新深读（量化深度版 9000+字）：训练日志触发的池饱和检测、共享配置契约程序化出题、五臂对照逐格重算、奖励压力测试与输出分解（完成 vs 改正）。",
+   "tags": [
+    "Post-training",
+    "Agent"
+   ]
+  },
+  {
+   "slug": "causalwam",
+   "title": "CausalWAM: Learning the Causes of Actions in World Action Models",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2610.42096v1",
+   "date": "2026-11-03",
+   "pinned": false,
+   "mode": "deep",
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 27 subsections, 23 display equations, 17 worked calcs) of causal action identification in world action models: over-coverage lower bound (Prop 1), support-sparsity identifiability (Thm 1-2 with full proof chains), sparse token routing on Cosmos 3 Nano, block-recovery synthetic audit, and 17-task macro recomputation (0.24 to 0.43).",
+   "summaryZh": "世界动作模型的因果动作辨识深读（量化深度版 9000+字/16章/23公式/17手算）：过覆盖下界（Prop 1）、支撑稀疏可识别性（Thm 1-2 证明链全展开）、Cosmos 3 Nano 上的稀疏 token 路由、合成块恢复审计与 17 任务宏平均重算（0.24→0.43）。",
+   "tags": [
+    "World-Model"
+   ]
+  },
+  {
+   "slug": "cua-master",
+   "title": "CUA-Master: Scaling Computer-use Agents through Open-World Recursive Improvements",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2611.03126v1",
+   "date": "2026-11-04",
+   "pinned": false,
+   "mode": "deep",
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 17 subsections, 11 display equations, 14 worked calcs) of nested double-loop recursive improvement for computer-use agents: open-world video seeding with visual-semantic dual-path reconstruction, primitive-based K/N composable task synthesis, snapshot-rollback retry, plus full recomputation of Table 1 efficiency claims and domain-table denominator audits (two tables fail to reconstruct).",
+   "summaryZh": "计算机使用 Agent 的开放世界递归自我改进深读（量化深度版 9000+字/16章/11公式/14手算）：双环飞轮（世界-数据-模型外环+播种/自催化内环）、视觉-语义双路轨迹重建、K/N 预算的原语组合合成、快照回滚重试，Table 1 效率声明逐条复算与域表分母审计（两张表重构不上）。",
+   "tags": [
+    "Agent",
+    "RL"
+   ]
+  },
+  {
+   "slug": "axion",
+   "title": "Axion 1.0: Open Agent Foundation Models, Simplified",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2611.03233v2",
+   "date": "2026-11-05",
+   "pinned": false,
+   "mode": "deep",
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 20 subsections, 10 display equations, 26 worked calcs) of the deliberately simple three-stage recipe (2xSFT + RL, no mid-training/DPO/OPD) for open agent foundation models: model-aware four-operator difficulty enhancement, deterministic filter-select-compute-verbalize task construction, prefix-chain partial rewards, TITO/R3 training-inference consistency, plus full recomputation of Tables 1-3 and R3 diagnostics.",
+   "summaryZh": "开源 Agent 基座极简配方深读（量化深度版 9000+字/16章/10公式/26手算）：两段 SFT+RL 三段式（无中途训练/DPO/OPD）、模型感知四难化算子、确定性 filter-select-compute-verbalize 造题、前缀链部分奖励、TITO/R3 训推一致性，Table 1-3 与 R3 诊断逐格复算。",
+   "tags": [
+    "Agent",
+    "Post-training"
+   ]
+  },
+  {
+   "slug": "rethinking-agentic-rl",
+   "title": "What Does Multi-Turn Reinforcement Learning Really Improve in LLM Agents?",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2611.06483v1",
+   "date": "2026-11-06",
+   "pinned": false,
+   "mode": "deep",
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 22 subsections, 10 display equations, 12 worked calcs) of what multi-turn agentic RL actually improves: Pass@K boundary expansion vs Pass@T budget dependence (reversal -11.3 at 25% budget), step-level quality slightly declining on matched states while error-state recovery reverses (65.7-67.3%), likelihood mechanism (NLL overlap, trajectory LLR 228 vs 26), and BudgetMix RL repair (+7.9/+5.2/+3.8/+1.1 across budget tiers) with step-quality erosion eliminated.",
+   "summaryZh": "多轮 Agent RL 归因分析深读（量化深度版 9000+字/16章/10公式/12手算）：Pass@K 扩边界 vs Pass@T 预算依赖（25% 预算反转 -11.3）、匹配态步级质量不升反微降而错误态反转（65.7-67.3%）、似然机制（NLL 重叠、轨迹 LLR 228 对 26）、BudgetMix 修复（紧档 +7.9 到满档 +1.1，步级侵蚀归零）。",
+   "tags": [
+    "RL",
+    "Eval"
+   ]
+  },
+  {
+   "slug": "claude-fold-subagents",
+   "title": "Claude｜Building agents：何时把子代理折进主循环",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "url": "https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop",
+   "date": "2026-11-06",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Claude",
+    "Agent"
+   ],
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 14 subsections, 10 display formulas, 17 worked calcs) of Anthropic's official guidance on folding subagents into the main agent loop: five enterprise failure modes with interface-count squaring, three keep-conditions as a decision rule, telephone-game fidelity and nested-loop latency models reproducing the 2x claim, progressive-disclosure budget matching the 80% prompt cut, and the eval-first migration path with task-flip analysis.",
+   "summaryZh": "Anthropic 官方「子代理折叠」指南深读（量化深度版 9000+字/16章/10公式/17手算）：五大企业失败模式（接口数平方律）、三保留条件决策规则、电话游戏保真度与嵌套延迟模型（复算 2 倍声明）、渐进披露预算（对上 80% 缩减）、评测先行迁移路径与 task-flip 分析。"
+  },
+  {
+   "slug": "drex",
+   "title": "Towards Foundation Decision Models: Drex",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2611.07854v1",
+   "date": "2026-11-07",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent",
+    "Post-training"
+   ],
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 19 subsections, 9 display equations, 14 worked calcs) of the Drex family of four open decision models: choice/noul/score interface, pointer vs readout heads, RLAF training (verified outcome + same-backbone judge under KL anchor, closed-form optimum), Decision Index 0.4.1 SOTA 67.52 with 183ms latency, calibration and flip-rate analyses, and deployment engineering.",
+   "summaryZh": "决策模型家族 Drex 深读（量化深度版 9000+字/16章/9公式/14手算）：choice/noul/score 接口、指针/读出双头、RLAF 训练（验证结果+同基座裁判+KL 锚定）、DI 0.4.1 SOTA 67.52 与 183ms 延迟、校准与翻转率全量分析、部署工程账。"
+  },
+  {
+   "slug": "agentbaton",
+   "title": "AgentBaton: Efficient Model Collaboration in Agentic Tasks",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2610.35959v1",
+   "date": "2026-11-10",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent",
+    "Post-training"
+   ],
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 18 subsections, 19 worked calcs) of NVIDIA's AgentBaton: direction asymmetry in model handoffs (capable-to-efficient wins), three readiness signals, a 2B learned detector (338ms median), saving 65.9% API cost across 11 model pairs while extending the Pareto frontier.",
+   "summaryZh": "模型交接的效率深读（量化深度版 9000+字/16章/19手算）：方向不对称（强→轻才划算）、三就绪信号（工件+反馈+剩余局部化）、2B 检测器（338ms）、65.9% API 省钱、帕累托前沿推扫。"
+  },
+  {
+   "slug": "gemini-mc",
+   "title": "A team of Gemini 4 Argon agents beats Minecraft",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2610.22319v1",
+   "date": "2026-11-10",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent"
+   ],
+   "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 18 subsections, 10 display equations, 24 worked calcs) of Google DeepMind's four Gemini 4 Argon agents beating Minecraft end-to-end: program-generation interface (2,783 programs, 63K lines JS), emergent coordination (roles in 10 min, Ghast loss-to-rule in 2 min), stronghold triangulation at 43m accuracy (independently recomputed), despawn-timer rescue with 2.5-min margin, dragon state-machine reverse engineering, and $520 cost breakdown with 91% cache economics.",
+   "summaryZh": "四个 Gemini 4 Argon agent 通关 Minecraft 深读（量化深度版 9000+字/16章/10公式/24手算）：程序生成接口（2783 程序/63K 行 JS）、涌现协作（10 分钟分工、Ghast 损失→规则 2 分钟闭环）、三角定位 43m 精度独立复算、despawn 极限救援 2.5 分钟余量、龙的状态机逆向、$520 成本分解与 91% 缓存经济学。"
+  },
+  {
+   "slug": "flide",
+   "title": "Flide: Accelerating Decision Inference with Exact State Forking",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2610.42148v1",
+   "date": "2026-11-11",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent",
+    "Architecture"
+   ],
+   "summaryEn": "A quantitative-depth Deep Reading (9,003 chars, 24 sections, 12 display equations, 6 worked calcs) of Flide, an exact inference engine for decision models: flattening each round of requests into one token stream with tree structure in GPU-resident metadata, ForkAttention forking both attention (visibility indices) and Gated DeltaNet states (two-call restart from trunk state), flat CUDA graph families whose shape depends only on stream length, incremental checkpoints for growing agent histories, and an optional bitwise-invariant mode. Up to 9.5x faster than vLLM/SGLang with highest agreement to the float32 reference; MIS delimiter corruption independently recomputed (13.3x TV, up to 28.9% flipped decisions); serves 29 decision models incl. Drex v1.5.",
+   "summaryZh": "决策模型推理引擎 Flide 深读（量化深度版 9,003字/24节/12公式/6手算）：逻辑树压进扁平流、树结构住 GPU 元数据；ForkAttention 全注意力可见性下标 + GDN 两次调用从躯干状态重启；CUDA 图族形状只依赖流长；agent 历史增量检查点；可选位级确定模式。最快 9.5 倍于 vLLM/SGLang 且与 float32 参考一致率最高；MIS 分隔符污染独立复算（TV 13.3 倍、翻转最多 28.9%）；已服务 29 个决策模型含上周深读的 Drex v1.5。"
+  }
+ ]
 }
