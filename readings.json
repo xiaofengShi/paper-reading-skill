@@ -412,6 +412,21 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 18 subsections, 19 worked calcs) of NVIDIA's AgentBaton: direction asymmetry in model handoffs (capable-to-efficient wins), three readiness signals, a 2B learned detector (338ms median), saving 65.9% API cost across 11 model pairs while extending the Pareto frontier.",
       "summaryZh": "模型交接的效率深读（量化深度版 9000+字/16章/19手算）：方向不对称（强→轻才划算）、三就绪信号（工件+反馈+剩余局部化）、2B 检测器（338ms）、65.9% API 省钱、帕累托前沿推扫。"
+    },
+    {
+      "slug": "gemini-mc",
+      "title": "A team of Gemini 4 Argon agents beats Minecraft",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.22319v1",
+      "date": "2026-11-10",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Agent"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 16 chapters, 18 subsections, 10 display equations, 24 worked calcs) of Google DeepMind's four Gemini 4 Argon agents beating Minecraft end-to-end: program-generation interface (2,783 programs, 63K lines JS), emergent coordination (roles in 10 min, Ghast loss-to-rule in 2 min), stronghold triangulation at 43m accuracy (independently recomputed), despawn-timer rescue with 2.5-min margin, dragon state-machine reverse engineering, and $520 cost breakdown with 91% cache economics.",
+      "summaryZh": "四个 Gemini 4 Argon agent 通关 Minecraft 深读（量化深度版 9000+字/16章/10公式/24手算）：程序生成接口（2783 程序/63K 行 JS）、涌现协作（10 分钟分工、Ghast 损失→规则 2 分钟闭环）、三角定位 43m 精度独立复算、despawn 极限救援 2.5 分钟余量、龙的状态机逆向、$520 成本分解与 91% 缓存经济学。"
     }
   ]
 }
