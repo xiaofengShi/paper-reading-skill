@@ -443,6 +443,22 @@
    ],
    "summaryEn": "A quantitative-depth Deep Reading (9,003 chars, 24 sections, 12 display equations, 6 worked calcs) of Flide, an exact inference engine for decision models: flattening each round of requests into one token stream with tree structure in GPU-resident metadata, ForkAttention forking both attention (visibility indices) and Gated DeltaNet states (two-call restart from trunk state), flat CUDA graph families whose shape depends only on stream length, incremental checkpoints for growing agent histories, and an optional bitwise-invariant mode. Up to 9.5x faster than vLLM/SGLang with highest agreement to the float32 reference; MIS delimiter corruption independently recomputed (13.3x TV, up to 28.9% flipped decisions); serves 29 decision models incl. Drex v1.5.",
    "summaryZh": "决策模型推理引擎 Flide 深读（量化深度版 9,003字/24节/12公式/6手算）：逻辑树压进扁平流、树结构住 GPU 元数据；ForkAttention 全注意力可见性下标 + GDN 两次调用从躯干状态重启；CUDA 图族形状只依赖流长；agent 历史增量检查点；可选位级确定模式。最快 9.5 倍于 vLLM/SGLang 且与 float32 参考一致率最高；MIS 分隔符污染独立复算（TV 13.3 倍、翻转最多 28.9%）；已服务 29 个决策模型含上周深读的 Drex v1.5。"
+  },
+  {
+   "slug": "mmdm",
+   "title": "MMDM: Measuring Massive Multitask Decision Making",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2611.14309v1",
+   "date": "2026-11-12",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Eval",
+    "Agent"
+   ],
+   "summaryEn": "A quantitative-depth Deep Reading (9,006 chars, 23 sections, 11 display equations, 5 worked calcs) of MMDM, a 5,448-question benchmark across 16 task categories for System-1 decision models: options 2-1,024, inputs to 64,817 tokens, single-select/multi-select/soft-label tracks, 28 models evaluated. Key decoupling findings independently recomputed: KnowLine vs WeMM-JEV single-select gap <1pp but Brier halved; best multi-select only 36.81% with all SB-F <0.2; OpenJev vs Intern-4B ranking reverses between long-input and large-option axes; SB-F worked examples and case-study Brier recomputation.",
+   "summaryZh": "决策模型大规模评测基准 MMDM 深读（量化深度版 9,006字/23节/11公式/5手算）：5,448 题/16 类/选项至 1,024/输入至 64K，单选-多选-软标签三轨评测 28 个决策模型。解耦发现独立复算：单选差不到 1 点的两个模型 Brier 差近一半；多选最高 36.81%、SB-F 全部 <0.2（认得出一个丢得掉一群）；长输入与大选项两轴排名反转；SB-F 教学例与案例 Brier 手算。决策模型三部曲收官（Drex 模型侧→Flide 服务侧→MMDM 评测侧）。"
   }
  ]
 }
