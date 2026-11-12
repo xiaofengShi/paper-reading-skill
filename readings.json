@@ -459,6 +459,22 @@
    ],
    "summaryEn": "A quantitative-depth Deep Reading (9,006 chars, 23 sections, 11 display equations, 5 worked calcs) of MMDM, a 5,448-question benchmark across 16 task categories for System-1 decision models: options 2-1,024, inputs to 64,817 tokens, single-select/multi-select/soft-label tracks, 28 models evaluated. Key decoupling findings independently recomputed: KnowLine vs WeMM-JEV single-select gap <1pp but Brier halved; best multi-select only 36.81% with all SB-F <0.2; OpenJev vs Intern-4B ranking reverses between long-input and large-option axes; SB-F worked examples and case-study Brier recomputation.",
    "summaryZh": "决策模型大规模评测基准 MMDM 深读（量化深度版 9,006字/23节/11公式/5手算）：5,448 题/16 类/选项至 1,024/输入至 64K，单选-多选-软标签三轨评测 28 个决策模型。解耦发现独立复算：单选差不到 1 点的两个模型 Brier 差近一半；多选最高 36.81%、SB-F 全部 <0.2（认得出一个丢得掉一群）；长输入与大选项两轴排名反转；SB-F 教学例与案例 Brier 手算。决策模型三部曲收官（Drex 模型侧→Flide 服务侧→MMDM 评测侧）。"
+  },
+  {
+   "slug": "ernie-evolve",
+   "title": "ERNIE Evolve: Bringing Automated Research into Real AI R&D",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "url": "https://ernie.baidu.com/zh/research/posts/ernie-evolve/",
+   "date": "2026-11-12",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent",
+    "Architecture"
+   ],
+   "summaryEn": "A quantitative-depth Deep Reading (9,363 chars, 19 sections, 11 display equations, 5 worked calcs) of Baidu's ERNIE Evolve, a two-loop RSI system for production codebases: outer loop (Director) picks differentiated research directions with parallel lanes each keeping a candidate tree; inner loop (Selector/Executor) iterates deeply in isolated git worktrees; Evaluator physically outside the repo and invisible to agents with a noise-threshold gate, plus Reviewer and human sign-off. Two public records beaten (NanoChat BPB 0.8763 vs 0.8878, NanoGPT Track1 38.9s vs 39.9s; Track3 2590 vs 2690 steps), and production gains in ERNIE 5.5 Flash: Kunlun P800 at 623.6% baseline (four-round multiplicative ledger recomputed), deterministic inference +33.7%, extreme decoding +14.9%. Five engineering lessons formalized.",
+   "summaryZh": "百度 ERNIE Evolve 双层 RSI 深读（量化深度版 9,363字/19节/11公式/5手算，三源合读：官方博客+Datawhale 访谈+GitHub 开源仓库）：外循环定方向多 Lane 并行各养候选树、内循环隔离工作树连续深挖、Evaluator 物理隔离+噪声阈值+Reviewer+人工四道闸。两项公开纪录被超（NanoChat BPB 0.8763、NanoGPT T1 38.9s/T3 2590 步）；文心 5.5 Flash 生产实测昆仑芯 P800 达基线 623.6%（四轮乘法账逐轮复算）、确定性推理 +33.7%、极限解码 +14.9%；五条实践经验全部形式化（同质化覆盖/联动收益/止损规则/评测过拟合/标尺治理）。"
   }
  ]
 }
