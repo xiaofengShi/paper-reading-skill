@@ -4,6 +4,28 @@
 
 # Flide：用精确状态分叉加速决策推断（深读）
 
+```paper-map
+{"thesis":"决策模型（读长上下文、输出离散选项分布）是 agent 高频微决策的专用件，但 vLLM/SGLang 为文本生成设计：每问题独立序列反复算共享状态（混合架构上缓存只能在块边界恢复 GDN 状态），multi-item scoring 拼接加分隔符则污染概率分布（实测翻转最多 29% 的阈值决策）。根因是请求的逻辑树与物理执行流被绑死。Flide 把一整轮请求摊平成一条 token 流、树结构住进 GPU 元数据：ForkAttention 用可见性下标隔离兄弟问题、GDN 层两次调用让每个问题从躯干末状态重启递推，精确算术下与单独提问逐位一致（Proposition 1）；CUDA 图族形状只依赖流长，任意负载组合零重编译。最快 9.5 倍于 vLLM/SGLang，答案与 float32 参考一致率最高，可选位级确定模式代价 ≤10%。","reader":"关心 agent 基础设施、推理引擎与决策模型服务的读者；机制证明、全部主表与附录 A-H 都展开手算。","goals":["看懂 ForkAttention 两层分叉：注意力 mask 可见性下标 + GDN 两次调用状态重启（不拷贝、只索引）","把成本比 ρ、9.5 倍加速、0.88ms/千 token 步进斜率逐格手算","分清快的三种来源：状态只算一遍 / CUDA 图消启动 / 一遍前向跑完整个请求"],"outcome":"通读 arXiv 2610.42148v1 全部 20 页：正文 §1-§5、附录 A-H（证明、引擎配置、负载构造、全量结果、深入分析、复发状态、正确性测试、29 个支持模型表）。","outcomeSource":"arXiv 2610.42148v1 PDF pp.1-20","items":[{"number":"01","label":"靶子","signal":"三重失配","text":"生成引擎把每个问题当独立 prompt 反复算状态（混合架构块边界坑）；MIS 拼接分隔符改变隐藏状态扭曲分布；动态批浮点归约顺序漂移致决策不稳定。","source":"§1, Fig.1"},{"number":"02","label":"诊断","signal":"逻辑树≠物理流","text":"状态是躯干、问题是枝条；生成引擎把逻辑结构强加给物理序列（慢），MIS 把物理结构强加给逻辑树（不准）——目标是分支一起跑且各算各的。","source":"§1"},{"number":"03","label":"形式化","signal":"成本比 ρ","text":"朴素成本 Q·Ls+Σ|q| 对 Flide 的 Ls+Σ|q|；QuALITY,all 负载理论比 14.4 倍——问题越密状态越长，结构性收益越大。","source":"§3.1, Table 2"},{"number":"04","label":"注意力分叉","signal":"可见性下标","text":"查询可见 = 同请求 ∧（躯干∨本问题）∧ 因果——键集合与独立序列逐元素一致；滑窗层因位置一致而同样成立。","source":"§3.2.1"},{"number":"05","label":"GDN 分叉","signal":"两次调用","text":"GDN 把此前 token 折叠进单一循环状态、mask 挡不住兄弟污染；拆两次调用：先算所有状态段存末状态，问题段通过状态索引从各自 S_Ls 起步——零拷贝。","source":"§3.2.2"},{"number":"06","label":"精确性","signal":"Proposition 1","text":"逐层归纳证明：点式层 token 独立、注意力可见集一致、GDN 从正确状态续推——任何扁平排版下每个问题等于单独计算；附录 G 测试梯队每次引擎改动都过。","source":"§3.2.3, App A/G"},{"number":"07","label":"扁平图执行","signal":"形状只看流长","text":"段长/位置/键范围/状态索引全住 GPU 缓冲区，kernel 形状只由流长决定——同一族捕获图吃任意请求组合；选择性读出让末层只算问题末 token。","source":"§3.3"},{"number":"08","label":"增量分叉","signal":"0.88ms/千token","text":"状态内部位置 m 打检查点（GDN float32 状态+卷积窗+注意力 KV），agent 下一步从检查点恢复只算新 token；与答题同遍前向完成。","source":"§3.4, Table 7"},{"number":"09","label":"位级确定","signal":"≤10% 代价","text":"固定归约顺序+每问题独立 tile/chunk，任何负载下答案位级不变；对比 SGLang 批不变 kernel 损失 34%。","source":"§3.5, Table 12, App E"},{"number":"10","label":"主证据","signal":"9.5×且最准","text":"多问题负载全尺寸全并发领先（QuALITY,all 362→37.7ms）；Agr 与 float32 参考每个负载最高、Stab 100%；消融四部件各砍一刀各讲一个成本故事。","source":"§4.2-4.4, Tables 3-5"},{"number":"11","label":"生态","signal":"29 个模型","text":"通用树引擎跑赢专用 vllm-jev（约 3 倍）；Table 18 列 29 个决策模型含 Drex v1.5（2.95-7.44 倍）——决策模型四层拼图（训练/判断/执行/服务）合龙。","source":"Table 6/18, App H"}]}
+```
+
+<!-- Deep Reading coverage
+| Source section / object | Role | Explanation location / status |
+| --- | --- | --- |
+| §1 引言（三重失配、根因诊断） | 立论 | §01-03 |
+| §3.1 问题形式化（式 1-2、成本账） | 协议 | §04（手算 1） |
+| §3.2 ForkAttention（注意力/GDN/精确性） | 机制 | §05-07（手算 2-3） |
+| §3.3 扁平图执行（元数据/图族/读出） | 机制 | §08-09 |
+| §3.4 增量状态分叉（检查点） | 机制 | §10（手算 4） |
+| §3.5 位级确定性 | 性质 | §11 |
+| §4.1 实验设置（负载/基线/指标） | 协议 | §12 |
+| §4.2 主结果（Table 3, Fig.3/5） | 主证据 | §13-14（手算+逐格） |
+| §4.3 答案保真（Table 4/11, Fig.4） | 主证据 | §15（手算 5） |
+| §4.4 消融与专用模型（Table 5/6） | 对照 | §16-17（手算 6） |
+| App E 深入分析（Table 9-17） | 补充 | §18-19 |
+| App A 证明 / B 配置 / C 负载 / D 全量 / F 复发 / G 正确性 / H 模型表 | 复现条件 | §07/§12/§17-19 |
+| References | 行政性材料 | 不单列 |
+-->
+
 ## 深读对象
 
 [Flide: Accelerating Decision Inference with Exact State Forking](https://arxiv.org/abs/2610.42148)（Bobo Li、Jiajia Song、Wynnie Hsu、Mong Li Lee，新加坡国立大学；Hao Fei，牛津大学。arXiv 2610.42148v1，2026-10-30）。[点此打开原文 ↗](https://arxiv.org/abs/2610.42148)
