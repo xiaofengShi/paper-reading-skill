@@ -491,6 +491,22 @@
    ],
    "summaryEn": "A quantitative-depth Deep Reading (9,041 chars, 19 sections, 11 display equations, 5 worked calcs) of Evolving Infra, the first agent-adaptive LLM serving framework: symmetric engines switch PD phases in 0.7s without restart, a shared host-memory KV pool survives phase switches, and a cluster-wide KV directory counts active-branch references so eviction follows agent context management (compaction-killed histories first). Online-fitted iteration-time models (roofline + MoE routed-expert fraction, <7% error) drive a planner with a 2σ switch threshold, replacing 10,752-GPU-hour offline profiling with zero GPU cost. Up to 4.1× mean E2E latency and 14× P95 TTFT over NVIDIA Dynamo on Putnam/Claude Code/OSWorld agents with GLM-5.2 and Kimi K2.6; at 256 GPUs static P95 TTFT balloons to 418s while Evolving Infra holds 10-14s.",
    "summaryZh": "Agent 负载自适应服务系统 Evolving Infra 深读（量化深度版 9,041字/19节/11公式/5手算）：对称引擎 0.7s 免重启换相 + 共享宿主内存 KV 池 + 分支引用计数目录（驱逐跟随上下文管理，压缩死历史先逐）；在线迭代时间模型（roofline+MoE 专家分数，<7% 误差）+ 2σ 门槛规划器，替代 10,752 GPU 时的离线画像。Putnam/CC/OSWorld 三类 agent、GLM-5.2 与 Kimi K2.6、36-256 张 GB300：对 NVIDIA Dynamo 平均延迟最高 4.1×、P95 TTFT 最高 14×；256 卡上静态 P95 涨至 418s 而本文稳在 10-14s。agent 推理栈三层收官（Flide 请求形态→ERNIE Evolve 内核→本文集群编排）。"
+  },
+  {
+   "slug": "vot",
+   "title": "The Value of Thinking: Learning When to Reason in Hybrid Decision Models",
+   "lang": "zh-CN",
+   "tool": "ZCode",
+   "arxiv": "2611.16961v1",
+   "date": "2026-11-14",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent",
+    "Architecture"
+   ],
+   "summaryEn": "A quantitative-depth Deep Reading (9,013 chars, 17 sections, 11 display equations, 5 worked calcs) of The Value of Thinking: zero-or-T thinking paradigm — a frozen LLM backbone either answers from implicit thinking (zero generated tokens) or pays T tokens for full autoregressive reasoning, decided by a ~100KB self-routing block that estimates the value of thinking v = log P(slow✓)/P(fast✓) from hidden states already computed. CDPO trains from episode-level returns via PPO clip with per-decision reweighting. On JevBench HDM-4B scores 0.857 vs Jev's 0.851 at −72.5% median latency; on MiniWoB saves 80.1% thinking tokens; on BANKING77 spends 127× fewer tokens than AnyJev. Theoretical capstone of the week's decision-model line (Drex→Flide→MMDM→Gemini Decisions API→this).",
+   "summaryZh": "混合决策模型 Value of Thinking 深读（量化深度版 9,013字/17节/11公式/5手算）：zero-or-T 思考范式——冻结骨干要么从隐式思考零 token 直接决策、要么付 T token 走完整推理；~100KB 自路由块从隐藏状态估计思考的价值 v=log P(slow✓)/P(fast✓)（与置信度分离的对率提升），低于价格 λ 不升级。CDPO 从回合级回报训练（PPO clip 逐决策重加权）。JevBench 上 HDM-4B 0.857 对 Jev 0.851（延迟 −72.5%）；MiniWoB 省 80.1% thinking token；BANKING77 比 AnyJev 少 127 倍 token。本周决策模型线理论收官：Drex→Flide→MMDM→Gemini API→本文「何时不思考」。"
   }
  ]
 }
