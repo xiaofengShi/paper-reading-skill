@@ -523,6 +523,22 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9.5k chars, 17 chapters, 13 subsections, 10 display formulas, 20+ worked calcs) of Anthropic's engineering post on always-on agents: \"always-on\" is a UX description of a sleep-wake cycle of runs in sessions; five persistent primitives (event inbox, timers, memory, permissions, outbox) rebuild it, with the 78%/40% cost gap recomputed, inbox backlog and batching models, timer-as-event convergence, memory pointer rule, cache-economics, deferred-call interruption protocol, and outbox noise budget.",
       "summaryZh": "Anthropic「常驻智能体」工程文深读（量化深度版 9500+字/17章/10行间公式/20+手算）：「永远在线」只是睡-醒循环的体验描述（占空比手算 2.5%）；五原语逐个重构——事件收件箱（去重/单worker/批处理省 78% 的模型）、定时器双类递归（从不直接发起 run）、记忆指针规则与四类文件分层、缓存经济学（90% 命中压到 0.19 倍）、deferred 中断-恢复协议（人机交接保真 100%）、发件箱噪声预算与 start quiet。"
+    },
+    {
+      "slug": "mirix2",
+      "title": "MIRIX-2.0：证据层做真相源、超图只做索引——多智能体记忆系统的三难突围",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2611.12068",
+      "date": "2026-11-17",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Agent",
+        "Architecture"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 17 chapters, 32 subsections, 13 display formulas, 10 worked calcs) of MIRIX-2.0: six typed memory agents keep full records as the system of record while a provenance n-ary hypergraph serves only as a bounded index (occurrence identities keep similar undated events apart); operator-budgeted two-lane retrieval with citation-balanced fusion; AutoDream merges identities outside the write path and distills quote-checked skills. LoCoMo 91.4 / LongMemEval-S 72.6 (+14.3) / doc QA +31/+22 with the DetectiveQA counter-example, ALFWorld per-task interference, and a full cost ledger (4x slower document ingestion, faster answers everywhere, the 1.16M-vs-0.35M token paradox).",
+      "summaryZh": "MIRIX-2.0 深读（量化深度版 9000+字/17章32节/13公式/10手算）：六类记忆 agent 把完整记录写进向量库做唯一真相源，溯源超图只做有界索引（n 元帧带字面量与源行引用、发生身份区分异日相似事件）；算子预算双车道检索（count 8/12 封顶 20 行证据）+引用均衡融合；AutoDream 写路径外只并身份不重写、程序侧引文核验蒸馏技能。LoCoMo 91.4/LME-S 72.6（+14.3，图贡献 11.2）/文档 QA +31/+22 但 Detective 输 2.8；ALFWorld Clean+14/Heat+26 而 Pick/Look 低于无记忆；成本账：文档摄取慢 3.8-4.0 倍、对话摄取反快 3.2 倍、五基准延迟全胜、Detective token 3.3 倍悖论。"
     }
   ]
 }
