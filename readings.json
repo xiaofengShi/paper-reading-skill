@@ -539,6 +539,22 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9k+ chars, 17 chapters, 32 subsections, 13 display formulas, 10 worked calcs) of MIRIX-2.0: six typed memory agents keep full records as the system of record while a provenance n-ary hypergraph serves only as a bounded index (occurrence identities keep similar undated events apart); operator-budgeted two-lane retrieval with citation-balanced fusion; AutoDream merges identities outside the write path and distills quote-checked skills. LoCoMo 91.4 / LongMemEval-S 72.6 (+14.3) / doc QA +31/+22 with the DetectiveQA counter-example, ALFWorld per-task interference, and a full cost ledger (4x slower document ingestion, faster answers everywhere, the 1.16M-vs-0.35M token paradox).",
       "summaryZh": "MIRIX-2.0 深读（量化深度版 9000+字/17章32节/13公式/10手算）：六类记忆 agent 把完整记录写进向量库做唯一真相源，溯源超图只做有界索引（n 元帧带字面量与源行引用、发生身份区分异日相似事件）；算子预算双车道检索（count 8/12 封顶 20 行证据）+引用均衡融合；AutoDream 写路径外只并身份不重写、程序侧引文核验蒸馏技能。LoCoMo 91.4/LME-S 72.6（+14.3，图贡献 11.2）/文档 QA +31/+22 但 Detective 输 2.8；ALFWorld Clean+14/Heat+26 而 Pick/Look 低于无记忆；成本账：文档摄取慢 3.8-4.0 倍、对话摄取反快 3.2 倍、五基准延迟全胜、Detective token 3.3 倍悖论。"
+    },
+    {
+      "slug": "spillway",
+      "title": "SPILLWAY：把「动作发往哪里」从模型手里拿走——工具 agent 防提示注入的确定性出口",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2611.07222",
+      "date": "2026-11-18",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Agent",
+        "Architecture"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k chars, 17 chapters, 13 subsections, 12 display formulas, 11 worked calcs) of SPILLWAY: an egress floor that admits a tool call's targets only if they appear in typed identity fields of read-only returns and are not repeated in free text (a set lookup, zero model calls), a deterministic ingress sanitizer that removes instruction-like regions and keeps them as span evidence, and a fail-closed two-view judge bounded by a span veto. In-scope ASR is exactly zero on all 12 AgentDojo backbone-by-suite cells at 99.8% benign utility and higher under-attack utility than undefended, with 0.43 judge calls per episode versus +2.2-13.6 backbone re-runs for model-in-the-loop defenses; raw zero under ChatInject and .005 under the PISmith RL attacker; the honest identity-target scope and the ablation where the judge without the sanitizer opens leaks.",
+      "summaryZh": "SPILLWAY 深读（量化深度版 9000+字/17章13节/12行间公式/11手算）：间接注入防御的确定性路线——出口地板按「taint-novel 目标值须在只读返回的类型化身份字段且不在自由文本重复」查表放行（零模型调用、跨骨干不变），入口消毒器规则移除指令样区域留 span 证据，双视图法官 fail-closed 且被 span 否决约束。AgentDojo 12 格 in-scope ASR 全零（网格唯一）、良性保持 99.8%、受攻效用反超无防御、每集 0.43 次法官调用对模型在环防御 +2.2-13.6 次；ChatInject 原始零、PISmith .005、对 ROPE 七套件全零且效用套套更高；消融证明法官无消毒器会开门（.028），附录 C 主动破 P1 前提仍守零。"
     }
   ]
 }
