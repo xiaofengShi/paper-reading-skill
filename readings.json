@@ -555,6 +555,22 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9k chars, 17 chapters, 13 subsections, 12 display formulas, 11 worked calcs) of SPILLWAY: an egress floor that admits a tool call's targets only if they appear in typed identity fields of read-only returns and are not repeated in free text (a set lookup, zero model calls), a deterministic ingress sanitizer that removes instruction-like regions and keeps them as span evidence, and a fail-closed two-view judge bounded by a span veto. In-scope ASR is exactly zero on all 12 AgentDojo backbone-by-suite cells at 99.8% benign utility and higher under-attack utility than undefended, with 0.43 judge calls per episode versus +2.2-13.6 backbone re-runs for model-in-the-loop defenses; raw zero under ChatInject and .005 under the PISmith RL attacker; the honest identity-target scope and the ablation where the judge without the sanitizer opens leaks.",
       "summaryZh": "SPILLWAY 深读（量化深度版 9000+字/17章13节/12行间公式/11手算）：间接注入防御的确定性路线——出口地板按「taint-novel 目标值须在只读返回的类型化身份字段且不在自由文本重复」查表放行（零模型调用、跨骨干不变），入口消毒器规则移除指令样区域留 span 证据，双视图法官 fail-closed 且被 span 否决约束。AgentDojo 12 格 in-scope ASR 全零（网格唯一）、良性保持 99.8%、受攻效用反超无防御、每集 0.43 次法官调用对模型在环防御 +2.2-13.6 次；ChatInject 原始零、PISmith .005、对 ROPE 七套件全零且效用套套更高；消融证明法官无消毒器会开门（.028），附录 C 主动破 P1 前提仍守零。"
+    },
+    {
+      "slug": "repofactory",
+      "title": "RepoFactory：把真实仓库变成训练环境——乘性目标与环境演化循环撑起长程编码 agent",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2611.21152",
+      "date": "2026-11-19",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Agent",
+        "Post-training"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k chars, 16 chapters, 14 subsections, 13 display formulas, 13 worked calcs) of RepoFactory: environments as e=(I,W,V,O) scored by a multiplicative objective Q=A·C·S (validity gate / normalized propagation cost / log-scaled scope) optimized by an evolution loop that repairs before it optimizes, strictly retains increasing revisions, and never runs a solver rollout. 10,159 environments across 17 domains; training Qwen3.5-35B-A3B yields RepoHorizen with +22.6 on NL2Repo (46.4, beating GPT-5.5 and larger open models) and +8.5 average, evolution contributing 5.1/2.1; same-teacher controlled comparison leads six SWE datasets by +21.2; no saturation to 5,577 environments; recovery doubles yield 33.8%→69.4%; C-evolution gains without longer trajectories.",
+      "summaryZh": "RepoFactory 深读（量化深度版 9000字/16章14节/13行间公式/13手算）：环境=四元组(I,W,V,O)，乘性目标 Q=A·C·S（有效性二值门/归一化传播成本 R/N²/双对数规模），演化循环先修复后优化、严格增量保留、全程零求解 rollout。10,159 环境 17 域；训练 Qwen3.5-35B-A3B 得 RepoHorizen：NL2Repo +22.6 到 46.4（超 GPT-5.5 与更大开源模型）、五基准平均 +8.5，演化循环贡献 5.1/2.1；同教师受控对照全面领先六个 SWE 数据集（+21.2）；环境 scaling 到 5,577 无饱和（后段斜率 3.8 对前段 4.2 分/千）；恢复把产出率 33.8%→69.4%；C 演化不靠加长轨迹拿 +2.3——训练价值=工作量×互联度的二元证据。"
     }
   ]
 }
