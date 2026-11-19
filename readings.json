@@ -571,6 +571,22 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9k chars, 16 chapters, 14 subsections, 13 display formulas, 13 worked calcs) of RepoFactory: environments as e=(I,W,V,O) scored by a multiplicative objective Q=A·C·S (validity gate / normalized propagation cost / log-scaled scope) optimized by an evolution loop that repairs before it optimizes, strictly retains increasing revisions, and never runs a solver rollout. 10,159 environments across 17 domains; training Qwen3.5-35B-A3B yields RepoHorizen with +22.6 on NL2Repo (46.4, beating GPT-5.5 and larger open models) and +8.5 average, evolution contributing 5.1/2.1; same-teacher controlled comparison leads six SWE datasets by +21.2; no saturation to 5,577 environments; recovery doubles yield 33.8%→69.4%; C-evolution gains without longer trajectories.",
       "summaryZh": "RepoFactory 深读（量化深度版 9000字/16章14节/13行间公式/13手算）：环境=四元组(I,W,V,O)，乘性目标 Q=A·C·S（有效性二值门/归一化传播成本 R/N²/双对数规模），演化循环先修复后优化、严格增量保留、全程零求解 rollout。10,159 环境 17 域；训练 Qwen3.5-35B-A3B 得 RepoHorizen：NL2Repo +22.6 到 46.4（超 GPT-5.5 与更大开源模型）、五基准平均 +8.5，演化循环贡献 5.1/2.1；同教师受控对照全面领先六个 SWE 数据集（+21.2）；环境 scaling 到 5,577 无饱和（后段斜率 3.8 对前段 4.2 分/千）；恢复把产出率 33.8%→69.4%；C 演化不靠加长轨迹拿 +2.3——训练价值=工作量×互联度的二元证据。"
+    },
+    {
+      "slug": "jeveration",
+      "title": "Jeveration：System One 决策模型现在会生成——一次前向出整图、78 毫秒、一个检查点通吃三种视觉任务",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2611.24738",
+      "date": "2026-11-20",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Multimodal",
+        "Architecture"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k chars, 16 chapters, 13 subsections, 10 display formulas, 10 worked calcs) of Jeveration: a frozen Qwen3.5-4B VLM with rank-256 LoRA generates a whole image as one joint typed decision over tokenizer codes in a single forward pass. The information-theoretic core: independent parallel selection's forward-KL gap equals the target's total correlation, so codes sampled independently come from different realizations; the fix conditions all 128 positions on one shared random state and trains in two phases (masked model learns the distribution, then frozen-model-judged distribution matching plus confidence-guided correction teaches the model to use the state). 512px in 77.8ms (122x over Janus-Pro-7B, fastest unified model at GenEval 0.74); image-to-image at +14ms with HED F1 0.880; dense prediction on par with dedicated models (mIoU 67.7) — with the swap experiments showing codes carry structure and the source image refines detail.",
+      "summaryZh": "Jeveration 深读（量化深度版 9000+字/16章13节/10行间公式/10手算）：冻结 VLM+LoRA 把一张图当作对码本的一次联合类型化决策——128 个码位单次前向并行决定。理论内核：独立并行的 forward-KL 缺口=目标分布的 total correlation（码位互依赖总量），独立采样必拼出碎图；共享随机状态 ξ 提供协调信道，两阶段训练（先掩码模型学分布、再冻结裁判的分布匹配+置信度校正教用 ξ）把 0.32 的独立基线拉到 0.74。速度账：78ms 对 Janus-Pro-7B 的 122×（步数 576→1 是主项）；图生图 +14ms 保结构 HED 0.880；稠密预测 mIoU 67.7 持平专项；交换实验定分工：码=结构骨架、源图=细节皮肤。决策模型六连（Drex→Flide→MMDM→Gemini→VoT→本文）从「选得对」走到「生成得出」。"
     }
   ]
 }
