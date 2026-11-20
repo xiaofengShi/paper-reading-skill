@@ -587,6 +587,22 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9k chars, 16 chapters, 13 subsections, 10 display formulas, 10 worked calcs) of Jeveration: a frozen Qwen3.5-4B VLM with rank-256 LoRA generates a whole image as one joint typed decision over tokenizer codes in a single forward pass. The information-theoretic core: independent parallel selection's forward-KL gap equals the target's total correlation, so codes sampled independently come from different realizations; the fix conditions all 128 positions on one shared random state and trains in two phases (masked model learns the distribution, then frozen-model-judged distribution matching plus confidence-guided correction teaches the model to use the state). 512px in 77.8ms (122x over Janus-Pro-7B, fastest unified model at GenEval 0.74); image-to-image at +14ms with HED F1 0.880; dense prediction on par with dedicated models (mIoU 67.7) — with the swap experiments showing codes carry structure and the source image refines detail.",
       "summaryZh": "Jeveration 深读（量化深度版 9000+字/16章13节/10行间公式/10手算）：冻结 VLM+LoRA 把一张图当作对码本的一次联合类型化决策——128 个码位单次前向并行决定。理论内核：独立并行的 forward-KL 缺口=目标分布的 total correlation（码位互依赖总量），独立采样必拼出碎图；共享随机状态 ξ 提供协调信道，两阶段训练（先掩码模型学分布、再冻结裁判的分布匹配+置信度校正教用 ξ）把 0.32 的独立基线拉到 0.74。速度账：78ms 对 Janus-Pro-7B 的 122×（步数 576→1 是主项）；图生图 +14ms 保结构 HED 0.880；稠密预测 mIoU 67.7 持平专项；交换实验定分工：码=结构骨架、源图=细节皮肤。决策模型六连（Drex→Flide→MMDM→Gemini→VoT→本文）从「选得对」走到「生成得出」。"
+    },
+    {
+      "slug": "harnessmm",
+      "title": "HarnessMM：把「已经决定的调用」从推理账单上划掉——守卫式决策复用与回调替换的 harness 提效工程",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2610.32813",
+      "date": "2026-11-20",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Agent",
+        "Architecture"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k chars, 16 chapters, 15 subsections, 12 display formulas, 13 worked calcs; manual on-demand read) of HarnessMinusMinus: Executable Decision Graphs store actions+literal args+predecessors+public guards authored by slow reasoning; Guarded Decision Reuse activates them from observed receipts (Jev-typed selector, abstain-or-ID); Certified Callback Substitution executes eligible decisions through native interfaces and removes the corresponding reasoning callbacks with audit certificates. Complete-task accounting (authorship/selector/fallback/failures all charged). HumanEval: Codex 90.82% held at 29.54% saving; DeepSeek harness 71.43->85.71% at 87.93% saving (McNemar p=0.0161). MBPP ablation separates GDR persistence (26.91%) from CCS callback removal (19.52%). Honest negatives: AIME costs +28.34%, MetaRSI zero accepts, six-benchmark configurations heterogeneous (D.5 map). Visual HarnessMM-V: LongForm-UI 8.33->78.13% at 73.49% saving; cross-benchmark transfer saves 83.10% with 82% of omissions after first graph use.",
+      "summaryZh": "HarnessMM 深读（手动点播，量化深度版 9000+字/16章15节/12行间公式/13手算）：harness 在每次工具回执后重新推理哪怕动作早已定死——EDG 存已解决决策（动作+字面参数+前驱+公共守卫）、GDR 用观测回执激活（Jev 式类型化选择器，候选 ID 或弃权）、CCS 认证替换（六字段证书+审计不等式），完整记账下署名/选择/回退/失败全入账。HumanEval：Codex 90.82% 持平省 29.54%、DeepSeek 71.43→85.71% 省 87.93%（配对显著）；MBPP 消融分离 GDR 持久复用 26.91% 与 CCS 回调移除 19.52%；替换悖论不等式 K>(A+F)/c 给部署判据。负结果照登：AIME 贵 28.34%（生成推理主导无可复用）、MetaRSI 零接受、六基准配置异质（D.5 地图）。视觉版 LongForm-UI 8.33→78.13% 省 73.49%；跨基准迁移省 83.10%。"
     }
   ]
 }
