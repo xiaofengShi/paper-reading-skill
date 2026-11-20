@@ -603,6 +603,22 @@
       ],
       "summaryEn": "A quantitative-depth Deep Reading (9k chars, 16 chapters, 15 subsections, 12 display formulas, 13 worked calcs; manual on-demand read) of HarnessMinusMinus: Executable Decision Graphs store actions+literal args+predecessors+public guards authored by slow reasoning; Guarded Decision Reuse activates them from observed receipts (Jev-typed selector, abstain-or-ID); Certified Callback Substitution executes eligible decisions through native interfaces and removes the corresponding reasoning callbacks with audit certificates. Complete-task accounting (authorship/selector/fallback/failures all charged). HumanEval: Codex 90.82% held at 29.54% saving; DeepSeek harness 71.43->85.71% at 87.93% saving (McNemar p=0.0161). MBPP ablation separates GDR persistence (26.91%) from CCS callback removal (19.52%). Honest negatives: AIME costs +28.34%, MetaRSI zero accepts, six-benchmark configurations heterogeneous (D.5 map). Visual HarnessMM-V: LongForm-UI 8.33->78.13% at 73.49% saving; cross-benchmark transfer saves 83.10% with 82% of omissions after first graph use.",
       "summaryZh": "HarnessMM 深读（手动点播，量化深度版 9000+字/16章15节/12行间公式/13手算）：harness 在每次工具回执后重新推理哪怕动作早已定死——EDG 存已解决决策（动作+字面参数+前驱+公共守卫）、GDR 用观测回执激活（Jev 式类型化选择器，候选 ID 或弃权）、CCS 认证替换（六字段证书+审计不等式），完整记账下署名/选择/回退/失败全入账。HumanEval：Codex 90.82% 持平省 29.54%、DeepSeek 71.43→85.71% 省 87.93%（配对显著）；MBPP 消融分离 GDR 持久复用 26.91% 与 CCS 回调移除 19.52%；替换悖论不等式 K>(A+F)/c 给部署判据。负结果照登：AIME 贵 28.34%（生成推理主导无可复用）、MetaRSI 零接受、六基准配置异质（D.5 地图）。视觉版 LongForm-UI 8.33→78.13% 省 73.49%；跨基准迁移省 83.10%。"
+    },
+    {
+      "slug": "sysone-agents",
+      "title": "System 1 agents：不生成文本的本地工具调用 agent——决策模型选选项、确定性编译器出问题、幻觉零发生",
+      "lang": "zh-CN",
+      "tool": "ZCode",
+      "arxiv": "2611.21053",
+      "date": "2026-11-21",
+      "pinned": false,
+      "mode": "deep",
+      "tags": [
+        "Agent",
+        "Architecture"
+      ],
+      "summaryEn": "A quantitative-depth Deep Reading (9k chars, 15 chapters, 13 subsections, 10+ display formulas, 14 worked calcs) of System 1 agents: clinical agents face privacy (cloud LLMs export patient data) vs reliability (local LLMs hallucinate tool-call values that silently propagate through pipelines). The fix: tool calling is mostly multiple choice — tools are in the catalogue, values in the request or schema. Three components: agent (thresholded control flow at 0.3/0.5/0.7), deterministic compiler (schema+request into finite-option questions; candidates from request/derived/schema/environment), decision model (one forward pass, six published models unfine-tuned). On 157 biomedical MCP tools / 1,952 requests: best System 1 agent 97.0/97.0/93.9 (tool calling/filling/fully correct) beats all 18 local LLM settings; 10,888 calls zero hallucination (LLM 5.5-19.7%); underspecified requests 86.2-93.7% correct (LLM max 5.7%); OpenJev 2.6s/0.228Wh per correct request. Same-backbone: decider models beat their bases up to +9.6 at 4-27B; 35B reverses.",
+      "summaryZh": "System 1 agents 深读（量化深度版 9000+字/15章13节/10+行间公式/14手算）：临床 agent 的隐私×可靠性两难——云 LLM 送数据出站、本地 LLM 编造参数值在管线里静默传播。核心观察：工具调用大部分是选择题（工具在目录、值在请求或 schema）。三件套：阈值化 agent（0.3/0.5/0.7 三门）、确定性编译器（候选四源+消耗制结算）、决策模型（一次前向、六模型不微调）。157 个生物医学工具、1,952 请求：最强 System 1 全对 93.9% 超全部 18 个本地 LLM 设置；10,888 次调用零幻觉（LLM 5.5-19.7% 编造）；欠指定请求正确 86.2-93.7%（LLM 最高 5.7%、62.1% 编缺失值）；同骨干对照 4-27B 决策模型化净增益最高 +9.6、35B 反转——决策模型三周谱系（Drex→Flide→MMDM→Gemini→VoT→Jeveration→本文）的终点：决策模型可以就是 agent 本身。"
     }
   ]
 }
