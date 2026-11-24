@@ -281,7 +281,9 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
   .article { border-left: 0; }
 }
 @media (max-width: 700px) {
-  .topbar span { display: none; }.topbar .brand { margin-right: auto; }
+  .topbar { height: auto; min-height: 56px; flex-wrap: wrap; gap: .4rem .7rem; padding-block: .5rem; }
+  .topbar > span { display: none; }
+  .topbar .brand { margin-right: auto; }
   .topbar > a:last-child { display: none; }
   .hero-inner { min-height: 0; display: block; padding: 2.4rem 1.3rem; }
   .hero-map { margin-top: 2.3rem; }

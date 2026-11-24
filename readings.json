@@ -635,6 +635,39 @@
    ],
    "summaryEn": "A quantitative-depth Deep Reading (9k chars, 18 sections, 10 display formulas, 6 worked-calc groups) of Intent Contracts: an authorization interface for tool-using LLM agents where the planning model holds no tools. Each step it submits a logged contract (goal <=100 words, verbatim user quotation, scope fields, error policy); code validates it, and a small trusted model checks it against the user's words and writes the tool call itself. Three by-construction properties: trusted model authors every executed call, a logged contract precedes each call as the planner's only channel, and the trusted side chooses granularity. On AmPermBench (3 families, 96 prompts): declaration coverage 56/56 vs 2/16 and 4/54 for reviewers; bundled requests complete 27/30 vs 16/30 (reviewers can only refuse whole commands). Honest negatives: unauthorized actions NOT reduced (10/96 ties blind review; clarified lane: every acting condition wrong on 40-49% of state-changing runs) — the error is the planner's choice of objects for ambiguous references, which no environment-blind trusted model can check. Interface-narrowing series (browser-use REPL -> HarnessMM callbacks -> System 1 optionization) reaches the permission layer.",
    "summaryZh": "Intent Contracts 深读（量化深度版 9000+字/18节/10行间公式/6手算组）：把工具从规划模型手里拿走——每步只交一张契约（目标≤100词+用户原话逐字引语+只窄不宽的作用域+错误策略），代码校验、小模型（GLM-5.3-Flash）对照用户原话写调用本身。三条构造性质：执行调用全由可信侧执笔、事前契约是规划器唯一通道、可信侧定粒度（可只做授权部分）。AmPermBench 96 题：声明覆盖 56/56 对审查的 2/16 与 4/54；捆绑夹带完成 27/30 对 16/30（引语校验 72/72 拒夹带+粒度剪刀）。诚实负结果：未授权动作并不减少（10/96 与盲审查持平；澄清通道后所有行动条件打错率 40-49%）——错误源是规划器对歧义引用的对象选择，不看环境的守门人兜不住；「不确定就谢绝」指令零效应（p=1.0）。接口收窄谱系（browser-use REPL→HarnessMM 回调→System 1 选项化）的权限层收官。"
+  },
+  {
+   "slug": "videcide",
+   "title": "ViDecide：把视频规划拆成可纠正的一步步决策",
+   "lang": "zh-CN",
+   "tool": "Codex",
+   "arxiv": "2611.26389",
+   "date": "2026-11-25",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "World-Model",
+    "Post-training",
+    "Eval"
+   ],
+   "summaryEn": "Reconstruct causal video segments, timestep shifting, and corrective flow matching. Audit the 83.8% strict-success average across four benchmark columns, and compare the in-distribution gains with the reversals on unseen robot layouts.",
+   "summaryZh": "沿因果视频分段、训练时间步偏移和纠正流匹配重建三阶段训练，逐格复算四列等权的 83.8% 严格成功率，再核对机器人新布局上的负增益。"
+  },
+  {
+   "slug": "claude-coding-agent-security",
+   "title": "Claude｜编码智能体如何在企业授权范围内工作",
+   "lang": "zh-CN",
+   "tool": "Codex",
+   "url": "https://claude.com/resources/articles/enterprise-guide-to-securing-coding-agents",
+   "date": "2026-11-25",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent",
+    "Claude"
+   ],
+   "summaryEn": "Read the engineering guide from proposed action to resource boundaries, management policy, and pilot evidence. Reconstruct the benchmark denominators and work through defensive acceptance checks.",
+   "summaryZh": "沿模型判断、工具审查、环境约束与中央策略拆解企业指南，区分场景预算与比例分母，用权限、日志和策略生效算例核查部署。"
   }
  ]
 }
