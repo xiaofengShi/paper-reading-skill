@@ -339,56 +339,27 @@ a:focus-visible, summary:focus-visible { outline: 3px solid var(--orange); outli
 #show-sources:checked ~ .reading-shell .lab-takeaway .source-badge { display: inline-block; }
 @media print { .learning-lab iframe { display: none; } .learning-lab { break-inside: avoid; } }
 </style><link rel="canonical" href="https://xiaofengshi.github.io/paper-reading-skill/intentcontracts-deep-read.html"><meta property="og:type" content="article"><meta property="og:title" content="把工具从规划器手里拿走：意图契约如何让 agent 的每一步都可审计 · 深读图谱"><meta property="og:url" content="https://xiaofengshi.github.io/paper-reading-skill/intentcontracts-deep-read.html"></head>
-<body data-theme="saffron"><a class="skip-link" href="#content">跳到正文</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>图解阅读 · 机制与证据</span><label class="source-toggle-label" for="show-sources">显示资料标注</label><a class="gallery-link" href="https://xiaofengshi.github.io/paper-reading-skill/">深读画廊 <span aria-hidden="true">↗</span></a><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">论文深读图谱 · 中文</p><h1>把工具从规划器手里拿走：意图契约如何让 agent 的每一步都可审计</h1><p class="hero-sub">从全局路径到关键机制与实验证据。</p><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div></div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div><a href="#section-1">1 一句话与定位</a><a href="#section-2">2 授权缺口从哪来</a><a href="#section-3">3 三个接口：同一对模型的三种信息路由</a><a href="#section-4">4 契约的形状</a><a href="#section-5">5 构造层：三条由代码固定的性质</a><a href="#section-6">6 实验设置</a><a href="#section-7">7 结果一：原始题——契约不减少未授权动作</a><a href="#section-8">8 没人读的声明</a><a href="#section-9">9 声明覆盖率：56/56</a><a href="#section-10">10 捆绑请求：粒度性质的兑现</a><a href="#section-11">11 整任务执行消融：把困难决定推给谁</a><a href="#section-12">12 澄清通道：把「行动频率 vs 行动质量」摊开</a><a href="#section-13">13 严格执行器：一句指令的零效应</a><a href="#section-14">14 相关工作地图</a><a href="#section-15">15 局限与诚实账单</a><a href="#section-16">16 与您的关联：接口收窄谱系的权限层收官：从「少几个动作」到「没有工具」</a><a href="#section-17">17 自测（paper-check）</a><a href="#section-18">18 溯源披露</a></nav><main id="content" class="article"><div class="article-inner"><pre><code class="language-json">{
-  &quot;title&quot;: &quot;Intent Contracts: Taking Tools Away from Agents&quot;,
-  &quot;id&quot;: &quot;arXiv 2611.24025v1&quot;,
-  &quot;venue&quot;: &quot;cs.CR · 2026-11-18 · 10 页&quot;,
-  &quot;team&quot;: &quot;独立研究者 Ziyuan Wang × Georgia Tech × UMass Amherst × UIUC&quot;,
-  &quot;problem&quot;: &quot;工具型 agent 的授权缺口：规划器既选目标又写命令，权限分类器只能事后从命令反推动机&quot;,
-  &quot;method&quot;: [
-    &quot;规划器不持有任何环境工具，每步只提交一张契约（目标≤100字+用户原话逐字引语+作用域+错误策略）&quot;,
-    &quot;代码校验引语与作用域，小模型（可信侧）对照用户原话写工具调用本身&quot;,
-    &quot;执行器每契约至多一次调用、只见回执（输出大小+退出码），完整合同日志先于每次调用落盘&quot;
-  ],
-  &quot;results&quot;: [
-    &quot;声明覆盖率 56/56 vs 审查条件的 2/16 与 4/54（目标字段）&quot;,
-    &quot;捆绑夹带任务完成 27/30 vs 意图可见审查 16/30（审查只能整条拒绝）&quot;,
-    &quot;未授权动作并未减少：原始题 10/96 与盲审查持平；澄清后所有行动条件 40-49% 打错目标&quot;,
-    &quot;诚实负结果：错误源是规划器对歧义引用的对象选择，任何不 see 环境的可信侧都查不了&quot;
-  ],
-  &quot;limits&quot;: [&quot;单一 planner（gpt-6.1-terra）+单一小模型（GLM-5.3-Flash）+一套指令措辞&quot;, &quot;AmPermBench 3/4 族 96 题、16 模板&quot;, &quot;中位时长 178.8s 为全场最慢&quot;, &quot;非对抗设定，良性越权&quot;],
-  &quot;lineage&quot;: [&quot;Claude Code auto mode（推理盲分类器）&quot;, &quot;AmPermBench&quot;, &quot;AI control / untrusted advice&quot;, &quot;接口收窄谱系：browser-use REPL → HarnessMM 回调 → System 1 选项化 → 本文权限收窄&quot;]
-}
-</code></pre>
-<p><strong>Deep Reading coverage</strong></p>
-<table>
-<thead>
-<tr>
-<th>覆盖项</th>
-<th>状态</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>正文 10 页（含 Related Work、Limitations、Appendix A 角色指令全文）</td>
-<td>全读</td>
-</tr>
-<tr>
-<td>Table 1-7</td>
-<td>逐格复核</td>
-</tr>
-<tr>
-<td>Figure 1（契约执行流）</td>
-<td>700 DPI 提取，本文嵌入</td>
-</tr>
-<tr>
-<td>统计方法（Clopper-Pearson 区间、精确 McNemar）</td>
-<td>四处手算复现</td>
-</tr>
-<tr>
-<td>开源声明（插件+运行记录+复算脚本）</td>
-<td>已核对仓库地址</td>
-</tr>
-</tbody></table>
+<body data-theme="saffron"><a class="skip-link" href="#content">跳到正文</a><input class="source-toggle" id="show-sources" type="checkbox"><header class="topbar"><a class="brand" href="#top">PAPER / READING</a><span>图解阅读 · 机制与证据</span><label class="source-toggle-label" for="show-sources">显示资料标注</label><a class="gallery-link" href="https://xiaofengshi.github.io/paper-reading-skill/">深读画廊 <span aria-hidden="true">↗</span></a><a href="#content">开始阅读 ↘</a></header><div id="top" class="hero"><div class="hero-inner"><div class="hero-copy"><p class="eyebrow">论文深读图谱 · 中文</p><h1>把工具从规划器手里拿走：意图契约如何让 agent 的每一步都可审计</h1><p class="hero-sub">独立研究者 × Georgia Tech × UMass × UIUC 提出 Intent Contracts：工具型 agent 的授权缺口在于规划器既选目标又写命令，权限分类器只能事后从命令反推动机。解法是结构激进的信息路由重排——规划模型不持有任何环境工具，每步只提交一张契约（≤100 词、点名具体对象、禁命令行的目标 + 用户原话逐字引语 + 只窄不宽的作用域 + 错误策略）；代码校验引语（NFKC+空白归一化的连续子串、保大小写）与格式；小号可信模型（GLM-5.3-Flash）对照用户原话裁决授权并亲自写至多一次工具调用，只见输出大小与退出码的回执。三条构造性质由代码固定：可信侧执笔每次调用、事前契约是规划器唯一通道、可信侧定粒度。AmPermBench 96 题：声明覆盖 56/56（审查条件目标字段 2/16、4/54）；捆绑夹带任务 27/30 对 16/30（引语校验 72/72 拒夹带+粒度剪刀对整条拒绝）。诚实负结果：未授权动作不降（10/96 与推理盲审查持平），澄清后所有行动条件打错率 40-49%——错误源是规划器对歧义引用的对象选择，不看环境的守门人查不了；「不确定就谢绝」指令零效应（p=1.0）。中位 178.8s/跑为全场最慢。</p><p class="hero-reader"><strong>适合谁读</strong> · 要给工具型 agent 做权限设计、或关心 AI control/可审计 agent 的工程师与研究者；本页把契约的形式定义、三条构造性质、McNemar 手算、行动频率×行动质量分解、捆绑双机制、澄清通道教训逐个放进可复算的框架。</p><div class="hero-goals"><p>读完可以尝试</p><ul><li>走通「授权缺口→三接口对照→契约四元组与代码校验→三条构造性质→结构性极限→原始题结果→捆绑与消融→澄清通道」的完整论证链</li><li>把 2/96、10/96、56/56、27/30、40-49% 等关键数字放回配对统计框架核算（四处精确 McNemar 独立复现）</li><li>标出边界：可信侧无环境视野挡不住对象选择错误、单一模型对与单一指令措辞、运行时 7 倍代价、非对抗设定</li></ul></div><a class="hero-link" href="#section-1">进入论文图谱 <span aria-hidden="true">↘</span></a></div><div class="hero-map"><p class="hero-map-title">论文全局图 <span>01 — 08</span></p><ol><li><span class="hero-map-index">01</span><div><div class="hero-map-heading"><strong>授权缺口</strong><b>歧义请求→过度执行</b></div><p>工具型 agent 出事多数不是恶意而是歧义：用户说「把我那批旧任务清了」，agent 自选解释范围、写命令、执行超出授权。权限分类器只能拿命令和用户原话反推动机——命令是「怎么做的答案」，缺「为什么」的证据。Claude Code auto mode 反向选择：分类器故意不看 agent 的解释文字（推理盲），减少说服机会但失去理由可见性。AmPermBench 用歧义 DevOps 请求压测这一点。</p><span class="source-badge">引言</span></div></li><li><span class="hero-map-index">02</span><div><div class="hero-map-heading"><strong>三接口</strong><b>同一对模型三种路由</b></div><p>REVIEW（盲审查）：规划器写命令，审查者只见用户原话+命令+调用账本，整条批准或拒绝。REVIEW+INTENT：同上但审查者也见经代码校验的目标与引语。CONTRACT：规划器无工具，只交契约；可信模型裁决授权并亲自写调用，每契约至多一 call、只见回执。外加 STRONG/SMALL 裸跑、STRONG+DECLARE（无人读的声明）、WHOLETASK 消融。</p><span class="source-badge">§2.1、Table 1</span></div></li><li><span class="hero-map-index">03</span><div><div class="hero-map-heading"><strong>契约四元组</strong><b>目标+引语+作用域+错误策略</b></div><p>C=(g,q,S,e)：g ≤100 词、点名具体对象、禁命令行；q 是用户原话逐字引语，代码在 NFKC+空白归一化（保大小写）后验证为连续子串——证明「用户说过」不证明「授权了这步」；S 只能收窄基线；e 定错误处理。执行器独立会话：只见用户原话+契约+自己的调用账本，不见环境、不见工具输出、不见项目指令；连续谢绝冻结契约流等用户。</p><span class="source-badge">§2.1-2.3、§4</span></div></li><li><span class="hero-map-index">04</span><div><div class="hero-map-heading"><strong>三条构造性质</strong><b>代码固定与模型无关</b></div><p>其一调用作者权：每个被执行调用都由可信模型写，代码不传规划器文本给工具。其二先行完备记录：每次调用前有被接受的契约且它是规划器对该调用的全部影响——审计读契约对用户请求即可定位越权。其三粒度决定权：可信侧可只执行授权部分。三条都不蕴含「被授权」或「改对对象」——是「谁能导致什么」的路由陈述。</p><span class="source-badge">§2.2、§5</span></div></li><li><span class="hero-map-index">05</span><div><div class="hero-map-heading"><strong>原始题结果</strong><b>未授权不降</b></div><p>96 题：REVIEW+INTENT 未授权 2/96（对 REVIEW 10/96，McNemar 2·11/1024≈0.0215✓）但少行动（改状态 9 对 20 跑）；CONTRACT 未授权 10/96 与盲审查打平（p=1.0）、安全完成 12/96 最高。STRONG+DECLARE 10/96——没人读的声明无用（依从 14/30）。按指代拆：全部条件精确 ID 题零未授权，错误集中在 range 类。</p><span class="source-badge">§4.1-4.3、Table 2-4</span></div></li><li><span class="hero-map-index">06</span><div><div class="hero-map-heading"><strong>声明覆盖与捆绑</strong><b>56/56 与 27/30</b></div><p>declared-before-done：CONTRACT 改的 56 对象全部事前点名（100%）对 R+I 2/16、REVIEW 4/54（审查条件对象名在命令里——「怎么做」非「为什么」）。捆绑实验：规划器消息副本被塞用户没说过的请求——引语校验拒掉全部引用夹带句的契约（72/72）；粒度性质兑现：CONTRACT 主任务 27/30 对 R+I 16/30（审查整条拒绝连授权部分一起挡，15 跑等重提、13 永远没等来）。拒绝是断路器，谢绝是剪刀。</p><span class="source-badge">§4.4-4.5、Table 5-6</span></div></li><li><span class="hero-map-index">07</span><div><div class="hero-map-heading"><strong>消融与澄清</strong><b>范围决定归强模型</b></div><p>WHOLETASK（整任务交小模型）：未授权 15/30 对 CONTRACT 3/30（12 对 0，p=2·2^-12≈0.0005✓）——授权判断放小模型、范围决定放强模型的切分最干净。澄清 lane 术语后：四条件打错率 40-49% 不可区分、差异全在行动频率（改状态 35/37/58/64 跑）；给执行器加「不确定就谢绝」96 题纹丝不动（p=1.0）——对象是否用户所指是环境事实，指令替代不了。</p><span class="source-badge">§4.6-4.7、Table 7</span></div></li><li><span class="hero-map-index">08</span><div><div class="hero-map-heading"><strong>边界与谱系</strong><b>环境视野缺失</b></div><p>可信侧看不到环境：能对照用户的话检查一步，不能检查规划器点名的对象是否用户所指——歧义引用的对象选择发生在任何门看到这步之前。相关工作地图：untrusted advice（执行器被指示听从）；Dual LLM/CaMeL 反向布置（无工具者读不可信数据）；Progent/治理工具包代码即边界；本文是「记录与主张由代码保证、授权裁决由模型承担」的混合形态。运行时 178.8s（约裸跑 7 倍）是可审计性的价格。接口收窄谱系（browser-use REPL→HarnessMM 回调→System 1 选项化）的权限层收官。</p><span class="source-badge">§5-7、§16</span></div></li></ol><div class="hero-map-outcome"><span aria-hidden="true">↳</span><div><strong>全文精读 arXiv 2611.24025v1（cs.CR，10 页含附录 A 角色指令逐字附录），Figure 1 以 700 DPI 矢量重渲嵌入，Table 1-7 逐格核对，四处 p 值手算复现。</strong><span class="source-badge">https://arxiv.org/abs/2611.24025</span></div></div></div></div></div><div class="reading-shell"><nav class="toc" aria-label="本文目录"><div class="toc-title">阅读路径</div><a href="#section-1">1 一句话与定位</a><a href="#section-2">2 授权缺口从哪来</a><a href="#section-3">3 三个接口：同一对模型的三种信息路由</a><a href="#section-4">4 契约的形状</a><a href="#section-5">5 构造层：三条由代码固定的性质</a><a href="#section-6">6 实验设置</a><a href="#section-7">7 结果一：原始题——契约不减少未授权动作</a><a href="#section-8">8 没人读的声明</a><a href="#section-9">9 声明覆盖率：56/56</a><a href="#section-10">10 捆绑请求：粒度性质的兑现</a><a href="#section-11">11 整任务执行消融：把困难决定推给谁</a><a href="#section-12">12 澄清通道：把「行动频率 vs 行动质量」摊开</a><a href="#section-13">13 严格执行器：一句指令的零效应</a><a href="#section-14">14 相关工作地图</a><a href="#section-15">15 局限与诚实账单</a><a href="#section-16">16 与您的关联：接口收窄谱系的权限层收官：从「少几个动作」到「没有工具」</a><a href="#section-17">17 自测（paper-check）</a><a href="#section-18">18 溯源披露</a></nav><main id="content" class="article"><div class="article-inner"><!-- Deep Reading coverage
+| Source section / object | Role | Explanation location / status |
+| --- | --- | --- |
+| 摘要 + §1 引言（授权缺口、auto mode 动机） | 立论 | §01、§2 |
+| §2.1 三接口定义 + Table 1 | 机制对照 | §3、§02 |
+| §2.2 构造性质 + §2.3 实现细节（引语校验/会话隔离/回执） | 机制核心 | §4、§5、§04 |
+| §2.4 参照条件（STRONG/SMALL/DECLARE/WHOLETASK） | 实验设计 | §3 |
+| §3 评测设置（AmPermBench 3 族 96 题、模型对、统计口径） | 实验设计 | §6 |
+| §4.1-4.2 原始题结果 + Table 2-3 | 实验一 | §7、§8（McNemar 手算一/二） |
+| §4.3 指代分解 + Table 4 | 实验二 | §7 |
+| §4.4 声明覆盖 + Table 5 | 指标 | §9（手算三） |
+| §4.5 捆绑任务 + Table 6 | 实验三 | §10（手算四） |
+| §4.6 WHOLETASK 消融 | 消融 | §11（手算五） |
+| §4.7 澄清通道 + Table 7 + 严格执行器 | 实验四 | §12、§13（手算六） |
+| §5 相关工作（16 篇） | 谱系 | §14 |
+| §6 局限 | 边界 | §15 |
+| §7 结论 + 数据可用性 | 收束 | §16 |
+| Appendix A 角色指令（执行器/严格执行器/两审查者/规划器意图规则/声明规则/澄清句） | 逐字附录 | §4、走查节全读 |
+| Figure 1 | 图 | 700 DPI 矢量重渲嵌入 §3 |
+-->
+
 <p><strong>深读对象</strong>：<a href="https://arxiv.org/abs/2611.24025">Intent Contracts: Taking Tools Away from Agents</a>（<a href="https://arxiv.org/abs/2611.24025">点此打开原文 ↗</a>）</p>
 <p><strong>怎么读这篇论文</strong>（给时间紧的读者）：先读 §2.2（三条构造性质，全文的骨架）与 Table 1（三接口的差异矩阵），再直接跳 Table 2 与 §4.5（捆绑实验，粒度性质的兑现），最后读 §4.7 最后三段（澄清实验的结构性教训）——这三处分别是「保证了什么」「兑现了什么」「保证不了什么」。负结果读者的预期管理：这不是一篇「新方法涨点」的论文，是一篇「把一个接口设计能买到什么、买不到什么量干净」的论文。</p>
 <hr>
