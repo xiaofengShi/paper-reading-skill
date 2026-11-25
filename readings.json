@@ -668,6 +668,23 @@
    ],
    "summaryEn": "Read the engineering guide from proposed action to resource boundaries, management policy, and pilot evidence. Reconstruct the benchmark denominators and work through defensive acceptance checks.",
    "summaryZh": "沿模型判断、工具审查、环境约束与中央策略拆解企业指南，区分场景预算与比例分母，用权限、日志和策略生效算例核查部署。"
+  },
+  {
+   "slug": "rlvb",
+   "title": "RLVB：让智能体按手里的证据决定何时作答",
+   "lang": "zh-CN",
+   "tool": "Codex",
+   "arxiv": "2611.32884",
+   "date": "2026-11-26",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent",
+    "Post-training",
+    "Eval"
+   ],
+   "summaryEn": "Reconstruct the posterior teacher and same-history credit. Recompute the nine-setting accuracy gain, then use the evidence decomposition and failure cases to distinguish better stopping from better visual interpretation.",
+   "summaryZh": "用翻杯实验手算后验、停止门和同历史信用，复算九组准确率，再用证据分解和失败案例区分停止策略与读图能力。"
   }
  ]
 }

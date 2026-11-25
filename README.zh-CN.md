@@ -59,11 +59,11 @@ Agent 完成阅读后，预期得到 `paper-readings/lora/reading.html` 及 Mark
 - **Attention Is All You Need** · English · Brief Reading · `Architecture` — 沿编码器与解码器追踪 token，算清注意力公式，再读翻译实验、消融和句法分析。 依据 [arXiv:1706.03762](https://arxiv.org/abs/1706.03762)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/attention-is-all-you-need-deep-read.html)
 - **MiMo-V2.6** · 中文 · Brief Reading · `Post-training` `RL` — 从训练主线读到 RL 目标、GRS/GAR、运行系统、MOPD2 与实验。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/mimo-v2.6-deep-read.html)
 - **LoRA** · 中文 · Brief Reading · `Post-training` — 改变输入，跟算低秩修正，再核对合并权重的输出。从初始化梯度读到二维子空间例子，完整实验与协议按需展开。附四道自测，包含换预算的迁移题。 依据 [arXiv:2106.09685v2](https://arxiv.org/abs/2106.09685v2)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/lora-deep-read.html)
+- **RLVB：让智能体按手里的证据决定何时作答** · 中文 · Deep Reading · Codex · `Agent` `Post-training` `Eval` — 用翻杯实验手算后验、停止门和同历史信用，复算九组准确率，再用证据分解和失败案例区分停止策略与读图能力。 依据 [arXiv:2611.32884](https://arxiv.org/abs/2611.32884)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/rlvb-deep-read.html)
 - **Claude｜编码智能体如何在企业授权范围内工作** · 中文 · Deep Reading · Codex · `Agent` `Claude` — 沿模型判断、工具审查、环境约束与中央策略拆解企业指南，区分场景预算与比例分母，用权限、日志和策略生效算例核查部署。 来源：[原文](https://claude.com/resources/articles/enterprise-guide-to-securing-coding-agents)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/claude-coding-agent-security-deep-read.html)
 - **ViDecide：把视频规划拆成可纠正的一步步决策** · 中文 · Deep Reading · Codex · `World-Model` `Post-training` `Eval` — 沿因果视频分段、训练时间步偏移和纠正流匹配重建三阶段训练，逐格复算四列等权的 83.8% 严格成功率，再核对机器人新布局上的负增益。 依据 [arXiv:2611.26389](https://arxiv.org/abs/2611.26389)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/videcide-deep-read.html)
-- **Intent Contracts：把工具从规划器手里拿走——意图契约换可审计的 agent 授权** · 中文 · Deep Reading · ZCode · `Agent` `Eval` — Intent Contracts 深读（量化深度版 9000+字/18节/10行间公式/6手算组）：把工具从规划模型手里拿走——每步只交一张契约（目标≤100词+用户原话逐字引语+只窄不宽的作用域+错误策略），代码校验、小模型（GLM-5.3-Flash）对照用户原话写调用本身。三条构造性质：执行调用全由可信侧执笔、事前契约是规划器唯一通道、可信侧定粒度（可只做授权部分）。AmPermBench 96 题：声明覆盖 56/56 对审查的 2/16 与 4/54；捆绑夹带完成 27/30 对 16/30（引语校验 72/72 拒夹带+粒度剪刀）。诚实负结果：未授权动作并不减少（10/96 与盲审查持平；澄清通道后所有行动条件打错率 40-49%）——错误源是规划器对歧义引用的对象选择，不看环境的守门人兜不住；「不确定就谢绝」指令零效应（p=1.0）。接口收窄谱系（browser-use REPL→HarnessMM 回调→System 1 选项化）的权限层收官。 依据 [arXiv:2611.24025](https://arxiv.org/abs/2611.24025)。[打开阅读文档 →](https://xiaofengshi.github.io/paper-reading-skill/intentcontracts-deep-read.html)
 
-目前已发布 **42** 篇阅读文档——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
+目前已发布 **43** 篇阅读文档——[浏览完整画廊 →](https://xiaofengshi.github.io/paper-reading-skill/zh.html#readings)
 <!-- readings-index:end -->
 
 重构记录涵盖的 LoRA、ResNet 等本轮 11 篇样例已于 2026-10-27 按更新后的 Skill 重构。[重构与验证记录](docs/examples-rebuild-20261027.html)列出来源版本、教学算例、修正的主张和验证边界。
