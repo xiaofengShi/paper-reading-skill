@@ -685,6 +685,22 @@
    ],
    "summaryEn": "Reconstruct the posterior teacher and same-history credit. Recompute the nine-setting accuracy gain, then use the evidence decomposition and failure cases to distinguish better stopping from better visual interpretation.",
    "summaryZh": "用翻杯实验手算后验、停止门和同历史信用，复算九组准确率，再用证据分解和失败案例区分停止策略与读图能力。"
+  },
+  {
+   "slug": "autoresearch-harness",
+   "title": "自动科研如何找回失败的那一轮",
+   "lang": "zh-CN",
+   "tool": "Codex",
+   "arxiv": "2611.28244",
+   "date": "2026-11-27",
+   "pinned": false,
+   "mode": "deep",
+   "tags": [
+    "Agent",
+    "Eval"
+   ],
+   "summaryEn": "Reconstruct per-attempt context folding and skill maintenance. Work through eight examples and distinguish late new-best rates, benchmark denominators, and system-level comparisons.",
+   "summaryZh": "拆解逐轮实验折叠和候选技能管理。沿八个手算复核后期新高率、基准的分母与系统级对照。"
   }
  ]
 }
